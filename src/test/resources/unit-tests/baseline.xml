@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
+  <requirement>Baseline</requirement>
+  <description>Baseline test where all should pass.</description>
+  <template xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" template="classpath:templates/primary-swid.xml">
+  </template>
+  <assessments>
+    <schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"/>
+  </assessments>
+  <assertions>
+    <assert-overall result="PASS" quantifier="ALL" />
+  </assertions>
+</content-unit-test>

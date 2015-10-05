@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
+	<requirement>GEN-3</requirement>
+	<description>Remove @regid and @name attributes from the Entity with a
+		@role=softwareCreator to cause this text to fail.</description>
+	<template xmlns="http://decima.nist.gov/xml/template"
+		xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" template="classpath:templates/primary-swid.xml">
+		<delete
+			xpath="//swid:Entity[contains(@role,'softwareCreator')]/@*[name()='regid' or name()='@name']" />
+	</template>
+	<assessments>
+		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch">
+			<parameter name="authoritative">true</parameter>
+		</schematron-assessment>
+	</assessments>
+	<assertions>
+		<assert-derived-requirement requirement-id="GEN-3-1"
+			result="FAIL" />
+		<assert-remaining quantifier="ALL" result="PASS" />
+	</assertions>
+</content-unit-test>
