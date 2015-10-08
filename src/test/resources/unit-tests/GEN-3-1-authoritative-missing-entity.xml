@@ -3,28 +3,27 @@
 	<requirement>GEN-3-1</requirement>
 	<description>An authoritative tag MUST provide and Entity element containing
 		the @role 'softwareCreator' with both a @regid and @name attribute. This test
-		provides a valid authoritative primary tag with an Entity having the @role
-		'softwareCreator', but not the required @name and @regid attributes. This will
-		cause this test to fail.</description>
+		provides a valid authoritative primary tag with no such Entity, which will cause
+		this test to fail.</description>
 	<template template="classpath:templates/primary-auth-swid.xml"
 		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<delete xpath="//swid:Entity" />
 		<insert-child xpath="/swid:SoftwareIdentity">
 			<swid:Entity name="ACME Connection Distributor" role="distributor tagCreator" />
-			<swid:Entity name="ACME Connection" role="softwareCreator" />
 		</insert-child>
 	</template>
 	<assessments>
 		<schema-assessment derived-requirement="GEN-1" />
-		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"
-			phase="swid.primary.auth">
+		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch" phase="swid.primary.auth">
 			<parameter name="authoritative">true</parameter>
 		</schematron-assessment>
 	</assessments>
 	<assertions>
-		<assert-derived-requirement requirement-id="GEN-3-2"
+		<assert-derived-requirement requirement-id="GEN-3-1"
 			result="FAIL" />
+		<assert-derived-requirement requirement-id="GEN-3-2"
+			result="NOT_CHECKED" />
 		<assert-remaining quantifier="ALL" result="PASS" />
 	</assertions>
 </content-unit-test>

@@ -3,33 +3,66 @@
     xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://standards.iso.org/iso/19770/-2/2015/schema.xsd swid-schema-2015-06-08.xsd"
-    queryBinding="xslt2">
+    queryBinding="xslt2"
+    defaultPhase="swid.primary.auth">
     <title>ISO/IEC 19770-2 SWID Tag Checker based on NISTIR 8060</title>
     <ns uri="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" prefix="swid"/>
     <ns prefix="java" uri="java:gov.nist.decima.swid.schematron"/>
 
-    <phase id="swid.primary">
+    <phase id="swid.primary.auth">
         <active pattern="info"/>
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
+        <active pattern="general-auth"/>
     </phase>
 
-    <phase id="swid.patch">
+    <phase id="swid.primary.non-auth">
         <active pattern="info"/>
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
+        <active pattern="general-non-auth"/>
     </phase>
 
-    <phase id="swid.corpus">
+    <phase id="swid.patch.auth">
         <active pattern="info"/>
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
+        <active pattern="general-auth"/>
     </phase>
 
-    <phase id="swid.supplemental">
+    <phase id="swid.patch.non-auth">
         <active pattern="info"/>
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
+        <active pattern="general-non-auth"/>
+    </phase>
+
+    <phase id="swid.corpus.auth">
+        <active pattern="info"/>
+        <active pattern="ISO-19770-2"/>
+        <active pattern="general"/>
+        <active pattern="general-auth"/>
+    </phase>
+
+    <phase id="swid.corpus.non-auth">
+        <active pattern="info"/>
+        <active pattern="ISO-19770-2"/>
+        <active pattern="general"/>
+        <active pattern="general-non-auth"/>
+    </phase>
+
+    <phase id="swid.supplemental.auth">
+        <active pattern="info"/>
+        <active pattern="ISO-19770-2"/>
+        <active pattern="general"/>
+        <active pattern="general-auth"/>
+    </phase>
+
+    <phase id="swid.supplemental.non-auth">
+        <active pattern="info"/>
+        <active pattern="ISO-19770-2"/>
+        <active pattern="general"/>
+        <active pattern="general-non-auth"/>
     </phase>
 
     <let name="authoritative" value="//swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))]"/>
@@ -43,21 +76,26 @@
     </pattern>
 
     <pattern id="ISO-19770-2">
-        <rule id="SWID-1" context="swid:SoftwareIdentity">
+        <rule id="swid-test-software-identity" context="swid:SoftwareIdentity">
         	<assert id="SWID-1-1" test="swid:Entity[contains(@role,'tagCreator')]"/>
         </rule>
         <rule id="swid-test-entity" context="swid:Entity">
-	        <!-- Every Entity with the same @regid must have a different @xml:lang -->
-        	<assert id="SWID-2-1" test="every $n in (preceding-sibling::node() union following-sibling::node()) satisfies (not(@regid=$n/@regid) or not(lang((ancestor-or-self::*/@xml:lang)[last()],$n)))"/>
+            <!-- All Entity elements with the role tagCreator must have the same @regid -->
+            <assert id="SWID-2-1" test="not(contains(@role,'tagCreator')) or (every $n in (preceding-sibling::node() union following-sibling::node()) satisfies (not(contains($n/@role,'tagCreator')) or @regid=$n/@regid))"/>
+            <!-- Every Entity with the same @regid must have a different @xml:lang -->
+        	<assert id="SWID-3-1" test="every $n in (preceding-sibling::node() union following-sibling::node()) satisfies (not(@regid=$n/@regid) or not(lang((ancestor-or-self::*/@xml:lang)[last()],$n)))"/>
 	        <!-- Every Entity with the same @regid must have the same @role entries -->
-        	<assert id="SWID-3-1" test="every $n in (preceding-sibling::node() union following-sibling::node()) satisfies (not(@regid=$n/@regid) or java:isStringSetEqual(@role,$n/@role,'\s+'))"/>
+        	<assert id="SWID-4-1" test="every $n in (preceding-sibling::node() union following-sibling::node()) satisfies (not(@regid=$n/@regid) or java:isStringSetEqual(@role,$n/@role,'\s+'))"/>
         </rule>
     </pattern>
 
     <pattern id="general">
+    </pattern>
+
+	<pattern id="general-auth">
     	<rule id="general-software-identity" context="swid:SoftwareIdentity">
-    		<assert id="GEN-2-1" test="not($authoritative) or exists(swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))])"/>
-    		<assert id="GEN-3-1" test="swid:Entity[contains(@role,'softwareCreator') and @name and @regid]"/>
+    		<assert id="GEN-2-1" test="exists(swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))])"/>
+    	    <assert id="GEN-3-1" test="swid:Entity[contains(@role,'softwareCreator')]"/>
     	</rule>
 <!-- 
     	<rule id="GEN-2" context="swid:SoftwareIdentity">
@@ -71,5 +109,11 @@
             <assert id="GEN-3-3" role="error" test="swid:Entity[contains(@role,'softwareCreator')]/@regid">Authoritative tag creators MUST provide an &lt;Entity&gt; element where the @role attribute contains the value softwareCreator and the @regid attribute is also provided.</assert>
         </rule>
  -->
-     </pattern>
+	    <rule id="general-auth-entity-softwareCreator" context="swid:Entity[contains(@role,'softwareCreator')]">
+            <assert id="GEN-3-2" test="@regid"/>
+        </rule>
+	</pattern>
+
+	<pattern id="general-non-auth">
+	</pattern>
 </schema>

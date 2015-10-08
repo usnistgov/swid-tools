@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
-	<requirement>GEN-3-1</requirement>
-	<description>An authoritative tag MUST provide and Entity element containing
-		the @role 'softwareCreator' with both a @regid and @name attribute. This test
-		provides a valid authoritative primary tag with an Entity having the @role
-		'softwareCreator', but not the required @name and @regid attributes. This will
-		cause this test to fail.</description>
+	<requirement>SWID-2-1</requirement>
+	<description>An valid authoritative tag with the invalid condition where
+		multiple Entity @regid organizations that are tagCreator.</description>
 	<template template="classpath:templates/primary-auth-swid.xml"
 		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<delete xpath="//swid:Entity" />
 		<insert-child xpath="/swid:SoftwareIdentity">
-			<swid:Entity name="ACME Connection Distributor" role="distributor tagCreator" />
-			<swid:Entity name="ACME Connection" role="softwareCreator" />
+			<swid:Entity name="ACME Connection" regid="acme.org"
+				role="softwareCreator tagCreator" xml:lang="en-US" />
+			<swid:Entity name="ACME Connexion" regid="acme.org"
+				role="tagCreator softwareCreator" xml:lang="en-GB" />
+			<swid:Entity name="ACME Connection Publisher" regid="acme.com"
+				role="publisher tagCreator" />
 		</insert-child>
 	</template>
 	<assessments>
@@ -23,7 +24,7 @@
 		</schematron-assessment>
 	</assessments>
 	<assertions>
-		<assert-derived-requirement requirement-id="GEN-3-2"
+		<assert-derived-requirement requirement-id="SWID-2-1"
 			result="FAIL" />
 		<assert-remaining quantifier="ALL" result="PASS" />
 	</assertions>

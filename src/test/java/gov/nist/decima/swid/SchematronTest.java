@@ -37,12 +37,13 @@ public class SchematronTest {
 		SchematronCompiler schematronCompiler = new DefaultSchematronCompiler();
 		Schematron schematron = schematronCompiler.newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
 		SchematronEvaluator schematronEvaluator = new DefaultSchematronEvaluator(schematron);
+		File resultDir = new File("svrl-result");
 		SchematronAssessment assessment = new SchematronAssessment(schematronEvaluator);
+		assessment.setResultDirectory(resultDir);
 		Template doc = new FileTemplate(new URL("classpath:templates/primary-swid.xml"));
 		AssessmentResultBuilder builder = new AssessmentResultBuilder();
-		File resultDir = new File("svrl-result");
 		resultDir.mkdirs();
-		assessment.execute(doc, builder,resultDir);
+		assessment.execute(doc, builder);
 		builder.end();
 		
 //

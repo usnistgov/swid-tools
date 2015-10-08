@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template template="classpath:templates/minimal-swid.xml"
+		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<delete xpath="//swid:Entity" />
+		<insert-child xpath="/swid:SoftwareIdentity">
+			<swid:Entity name="ACME Connection" regid="acme.org" role="tagCreator softwareCreator" />
+		</insert-child>
+</template>

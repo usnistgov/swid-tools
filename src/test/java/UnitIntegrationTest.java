@@ -1,18 +1,17 @@
 
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.runner.RunWith;
 
-import gov.nist.decima.testing.AssessmentUnitTestRunner;
+import gov.nist.decima.testing.PathRunner;
 
-@RunWith(AssessmentUnitTestRunner.class)
+@RunWith(PathRunner.class)
 public class UnitIntegrationTest {
-//
-//	@Test
-//	public void test() throws MalformedURLException, ParserException {
-//		AssessmentUnitTestParser parser = AssessmentUnitTestParser.getInstance();
-//		AssessmentUnitTest ut = parser.parse(new URL("classpath:unit-tests/scap-1.2/GENERAL/requirement-10-scenario-2"));
-//		ut.execute(new RunNotifier() {
-//			
-//		});
-//	}
+	public static List<File> paths() {
+//		return Collections.singletonList(new File("src/test/resources/unit-tests/baseline-minimal.xml"));
+		return Collections.singletonList(new File("src/test/resources/unit-tests"));
+	}
 }

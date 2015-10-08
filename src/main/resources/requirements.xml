@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<requirements xmlns="http://decima.nist.gov/xml/requirements/0.1">
+	<requirement id="GEN-1" resource="NISTIR8060" section="3.1">
+		<statement>When producing SWID tags, tag creators MUST produce SWID
+			tags that conform to all requirements defined in the ISO/IEC
+			19770-2:2015 specification.
+		</statement>
+		<derived-requirements>
+			<derived-requirement id="GEN-1-1" type="MUST"
+				use-case="general">
+				<statement>All SWID tag instances MUST pass a validating parse with
+					no errors prior to performing any other processing.
+				</statement>
+			</derived-requirement>
+		</derived-requirements>
+	</requirement>
+	<requirement id="GEN-2" resource="NISTIR8060" section="3.3">
+		<statement>
+			Authoritative tag creators MUST provide an &lt;Entity&gt;
+			element where the @role attribute contains the value tagCreator and
+			at least one of these additional role values: "aggregator",
+			"distributor", "licensor", or "softwareCreator".
+		</statement>
+		<derived-requirements>
+			<derived-requirement id="GEN-2-1" type="MUST"
+				use-case="general" scope="authoritative">
+				<statement>There MUST exist at least one &lt;Entity&gt; element that
+					has a @role attribute that contains the value "tagCreator" and one
+					or more of the following values: "aggregator", "distributor",
+					"licensor", or "softwareCreator".
+				</statement>
+			</derived-requirement>
+		</derived-requirements>
+	</requirement>
+	<requirement id="GEN-3">
+		<statement>Authoritative tag creators MUST provide an &lt;Entity&gt;
+			element where the value of the @role contains “softwareCreator”, and
+			the @name and @regid attribute values are also provided.</statement>
+			<derived-requirements>
+				<derived-requirement id="GEN-3-1" type="MUST" use-case="general" scope="authoritative">
+					<statement>There MUST exist an &lt;Entity&gt; element that contains the @role 'softwareCreator'.</statement>
+				</derived-requirement>
+				<derived-requirement id="GEN-3-2" type="MUST" use-case="general" scope="authoritative">
+					<statement>If an &lt;Entity&gt; element contains the @role 'softwareCreator', it MUST have a @regid attribute.</statement>
+				</derived-requirement>
+			</derived-requirements>
+	</requirement>
+</requirements>

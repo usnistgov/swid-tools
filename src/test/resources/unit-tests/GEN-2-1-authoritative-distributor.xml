@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
-  <requirement>GEN-2</requirement>
-  <description>An authoritative tag produced by a distributor.</description>
-  <template xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" template="classpath:templates/primary-swid.xml">
-	<modify-attribute xpath="//swid:Entity[contains(@role,'tagCreator')]/@role" value="tagCreator distributor" />
-  </template>
-  <assessments>
-    <schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch">
-    	<parameter name="authoritative">true</parameter>
-    </schematron-assessment>
-  </assessments>
-  <assertions>
-  	<assert-overall quantifier="ALL" result="PASS"/>
-  </assertions>
+	<requirement>GEN-2-1</requirement>
+	<description>An authoritative tag produced by a distributor.</description>
+	<template template="classpath:templates/primary-auth-swid.xml"
+		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<delete xpath="//swid:Entity" />
+		<insert-child xpath="/swid:SoftwareIdentity">
+			<swid:Entity name="ACME Connection" regid="acme.org"
+				role="softwareCreator" />
+			<swid:Entity name="ACME Connection Distributor" regid="acme.com"
+				role="distributor tagCreator" />
+		</insert-child>
+	</template>
+	<assessments>
+		<schema-assessment derived-requirement="GEN-1" />
+		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"
+			phase="swid.primary.auth">
+			<parameter name="authoritative">true</parameter>
+		</schematron-assessment>
+	</assessments>
+	<assertions>
+		<assert-overall quantifier="ALL" result="PASS" />
+	</assertions>
 </content-unit-test>
