@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import gov.nist.decima.assessment.AssessmentException;
-import gov.nist.decima.assessment.AssessmentExecutor;
+import gov.nist.decima.assessment.BasicAssessmentExecutor;
 import gov.nist.decima.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.assessment.result.AssessmentResults;
 import gov.nist.decima.assessment.result.BaseRequirementResult;
@@ -77,7 +77,7 @@ public class SchematronTest {
 
 		// TODO: Update this with a method to get an actual requirements manager instance
 		RequirementsManager requirementsManager = new StubRequirementsManager(Collections.emptySet());
-		AssessmentExecutor executor = new AssessmentExecutor(requirementsManager, Collections.singletonList(assessment));
+		BasicAssessmentExecutor executor = new BasicAssessmentExecutor(requirementsManager, Collections.singletonList(assessment));
 
 		Template doc = new FileTemplate(new URL("classpath:templates/primary-swid.xml"));
 		AssessmentResults validationResult = executor.execute(doc);
