@@ -20,19 +20,20 @@ import gov.nist.decima.assessment.result.TestResult;
 import gov.nist.decima.assessment.schematron.DefaultSchematronEvaluator;
 import gov.nist.decima.assessment.schematron.SchematronAssessment;
 import gov.nist.decima.assessment.schematron.SchematronEvaluator;
+import gov.nist.decima.document.JDOMDocument;
+import gov.nist.decima.document.XMLDocument;
+import gov.nist.decima.document.XMLDocumentException;
 import gov.nist.decima.requirement.RequirementsManager;
 import gov.nist.decima.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.schematron.Schematron;
 import gov.nist.decima.schematron.SchematronCompilationException;
 import gov.nist.decima.schematron.SchematronCompiler;
-import gov.nist.decima.template.FileTemplate;
-import gov.nist.decima.template.Template;
 import gov.nist.decima.testing.StubRequirementsManager;
 
 public class SchematronTest {
 
 	@Test
-	public void temporaryTest() throws SchematronCompilationException, MalformedURLException, IOException, AssessmentException {
+	public void temporaryTest() throws SchematronCompilationException, MalformedURLException, IOException, AssessmentException, XMLDocumentException {
 		// TODO: replace this once the requirements manager is implemented
 		SchematronCompiler schematronCompiler = new DefaultSchematronCompiler();
 		Schematron schematron = schematronCompiler.newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
@@ -40,7 +41,7 @@ public class SchematronTest {
 		File resultDir = new File("svrl-result");
 		SchematronAssessment assessment = new SchematronAssessment(schematronEvaluator);
 		assessment.setResultDirectory(resultDir);
-		Template doc = new FileTemplate(new URL("classpath:templates/primary-swid.xml"));
+		XMLDocument doc = new JDOMDocument(new URL("classpath:templates/primary-swid.xml"));
 		AssessmentResultBuilder builder = new AssessmentResultBuilder();
 		resultDir.mkdirs();
 		assessment.execute(doc, builder);
@@ -69,7 +70,7 @@ public class SchematronTest {
 
 	@Test
 	@Ignore
-	public void finalTest() throws SchematronCompilationException, MalformedURLException, IOException, AssessmentException {
+	public void finalTest() throws SchematronCompilationException, MalformedURLException, IOException, AssessmentException, XMLDocumentException {
 		SchematronCompiler schematronCompiler = new DefaultSchematronCompiler();
 		Schematron schematron = schematronCompiler.newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
 		SchematronEvaluator schematronEvaluator = new DefaultSchematronEvaluator(schematron);
@@ -79,7 +80,7 @@ public class SchematronTest {
 		RequirementsManager requirementsManager = new StubRequirementsManager(Collections.emptySet());
 		BasicAssessmentExecutor executor = new BasicAssessmentExecutor(requirementsManager, Collections.singletonList(assessment));
 
-		Template doc = new FileTemplate(new URL("classpath:templates/primary-swid.xml"));
+		XMLDocument doc = new JDOMDocument(new URL("classpath:templates/primary-swid.xml"));
 		AssessmentResults validationResult = executor.execute(doc);
 
 		Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();
