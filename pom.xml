@@ -4,6 +4,13 @@
 	<groupId>gov.nist.decima</groupId>
 	<artifactId>swidval</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
+	<scm>
+		<connection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval/trunk</connection>
+		<developerConnection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval/trunk</developerConnection>
+		<url>https://subversion.nist.gov/external1/NVD/swidval/trunk</url>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
