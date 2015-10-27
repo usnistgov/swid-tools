@@ -46,7 +46,6 @@ public class ResourceResolverExtension implements gov.nist.decima.service.Resour
 
 		@Override
 		public InputSource getExternalSubset(String name, String baseURI) throws SAXException, IOException {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -79,7 +78,6 @@ public class ResourceResolverExtension implements gov.nist.decima.service.Resour
 		@Override
 		public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId,
 				String baseURI) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
