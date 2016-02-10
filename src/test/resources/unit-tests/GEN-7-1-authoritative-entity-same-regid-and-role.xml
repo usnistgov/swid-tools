@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
-	<requirement>GEN-2-1</requirement>
-	<description>An authoritative tag produced by a licensor.</description>
+	<requirement>GEN-7-1</requirement>
+	<description>This test provides a valid authoritative primary tag with
+		multiple Entity elements having the same @regid attribute, but
+		different roles. This will cause this test to fail.
+	</description>
 	<template template="classpath:templates/primary-auth-swid.xml"
 		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-		<delete xpath="//swid:Entity" />
 		<insert-child xpath="/swid:SoftwareIdentity">
-			<swid:Entity name="ACME Connection" regid="acme.org"
+			<swid:Entity name="ACME Connexion" regid="acme.org"
 				role="softwareCreator" />
-			<swid:Entity name="ACME Connection Licensor" regid="acme.com"
-				role="licensor tagCreator" />
 		</insert-child>
 	</template>
 	<assessments>
@@ -18,9 +18,12 @@
 		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"
 			phase="swid.primary.auth">
 			<parameter name="authoritative">true</parameter>
+			<parameter name="type">primary</parameter>
 		</schematron-assessment>
 	</assessments>
 	<assertions>
-		<assert-overall quantifier="ALL" result="PASS" />
+		<assert-derived-requirement requirement-id="GEN-7-1"
+			result="FAIL" />
+		<assert-remaining quantifier="ALL" result="PASS" />
 	</assertions>
 </content-unit-test>

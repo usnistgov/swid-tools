@@ -18,8 +18,8 @@ public class IsStringSetEqual extends ExtensionFunctionDefinition {
 			"java:gov.nist.decima.swid.schematron", "isStringSetEqual");
 
 	private static final SequenceType[] FUNCTION_ARGUMENTS = new SequenceType[] {
-		 SequenceType.SINGLE_STRING,
-		 SequenceType.SINGLE_STRING,
+		 SequenceType.STRING_SEQUENCE,
+		 SequenceType.STRING_SEQUENCE,
 		 SequenceType.OPTIONAL_STRING
 		 };
 

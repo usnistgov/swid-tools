@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
-  <requirement>GEN-2-1</requirement>
-  <description>An authoritative tag produced by an aggregator that has multiple language based Entity elements.</description>
+	<requirement>GEN-8-1</requirement>
+	<description>An authoritative, primary tag produced by an aggregator.</description>
 	<template template="classpath:templates/primary-auth-swid.xml"
-		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns="http://decima.nist.gov/xml/template"
+		xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-		<add-attribute xpath="/swid:SoftwareIdentity" name="lang" value="en-GB" ns="http://www.w3.org/XML/1998/namespace" />
-		<delete xpath="//swid:Entity"/>
+		<delete xpath="//swid:Entity" />
 		<insert-child xpath="/swid:SoftwareIdentity">
 			<swid:Entity name="ACME Connection" regid="acme.org"
-				role="softwareCreator" xml:lang="en-US" />
-			<swid:Entity name="ACME Connexion" regid="acme.org"
 				role="softwareCreator" />
-			<swid:Entity name="ACME Connection Publisher" regid="acme.com"
-				role="distributor tagCreator" xml:lang="en-US" />
-			<swid:Entity name="ACME Connexion Publisher" regid="acme.com"
-				role="tagCreator distributor" />
+			<swid:Entity name="ACME Connection Aggregator" regid="acme.com"
+				role="aggregator tagCreator" />
 		</insert-child>
 	</template>
 	<assessments>
@@ -23,6 +19,7 @@
 		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"
 			phase="swid.primary.auth">
 			<parameter name="authoritative">true</parameter>
+			<parameter name="type">primary</parameter>
 		</schematron-assessment>
 	</assessments>
 	<assertions>

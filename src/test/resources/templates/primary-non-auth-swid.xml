@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template template="classpath:templates/primary-auth-swid.xml"
-		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-		<delete xpath="//swid:Entity" />
-		<insert-child xpath="/swid:SoftwareIdentity">
-			<swid:Entity name="Software Connection" regid="foo.org" role="tagCreator" />
-		</insert-child>
+	xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<delete xpath="//swid:Entity" />
+	<insert-child xpath="/swid:SoftwareIdentity">
+		<swid:Entity name="Software Connection" regid="foo.org"
+			role="tagCreator" />
+		<swid:Entity name="ACME Software" regid="acme.com" role="softwareCreator" />
+		<swid:Evidence>
+			<swid:Directory name="dirA">
+				<swid:File name="fileA" size="12345" />
+			</swid:Directory>
+			<swid:File name="fileB" size="234567" />
+		</swid:Evidence>
+	</insert-child>
 </template>
