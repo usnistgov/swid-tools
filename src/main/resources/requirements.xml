@@ -139,6 +139,8 @@
 					has a @role attribute that contains the value "tagCreator" and one
 					or more of the following additional values: "aggregator", "distributor",
 					"licensor", or "softwareCreator".</statement>
+				<message>An &lt;Entity&gt; doesn't exist that has a @role attribute with one of the following values: "aggregator", "distributor",
+					"licensor", or "softwareCreator".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -152,6 +154,7 @@
 			<derived-requirement id="GEN-9-1" type="MUST">
 				<statement>There MUST exist an &lt;Entity&gt; element that contains
 					the @role 'softwareCreator'.</statement>
+				<message>An &lt;Entity&gt; element doesn't exist that has a @role attribute value of "softwareCreator".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -164,6 +167,7 @@
 		<derived-requirements>
 			<derived-requirement id="GEN-10-1" type="SHOULD">
 				<statement>An entity SHOULD be provided that has the @role attribute value "softwareCreator".</statement>
+				<message>An &lt;Entity&gt; element doesn't exist that has a @role attribute value of "softwareCreator".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -208,12 +212,12 @@
 			<derived-requirement id="GEN-14-1" type="MUST">
 				<statement>Every &lt;File&gt; element provided within a
 					&lt;Payload&gt; or &lt;Evidence&gt; element MUST provide a @size attribute.</statement>
-				<message>The &lt;File&gt; with the @name ''{0}'' does not provide a @size attribute.</message>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provide a @size attribute.</message>
 			</derived-requirement>
 			<derived-requirement id="GEN-14-2" type="MUST">
 				<statement>Every &lt;File&gt; element provided within a
 					&lt;Payload&gt; or &lt;Evidence&gt; element MUST provide a non-blank @size attribute value.</statement>
-				<message>The &lt;v&gt; with the @name ''{0}'' has a blank @size attribute value.</message>
+				<message>The &lt;File&gt; element with the @name ''{0}'' has a blank @size attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
