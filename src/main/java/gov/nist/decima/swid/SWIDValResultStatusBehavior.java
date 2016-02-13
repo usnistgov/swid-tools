@@ -3,8 +3,8 @@ package gov.nist.decima.swid;
 import java.util.Map;
 import java.util.Set;
 
-import gov.nist.decima.assessment.result.ResultStatusBehavior;
-import gov.nist.decima.requirement.Requirement;
+import gov.nist.decima.core.assessment.result.ResultStatusBehavior;
+import gov.nist.decima.core.requirement.Requirement;
 
 public class SWIDValResultStatusBehavior implements ResultStatusBehavior {
 	private final TagType tagType;

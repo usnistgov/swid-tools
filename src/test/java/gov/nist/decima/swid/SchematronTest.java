@@ -10,21 +10,21 @@ import java.util.Collections;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import gov.nist.decima.assessment.AssessmentException;
-import gov.nist.decima.assessment.BasicAssessmentExecutor;
-import gov.nist.decima.assessment.result.AssessmentResultBuilder;
-import gov.nist.decima.assessment.result.AssessmentResults;
-import gov.nist.decima.assessment.result.BaseRequirementResult;
-import gov.nist.decima.assessment.result.DerivedRequirementResult;
-import gov.nist.decima.assessment.result.TestResult;
-import gov.nist.decima.assessment.schematron.SchematronAssessment;
-import gov.nist.decima.document.DefaultXMLDocumentFactory;
-import gov.nist.decima.document.XMLDocument;
-import gov.nist.decima.document.XMLDocumentException;
-import gov.nist.decima.requirement.RequirementsManager;
-import gov.nist.decima.schematron.DefaultSchematronCompiler;
-import gov.nist.decima.schematron.Schematron;
-import gov.nist.decima.schematron.SchematronCompilationException;
+import gov.nist.decima.core.assessment.AssessmentException;
+import gov.nist.decima.core.assessment.BasicAssessmentExecutor;
+import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
+import gov.nist.decima.core.assessment.result.AssessmentResults;
+import gov.nist.decima.core.assessment.result.BaseRequirementResult;
+import gov.nist.decima.core.assessment.result.DerivedRequirementResult;
+import gov.nist.decima.core.assessment.result.TestResult;
+import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.core.document.DefaultXMLDocumentFactory;
+import gov.nist.decima.core.document.XMLDocument;
+import gov.nist.decima.core.document.XMLDocumentException;
+import gov.nist.decima.core.requirement.RequirementsManager;
+import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
+import gov.nist.decima.core.schematron.Schematron;
+import gov.nist.decima.core.schematron.SchematronCompilationException;
 import gov.nist.decima.testing.StubRequirementsManager;
 
 public class SchematronTest {

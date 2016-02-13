@@ -14,7 +14,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>framework</artifactId>
+			<artifactId>core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.decima</groupId>
+			<artifactId>testing</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.decima</groupId>
+			<artifactId>module</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

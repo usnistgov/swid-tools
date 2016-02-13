@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://standards.iso.org/iso/19770/-2/2015/schema.xsd ../../main/xsd/swid-schema-20151006.xsd"
   name="ACME Roadrunner Management Suite Coyote Edition" tagId="com.acme.rms-ce-v4-1-5-0" xml:lang="en">
-  <Entity name="ACME Connection" regid="acme.com" role="tagCreator"/>
+  <Entity name="ACME Connection" regid="acme.com" role="tagCreator softwareCreator"/>
   <Payload>
     <Directory name="dirA">
       <File name="fileA" size="12345"/>

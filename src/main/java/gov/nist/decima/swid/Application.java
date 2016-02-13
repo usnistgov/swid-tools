@@ -22,24 +22,25 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
-import gov.nist.decima.assessment.Assessment;
-import gov.nist.decima.assessment.AssessmentException;
-import gov.nist.decima.assessment.AssessmentExecutor;
-import gov.nist.decima.assessment.ConcurrentAssessmentExecutor;
-import gov.nist.decima.assessment.result.AssessmentResultBuilder;
-import gov.nist.decima.assessment.result.AssessmentResults;
-import gov.nist.decima.assessment.result.ResultWriter;
-import gov.nist.decima.assessment.schema.SchemaAssessment;
-import gov.nist.decima.assessment.schematron.SchematronAssessment;
-import gov.nist.decima.document.JDOMDocument;
-import gov.nist.decima.document.XMLDocument;
-import gov.nist.decima.document.XMLDocumentException;
+import gov.nist.decima.core.assessment.Assessment;
+import gov.nist.decima.core.assessment.AssessmentException;
+import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
+import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
+import gov.nist.decima.core.assessment.result.AssessmentResults;
+import gov.nist.decima.core.assessment.result.ResultWriter;
+import gov.nist.decima.core.assessment.schema.SchemaAssessment;
+import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.core.document.JDOMDocument;
+import gov.nist.decima.core.document.XMLDocument;
+import gov.nist.decima.core.document.XMLDocumentException;
+import gov.nist.decima.core.requirement.DefaultRequirementsManager;
+import gov.nist.decima.core.requirement.MutableRequirementsManager;
+import gov.nist.decima.core.requirement.RequirementsParser;
+import gov.nist.decima.core.requirement.RequirementsParserException;
+import gov.nist.decima.core.schematron.SchematronCompilationException;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.EnumerationOptionValidator;
-import gov.nist.decima.requirement.DefaultRequirementsManager;
-import gov.nist.decima.requirement.MutableRequirementsManager;
-import gov.nist.decima.requirement.RequirementsParser;
-import gov.nist.decima.schematron.SchematronCompilationException;
 import gov.nist.decima.testing.ParserException;
 
 public class Application {
@@ -55,7 +56,7 @@ public class Application {
 	private static final String OPTION_NON_AUTHORITATIVE = "a";
 	
 
-	public static void main(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, ParserException, URISyntaxException, IOException {
+	public static void main(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, ParserException, URISyntaxException, IOException, RequirementsParserException {
 		try {
 			System.exit(new Application().run(args));
 		} catch (ParseException e) {
@@ -83,7 +84,7 @@ public class Application {
 		return cliParser.parse(args);
 	}
 
-	private int run(String[] args) throws ParseException, SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, ParserException, URISyntaxException, IOException {
+	private int run(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, ParserException, URISyntaxException, IOException, RequirementsParserException, ParseException {
 		CommandLine cmd = parseCLI(args);
 
 		List<String> paths = cmd.getArgList();
