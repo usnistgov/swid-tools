@@ -41,7 +41,6 @@ import gov.nist.decima.core.requirement.RequirementsParserException;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.EnumerationOptionValidator;
-import gov.nist.decima.testing.ParserException;
 
 public class Application {
 	private static final Logger log = LogManager.getLogger(Application.class);
@@ -56,7 +55,7 @@ public class Application {
 	private static final String OPTION_NON_AUTHORITATIVE = "a";
 	
 
-	public static void main(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, ParserException, URISyntaxException, IOException, RequirementsParserException {
+	public static void main(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, URISyntaxException, IOException, RequirementsParserException {
 		try {
 			System.exit(new Application().run(args));
 		} catch (ParseException e) {
@@ -84,7 +83,7 @@ public class Application {
 		return cliParser.parse(args);
 	}
 
-	private int run(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, ParserException, URISyntaxException, IOException, RequirementsParserException, ParseException {
+	private int run(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, URISyntaxException, IOException, RequirementsParserException, ParseException {
 		CommandLine cmd = parseCLI(args);
 
 		List<String> paths = cmd.getArgList();
