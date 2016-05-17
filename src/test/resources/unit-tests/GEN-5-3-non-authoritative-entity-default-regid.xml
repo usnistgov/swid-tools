@@ -23,7 +23,7 @@
 		<assert-derived-requirement requirement-id="GEN-5-3"
 			result="FAIL" />
 		<assert-derived-requirement requirement-id="GEN-6-3"
-			result="FAIL" />
+			result="WARNING" />
 		<assert-remaining quantifier="ALL" result="PASS" />
 	</assertions>
 </content-unit-test>

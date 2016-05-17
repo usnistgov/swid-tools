@@ -2,12 +2,14 @@
 <requirements xmlns="http://decima.nist.gov/xml/requirements/0.1"
 	xmlns:swid-ext="http://decima.nist.gov/xml/swid-requirements-ext/0.1"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://decima.nist.gov/xml/requirements/0.1 ../../../../../decima/trunk/src/main/xsd/requirements.xsd http://decima.nist.gov/xml/swid-requirements-ext/0.1 ../xsd/swid-requirements-ext.xsd">
+	xsi:schemaLocation="http://decima.nist.gov/xml/requirements/0.1 ../../../../../decima/trunk/core/src/main/xsd/requirements.xsd http://decima.nist.gov/xml/swid-requirements-ext/0.1 ../xsd/swid-requirements-ext.xsd">
 	<resource id="NISTIR8060"
+		name="NISTIR 8060"
 		href="file:///C:/Users/davidwal.NIST/Documents/SWID/NISTIR-8060-final-FOR-EDITING.pdf" />
 
 	<requirement id="GEN-1" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Basic Compliance">
+		<summary>The SWID tag is schema valid</summary>
 		<reference ref="NISTIR8060" section="4.1" />
 		<statement>When producing SWID tags, tag creators MUST produce SWID tags that
 			conform to all requirements defined in the ISO/IEC 19770-2:2015
@@ -21,6 +23,7 @@
 	</requirement>
 	<requirement id="GEN-2" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Internationalization">
+		<summary>The default language is specified</summary>
 		<reference ref="NISTIR8060" section="4.3" />
 		<statement>The &lt;SoftwareIdentity&gt; element MUST specify an
 			@xml:lang attribute with a non-blank value to indicate the default
@@ -43,6 +46,7 @@
 	</requirement>
 	<requirement id="GEN-3" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Internationalization">
+		<summary>The default language of the target platform is specified</summary>
 		<reference ref="NISTIR8060" section="4.3" />
 		<statement>When specifying a value for the &lt;SoftwareIdentity&gt;
 			@xml:lang attribute, non-authoritative tag creators SHOULD use the
@@ -51,6 +55,7 @@
 	</requirement>
 	<requirement id="GEN-4" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
+		<summary>Each &lt;Entity&gt; element specifies a @regid value</summary>
 		<reference ref="NISTIR8060" section="4.4.1" />
 		<statement>Every &lt;Entity&gt; element MUST provide an explicit
 			(i.e., non-default) @regid attribute value.</statement>
@@ -71,6 +76,7 @@
 	</requirement>
 	<requirement id="GEN-5" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Entity Identification">
+		<summary>The "tagCreator" &lt;Entity&gt; element specifies a @regid value</summary>
 		<reference ref="NISTIR8060" section="4.4.1" />
 		<statement>The &lt;Entity&gt; element containing the @role
 			"tagCreator" MUST provide an explicit (i.e., non-default) @regid
@@ -95,6 +101,7 @@
 	</requirement>
 	<requirement id="GEN-6" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Entity Identification">
+		<summary>Every &lt;Entity&gt; element specifies a @regid value</summary>
 		<reference ref="NISTIR8060" section="4.4.1" />
 		<statement>Every &lt;Entity&gt; element SHOULD provide an explicit
 			(i.e., non-default) @regid attribute value if such a value can be
@@ -116,6 +123,7 @@
 	</requirement>
 	<requirement id="GEN-7" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Entity Identification">
+		<summary>&lt;Entity&gt; elements with the same @regid value have the same @role value</summary>
 		<reference ref="NISTIR8060" section="4.4.2" />
 		<statement>All &lt;Entity&gt; elements that provide the same @regid
 			attribute value MUST provide the same @role attribute values.</statement>
@@ -128,6 +136,7 @@
 	</requirement>
 	<requirement id="GEN-8" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
+		<summary>Authoritative tags have an &lt;Entity&gt; that defines @role values for the "tagCreator" and a software provider role</summary>
 		<reference ref="NISTIR8060" section="4.4.3" />
 		<statement>Authoritative tag creators MUST provide an &lt;Entity&gt;
 			element where the @role attribute contains the value "tagCreator" and
@@ -146,6 +155,7 @@
 	</requirement>
 	<requirement id="GEN-9" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
+		<summary>Authoritative tags have an &lt;Entity&gt; for the "softwareCreator" @role</summary>
 		<reference ref="NISTIR8060" section="4.4.4" />
 		<statement>Authoritative tag creators MUST provide an &lt;Entity&gt;
 			element where the @role attribute contains the value
@@ -160,6 +170,7 @@
 	</requirement>
 	<requirement id="GEN-10" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Entity Identification">
+		<summary>Non-authoritative tags have an &lt;Entity&gt; for the "softwareCreator" @role</summary>
 		<reference ref="NISTIR8060" section="4.4.4" />
 		<statement>Non-authoritative tag creators SHOULD provide an
 			&lt;Entity&gt; element where the @role attribute contains the value
@@ -173,6 +184,7 @@
 	</requirement>
 	<requirement id="GEN-11" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="4.5.1" />
 		<statement>In order to link a source tag to a specific target tag
 			whose @tagId is known at the time the source tag is created, tag
@@ -182,6 +194,7 @@
 	</requirement>
 	<requirement id="GEN-12" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="4.5.2" />
 		<statement>When linking a source tag to one or more target tags whose
 			@tagId value(s) cannot be determined at the time the source tag is
@@ -195,6 +208,7 @@
 	</requirement>
 	<requirement id="GEN-13" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="4.5.2" />
 		<statement>Any XPath query used within a &lt;Link&gt; @href element
 			MUST be designed in such a way that it can used by a system to
@@ -204,6 +218,7 @@
 	</requirement>
 	<requirement id="GEN-14" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a @size value for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.1" />
 		<statement>Every &lt;File&gt; element provided within a
 			&lt;Payload&gt; or &lt;Evidence&gt; element MUST include a value for
@@ -223,6 +238,7 @@
 	</requirement>
 	<requirement id="GEN-15" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a @version value if a version is available for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.1" />
 		<statement>Every &lt;File&gt; element provided within a
 			&lt;Payload&gt; or &lt;Evidence&gt; element MUST include a value for
@@ -235,6 +251,7 @@
 	</requirement>
 	<requirement id="GEN-16" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a hash value for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.1" />
 		<statement>Every &lt;File&gt; element within a &lt;Payload&gt; element
 			MUST include a hash value.</statement>
@@ -246,6 +263,7 @@
 	</requirement>
 	<requirement id="GEN-17" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a hash value for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.1" />
 		<statement>Every &lt;File&gt; element within an &lt;Evidence&gt;
 			element SHOULD include a hash value.</statement>
@@ -257,6 +275,7 @@
 	</requirement>
 	<requirement id="GEN-18" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a hash value for the referenced file with suffecient security strength</summary>
 		<reference ref="NISTIR8060" section="4.6.2" />
 		<statement>Whenever &lt;Payload&gt; or &lt;Evidence&gt; elements are
 			included in a tag, every &lt;File&gt; element SHOULD avoid the
@@ -270,6 +289,7 @@
 	</requirement>
 	<requirement id="GEN-19" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a SHA-256 hash value for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.2" />
 		<statement>Whenever a &lt;Payload&gt; element is included in a tag,
 			every &lt;File&gt; element contained therein MUST provide a hash
@@ -282,6 +302,7 @@
 	</requirement>
 	<requirement id="GEN-20" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element provides a SHA-256 hash value for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.2" />
 		<statement>Whenever an &lt;Evidence&gt; element is included in a tag,
 			every &lt;File&gt; element contained therein SHOULD provide a hash
@@ -294,6 +315,7 @@
 	</requirement>
 	<requirement id="GEN-21" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>Every &lt;File&gt; element can provide SHA-384, SHA-512, and/or SHA-512/256 hash hash values for the referenced file</summary>
 		<reference ref="NISTIR8060" section="4.6.2" />
 		<statement>Whenever a &lt;Payload&gt; or &lt;Evidence&gt; element is
 			included in a tag, every &lt;File&gt; element contained therein MAY
@@ -307,6 +329,7 @@
 	</requirement>
 	<requirement id="GEN-22" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>A @n8060:pathSeparator value is provided for &lt;Payload&gt; and &lt;Evidence&gt; elements</summary>
 		<reference ref="NISTIR8060" section="4.6.3" />
 		<statement>The @n8060:pathSeparator extension attribute SHOULD be used
 			within &lt;Payload&gt; and &lt;Evidence&gt; elements to specify the
@@ -320,6 +343,7 @@
 	</requirement>
 	<requirement id="GEN-23" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>An @n8060:envVarPrefix value is provided for &lt;Payload&gt; and &lt;Evidence&gt; elements</summary>
 		<reference ref="NISTIR8060" section="4.6.3" />
 		<statement>The @n8060:envVarPrefix extension attribute SHOULD be used
 			within &lt;Payload&gt; and &lt;Evidence&gt; elements to specify the
@@ -333,6 +357,7 @@
 	</requirement>
 	<requirement id="GEN-24" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>An @n8060:envVarSuffix value is provided for &lt;Payload&gt; and &lt;Evidence&gt; elements</summary>
 		<reference ref="NISTIR8060" section="4.6.3" />
 		<statement>The @n8060:envVarSuffix extension attribute SHOULD be used
 			within &lt;Payload&gt; and &lt;Evidence&gt; elements to specify the
@@ -346,6 +371,7 @@
 	</requirement>
 	<requirement id="GEN-25" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Maintenance">
+		<summary>The &lt;SoftwareIdentity&gt; @tagId value is not changed when the tag is revised</summary>
 		<reference ref="NISTIR8060" section="4.8" />
 		<statement>When it is necessary to update a tag to correct errors in
 			or add data elements to that tag, the tag’s &lt;SoftwareIdentity&gt;
@@ -358,6 +384,7 @@
 	</requirement>
 	<requirement id="GEN-26" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Maintenance">
+		<summary>The &lt;SoftwareIdentity&gt; @tagVersion value is changed when the tag is revised</summary>
 		<reference ref="NISTIR8060" section="4.8" />
 		<statement>When it is necessary to update a tag to correct errors in
 			or add data elements to that tag, the tag’s &lt;SoftwareIdentity&gt;
@@ -370,6 +397,7 @@
 	</requirement>
 	<requirement id="COR-1" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
+		<summary>The corpus tag's &lt;SoftwareIdentity&gt; @corpus value is "true", and @patch and @supplemental values are "false"</summary>
 		<reference ref="NISTIR8060" section="5.1.1" />
 		<statement>If the value of the &lt;SoftwareIdentity&gt; @corpus
 			attribute is set to "true", then the values of
@@ -383,6 +411,7 @@
 	</requirement>
 	<requirement id="COR-2" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Software Version Identification">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.1.2" />
 		<statement>If a software product has been assigned a version by the
 			software provider, that version MUST be specified in the
@@ -396,6 +425,7 @@
 	</requirement>
 	<requirement id="COR-3" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Software Version Identification">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.1.2" />
 		<statement>If a corpus tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, it MUST also contain a
@@ -408,6 +438,7 @@
 	</requirement>
 	<requirement id="COR-4" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.1.3" />
 		<statement>A corpus tag MUST contain a &lt;Payload&gt; element that
 			enumerates every file that is included in the tagged installation
@@ -420,6 +451,7 @@
 	</requirement>
 	<requirement id="PRI-1" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
+		<summary>The primary tag's &lt;SoftwareIdentity&gt; @corpus, @patch, and @supplemental values are "false"</summary>
 		<reference ref="NISTIR8060" section="5.2.1" />
 		<statement>To indicate that a tag is a primary tag, the
 			&lt;SoftwareIdentity&gt; @corpus, @patch, and @supplemental
@@ -432,6 +464,7 @@
 	</requirement>
 	<requirement id="PRI-2" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Software Version Identification">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a software product has been assigned a version by the
 			software provider, that version MUST be specified in the
@@ -445,6 +478,7 @@
 	</requirement>
 	<requirement id="PRI-3" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Software Version Identification">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a primary tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, it MUST also contain a
@@ -457,6 +491,7 @@
 	</requirement>
 	<requirement id="PRI-4" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Software Version Identification">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a software product has been assigned a version by the
 			software provider, and that version can be determined, the
@@ -470,6 +505,7 @@
 	</requirement>
 	<requirement id="PRI-5" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Software Version Identification">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a primary tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, and the version scheme
@@ -484,6 +520,7 @@
 	</requirement>
 	<requirement id="PRI-6" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>A &lt;Payload&gt; element SHOULD be provided in a software
 			product’s primary tag.</statement>
@@ -495,6 +532,7 @@
 	</requirement>
 	<requirement id="PRI-7" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>An &lt;Evidence&gt; element SHOULD be provided in a
 			software product’s primary tag.</statement>
@@ -506,6 +544,7 @@
 	</requirement>
 	<requirement id="PRI-8" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>&lt;Payload&gt; and &lt;Evidence&gt; elements SHOULD list every
 			file comprising the product described by the tag.</statement>
@@ -517,6 +556,7 @@
 	</requirement>
 	<requirement id="PRI-9" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If the &lt;Payload&gt; element is provided, it MUST list
 			every machine instruction file comprising the product described by
@@ -529,6 +569,7 @@
 	</requirement>
 	<requirement id="PRI-10" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If the &lt;Evidence&gt; element is provided, it MUST list
 			every machine instruction file comprising the product described by
@@ -541,6 +582,7 @@
 	</requirement>
 	<requirement id="PRI-11" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If a &lt;File&gt; element included in a &lt;Payload&gt;
 			element of a primary tag describes a file that can undergo authorized
@@ -555,6 +597,7 @@
 	</requirement>
 	<requirement id="PRI-12" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If it can be determined that a &lt;File&gt; element
 			included in an &lt;Evidence&gt; element of a primary tag describes a
@@ -570,6 +613,7 @@
 	</requirement>
 	<requirement id="PRI-13" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Metadata">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.2.4" />
 		<statement>If appropriate values exist and can be determined, a
 			&lt;Meta&gt; element MUST be provided and MUST furnish values for as
@@ -583,6 +627,7 @@
 	</requirement>
 	<requirement id="PAT-1" swid-ext:tag-type="patch"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
+		<summary>The corpus tag's &lt;SoftwareIdentity&gt; @patch value is "true", and @corpus and @supplemental values are "false"</summary>
 		<reference ref="NISTIR8060" section="5.3.1" />
 		<statement>If the value of the &lt;SoftwareIdentity&gt; @patch
 			attribute is set to "true", then the values of
@@ -596,6 +641,7 @@
 	</requirement>
 	<requirement id="PAT-2" swid-ext:tag-type="patch"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.3.2" />
 		<statement>A patch tag SHOULD contain a &lt;Payload&gt; element that
 			MUST enumerate every file that is modified, removed, or added by the
@@ -608,6 +654,7 @@
 	</requirement>
 	<requirement id="PAT-3" swid-ext:tag-type="patch"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.3.2" />
 		<statement>Each &lt;File&gt; element contained within the
 			&lt;Payload&gt; element of a patch tag MUST include an extension
@@ -631,6 +678,7 @@
 	</requirement>
 	<requirement id="PAT-4" swid-ext:tag-type="patch"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.3.2" />
 		<statement>A patch tag SHOULD contain an &lt;Evidence&gt; element that
 			enumerates every file that was found to have changed as a result of
@@ -643,6 +691,7 @@
 	</requirement>
 	<requirement id="SUP-1" swid-ext:tag-type="supplemental"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
+		<summary>The corpus tag's &lt;SoftwareIdentity&gt; @supplemental value is "true", and @corpus and @patch values are "false"</summary>
 		<reference ref="NISTIR8060" section="5.4.1" />
 		<statement>If the value of the &lt;SoftwareIdentity&gt; @supplemental
 			attribute is set to "true", then the values of
@@ -656,6 +705,7 @@
 	</requirement>
 	<requirement id="SUP-2" swid-ext:tag-type="supplemental"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.4.2" />
 		<statement>A supplemental tag MUST contain a &lt;Link&gt; element to
 			associate itself with the individual tag that it supplements. The
@@ -669,6 +719,7 @@
 	</requirement>
 	<requirement id="SUP-3" swid-ext:tag-type="supplemental"
 		swid-ext:scope="all" swid-ext:category="Data Deconfliction">
+		<summary>TBD</summary>
 		<reference ref="NISTIR8060" section="5.4.3" />
 		<statement>If a supplemental tag provides a data value that conflicts with
 			corresponding data values in the tag being supplemented, the data value in the
@@ -679,5 +730,4 @@
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
-
 </requirements>

@@ -21,7 +21,7 @@
 	</assessments>
 	<assertions>
 		<assert-derived-requirement requirement-id="GEN-6-2"
-			result="FAIL" />
+			result="WARNING" />
 		<assert-remaining quantifier="ALL" result="PASS" />
 	</assertions>
 </content-unit-test>

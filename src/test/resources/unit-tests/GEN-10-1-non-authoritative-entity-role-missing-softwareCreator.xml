@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
-	<requirement>GEN-9-1</requirement>
+	<requirement>GEN-10-1</requirement>
 	<description>This test provides a valid non-authoritative primary tag with
 		no Entity containing the @role 'softwareCreator', which will cause
 		this test to fail.</description>
@@ -22,7 +22,7 @@
 	</assessments>
 	<assertions>
 		<assert-derived-requirement requirement-id="GEN-10-1"
-			result="FAIL" />
+			result="WARNING" />
 		<assert-remaining quantifier="ALL" result="PASS" />
 	</assertions>
 </content-unit-test>

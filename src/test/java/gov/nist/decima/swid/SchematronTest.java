@@ -52,6 +52,7 @@ public class SchematronTest {
 		// Generate the assessment results
 		// TODO: replace this once the requirements manager is implemented
 		RequirementsManager requirementsManager = new StubRequirementsManager(builder.getDerivedRequirementsTestStatus().keySet());
+		builder.setAssessedDocument(doc);
 		AssessmentResults validationResult = builder.build(requirementsManager);
 
 		// Output the results
