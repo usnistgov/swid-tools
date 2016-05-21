@@ -10,7 +10,10 @@
     <xsl:import href="result.xsl"/>
     
     <xsl:param name="has-requirement-categorizations" select="true()"/>
-    
+    <xsl:template name="process-header">
+    	<h1>SWID Tag <small>Validation Report</small></h1>
+    </xsl:template>
+
     <xsl:template name="process-categorizations">
         <xsl:variable name="current-req" select="@id"/>
         <xsl:variable name="req-id-key" select="$requirements/key('requirement-index', $current-req)"/>

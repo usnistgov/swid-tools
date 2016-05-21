@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessment-results xmlns="http://decima.nist.gov/xml/assessment-results/0.1"
+	subject="file:/C:/eclipse-workspace/workspace-decima/swidval/trunk/src/test/resources/swid.xml"
+	start="2016-05-19T12:25:56.989-04:00" end="2016-05-19T12:26:11.974-04:00">
+  <requirements>
+    <requirement href="classpath:requirements.xml" />
+  </requirements>
+  <results>
+    <base-requirement id="GEN-1">
+      <status>PASS</status>
+      <derived-requirement id="GEN-1-1">
+        <status>PASS</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-2">
+      <status>PASS</status>
+      <derived-requirement id="GEN-2-1">
+        <status>PASS</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-2-2">
+        <status>PASS</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-3">
+      <status>NOT_IN_SCOPE</status>
+    </base-requirement>
+    <base-requirement id="GEN-4">
+      <status>PASS</status>
+      <derived-requirement id="GEN-4-1">
+        <status>PASS</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-4-2">
+        <status>PASS</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-4-3">
+        <status>PASS</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-5">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="GEN-5-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-5-2">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-5-3">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-6">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="GEN-6-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-6-2">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-6-3">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-7">
+      <status>PASS</status>
+      <derived-requirement id="GEN-7-1">
+        <status>PASS</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-8">
+      <status>FAIL</status>
+      <derived-requirement id="GEN-8-1">
+        <status>FAIL</status>
+        <test test-id-ref="GEN-8-1">
+          <status>FAIL</status>
+          <message>The &lt;Entity&gt; with the @name 'ACME Connexion' does not have matching @role attribute values with other &lt;Entity&gt; elements with the same @regid attribute value.</message>
+          <location line="6" column="38" xpath="/*:SoftwareIdentity[namespace-uri()='http://standards.iso.org/iso/19770/-2/2015/schema.xsd'][1]/*:Payload[namespace-uri()='http://standards.iso.org/iso/19770/-2/2015/schema.xsd'][1]/*:File[namespace-uri()='http://standards.iso.org/iso/19770/-2/2015/schema.xsd'][1]" />
+        </test>
+        
+        <test test-id-ref="GEN-8-1">
+          <status>FAIL</status>
+          <message>An &lt;Entity&gt; doesnt exist that has a @role attribute with one of the following values: "aggregator", "distributor",      "licensor", or "softwareCreator".</message>
+          <location line="5" column="105" xpath="/*:SoftwareIdentity[namespace-uri()='http://standards.iso.org/iso/19770/-2/2015/schema.xsd'][1]" />
+        </test>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-9">
+      <status>FAIL</status>
+      <derived-requirement id="GEN-9-1">
+        <status>FAIL</status>
+        <test test-id-ref="GEN-9-1">
+          <status>FAIL</status>
+          <message>An &lt;Entity&gt; element doesnt exist that has a @role attribute value of "softwareCreator".</message>
+          <location line="5" column="105" xpath="/*:SoftwareIdentity[namespace-uri()='http://standards.iso.org/iso/19770/-2/2015/schema.xsd'][1]" />
+        </test>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-10">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="GEN-10-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-11">
+      <status>NOT_TESTED</status>
+    </base-requirement>
+    <base-requirement id="GEN-12">
+      <status>NOT_TESTED</status>
+    </base-requirement>
+    <base-requirement id="GEN-13">
+      <status>NOT_TESTED</status>
+    </base-requirement>
+    <base-requirement id="GEN-14">
+      <status>PASS</status>
+      <derived-requirement id="GEN-14-1">
+        <status>PASS</status>
+      </derived-requirement>
+      <derived-requirement id="GEN-14-2">
+        <status>PASS</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-15">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-15-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-16">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-16-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-17">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="GEN-17-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-18">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-18-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-19">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-19-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-20">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="GEN-20-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-21">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-21-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-22">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-22-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-23">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-23-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-24">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-24-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-25">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-25-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="GEN-26">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="GEN-26-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="COR-1">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="COR-1-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="COR-2">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="COR-2-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="COR-3">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="COR-3-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="COR-4">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="COR-4-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-1">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-1-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-2">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-2-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-3">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-3-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-4">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PRI-4-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-5">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PRI-5-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-6">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-6-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-7">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PRI-7-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-8">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-8-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-9">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-9-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-10">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PRI-10-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-11">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-11-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-12">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PRI-12-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PRI-13">
+      <status>NOT_TESTED</status>
+      <derived-requirement id="PRI-13-1">
+        <status>NOT_TESTED</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PAT-1">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PAT-1-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PAT-2">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PAT-2-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PAT-3">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PAT-3-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="PAT-4">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="PAT-4-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="SUP-1">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="SUP-1-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="SUP-2">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="SUP-2-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+    <base-requirement id="SUP-3">
+      <status>NOT_IN_SCOPE</status>
+      <derived-requirement id="SUP-3-1">
+        <status>NOT_IN_SCOPE</status>
+      </derived-requirement>
+    </base-requirement>
+  </results>
+</assessment-results>
