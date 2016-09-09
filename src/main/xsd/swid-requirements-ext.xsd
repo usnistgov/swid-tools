@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://decima.nist.gov/xml/swid-requirements-ext/0.1"
-	xmlns:tns="http://decima.nist.gov/xml/swid-requirements-ext/0.1"
+	targetNamespace="http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
+	xmlns:tns="http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
 	elementFormDefault="qualified">
 	<attribute name="tag-type">
 		<simpleType>

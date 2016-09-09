@@ -1,22 +1,22 @@
 package gov.nist.decima.swid.services;
 
+import org.apache.xerces.util.XMLCatalogResolver;
 import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.ext.EntityResolver2;
 
 // TODO: Remove this?
 public class ResourceResolverExtension implements gov.nist.decima.core.service.ResourceResolverExtension {
 //	private static final ExtendedEntityResolver RESOLVER = new ExtendedEntityResolver();
+	private static final XMLCatalogResolver RESOLVER = new XMLCatalogResolver(new String[] { "classpath:swidval-catalog.xml"});
 
 	@Override
 	public EntityResolver2 getEntityResolver() {
-		return null;
-//		return RESOLVER;
+		return RESOLVER;
 	}
 
 	@Override
 	public LSResourceResolver getLSResourceResolver() {
-		return null;
-//		return RESOLVER;
+		return RESOLVER;
 	}
 
 //	private static class ExtendedEntityResolver implements EntityResolver2, LSResourceResolver {

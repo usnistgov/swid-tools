@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<requirements xmlns="http://decima.nist.gov/xml/requirements/0.1"
-	xmlns:swid-ext="http://decima.nist.gov/xml/swid-requirements-ext/0.1"
+<requirements xmlns="http://csrc.nist.gov/ns/decima/requirements/1.0"
+	xmlns:swid-ext="http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://decima.nist.gov/xml/requirements/0.1 ../../../../../decima/trunk/core/src/main/xsd/requirements.xsd http://decima.nist.gov/xml/swid-requirements-ext/0.1 ../xsd/swid-requirements-ext.xsd">
+	xsi:schemaLocation="http://csrc.nist.gov/ns/decima/requirements/1.0 http://csrc.nist.gov/schema/decima/requirements/decima-requirements-0.1.xsd http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1 http://csrc.nist.gov/schema/swidval/swid-requirements-ext/swidval-swid-requirements-ext-0.1.xsd">
 	<resource id="NISTIR8060"
 		name="NISTIR 8060"
 		href="file:///C:/Users/davidwal.NIST/Documents/SWID/NISTIR-8060-final-FOR-EDITING.pdf" />
@@ -32,7 +32,7 @@
 		<derived-requirements>
 			<derived-requirement id="GEN-2-1" type="MUST">
 				<statement>The &lt;SoftwareIdentity&gt; element MUST specify an
-					@xml:lang attribute with a non-blank value.</statement>
+					@xml:lang attribute.</statement>
 				<message>The &lt;SoftwareIdentity&gt; element does not specify an
 					@xml:lang attribute.</message>
 			</derived-requirement>
@@ -52,6 +52,7 @@
 			@xml:lang attribute, non-authoritative tag creators SHOULD use the
 			language tag corresponding to the default language of the device
 			where the tagged product resides.</statement>
+			<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="GEN-4" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
@@ -148,7 +149,7 @@
 					has a @role attribute that contains the value "tagCreator" and one
 					or more of the following additional values: "aggregator", "distributor",
 					"licensor", or "softwareCreator".</statement>
-				<message>An &lt;Entity&gt; doesn't exist that has a @role attribute with one of the following values: "aggregator", "distributor",
+				<message>An &lt;Entity&gt; doesn't exist that has a @role attribute with the value "tagCreator" and at least one of the following values: "aggregator", "distributor",
 					"licensor", or "softwareCreator".</message>
 			</derived-requirement>
 		</derived-requirements>
@@ -184,17 +185,24 @@
 	</requirement>
 	<requirement id="GEN-11" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
-		<summary>TBD</summary>
+		<summary>When the &lt;Link&gt; @href attribute value has the URI scheme 'swid', the schema specific part references the @tagId of the target tag.</summary>
 		<reference ref="NISTIR8060" section="4.5.1" />
+		<!-- TODO: Update should read "followed by the @tagId attribute value of the target tag." -->
 		<statement>In order to link a source tag to a specific target tag
 			whose @tagId is known at the time the source tag is created, tag
 			creators MUST set the value of the &lt;Link&gt; @href attribute in
 			the source tag to a URI with "swid:" as its scheme, followed by the
 			@tagId of the target tag.</statement>
+		<derived-requirements>
+			<derived-requirement id="GEN-11-1" type="MUST">
+				<statement>All &lt;Link&gt; elements with an @href attribute value with the "swid" URI scheme MUST have a URI schema specific part that is a valid tag identifier.</statement>
+				<message>The &lt;Link&gt; elements with an @href attribute value ''{0}'' is not a valid tag identifier. The URI syntax is invalid according to RFC 3986.</message>
+			</derived-requirement>
+		</derived-requirements>
 	</requirement>
 	<requirement id="GEN-12" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
-		<summary>TBD</summary>
+		<summary>When the &lt;Link&gt; @href attribute value has the URI scheme 'swidpath', the schema specific part contains a URI encoded valid XPath expression.</summary>
 		<reference ref="NISTIR8060" section="4.5.2" />
 		<statement>When linking a source tag to one or more target tags whose
 			@tagId value(s) cannot be determined at the time the source tag is
@@ -205,16 +213,18 @@
 			designates as reserved MUST be percent encoded per the URI
 			specification. All embedded SWID tag elements in the query MUST be
 			prefixed with the "swid:" namespace.</statement>
+		<!-- While a custom XPath function could be used to check the XPath, this requirement cannot be fully checked -->
 	</requirement>
 	<requirement id="GEN-13" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
-		<summary>TBD</summary>
+		<summary>When the &lt;Link&gt; @href attribute value has the URI scheme 'swidpath', the XPath is written to identify tags for which the XPath matches.</summary>
 		<reference ref="NISTIR8060" section="4.5.2" />
 		<statement>Any XPath query used within a &lt;Link&gt; @href element
 			MUST be designed in such a way that it can used by a system to
 			iterate over a set of SWID tags and identify matching tags by
 			applying the XPath query to each tag and checking for a non-empty
 			result.</statement>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="GEN-14" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
@@ -244,8 +254,15 @@
 			&lt;Payload&gt; or &lt;Evidence&gt; element MUST include a value for
 			the @version attribute, if one exists for the file.</statement>
 		<derived-requirements>
-			<derived-requirement id="GEN-15-1" type="MUST">
-				<statement></statement>
+			<derived-requirement id="GEN-15-1" type="MUST" conditional="true">
+				<statement>Every &lt;File&gt; element provided within a
+					&lt;Payload&gt; or &lt;Evidence&gt; element MUST provide a @version attribute.</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provide a @version attribute.</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-15-2" type="MUST" conditional="true">
+				<statement>Every &lt;File&gt; element provided within a
+					&lt;Payload&gt; or &lt;Evidence&gt; element MUST provide a non-blank @version attribute value.</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' has a blank @version attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -257,7 +274,8 @@
 			MUST include a hash value.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-16-1" type="MUST">
-				<statement></statement>
+				<statement>Every &lt;File&gt; element MUST provide at least one hash value for the referenced file</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provide a hash attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -269,13 +287,14 @@
 			element SHOULD include a hash value.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-17-1" type="SHOULD">
-				<statement></statement>
+				<statement>Every &lt;File&gt; element SHOULD provide at least one hash value for the referenced file</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provide a hash attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="GEN-18" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
-		<summary>Every &lt;File&gt; element provides a hash value for the referenced file with suffecient security strength</summary>
+		<summary>Every &lt;File&gt; element provides a hash value for the referenced file with sufficient security strength</summary>
 		<reference ref="NISTIR8060" section="4.6.2" />
 		<statement>Whenever &lt;Payload&gt; or &lt;Evidence&gt; elements are
 			included in a tag, every &lt;File&gt; element SHOULD avoid the
@@ -283,7 +302,20 @@
 			security strength (&lt; 128 bits).</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-18-1" type="SHOULD">
-				<statement></statement>
+				<statement>Every &lt;File&gt; element SHOULD avoid providing hash values based on the MD5 hash function</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' provides a MD5 hash value which has an insufficient security strength (64 bits &lt; 128 bits).</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-18-2" type="SHOULD">
+				<statement>Every &lt;File&gt; element SHOULD avoid providing hash values based on the SHA1 hash function</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' provides a SHA1 hash value which has an insufficient security strength (80 bits &lt; 128 bits).</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-18-3" type="SHOULD">
+				<statement>Every &lt;File&gt; element SHOULD avoid providing hash values based on the SHA224 hash function</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' provides a SHA224 hash value which has an insufficient security strength (112 bits &lt; 128 bits).</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-18-4" type="SHOULD">
+				<statement>Every &lt;File&gt; element SHOULD avoid providing hash values based on the SHA224 hash function</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' provides a SHA224 hash value which has an insufficient security strength (80 bits &lt; 128 bits).</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -296,7 +328,8 @@
 			value based on the SHA-256 hash function.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-19-1" type="MUST">
-				<statement></statement>
+				<statement>Every &lt;File&gt; element provided inside a &lt;Payload&gt; element MUST provide a hash value based on the SHA-256 hash function.</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provides a SHA256 hash value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -309,7 +342,8 @@
 			value based on the SHA-256 hash function.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-20-1" type="SHOULD">
-				<statement></statement>
+				<statement>Every &lt;File&gt; element provided inside a &lt;Evidence&gt; element MUST provide a hash value based on the SHA-256 hash function.</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provides a SHA256 hash value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -321,11 +355,7 @@
 			included in a tag, every &lt;File&gt; element contained therein MAY
 			additionally provide hash values based on the SHA-384, SHA-512,
 			and/or SHA-512/256 hash functions.</statement>
-		<derived-requirements>
-			<derived-requirement id="GEN-21-1" type="MAY">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="GEN-22" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
@@ -374,26 +404,18 @@
 		<summary>The &lt;SoftwareIdentity&gt; @tagId value is not changed when the tag is revised</summary>
 		<reference ref="NISTIR8060" section="4.8" />
 		<statement>When it is necessary to update a tag to correct errors in
-			or add data elements to that tag, the tag’s &lt;SoftwareIdentity&gt;
+			or add data elements to that tag, the tag's &lt;SoftwareIdentity&gt;
 			@tagId SHOULD NOT be changed.</statement>
-		<derived-requirements>
-			<derived-requirement id="GEN-25-1" type="MUST">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="GEN-26" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Maintenance">
 		<summary>The &lt;SoftwareIdentity&gt; @tagVersion value is changed when the tag is revised</summary>
 		<reference ref="NISTIR8060" section="4.8" />
 		<statement>When it is necessary to update a tag to correct errors in
-			or add data elements to that tag, the tag’s &lt;SoftwareIdentity&gt;
+			or add data elements to that tag, the tag's &lt;SoftwareIdentity&gt;
 			@tagVersion attribute MUST be changed.</statement>
-		<derived-requirements>
-			<derived-requirement id="GEN-26-1" type="MUST">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="COR-1" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
@@ -411,11 +433,11 @@
 	</requirement>
 	<requirement id="COR-2" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Software Version Identification">
-		<summary>TBD</summary>
+		<summary>If the software is versioned, the corpus tag's &lt;SoftwareIdentity&gt; @version provides a value.</summary>
 		<reference ref="NISTIR8060" section="5.1.2" />
 		<statement>If a software product has been assigned a version by the
 			software provider, that version MUST be specified in the
-			&lt;SoftwareIdentity&gt; @version attribute of the product’s corpus
+			&lt;SoftwareIdentity&gt; @version attribute of the product's corpus
 			tag, if any.</statement>
 		<derived-requirements>
 			<derived-requirement id="COR-2-1" type="MUST">
@@ -425,7 +447,7 @@
 	</requirement>
 	<requirement id="COR-3" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Software Version Identification">
-		<summary>TBD</summary>
+		<summary>A corpus tag's &lt;SoftwareIdentity&gt; @versionScheme attribute value is provided when a @version attribute value is provided.</summary>
 		<reference ref="NISTIR8060" section="5.1.2" />
 		<statement>If a corpus tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, it MUST also contain a
@@ -438,7 +460,9 @@
 	</requirement>
 	<requirement id="COR-4" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>The corpus tag contains a &lt;Payload&gt; element
+			enumerating all files included in the tagged installation
+			media.</summary>
 		<reference ref="NISTIR8060" section="5.1.3" />
 		<statement>A corpus tag MUST contain a &lt;Payload&gt; element that
 			enumerates every file that is included in the tagged installation
@@ -464,11 +488,11 @@
 	</requirement>
 	<requirement id="PRI-2" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Software Version Identification">
-		<summary>TBD</summary>
+		<summary>If the software is versioned, the primary tag's &lt;SoftwareIdentity&gt; @version provides a value.</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a software product has been assigned a version by the
 			software provider, that version MUST be specified in the
-			&lt;SoftwareIdentity&gt; @version attribute of the product’s primary
+			&lt;SoftwareIdentity&gt; @version attribute of the product's primary
 			tag.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-2-1" type="MUST">
@@ -478,7 +502,7 @@
 	</requirement>
 	<requirement id="PRI-3" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Software Version Identification">
-		<summary>TBD</summary>
+		<summary>A corpus tag's &lt;SoftwareIdentity&gt; @versionScheme attribute value is provided when a @version attribute value is provided.</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a primary tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, it MUST also contain a
@@ -491,7 +515,7 @@
 	</requirement>
 	<requirement id="PRI-4" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Software Version Identification">
-		<summary>TBD</summary>
+		<summary>If the software is versioned and that version can be determined, the primary tag's &lt;SoftwareIdentity&gt; @version attribute is assigned that version value.</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a software product has been assigned a version by the
 			software provider, and that version can be determined, the
@@ -505,7 +529,7 @@
 	</requirement>
 	<requirement id="PRI-5" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Software Version Identification">
-		<summary>TBD</summary>
+		<summary>If the software is versioned and the versioning scheme can be determined, the primary tag's &lt;SoftwareIdentity&gt; @versionScheme attribute is assigned that version value.</summary>
 		<reference ref="NISTIR8060" section="5.2.2" />
 		<statement>If a primary tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, and the version scheme
@@ -520,10 +544,10 @@
 	</requirement>
 	<requirement id="PRI-6" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>A &lt;Payload&gt; element is provided in the primary tag.</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>A &lt;Payload&gt; element SHOULD be provided in a software
-			product’s primary tag.</statement>
+			product's primary tag.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-6-1" type="SHOULD">
 				<statement></statement>
@@ -532,10 +556,10 @@
 	</requirement>
 	<requirement id="PRI-7" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>An &lt;Evidence&gt; element is provided in the primary tag.</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>An &lt;Evidence&gt; element SHOULD be provided in a
-			software product’s primary tag.</statement>
+			software product's primary tag.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-7-1" type="SHOULD">
 				<statement></statement>
@@ -544,7 +568,7 @@
 	</requirement>
 	<requirement id="PRI-8" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>The &lt;Payload&gt; or &lt;Evidence&gt; element lists all files comprising the tagged product.</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>&lt;Payload&gt; and &lt;Evidence&gt; elements SHOULD list every
 			file comprising the product described by the tag.</statement>
@@ -556,64 +580,48 @@
 	</requirement>
 	<requirement id="PRI-9" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>The &lt;Payload&gt; element lists all machine instruction files comprising the tagged product.</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If the &lt;Payload&gt; element is provided, it MUST list
 			every machine instruction file comprising the product described by
 			the tag.</statement>
-		<derived-requirements>
-			<derived-requirement id="PRI-9-1" type="MUST">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="PRI-10" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>The &lt;Evidence&gt; element lists all machine instruction files comprising the tagged product.</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If the &lt;Evidence&gt; element is provided, it MUST list
 			every machine instruction file comprising the product described by
 			the tag.</statement>
-		<derived-requirements>
-			<derived-requirement id="PRI-10-1" type="MUST">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="PRI-11" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>Any file referenced by a &lt;Payload&gt; &lt;File&gt; element that may change in size, version, or hash value is marked with the @n8060:mutable extension attribute with the value "true".</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If a &lt;File&gt; element included in a &lt;Payload&gt;
 			element of a primary tag describes a file that can undergo authorized
 			changes over time in ways that could alter its size, version, and/or
-			hash value, the tag creator MUST set that file’s &lt;File&gt;
+			hash value, the tag creator MUST set that file's &lt;File&gt;
 			@n8060:mutable extension attribute to "true".</statement>
-		<derived-requirements>
-			<derived-requirement id="PRI-11-1" type="MUST">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="PRI-12" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
+		<summary>Any file referenced by an &lt;Evidence&gt; &lt;File&gt; element that may change in size, version, or hash value is marked with the @n8060:mutable extension attribute with the value "true".</summary>
 		<reference ref="NISTIR8060" section="5.2.3" />
 		<statement>If it can be determined that a &lt;File&gt; element
 			included in an &lt;Evidence&gt; element of a primary tag describes a
 			file that can undergo authorized changes over time in ways that could
 			alter its size, version, and/or hash value, the tag creator SHOULD
-			set that file’s &lt;File&gt; @n8060:mutable extension attribute to
+			set that file's &lt;File&gt; @n8060:mutable extension attribute to
 			"true".</statement>
-		<derived-requirements>
-			<derived-requirement id="PRI-12-1" type="SHOULD">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="PRI-13" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Metadata">
-		<summary>TBD</summary>
+		<summary>A &lt;Meta&gt; element is provided with values for the @product, @colloquialVersion, @revision, and @edition attributes.</summary>
 		<reference ref="NISTIR8060" section="5.2.4" />
 		<statement>If appropriate values exist and can be determined, a
 			&lt;Meta&gt; element MUST be provided and MUST furnish values for as
@@ -724,10 +732,6 @@
 		<statement>If a supplemental tag provides a data value that conflicts with
 			corresponding data values in the tag being supplemented, the data value in the
 			supplemented tag MUST be considered to be the correct value.</statement>
-		<derived-requirements>
-			<derived-requirement id="SUP-3-1" type="MUST">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 </requirements>

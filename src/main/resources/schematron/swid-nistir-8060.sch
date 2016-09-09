@@ -98,15 +98,24 @@
             <!-- Every Entity with the same @regid must have the same @role entries -->
             <assert id="GEN-7-1" test="every $n in (preceding-sibling::node() union following-sibling::node()) satisfies (not(@regid=$n/@regid) or @role=$n/@role)"><value-of select="@name"/></assert>
         </rule>
+        <rule id="general-link" context="swid:Link">
+            <assert id="GEN-11-1" test="not(matches(@href,'^swid:')) or matches(@href,'^([a-z0-9+.-]+):(//((([a-z0-9\-._~!$&amp;''()*+,;=:]|%[0-9A-F]{2})*)@)?(([a-z0-9\-._~!$&amp;''()*+,;=]|%[0-9A-F]{2})*)(:(\d*))?(/([a-z0-9\-._~!$&amp;''()*+,;=:@/]|%[0-9A-F]{2})*)?|(/?([a-z0-9\-._~!$&amp;''()*+,;=:@]|%[0-9A-F]{2})+([a-z0-9\-._~!$&amp;''()*+,;=:@/]|%[0-9A-F]{2})*)?)(\?(([a-z0-9\-._~!$&amp;''()*+,;=:/?@]|%[0-9A-F]{2})*))?(#(([a-z0-9\-._~!$&amp;''()*+,;=:/?@]|%[0-9A-F]{2})*))?$')"><value-of select="@href"/></assert>
+        </rule>
         <rule id="general-file" context="swid:File">
             <assert id="GEN-14-1" test="@size"><value-of select="@name"/></assert>
             <assert id="GEN-14-2" test="@size and string-length(@size)!=0"><value-of select="@name"/></assert>
+            <assert id="GEN-15-1" test="@version"><value-of select="@name"/></assert>
+            <assert id="GEN-15-2" test="@version and string-length(@version)!=0"><value-of select="@name"/></assert>
+            <assert id="GEN-18-1" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmldsig-more#md5'])"><value-of select="@name"/></assert>
+            <assert id="GEN-18-2" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2000/09/xmldsig#sha1'])"><value-of select="@name"/></assert>
+            <assert id="GEN-18-3" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmldsig-more#sha224'])"><value-of select="@name"/></assert>
+            <assert id="GEN-18-4" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#ripemd160'])"><value-of select="@name"/></assert>
         </rule>
     </pattern>
 
 	<pattern id="general-auth">
     	<rule id="general-auth-software-identity" context="swid:SoftwareIdentity">
-    		<assert id="GEN-8-1" test="exists(swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))])"/>
+    		<assert id="GEN-8-1" test="swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))]"/>
     	    <assert id="GEN-9-1" test="swid:Entity[contains(@role,'softwareCreator')]"/>
     	</rule>
 <!-- 
@@ -131,6 +140,12 @@
             <assert id="GEN-3-2" test="@regid"/>
         </rule>
  -->
+	    <rule id="general-auth-file" context="swid:Payload//swid:File">
+	        <assert id="GEN-16-1" test="@*:hash"><value-of select="@name"/></assert>
+<!--	        <assert id="GEN-16-2" subject="@*:hash" test="matches(text(),'^[a-fA-F0-9]+$')"><value-of select="@name"/>|<value-of select="local-name(@*:hash)"/>|<value-of select="namespace-uri(@*:hash)"/></assert>
+-->
+	        <assert id="GEN-19-1" test="@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256']"><value-of select="@name"/></assert>
+	    </rule>
 	</pattern>
 
 	<pattern id="general-non-auth">
@@ -144,6 +159,11 @@
 	        <assert id="GEN-6-1" test="@regid"><value-of select="@name"/></assert>
 	        <assert id="GEN-6-2" test="@regid and string-length(@regid)!=0"><value-of select="@name"/></assert>
 	        <assert id="GEN-6-3" test="@regid and @regid!='http://invalid.unavailable'"><value-of select="@name"/></assert>
+	    </rule>
+
+	    <rule id="general-non-auth-file" context="swid:Evidence//swid:File">
+	        <assert id="GEN-17-1" test="@*:hash"><value-of select="@name"/></assert>
+	        <assert id="GEN-20-1" test="@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256']"><value-of select="@name"/></assert>
 	    </rule>
 	</pattern>
 </schema>

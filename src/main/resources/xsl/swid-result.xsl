@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:res="http://decima.nist.gov/xml/assessment-results/0.1"
-    xmlns:req="http://decima.nist.gov/xml/requirements/0.1"
-    xmlns:swid-ext="http://decima.nist.gov/xml/swid-requirements-ext/0.1"
-    exclude-result-prefixes="xs"
+    xmlns:swid-ext="http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
     version="2.0">
 
-    <xsl:import href="result.xsl"/>
+    <xsl:import href="classpath:xsl/result.xsl"/>
     
     <xsl:param name="has-requirement-categorizations" select="true()"/>
     <xsl:template name="process-header">

@@ -7,6 +7,8 @@ import gov.nist.decima.core.assessment.result.ResultStatusBehavior;
 import gov.nist.decima.core.requirement.Requirement;
 
 public class SWIDValResultStatusBehavior implements ResultStatusBehavior {
+	private static final String TAG_TYPES_QNAME = "{"+XMLConstants.REQUIREMENTS_SWID_EXTENSION_NS+"}tag-type";
+	private static final String SCOPE_QNAME = "{"+XMLConstants.REQUIREMENTS_SWID_EXTENSION_NS+"}scope";
 	private final TagType tagType;
 	private final boolean authoritative;
 
@@ -19,8 +21,8 @@ public class SWIDValResultStatusBehavior implements ResultStatusBehavior {
 	public boolean isInScope(Requirement requirement) {
 		Map<String, Set<String>> tags = requirement.getMetadataTagValueMap();
 
-		Set<String> tagTypes = tags.get("{http://decima.nist.gov/xml/swid-requirements-ext/0.1}tag-type");
-		Set<String> scopeValues = tags.get("{http://decima.nist.gov/xml/swid-requirements-ext/0.1}scope");
+		Set<String> tagTypes = tags.get(TAG_TYPES_QNAME);
+		Set<String> scopeValues = tags.get(SCOPE_QNAME);
 		String scope = authoritative ? "authoritative" : "non-authoritative";
 		boolean matchTagType = tagTypes == null || tagTypes.isEmpty() || tagTypes.contains("all") || tagTypes.contains(tagType.getName());
 		boolean matchScope = scopeValues == null || scopeValues.isEmpty() || scopeValues.contains("all") || scopeValues.contains(scope);
