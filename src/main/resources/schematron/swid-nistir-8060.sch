@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron"
     xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+    xmlns:n8060="http://csrc.nist.gov/ns/swid/2015-extensions/1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://standards.iso.org/iso/19770/-2/2015/schema.xsd swid-schema-2015-06-08.xsd"
+    xsi:schemaLocation="http://standards.iso.org/iso/19770/-2/2015/schema.xsd swid-schema-2015-06-08.xsd http://csrc.nist.gov/ns/swid/2015-extensions/1.0 http://csrc.nist.gov/schema/swid/2015-extensions/swid-2015-extensions-1.0.xsd"
     queryBinding="xslt2"
     defaultPhase="swid.primary.auth">
     <title>ISO/IEC 19770-2 SWID Tag Checker based on NISTIR 8060</title>
     <ns uri="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" prefix="swid"/>
+    <ns uri="http://csrc.nist.gov/ns/swid/2015-extensions/1.0" prefix="n8060"/>
     <ns prefix="java" uri="java:gov.nist.decima.swid.schematron"/>
 
     <phase id="swid.primary.auth">
@@ -14,6 +16,8 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-auth"/>
+        <active pattern="primary"/>
+        <active pattern="primary-auth"/>
     </phase>
 
     <phase id="swid.primary.non-auth">
@@ -21,6 +25,8 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-non-auth"/>
+        <active pattern="primary"/>
+        <active pattern="primary-non-auth"/>
     </phase>
 
     <phase id="swid.patch.auth">
@@ -28,6 +34,8 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-auth"/>
+        <active pattern="patch"/>
+        <active pattern="patch-auth"/>
     </phase>
 
     <phase id="swid.patch.non-auth">
@@ -35,6 +43,8 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-non-auth"/>
+        <active pattern="patch"/>
+        <active pattern="patch-non-auth"/>
     </phase>
 
     <phase id="swid.corpus.auth">
@@ -42,6 +52,7 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-auth"/>
+        <active pattern="corpus"/>
     </phase>
 
     <phase id="swid.corpus.non-auth">
@@ -49,6 +60,7 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-non-auth"/>
+        <active pattern="corpus"/>
     </phase>
 
     <phase id="swid.supplemental.auth">
@@ -56,6 +68,7 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-auth"/>
+        <active pattern="supplemental"/>
     </phase>
 
     <phase id="swid.supplemental.non-auth">
@@ -63,6 +76,7 @@
         <active pattern="ISO-19770-2"/>
         <active pattern="general"/>
         <active pattern="general-non-auth"/>
+        <active pattern="supplemental"/>
     </phase>
 
     <let name="authoritative" value="if (//swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))]) then 'true' else 'false'"/>
@@ -101,11 +115,20 @@
         <rule id="general-link" context="swid:Link">
             <assert id="GEN-11-1" test="not(matches(@href,'^swid:')) or matches(@href,'^([a-z0-9+.-]+):(//((([a-z0-9\-._~!$&amp;''()*+,;=:]|%[0-9A-F]{2})*)@)?(([a-z0-9\-._~!$&amp;''()*+,;=]|%[0-9A-F]{2})*)(:(\d*))?(/([a-z0-9\-._~!$&amp;''()*+,;=:@/]|%[0-9A-F]{2})*)?|(/?([a-z0-9\-._~!$&amp;''()*+,;=:@]|%[0-9A-F]{2})+([a-z0-9\-._~!$&amp;''()*+,;=:@/]|%[0-9A-F]{2})*)?)(\?(([a-z0-9\-._~!$&amp;''()*+,;=:/?@]|%[0-9A-F]{2})*))?(#(([a-z0-9\-._~!$&amp;''()*+,;=:/?@]|%[0-9A-F]{2})*))?$')"><value-of select="@href"/></assert>
         </rule>
+        <rule id="general-payload-and-evidence" context="swid:Payload|swid:Evidence">
+            <assert id="GEN-22-1" test="@n8060:pathSeparator" ><value-of select="local-name()"/></assert>
+            <assert id="GEN-22-2" test="not(@n8060:pathSeparator) or string-length(@n8060:pathSeparator)!=0" ><value-of select="local-name()"/>|<value-of select="@n8060:pathSeparator/name()"/></assert>
+            <assert id="GEN-23-1" test="@n8060:envVarPrefix" ><value-of select="local-name()"/></assert>
+            <assert id="GEN-23-2" test="not(@n8060:envVarPrefix) or string-length(@n8060:envVarPrefix)!=0" ><value-of select="local-name()"/>|<value-of select="@n8060:envVarPrefix/name()"/></assert>
+            <assert id="GEN-24-1" test="@n8060:envVarSuffix" ><value-of select="local-name()"/></assert>
+            <assert id="GEN-24-2" test="not(@n8060:envVarSuffix) or string-length(@n8060:envVarSuffix)!=0" ><value-of select="local-name()"/>|<value-of select="@n8060:envVarSuffix/name()"/></assert>
+        </rule>
+
         <rule id="general-file" context="swid:File">
             <assert id="GEN-14-1" test="@size"><value-of select="@name"/></assert>
             <assert id="GEN-14-2" test="@size and string-length(@size)!=0"><value-of select="@name"/></assert>
             <assert id="GEN-15-1" test="@version"><value-of select="@name"/></assert>
-            <assert id="GEN-15-2" test="@version and string-length(@version)!=0"><value-of select="@name"/></assert>
+            <assert id="GEN-15-2" test="not(@version) or string-length(@version)!=0"><value-of select="@name"/></assert>
             <assert id="GEN-18-1" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmldsig-more#md5'])"><value-of select="@name"/></assert>
             <assert id="GEN-18-2" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2000/09/xmldsig#sha1'])"><value-of select="@name"/></assert>
             <assert id="GEN-18-3" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmldsig-more#sha224'])"><value-of select="@name"/></assert>
@@ -145,6 +168,7 @@
 <!--	        <assert id="GEN-16-2" subject="@*:hash" test="matches(text(),'^[a-fA-F0-9]+$')"><value-of select="@name"/>|<value-of select="local-name(@*:hash)"/>|<value-of select="namespace-uri(@*:hash)"/></assert>
 -->
 	        <assert id="GEN-19-1" test="@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256']"><value-of select="@name"/></assert>
+	        <assert id="GEN-19-2" test="matches(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256'], '^[abcdef0-9]{64}$','i')"><value-of select="@name"/></assert>
 	    </rule>
 	</pattern>
 
@@ -166,4 +190,83 @@
 	        <assert id="GEN-20-1" test="@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256']"><value-of select="@name"/></assert>
 	    </rule>
 	</pattern>
+    
+    <pattern id="corpus">
+        <rule id="corpus-software-identity" context="swid:SoftwareIdentity">
+            <assert id="COR-1-1" test="exists(@corpus) and @corpus = true()"/>
+            <assert id="COR-1-2" test="empty(@patch) or @patch = false()"/>
+            <assert id="COR-1-3" test="empty(@supplemental) or @supplemental = false()"/>
+        </rule>
+    </pattern>
+    
+    <pattern id="primary">
+        <rule id="primary-software-identity" context="swid:SoftwareIdentity">
+            <assert id="PRI-1-1" test="empty(@corpus) or @corpus = false()"/>
+            <assert id="PRI-1-2" test="empty(@patch) or @patch = false()"/>
+            <assert id="PRI-1-3" test="empty(@supplemental) or @supplemental = false()"/>
+            <assert id="PRI-13-1" test="swid:Meta"/>
+        </rule>
+
+        <rule id="primary-meta" context="swid:Meta">
+            <assert id="PRI-13-2" test="@product"/>
+            <assert id="PRI-13-3" test="@colloquialVersion"/>
+            <assert id="PRI-13-4" test="@revision"/>
+            <assert id="PRI-13-5" test="@edition"/>
+        </rule>
+            
+        <rule id="primary-payload-or-evidence" context="swid:Payload|swid:Evidence">
+            <assert id="PRI-8-1" test="exists(child::swid:File)"/>
+        </rule>
+    </pattern>
+    
+    <pattern id="primary-auth">
+        <rule id="primary-auth-software-identity" context="swid:SoftwareIdentity">
+            <assert id="PRI-2-1" test="@version"><value-of select="@name"/></assert>
+            <assert id="PRI-2-2" test="not(@version) or string-length(@version)!=0"/>
+            <assert id="PRI-3-1" test="not(@version) or @versionScheme"/>
+            <assert id="PRI-3-2" test="not(@versionScheme) or string-length(@versionScheme)!=0"/>
+            <assert id="PRI-6-1" test="swid:Payload"/>
+            <assert id="PRI-6-2" test="not(swid:Evidence)"/>
+        </rule>
+    </pattern>
+    
+    <pattern id="primary-non-auth">
+        <rule id="primary-non-auth-software-identity" context="swid:SoftwareIdentity">
+            <assert id="PRI-7-1" test="swid:Evidence"/>
+            <assert id="PRI-7-2" test="not(swid:Payload)"/>
+        </rule>
+    </pattern>
+
+    <pattern id="patch">
+        <rule id="patch-software-identity" context="swid:SoftwareIdentity">
+            <assert id="PAT-1-1" test="empty(@corpus) or @corpus = false()"/>
+            <assert id="PAT-1-2" test="exists(@patch) and @patch = true()"/>
+            <assert id="PAT-1-3" test="empty(@supplemental) or @supplemental = false()"/>
+        </rule>
+    </pattern>
+    
+    <pattern id="patch-auth">
+        <rule id="patch-auth-file" context="swid:Payload//swid:File">
+            <assert id="PAT-3-1" test="exists(@n8060:patchEvent) and (@n8060:patchEvent = 'add' or @n8060:patchEvent = 'modify' or @n8060:patchEvent = 'remove')"/>
+        </rule>
+    </pattern>
+    
+    <pattern id="patch-non-auth">
+        <rule id="patch-non-auth-evidence" context="swid:Evidence">
+            <assert id="PAT-4-1" test="exists(child::swid:File)"/>
+        </rule>
+    </pattern>
+    
+    <pattern id="supplemental">
+        <rule id="supplemental-software-identity" context="swid:SoftwareIdentity">
+            <assert id="SUP-1-1" test="empty(@corpus) or @corpus = false()"/>
+            <assert id="SUP-1-2" test="empty(@patch) or @patch = false()"/>
+            <assert id="SUP-1-3" test="exists(@supplemental) and @supplemental = true()"/>
+            <assert id="SUP-2-1" test="swid:Link[@rel = 'supplemental']"/>
+        </rule>
+
+        <rule id="supplemental-link-supplemental" context="swid:Link[@rel = 'supplemental']">
+            <assert id="SUP-2-2" test="exists(@href) and (starts-with(@href, 'swid:') or starts-with(@href, 'swidpath:'))" />
+        </rule>    
+    </pattern>
 </schema>

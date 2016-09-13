@@ -127,8 +127,6 @@ public class Application {
 		RequirementsParser parser = new RequirementsParser(Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd")));
 		parser.parse(new URL("classpath:requirements.xml"), requirementsManager);
 
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-
 		// handle resultfile
 		File resultFile;
 		{
@@ -150,30 +148,41 @@ public class Application {
 				parentDir.mkdirs();
 			}
 		}
-		
-		// Configure the assessments
-		AssessmentExecutor executor = configureAssessments(executorService, requirementsManager, tagType, authoritative);
 
 		// Load the document to assess
 		File file = new File(path);
 		XMLDocument doc = new JDOMDocument(file);
 
-		AssessmentResults validationResult = executor.execute(doc);
 
-		executorService.shutdown();
+		ExecutorService executorService = null;
+		AssessmentResults validationResult;
+		try {
+			executorService = Executors.newFixedThreadPool(2);
+	
+			// Configure the assessments
+			AssessmentExecutor executor = configureAssessments(executorService, requirementsManager, tagType, authoritative);
+			validationResult = executor.execute(doc);
+		} finally {
+			if (executorService != null) {
+				executorService.shutdown();
+			}
+		}
 
 		// Output the results
 		ResultWriter writer = new ResultWriter();
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(resultFile))) {
+			log.info("Storing assessment results to: "+resultFile);
 			writer.write(validationResult, os);
 		}
 
 		// output the report
 		ReportGenerator reportGenerator = new ReportGenerator();
-		reportGenerator.setBootstrapDir(new File("target/bootstrap"));
-		reportGenerator.setIgnoreNotTestedResults(false);
+		// This is the location of the bootstrap directory, which is intended to be relative to the install location of SWIDVal
+		reportGenerator.setBootstrapDir(new File("bootstrap"));
+		reportGenerator.setIgnoreNotTestedResults(true);
 		reportGenerator.setIgnoreOutOfScopeResults(true);
 		reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
+		log.info("Generating HTML report to: "+reportFile);
 		reportGenerator.generate(resultFile, reportFile);
 		return 0;
 	}

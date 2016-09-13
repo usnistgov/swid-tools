@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <requirements xmlns="http://csrc.nist.gov/ns/decima/requirements/1.0"
-	xmlns:swid-ext="http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
+	xmlns:swid-ext="https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://csrc.nist.gov/ns/decima/requirements/1.0 http://csrc.nist.gov/schema/decima/requirements/decima-requirements-0.1.xsd http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1 http://csrc.nist.gov/schema/swidval/swid-requirements-ext/swidval-swid-requirements-ext-0.1.xsd">
+	xsi:schemaLocation="http://csrc.nist.gov/ns/decima/requirements/1.0 http://csrc.nist.gov/schema/decima/requirements/decima-requirements-0.1.xsd https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1 https://csrc.nist.gov/schema/swidval/swid-requirements-ext/swidval-swid-requirements-ext-0.1.xsd">
 	<resource id="NISTIR8060"
 		name="NISTIR 8060"
-		href="file:///C:/Users/davidwal.NIST/Documents/SWID/NISTIR-8060-final-FOR-EDITING.pdf" />
+		href="http://dx.doi.org/10.6028/NIST.IR.8060" />
 
 	<requirement id="GEN-1" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Basic Compliance">
 		<summary>The SWID tag is schema valid</summary>
-		<reference ref="NISTIR8060" section="4.1" />
+		<reference ref="NISTIR8060" section="4.1" section-fragment="page=39&amp;zoom=auto,100,387" requirement-fragment="page=39&amp;zoom=auto,70,326" />
 		<statement>When producing SWID tags, tag creators MUST produce SWID tags that
 			conform to all requirements defined in the ISO/IEC 19770-2:2015
 			specification.</statement>
@@ -24,7 +24,7 @@
 	<requirement id="GEN-2" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Internationalization">
 		<summary>The default language is specified</summary>
-		<reference ref="NISTIR8060" section="4.3" />
+		<reference ref="NISTIR8060" section="4.3" section-fragment="page=40&amp;zoom=auto,100,376" requirement-fragment="page=41&amp;zoom=auto,70,437" />
 		<statement>The &lt;SoftwareIdentity&gt; element MUST specify an
 			@xml:lang attribute with a non-blank value to indicate the default
 			human language used for expressing all language-dependent attribute
@@ -47,7 +47,7 @@
 	<requirement id="GEN-3" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Internationalization">
 		<summary>The default language of the target platform is specified</summary>
-		<reference ref="NISTIR8060" section="4.3" />
+		<reference ref="NISTIR8060" section="4.3" section-fragment="page=40&amp;zoom=auto,100,376" requirement-fragment="page=41&amp;zoom=auto,70,307" />
 		<statement>When specifying a value for the &lt;SoftwareIdentity&gt;
 			@xml:lang attribute, non-authoritative tag creators SHOULD use the
 			language tag corresponding to the default language of the device
@@ -57,7 +57,7 @@
 	<requirement id="GEN-4" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
 		<summary>Each &lt;Entity&gt; element specifies a @regid value</summary>
-		<reference ref="NISTIR8060" section="4.4.1" />
+		<reference ref="NISTIR8060" section="4.4.1" section-fragment="page=42&amp;zoom=auto,108,721" requirement-fragment="page=42&amp;zoom=auto,133,477" />
 		<statement>Every &lt;Entity&gt; element MUST provide an explicit
 			(i.e., non-default) @regid attribute value.</statement>
 		<derived-requirements>
@@ -78,7 +78,7 @@
 	<requirement id="GEN-5" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Entity Identification">
 		<summary>The "tagCreator" &lt;Entity&gt; element specifies a @regid value</summary>
-		<reference ref="NISTIR8060" section="4.4.1" />
+		<reference ref="NISTIR8060" section="4.4.1" section-fragment="page=42&amp;zoom=auto,108,721" requirement-fragment="page=42&amp;zoom=auto,70,356" />
 		<statement>The &lt;Entity&gt; element containing the @role
 			"tagCreator" MUST provide an explicit (i.e., non-default) @regid
 			attribute value.</statement>
@@ -103,7 +103,7 @@
 	<requirement id="GEN-6" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Entity Identification">
 		<summary>Every &lt;Entity&gt; element specifies a @regid value</summary>
-		<reference ref="NISTIR8060" section="4.4.1" />
+		<reference ref="NISTIR8060" section="4.4.1" section-fragment="page=42&amp;zoom=auto,108,721" requirement-fragment="page=42&amp;zoom=auto,70,321" />
 		<statement>Every &lt;Entity&gt; element SHOULD provide an explicit
 			(i.e., non-default) @regid attribute value if such a value can be
 			determined.</statement>
@@ -125,7 +125,7 @@
 	<requirement id="GEN-7" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Entity Identification">
 		<summary>&lt;Entity&gt; elements with the same @regid value have the same @role value</summary>
-		<reference ref="NISTIR8060" section="4.4.2" />
+		<reference ref="NISTIR8060" section="4.4.2" section-fragment="page=42&amp;zoom=auto,108,274" requirement-fragment="page=43&amp;zoom=auto,70,517" />
 		<statement>All &lt;Entity&gt; elements that provide the same @regid
 			attribute value MUST provide the same @role attribute values.</statement>
 		<derived-requirements>
@@ -138,7 +138,7 @@
 	<requirement id="GEN-8" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
 		<summary>Authoritative tags have an &lt;Entity&gt; that defines @role values for the "tagCreator" and a software provider role</summary>
-		<reference ref="NISTIR8060" section="4.4.3" />
+		<reference ref="NISTIR8060" section="4.4.3" section-fragment="page=43&amp;zoom=auto,108,268" requirement-fragment="page=43&amp;zoom=auto,133,122" />
 		<statement>Authoritative tag creators MUST provide an &lt;Entity&gt;
 			element where the @role attribute contains the value "tagCreator" and
 			at least one of these additional role values: "aggregator",
@@ -157,7 +157,7 @@
 	<requirement id="GEN-9" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Entity Identification">
 		<summary>Authoritative tags have an &lt;Entity&gt; for the "softwareCreator" @role</summary>
-		<reference ref="NISTIR8060" section="4.4.4" />
+		<reference ref="NISTIR8060" section="4.4.4" section-fragment="page=44&amp;zoom=auto,108,625" requirement-fragment="page=44&amp;zoom=auto,70,468" />
 		<statement>Authoritative tag creators MUST provide an &lt;Entity&gt;
 			element where the @role attribute contains the value
 			"softwareCreator".</statement>
@@ -172,7 +172,7 @@
 	<requirement id="GEN-10" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Entity Identification">
 		<summary>Non-authoritative tags have an &lt;Entity&gt; for the "softwareCreator" @role</summary>
-		<reference ref="NISTIR8060" section="4.4.4" />
+		<reference ref="NISTIR8060" section="4.4.4" section-fragment="page=44&amp;zoom=auto,108,625" requirement-fragment="page=44&amp;zoom=auto,70,365"  />
 		<statement>Non-authoritative tag creators SHOULD provide an
 			&lt;Entity&gt; element where the @role attribute contains the value
 			"softwareCreator".</statement>
@@ -186,7 +186,7 @@
 	<requirement id="GEN-11" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
 		<summary>When the &lt;Link&gt; @href attribute value has the URI scheme 'swid', the schema specific part references the @tagId of the target tag.</summary>
-		<reference ref="NISTIR8060" section="4.5.1" />
+		<reference ref="NISTIR8060" section="4.5.1" section-fragment="page=44&amp;zoom=auto,108,166" requirement-fragment="page=45&amp;zoom=auto,70,609"  />
 		<!-- TODO: Update should read "followed by the @tagId attribute value of the target tag." -->
 		<statement>In order to link a source tag to a specific target tag
 			whose @tagId is known at the time the source tag is created, tag
@@ -203,7 +203,7 @@
 	<requirement id="GEN-12" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
 		<summary>When the &lt;Link&gt; @href attribute value has the URI scheme 'swidpath', the schema specific part contains a URI encoded valid XPath expression.</summary>
-		<reference ref="NISTIR8060" section="4.5.2" />
+		<reference ref="NISTIR8060" section="4.5.2" section-fragment="page=45&amp;zoom=auto,108,266" requirement-fragment="page=46&amp;zoom=auto,70,520"  />
 		<statement>When linking a source tag to one or more target tags whose
 			@tagId value(s) cannot be determined at the time the source tag is
 			created, tag creators MUST set the value of the &lt;Link&gt; @href
@@ -218,7 +218,7 @@
 	<requirement id="GEN-13" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
 		<summary>When the &lt;Link&gt; @href attribute value has the URI scheme 'swidpath', the XPath is written to identify tags for which the XPath matches.</summary>
-		<reference ref="NISTIR8060" section="4.5.2" />
+		<reference ref="NISTIR8060" section="4.5.2" section-fragment="page=45&amp;zoom=auto,108,266" requirement-fragment="page=46&amp;zoom=auto,70,291"  />
 		<statement>Any XPath query used within a &lt;Link&gt; @href element
 			MUST be designed in such a way that it can used by a system to
 			iterate over a set of SWID tags and identify matching tags by
@@ -229,7 +229,7 @@
 	<requirement id="GEN-14" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a @size value for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.1" />
+		<reference ref="NISTIR8060" section="4.6.1" section-fragment="page=49&amp;zoom=auto,108,238" requirement-fragment="page=50&amp;zoom=auto,70,652"  />
 		<statement>Every &lt;File&gt; element provided within a
 			&lt;Payload&gt; or &lt;Evidence&gt; element MUST include a value for
 			the @size attribute that specifies the size of the file in bytes.</statement>
@@ -249,7 +249,7 @@
 	<requirement id="GEN-15" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a @version value if a version is available for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.1" />
+		<reference ref="NISTIR8060" section="4.6.1" section-fragment="page=49&amp;zoom=auto,108,238" requirement-fragment="page=50&amp;zoom=auto,70,549"  />
 		<statement>Every &lt;File&gt; element provided within a
 			&lt;Payload&gt; or &lt;Evidence&gt; element MUST include a value for
 			the @version attribute, if one exists for the file.</statement>
@@ -259,9 +259,9 @@
 					&lt;Payload&gt; or &lt;Evidence&gt; element MUST provide a @version attribute.</statement>
 				<message>The &lt;File&gt; element with the @name ''{0}'' does not provide a @version attribute.</message>
 			</derived-requirement>
-			<derived-requirement id="GEN-15-2" type="MUST" conditional="true">
-				<statement>Every &lt;File&gt; element provided within a
-					&lt;Payload&gt; or &lt;Evidence&gt; element MUST provide a non-blank @version attribute value.</statement>
+			<derived-requirement id="GEN-15-2" type="MUST">
+				<statement>If a &lt;File&gt; element provided within a
+					&lt;Payload&gt; or &lt;Evidence&gt; element includes a @version attribute, this attribute must be non-blank.</statement>
 				<message>The &lt;File&gt; element with the @name ''{0}'' has a blank @version attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
@@ -269,7 +269,7 @@
 	<requirement id="GEN-16" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a hash value for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.1" />
+		<reference ref="NISTIR8060" section="4.6.1" section-fragment="page=49&amp;zoom=auto,108,238" requirement-fragment="page=50&amp;zoom=auto,70,405"  />
 		<statement>Every &lt;File&gt; element within a &lt;Payload&gt; element
 			MUST include a hash value.</statement>
 		<derived-requirements>
@@ -282,7 +282,7 @@
 	<requirement id="GEN-17" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a hash value for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.1" />
+		<reference ref="NISTIR8060" section="4.6.1" section-fragment="page=49&amp;zoom=auto,108,238" requirement-fragment="page=50&amp;zoom=auto,70,370"  />
 		<statement>Every &lt;File&gt; element within an &lt;Evidence&gt;
 			element SHOULD include a hash value.</statement>
 		<derived-requirements>
@@ -295,7 +295,7 @@
 	<requirement id="GEN-18" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a hash value for the referenced file with sufficient security strength</summary>
-		<reference ref="NISTIR8060" section="4.6.2" />
+		<reference ref="NISTIR8060" section="4.6.2" section-fragment="page=50&amp;zoom=auto,108,330" requirement-fragment="page=51&amp;zoom=auto,70,720"  />
 		<statement>Whenever &lt;Payload&gt; or &lt;Evidence&gt; elements are
 			included in a tag, every &lt;File&gt; element SHOULD avoid the
 			inclusion of hash values based on hash functions with insufficient
@@ -322,21 +322,25 @@
 	<requirement id="GEN-19" swid-ext:tag-type="all"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a SHA-256 hash value for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.2" />
+		<reference ref="NISTIR8060" section="4.6.2" section-fragment="page=50&amp;zoom=auto,108,330" requirement-fragment="page=51&amp;zoom=auto,70,447"  />
 		<statement>Whenever a &lt;Payload&gt; element is included in a tag,
 			every &lt;File&gt; element contained therein MUST provide a hash
 			value based on the SHA-256 hash function.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-19-1" type="MUST">
 				<statement>Every &lt;File&gt; element provided inside a &lt;Payload&gt; element MUST provide a hash value based on the SHA-256 hash function.</statement>
-				<message>The &lt;File&gt; element with the @name ''{0}'' does not provides a SHA256 hash value.</message>
+				<message>The &lt;File&gt; element with the @name ''{0}'' does not provide a SHA256 hash value.</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-19-2" type="MUST">
+				<statement>Every &lt;File&gt; element provided inside a &lt;Payload&gt; element MUST provide a valid SHA256 hash attribute value based on the SHA-256 hash function.</statement>
+				<message>The &lt;File&gt; element with the @name ''{0}'' has an invalid SHA256 hash value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="GEN-20" swid-ext:tag-type="all"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
 		<summary>Every &lt;File&gt; element provides a SHA-256 hash value for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.2" />
+		<reference ref="NISTIR8060" section="4.6.2" section-fragment="page=50&amp;zoom=auto,108,330" requirement-fragment="page=51&amp;zoom=auto,70,413"  />
 		<statement>Whenever an &lt;Evidence&gt; element is included in a tag,
 			every &lt;File&gt; element contained therein SHOULD provide a hash
 			value based on the SHA-256 hash function.</statement>
@@ -349,8 +353,8 @@
 	</requirement>
 	<requirement id="GEN-21" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
-		<summary>Every &lt;File&gt; element can provide SHA-384, SHA-512, and/or SHA-512/256 hash hash values for the referenced file</summary>
-		<reference ref="NISTIR8060" section="4.6.2" />
+		<summary>Every &lt;File&gt; element optionally provides a SHA-384, SHA-512, and/or SHA-512/256 hash hash values for the referenced file</summary>
+		<reference ref="NISTIR8060" section="4.6.2" section-fragment="page=50&amp;zoom=auto,108,330" requirement-fragment="page=51&amp;zoom=auto,70,357"  />
 		<statement>Whenever a &lt;Payload&gt; or &lt;Evidence&gt; element is
 			included in a tag, every &lt;File&gt; element contained therein MAY
 			additionally provide hash values based on the SHA-384, SHA-512,
@@ -360,49 +364,65 @@
 	<requirement id="GEN-22" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>A @n8060:pathSeparator value is provided for &lt;Payload&gt; and &lt;Evidence&gt; elements</summary>
-		<reference ref="NISTIR8060" section="4.6.3" />
+		<reference ref="NISTIR8060" section="4.6.3" section-fragment="page=51&amp;zoom=auto,108,250" requirement-fragment="page=52&amp;zoom=auto,70,428"  />
 		<statement>The @n8060:pathSeparator extension attribute SHOULD be used
 			within &lt;Payload&gt; and &lt;Evidence&gt; elements to specify the
 			path separator character used in embedded &lt;File&gt; and
 			&lt;Directory&gt; elements.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-22-1" type="SHOULD">
-				<statement></statement>
+				<statement>A &lt;Payload&gt; or &lt;Evidence&gt; element SHOULD provide a @n8060:pathSeparator attribute.</statement>
+				<message>The &lt;{0}&gt; element does not provide a @n8060:pathSeparator attribute.</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-22-2" type="MUST">
+				<statement>If the &lt;Payload&gt; or &lt;Evidence&gt; element provides a @n8060:pathSeparator attribute, the attribute's value MUST be non-blank.</statement>
+				<message>The &lt;{0}&gt; element has a blank {1} attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="GEN-23" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>An @n8060:envVarPrefix value is provided for &lt;Payload&gt; and &lt;Evidence&gt; elements</summary>
-		<reference ref="NISTIR8060" section="4.6.3" />
+		<reference ref="NISTIR8060" section="4.6.3" section-fragment="page=51&amp;zoom=auto,108,250" requirement-fragment="page=52&amp;zoom=auto,70,266"  />
 		<statement>The @n8060:envVarPrefix extension attribute SHOULD be used
 			within &lt;Payload&gt; and &lt;Evidence&gt; elements to specify the
 			character(s) used to prefix environment variables that may be
 			embedded &lt;File&gt; and &lt;Directory&gt; elements.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-23-1" type="SHOULD">
-				<statement></statement>
+				<statement>A &lt;Payload&gt; or &lt;Evidence&gt; element SHOULD provide a @n8060:envVarPrefix attribute.</statement>
+				<message>The &lt;{0}&gt; element does not provide a @n8060:envVarPrefix attribute.</message>
+			</derived-requirement>
+			<derived-requirement id="GEN-23-2" type="MUST">
+				<statement>If the &lt;Payload&gt; or &lt;Evidence&gt; element provides a @n8060:envVarPrefix attribute, the attribute's value MUST be non-blank.</statement>
+				<message>The &lt;{0}&gt; element has a blank {1} attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="GEN-24" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>An @n8060:envVarSuffix value is provided for &lt;Payload&gt; and &lt;Evidence&gt; elements</summary>
-		<reference ref="NISTIR8060" section="4.6.3" />
+		<reference ref="NISTIR8060" section="4.6.3" section-fragment="page=51&amp;zoom=auto,108,250" requirement-fragment="page=52&amp;zoom=auto,70,215"  />
 		<statement>The @n8060:envVarSuffix extension attribute SHOULD be used
 			within &lt;Payload&gt; and &lt;Evidence&gt; elements to specify the
 			character(s) used to suffix environment variables that may be
 			embedded &lt;File&gt; and &lt;Directory&gt; elements.</statement>
 		<derived-requirements>
 			<derived-requirement id="GEN-24-1" type="SHOULD">
-				<statement></statement>
+				<statement>A &lt;Payload&gt; or &lt;Evidence&gt; element SHOULD provide a @n8060:envVarSuffix attribute.</statement>
+				<message>The &lt;{0}&gt; element does not provide a @n8060:envVarSuffix attribute.</message>
 			</derived-requirement>
+			<!-- May be blank if no suffix is needed -->
+<!-- 			<derived-requirement id="GEN-24-2" type="MUST"> -->
+<!-- 				<statement>If the &lt;Payload&gt; or &lt;Evidence&gt; element provides a @n8060:envVarSuffix attribute, the attribute's value MUST be non-blank.</statement> -->
+<!-- 				<message>The &lt;{0}&gt; element has a blank {1} attribute value.</message> -->
+<!-- 			</derived-requirement> -->
 		</derived-requirements>
 	</requirement>
 	<requirement id="GEN-25" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Maintenance">
 		<summary>The &lt;SoftwareIdentity&gt; @tagId value is not changed when the tag is revised</summary>
-		<reference ref="NISTIR8060" section="4.8" />
+		<reference ref="NISTIR8060" section="4.8" section-fragment="page=57&amp;zoom=auto,100,721" requirement-fragment="page=57&amp;zoom=auto,70,387"  />
 		<statement>When it is necessary to update a tag to correct errors in
 			or add data elements to that tag, the tag's &lt;SoftwareIdentity&gt;
 			@tagId SHOULD NOT be changed.</statement>
@@ -411,7 +431,7 @@
 	<requirement id="GEN-26" swid-ext:tag-type="all"
 		swid-ext:scope="all" swid-ext:category="Tag Maintenance">
 		<summary>The &lt;SoftwareIdentity&gt; @tagVersion value is changed when the tag is revised</summary>
-		<reference ref="NISTIR8060" section="4.8" />
+		<reference ref="NISTIR8060" section="4.8" section-fragment="page=57&amp;zoom=auto,100,721" requirement-fragment="page=57&amp;zoom=auto,70,257"  />
 		<statement>When it is necessary to update a tag to correct errors in
 			or add data elements to that tag, the tag's &lt;SoftwareIdentity&gt;
 			@tagVersion attribute MUST be changed.</statement>
@@ -420,21 +440,30 @@
 	<requirement id="COR-1" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
 		<summary>The corpus tag's &lt;SoftwareIdentity&gt; @corpus value is "true", and @patch and @supplemental values are "false"</summary>
-		<reference ref="NISTIR8060" section="5.1.1" />
+		<reference ref="NISTIR8060" section="5.1.1" section-fragment="page=59&amp;zoom=auto,108,534" requirement-fragment="page=59&amp;zoom=auto,70,400"  />
 		<statement>If the value of the &lt;SoftwareIdentity&gt; @corpus
 			attribute is set to "true", then the values of
 			&lt;SoftwareIdentity&gt; @patch and @supplemental MUST be set to
 			"false".</statement>
 		<derived-requirements>
 			<derived-requirement id="COR-1-1" type="MUST">
-				<statement></statement>
+				<statement>A corpus tag's &lt;SoftwareIdentity&gt; @corpus attribute value MUST be "true".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @corpus attribute value is not "true".</message>
+			</derived-requirement>
+			<derived-requirement id="COR-1-2" type="MUST">
+				<statement>A corpus tag's &lt;SoftwareIdentity&gt; @patch attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @patch attribute value is not "false".</message>
+			</derived-requirement>
+			<derived-requirement id="COR-1-3" type="MUST">
+				<statement>A corpus tag's &lt;SoftwareIdentity&gt; @supplemental attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @supplemental attribute value is not "false".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="COR-2" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Software Version Identification">
 		<summary>If the software is versioned, the corpus tag's &lt;SoftwareIdentity&gt; @version provides a value.</summary>
-		<reference ref="NISTIR8060" section="5.1.2" />
+		<reference ref="NISTIR8060" section="5.1.2" section-fragment="page=59&amp;zoom=auto,108,365" requirement-fragment="page=59&amp;zoom=auto,70,208"  />
 		<statement>If a software product has been assigned a version by the
 			software provider, that version MUST be specified in the
 			&lt;SoftwareIdentity&gt; @version attribute of the product's corpus
@@ -448,7 +477,7 @@
 	<requirement id="COR-3" swid-ext:tag-type="corpus"
 		swid-ext:scope="all" swid-ext:category="Software Version Identification">
 		<summary>A corpus tag's &lt;SoftwareIdentity&gt; @versionScheme attribute value is provided when a @version attribute value is provided.</summary>
-		<reference ref="NISTIR8060" section="5.1.2" />
+		<reference ref="NISTIR8060" section="5.1.2" section-fragment="page=59&amp;zoom=auto,108,365" requirement-fragment="page=60&amp;zoom=auto,70,270"  />
 		<statement>If a corpus tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, it MUST also contain a
 			value for the &lt;SoftwareIdentity&gt; @versionScheme attribute.</statement>
@@ -463,7 +492,7 @@
 		<summary>The corpus tag contains a &lt;Payload&gt; element
 			enumerating all files included in the tagged installation
 			media.</summary>
-		<reference ref="NISTIR8060" section="5.1.3" />
+		<reference ref="NISTIR8060" section="5.1.3" section-fragment="page=61&amp;zoom=auto,108,721" requirement-fragment="page=61&amp;zoom=auto,70,631"  />
 		<statement>A corpus tag MUST contain a &lt;Payload&gt; element that
 			enumerates every file that is included in the tagged installation
 			media.</statement>
@@ -476,47 +505,64 @@
 	<requirement id="PRI-1" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
 		<summary>The primary tag's &lt;SoftwareIdentity&gt; @corpus, @patch, and @supplemental values are "false"</summary>
-		<reference ref="NISTIR8060" section="5.2.1" />
+		<reference ref="NISTIR8060" section="5.2.1" section-fragment="page=61&amp;zoom=auto,108,467" requirement-fragment="page=61&amp;zoom=auto,70,391"  />
 		<statement>To indicate that a tag is a primary tag, the
 			&lt;SoftwareIdentity&gt; @corpus, @patch, and @supplemental
 			attributes MUST be set to "false".</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-1-1" type="MUST">
-				<statement></statement>
+				<statement>A primary tag's &lt;SoftwareIdentity&gt; @corpus attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @corpus attribute value is not "false".</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-1-2" type="MUST">
+				<statement>A primary tag's &lt;SoftwareIdentity&gt; @patch attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @patch attribute value is not "false".</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-1-3" type="MUST">
+				<statement>A primary tag's &lt;SoftwareIdentity&gt; @supplemental attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @supplemental attribute value is not "false".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PRI-2" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Software Version Identification">
-		<summary>If the software is versioned, the primary tag's &lt;SoftwareIdentity&gt; @version provides a value.</summary>
-		<reference ref="NISTIR8060" section="5.2.2" />
+		<summary>If the software is versioned, the primary tag's &lt;SoftwareIdentity&gt; @version attribute value is provided.</summary>
+		<reference ref="NISTIR8060" section="5.2.2" section-fragment="page=61&amp;zoom=auto,108,356" requirement-fragment="page=61&amp;zoom=auto,70,253"  />
 		<statement>If a software product has been assigned a version by the
 			software provider, that version MUST be specified in the
 			&lt;SoftwareIdentity&gt; @version attribute of the product's primary
 			tag.</statement>
 		<derived-requirements>
-			<derived-requirement id="PRI-2-1" type="MUST">
-				<statement></statement>
+			<derived-requirement id="PRI-2-1" type="MUST" conditional="true">
+				<statement>A primary tag SHOULD provide a &lt;SoftwareIdentity&gt; @version attribute, if such a version value exists.</statement>
+				<message>The &lt;SoftwareIdentity&gt; element does not provide a @version attribute.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-2-2" type="MUST">
+				<statement>If a primary tag provides a &lt;SoftwareIdentity&gt; @version attribute, this attribute's value MUST be non-blank.</statement>
+				<message>The &lt;SoftwareIdentity&gt; element has a blank @version attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PRI-3" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Software Version Identification">
-		<summary>A corpus tag's &lt;SoftwareIdentity&gt; @versionScheme attribute value is provided when a @version attribute value is provided.</summary>
-		<reference ref="NISTIR8060" section="5.2.2" />
+		<summary>A primary tag's &lt;SoftwareIdentity&gt; @versionScheme attribute value is provided when a @version attribute value is provided.</summary>
+		<reference ref="NISTIR8060" section="5.2.2" section-fragment="page=61&amp;zoom=auto,108,356" requirement-fragment="page=61&amp;zoom=auto,70,205"  />
 		<statement>If a primary tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, it MUST also contain a
 			value for the &lt;SoftwareIdentity&gt; @versionScheme attribute.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-3-1" type="MUST">
-				<statement></statement>
+				<statement>If the &lt;SoftwareIdentity&gt; @version attribute is provided, then the  &lt;SoftwareIdentity&gt; @versionScheme attribute MUST provide a value.</statement>
+			</derived-requirement>
+			<derived-requirement id="PRI-3-1" type="MUST">
+				<statement>If the &lt;SoftwareIdentity&gt; @versionScheme attribute is provided, then the attribute value MUST be non-blank.</statement>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PRI-4" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Software Version Identification">
 		<summary>If the software is versioned and that version can be determined, the primary tag's &lt;SoftwareIdentity&gt; @version attribute is assigned that version value.</summary>
-		<reference ref="NISTIR8060" section="5.2.2" />
+		<reference ref="NISTIR8060" section="5.2.2" section-fragment="page=61&amp;zoom=auto,108,356" requirement-fragment="page=61&amp;zoom=auto,70,134"  />
 		<statement>If a software product has been assigned a version by the
 			software provider, and that version can be determined, the
 			&lt;SoftwareIdentity&gt; @version attribute of the primary tag MUST
@@ -530,7 +576,7 @@
 	<requirement id="PRI-5" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Software Version Identification">
 		<summary>If the software is versioned and the versioning scheme can be determined, the primary tag's &lt;SoftwareIdentity&gt; @versionScheme attribute is assigned that version value.</summary>
-		<reference ref="NISTIR8060" section="5.2.2" />
+		<reference ref="NISTIR8060" section="5.2.2" section-fragment="page=61&amp;zoom=auto,108,356" requirement-fragment="page=62&amp;zoom=auto,70,720"  />
 		<statement>If a primary tag contains a value for the
 			&lt;SoftwareIdentity&gt; @version attribute, and the version scheme
 			of that @version attribute value can be determined, the
@@ -545,43 +591,62 @@
 	<requirement id="PRI-6" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
 		<summary>A &lt;Payload&gt; element is provided in the primary tag.</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=62&amp;zoom=auto,70,386"  />
 		<statement>A &lt;Payload&gt; element SHOULD be provided in a software
 			product's primary tag.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-6-1" type="SHOULD">
-				<statement></statement>
+				<summary>A &lt;Payload&gt; element is provided in the primary tag.</summary>
+				<statement>A &lt;Payload&gt; element SHOULD be provided in a software
+					product's primary tag.</statement>
+				<message>A &lt;Payload&gt; element was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-6-2" type="MUST_NOT">
+				<summary>An &lt;Evidence&gt; element is not provided in the primary tag.</summary>
+				<statement>An &lt;Evidence&gt; element MUST NOT be provided in a software
+					product's primary tag.</statement>
+				<message>An &lt;Evidence&gt; element was provided, instead of a &lt;Payload&gt; element.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PRI-7" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
 		<summary>An &lt;Evidence&gt; element is provided in the primary tag.</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=62&amp;zoom=auto,70,352"  />
 		<statement>An &lt;Evidence&gt; element SHOULD be provided in a
 			software product's primary tag.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-7-1" type="SHOULD">
-				<statement></statement>
+				<summary>A &lt;Evidence&gt; element is provided in the primary tag.</summary>
+				<statement>A &lt;Evidence&gt; element SHOULD be provided in a software
+					product's primary tag.</statement>
+				<message>A &lt;Evidence&gt; element was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-7-2" type="MUST_NOT">
+				<summary>An &lt;Payload&gt; element is not provided in the primary tag.</summary>
+				<statement>An &lt;Payload&gt; element MUST NOT be provided in a software
+					product's primary tag.</statement>
+				<message>An &lt;Payload&gt; element was provided, instead of a &lt;Evidence&gt; element.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PRI-8" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Payload and Evidence">
 		<summary>The &lt;Payload&gt; or &lt;Evidence&gt; element lists all files comprising the tagged product.</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=62&amp;zoom=auto,70,176"  />
 		<statement>&lt;Payload&gt; and &lt;Evidence&gt; elements SHOULD list every
 			file comprising the product described by the tag.</statement>
 		<derived-requirements>
-			<derived-requirement id="PRI-8-1" type="SHOULD">
-				<statement></statement>
+			<derived-requirement id="PRI-8-1" type="MUST">
+				<statement>At least one file comprising the tagged product MUST appear in the &lt;Payload&gt; or &lt;Evidence&gt; element.</statement>
+				<message>While it is impossible to know if every file is listed in a tag, a software installation will contain one or more files that can be identified.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PRI-9" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
 		<summary>The &lt;Payload&gt; element lists all machine instruction files comprising the tagged product.</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=63&amp;zoom=auto,70,680"  />
 		<statement>If the &lt;Payload&gt; element is provided, it MUST list
 			every machine instruction file comprising the product described by
 			the tag.</statement>
@@ -590,7 +655,7 @@
 	<requirement id="PRI-10" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
 		<summary>The &lt;Evidence&gt; element lists all machine instruction files comprising the tagged product.</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=63&amp;zoom=auto,70,646"  />
 		<statement>If the &lt;Evidence&gt; element is provided, it MUST list
 			every machine instruction file comprising the product described by
 			the tag.</statement>
@@ -599,7 +664,7 @@
 	<requirement id="PRI-11" swid-ext:tag-type="primary"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
 		<summary>Any file referenced by a &lt;Payload&gt; &lt;File&gt; element that may change in size, version, or hash value is marked with the @n8060:mutable extension attribute with the value "true".</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=63&amp;zoom=auto,70,286"  />
 		<statement>If a &lt;File&gt; element included in a &lt;Payload&gt;
 			element of a primary tag describes a file that can undergo authorized
 			changes over time in ways that could alter its size, version, and/or
@@ -610,7 +675,7 @@
 	<requirement id="PRI-12" swid-ext:tag-type="primary"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
 		<summary>Any file referenced by an &lt;Evidence&gt; &lt;File&gt; element that may change in size, version, or hash value is marked with the @n8060:mutable extension attribute with the value "true".</summary>
-		<reference ref="NISTIR8060" section="5.2.3" />
+		<reference ref="NISTIR8060" section="5.2.3" section-fragment="page=62&amp;zoom=auto,108,505" requirement-fragment="page=63&amp;zoom=auto,70,222"  />
 		<statement>If it can be determined that a &lt;File&gt; element
 			included in an &lt;Evidence&gt; element of a primary tag describes a
 			file that can undergo authorized changes over time in ways that could
@@ -622,48 +687,71 @@
 	<requirement id="PRI-13" swid-ext:tag-type="primary"
 		swid-ext:scope="all" swid-ext:category="Metadata">
 		<summary>A &lt;Meta&gt; element is provided with values for the @product, @colloquialVersion, @revision, and @edition attributes.</summary>
-		<reference ref="NISTIR8060" section="5.2.4" />
+		<reference ref="NISTIR8060" section="5.2.4" section-fragment="page=64&amp;zoom=auto,108,721" requirement-fragment="page=64&amp;zoom=auto,70,295"  />
 		<statement>If appropriate values exist and can be determined, a
 			&lt;Meta&gt; element MUST be provided and MUST furnish values for as
 			many of the following attributes as possible: @product,
 			@colloquialVersion, @revision, and @edition.</statement>
 		<derived-requirements>
-			<derived-requirement id="PRI-13-1" type="MUST">
-				<statement></statement>
+			<derived-requirement id="PRI-13-1" type="MUST" conditional="true">
+				<statement>A &lt;Meta&gt; element MUST be provided, if appropriate values exist and can be determined for the @product,
+					@colloquialVersion, @revision, and @edition attributes.</statement>
+				<message>The &lt;Meta&gt; element was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-13-2" type="MUST" conditional="true">
+				<statement>A value for the &lt;Meta&gt; @product attribute MUST be provided, if appropriate values exist and can be determined.</statement>
+				<message>The &lt;Meta&gt; @product attribute was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-13-3" type="MUST" conditional="true">
+				<statement>A value for the &lt;Meta&gt; @colloquialVersion attribute MUST be provided, if appropriate values exist and can be determined.</statement>
+				<message>The &lt;Meta&gt; @colloquialVersion attribute was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-13-4" type="MUST" conditional="true">
+				<statement>A value for the &lt;Meta&gt; @revision attribute MUST be provided, if appropriate values exist and can be determined.</statement>
+				<message>The &lt;Meta&gt; @revision attribute was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-13-5" type="MUST" conditional="true">
+				<statement>A value for the &lt;Meta&gt; @edition attribute MUST be provided, if appropriate values exist and can be determined.</statement>
+				<message>The &lt;Meta&gt; @edition attribute was not provided.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PAT-1" swid-ext:tag-type="patch"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
-		<summary>The corpus tag's &lt;SoftwareIdentity&gt; @patch value is "true", and @corpus and @supplemental values are "false"</summary>
-		<reference ref="NISTIR8060" section="5.3.1" />
+		<summary>The patch tag's &lt;SoftwareIdentity&gt; @patch value is "true", and @corpus and @supplemental values are "false"</summary>
+		<reference ref="NISTIR8060" section="5.3.1" section-fragment="page=65&amp;zoom=auto,108,721" requirement-fragment="page=65&amp;zoom=auto,70,588"  />
 		<statement>If the value of the &lt;SoftwareIdentity&gt; @patch
 			attribute is set to "true", then the values of
 			&lt;SoftwareIdentity&gt; @corpus and &lt;SoftwareIdentity&gt;
 			@supplemental MUST be set to "false".</statement>
 		<derived-requirements>
 			<derived-requirement id="PAT-1-1" type="MUST">
-				<statement></statement>
+				<statement>A patch tag's &lt;SoftwareIdentity&gt; @corpus attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @corpus attribute value is not "false".</message>
+			</derived-requirement>
+			<derived-requirement id="PAT-1-2" type="MUST">
+				<statement>A patch tag's &lt;SoftwareIdentity&gt; @patch attribute value MUST be "true".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @patch attribute value is not "true".</message>
+			</derived-requirement>
+			<derived-requirement id="PAT-1-3" type="MUST">
+				<statement>A patch tag's &lt;SoftwareIdentity&gt; @supplemental attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @supplemental attribute value is not "false".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PAT-2" swid-ext:tag-type="patch"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
-		<reference ref="NISTIR8060" section="5.3.2" />
+		<summary>The patch tag enumerates all files added, modified, or removed by the patch.</summary>
+		<reference ref="NISTIR8060" section="5.3.2" section-fragment="page=65&amp;zoom=auto,108,553" requirement-fragment="page=65&amp;zoom=auto,70,294"  />
 		<statement>A patch tag SHOULD contain a &lt;Payload&gt; element that
 			MUST enumerate every file that is modified, removed, or added by the
 			patch.</statement>
-		<derived-requirements>
-			<derived-requirement id="PAT-2-1" type="SHOULD">
-				<statement></statement>
-			</derived-requirement>
-		</derived-requirements>
+		<!-- This cannot be checked -->
 	</requirement>
 	<requirement id="PAT-3" swid-ext:tag-type="patch"
 		swid-ext:scope="authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
-		<reference ref="NISTIR8060" section="5.3.2" />
+		<summary>The patch tag indicates which files were added, modified, or removed by the patch.</summary>
+		<reference ref="NISTIR8060" section="5.3.2" section-fragment="page=65&amp;zoom=auto,108,553" requirement-fragment="page=65&amp;zoom=auto,131,260"  />
 		<statement>Each &lt;File&gt; element contained within the
 			&lt;Payload&gt; element of a patch tag MUST include an extension
 			attribute named @n8060:patchEvent, which has one of the following
@@ -677,58 +765,75 @@
 			3)
 			The string value "add" to indicate that the patch installs a new
 			file
-			that did not previously exist</statement>
+			that did not previously exist.</statement>
 		<derived-requirements>
 			<derived-requirement id="PAT-3-1" type="MUST">
-				<statement></statement>
+				<statement>Each &lt;File&gt; element contained within the
+					&lt;Payload&gt; element of a patch tag MUST include an extension
+					attribute named @n8060:patchEvent, with a value of modify, remove, or add.</statement>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="PAT-4" swid-ext:tag-type="patch"
 		swid-ext:scope="non-authoritative" swid-ext:category="Payload and Evidence">
-		<summary>TBD</summary>
-		<reference ref="NISTIR8060" section="5.3.2" />
+		<summary>The patch tag enumerates all files changed by the patch.</summary>
+		<reference ref="NISTIR8060" section="5.3.2" section-fragment="page=65&amp;zoom=auto,108,553" requirement-fragment="page=66&amp;zoom=auto,70,720"  />
 		<statement>A patch tag SHOULD contain an &lt;Evidence&gt; element that
 			enumerates every file that was found to have changed as a result of
 			the patch process.</statement>
 		<derived-requirements>
 			<derived-requirement id="PAT-4-1" type="SHOULD">
-				<statement></statement>
+				<statement>At least one file comprising the tagged patch SHOULD appear in the &lt;Evidence&gt; element.</statement>
+				<message>While it is impossible to know if every file to be listed in a patch tag, a software patch installation will contain one or more files that may be identifiable.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="SUP-1" swid-ext:tag-type="supplemental"
 		swid-ext:scope="all" swid-ext:category="Tag Type">
-		<summary>The corpus tag's &lt;SoftwareIdentity&gt; @supplemental value is "true", and @corpus and @patch values are "false"</summary>
-		<reference ref="NISTIR8060" section="5.4.1" />
+		<summary>The supplemental tag's &lt;SoftwareIdentity&gt; @supplemental value is "true", and @corpus and @patch values are "false"</summary>
+		<reference ref="NISTIR8060" section="5.4.1" section-fragment="page=66&amp;zoom=auto,108,583" requirement-fragment="page=66&amp;zoom=auto,70,449"  />
 		<statement>If the value of the &lt;SoftwareIdentity&gt; @supplemental
 			attribute is set to "true", then the values of
 			&lt;SoftwareIdentity&gt; @corpus and &lt;SoftwareIdentity&gt; @patch
 			MUST be set to "false".</statement>
 		<derived-requirements>
 			<derived-requirement id="SUP-1-1" type="MUST">
-				<statement></statement>
+				<statement>A supplemental tag's &lt;SoftwareIdentity&gt; @corpus attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @corpus attribute value is not "false".</message>
+			</derived-requirement>
+			<derived-requirement id="SUP-1-2" type="MUST">
+				<statement>A supplemental tag's &lt;SoftwareIdentity&gt; @patch attribute value MUST be "false".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @patch attribute value is not "false".</message>
+			</derived-requirement>
+			<derived-requirement id="SUP-1-3" type="MUST">
+				<statement>A supplemental tag's &lt;SoftwareIdentity&gt; @supplemental attribute value MUST be "true".</statement>
+				<message>The &lt;SoftwareIdentity&gt; @supplemental attribute value is not "true".</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="SUP-2" swid-ext:tag-type="supplemental"
 		swid-ext:scope="all" swid-ext:category="Tag Relationships">
-		<summary>TBD</summary>
-		<reference ref="NISTIR8060" section="5.4.2" />
+		<summary>The supplemental tag has a &lt;Link&gt; element with @rel="supplemental", with an @href attribute pointing to the supplemented tag.</summary>
+		<reference ref="NISTIR8060" section="5.4.2" section-fragment="page=66&amp;zoom=auto,108,414" requirement-fragment="page=66&amp;zoom=auto,70,312"  />
 		<statement>A supplemental tag MUST contain a &lt;Link&gt; element to
 			associate itself with the individual tag that it supplements. The
 			@rel attribute of this &lt;Link&gt; element MUST be set to
 			"supplemental".</statement>
 		<derived-requirements>
 			<derived-requirement id="SUP-2-1" type="MUST">
-				<statement></statement>
+				<summary>The supplemental tag has a &lt;Link&gt; element with @rel="supplemental"</summary>
+				<statement>A supplemental tag MUST contain a &lt;Link&gt; element with the @rel attribute having the value "supplemental".</statement>
+			</derived-requirement>
+			<derived-requirement id="SUP-2-2" type="MUST">
+				<summary>The supplemental tag has a &lt;Link&gt; element with @rel="supplemental", with an @href attribute pointing to the supplemented tag using the "swid" or "swidpath" scheme.</summary>
+				<statement>A supplemental tag MUST contain a &lt;Link&gt; element with the @rel attribute having the value "supplemental", with the @href attribute value's scheme assigned to either "swid" or "swidpath".</statement>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
 	<requirement id="SUP-3" swid-ext:tag-type="supplemental"
 		swid-ext:scope="all" swid-ext:category="Data Deconfliction">
 		<summary>TBD</summary>
-		<reference ref="NISTIR8060" section="5.4.3" />
+		<reference ref="NISTIR8060" section="5.4.3" section-fragment="page=66&amp;zoom=auto,108,192" requirement-fragment="page=67&amp;zoom=auto,70,452"  />
 		<statement>If a supplemental tag provides a data value that conflicts with
 			corresponding data values in the tag being supplemented, the data value in the
 			supplemented tag MUST be considered to be the correct value.</statement>

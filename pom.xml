@@ -163,6 +163,8 @@
 							<mainClass>gov.nist.decima.swid.Application</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
+							<classpathLayoutType>custom</classpathLayoutType>
+							<customClasspathLayout>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</customClasspathLayout>
 						</manifest>
 					</archive>
 				</configuration>

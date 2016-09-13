@@ -1,7 +1,11 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 	<!--  SWIDVal Decima Requirements Format Extension Schema -->
-	<public publicId="http://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1" uri="./swid-requirements-ext.xsd" />
-	<system systemId="http://csrc.nist.gov/schema/swidval/swid-requirements-ext/swidval-swid-requirements-ext-0.1.xsd" uri="./swid-requirements-ext.xsd" />
+	<public publicId="https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1" uri="./swid-requirements-ext.xsd" />
+	<system systemId="https://csrc.nist.gov/schema/swidval/swid-requirements-ext/swidval-swid-requirements-ext-0.1.xsd" uri="./swid-requirements-ext.xsd" />
 
-	<public publicId="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" uri="./swid-schema-fixed-20160908.xsd
+	<public publicId="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" uri="./swid-schema-fixed-20160908.xsd" />
+
+	<public publicId="http://csrc.nist.gov/ns/swid/2015-extensions/1.0" uri="./swid-2015-extensions-1.0.xsd" />
+	<system systemId="http://csrc.nist.gov/schema/swid/2015-extensions/swid-2015-extensions-1.0.xsd" uri="./swid-2015-extensions-1.0.xsd" />
+	<system systemId="https://csrc.nist.gov/schema/swid/2015-extensions/swid-2015-extensions-1.0.xsd" uri="./swid-2015-extensions-1.0.xsd" />
 </catalog>

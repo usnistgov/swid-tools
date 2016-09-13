@@ -5,7 +5,7 @@
 		@href attribute is properly checked. This will cause
 		this test to fail.
 	</description>
-	<template template="classpath:templates/primary-auth-swid.xml"
+	<template template="classpath:templates/primary-non-auth-swid.xml"
 		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<insert-child xpath="/swid:SoftwareIdentity">
