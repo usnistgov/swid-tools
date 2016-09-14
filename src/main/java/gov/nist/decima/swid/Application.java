@@ -33,6 +33,7 @@ import gov.nist.decima.core.assessment.AssessmentExecutor;
 import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
 import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
+import gov.nist.decima.core.assessment.result.DefaultLoggingHandler;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
 import gov.nist.decima.core.assessment.result.ResultWriter;
 import gov.nist.decima.core.assessment.schema.SchemaAssessment;
@@ -74,6 +75,7 @@ public class Application {
 
 	protected CommandLine parseCLI(String[] args) throws ParseException {
 		CLIParser cliParser = new CLIParser("java -jar <decima jar> (options) <swid tag path>");
+		cliParser.setVersion(Version.VERSION);
 
 		Option useCase = Option.builder(OPTION_USECASE).desc("the SWID tag type (default: primary)").hasArg().build();
 		EnumerationOptionValidator useCaseValidator = new EnumerationOptionValidator(useCase);
@@ -198,7 +200,9 @@ public class Application {
 		AssessmentExecutor retval = new ConcurrentAssessmentExecutor(executorService, requirementsManager, assessments) {
 			@Override
 			protected AssessmentResultBuilder newAssessmentResultBuilder() {
-				return new AssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, authoritative));
+				AssessmentResultBuilder retval = new AssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, authoritative));
+						retval.setLoggingHandler(new DefaultLoggingHandler(requirementsManager));
+				return retval;
 			}
 		};
 		return retval;
