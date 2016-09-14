@@ -49,6 +49,8 @@ import gov.nist.decima.core.schematron.SchematronCompilationException;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.EnumerationOptionValidator;
 
+import static gov.nist.decima.module.cli.CLIParser.*;
+
 public class Application {
 	private static final Logger log = LogManager.getLogger(Application.class);
 	private static final String OPTION_USECASE = "usecase";
@@ -60,9 +62,6 @@ public class Application {
 
 	private static final String OPTION_AUTHORITATIVE = "A";
 	private static final String OPTION_NON_AUTHORITATIVE = "a";
-	private static final String OPTION_RESULT_FILE = "resultfile";
-	private static final String OPTION_REPORT_FILE = "reportfile";
-	
 
 	public static void main(String[] args) throws SchematronCompilationException, XMLDocumentException, AssessmentException, JDOMException, SAXException, URISyntaxException, IOException, RequirementsParserException, TransformerException {
 		try {
@@ -90,11 +89,6 @@ public class Application {
 		authGroup.addOption(Option.builder(OPTION_NON_AUTHORITATIVE).desc("the tag is not produced by an authoritative creator (default)").build());
 		cliParser.addOptionGroup(authGroup);
 
-		Option resultfile = Option.builder(OPTION_RESULT_FILE).desc("the result file to write results to (default: validation-result.xml)").hasArg().argName("FILE").build();
-		cliParser.addOption(resultfile);
-
-		Option reportfile = Option.builder(OPTION_REPORT_FILE).desc("the HTML report file to generate (default: validation-report.html)").hasArg().argName("FILE").build();
-		cliParser.addOption(reportfile);
 		return cliParser.parse(args);
 	}
 
@@ -129,23 +123,23 @@ public class Application {
 		RequirementsParser parser = new RequirementsParser(Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd")));
 		parser.parse(new URL("classpath:requirements.xml"), requirementsManager);
 
-		// handle resultfile
-		File resultFile;
+//		 handle resultfile
+		File validationResultFile;
 		{
-			String fileValue = cmd.getOptionValue(OPTION_RESULT_FILE, "validation-result.xml");
-			resultFile = new File(fileValue);
-			File parentDir = resultFile.getParentFile();
+			String fileValue = cmd.getOptionValue(OPTION_VALIDATION_RESULT_FILE, DEFAULT_VALIDATION_RESULT_FILE);
+			validationResultFile = new File(fileValue);
+			File parentDir = validationResultFile.getParentFile();
 			if (parentDir != null && !parentDir.exists()) {
 				parentDir.mkdirs();
 			}
 		}
 
 		// handle reportfile
-		File reportFile;
+		File validationReportFile;
 		{
-			String fileValue = cmd.getOptionValue(OPTION_RESULT_FILE, "validation-report.html");
-			reportFile = new File(fileValue);
-			File parentDir = reportFile.getParentFile();
+			String fileValue = cmd.getOptionValue(OPTION_VALIDATION_REPORT_FILE, DEFAULT_VALIDATION_REPORT_FILE);
+			validationReportFile = new File(fileValue);
+			File parentDir = validationReportFile.getParentFile();
 			if (parentDir != null && !parentDir.exists()) {
 				parentDir.mkdirs();
 			}
@@ -172,8 +166,8 @@ public class Application {
 
 		// Output the results
 		ResultWriter writer = new ResultWriter();
-		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(resultFile))) {
-			log.info("Storing assessment results to: "+resultFile);
+		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(validationResultFile))) {
+			log.info("Storing assessment results to: "+validationResultFile);
 			writer.write(validationResult, os);
 		}
 
@@ -184,8 +178,8 @@ public class Application {
 		reportGenerator.setIgnoreNotTestedResults(true);
 		reportGenerator.setIgnoreOutOfScopeResults(true);
 		reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
-		log.info("Generating HTML report to: "+reportFile);
-		reportGenerator.generate(resultFile, reportFile);
+		log.info("Generating HTML report to: "+validationReportFile);
+		reportGenerator.generate(validationResultFile, validationReportFile);
 		return 0;
 	}
 
