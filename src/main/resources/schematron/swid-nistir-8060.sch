@@ -196,6 +196,12 @@
             <assert id="COR-1-1" test="exists(@corpus) and @corpus = true()"/>
             <assert id="COR-1-2" test="empty(@patch) or @patch = false()"/>
             <assert id="COR-1-3" test="empty(@supplemental) or @supplemental = false()"/>
+            <assert id="COR-2-1" test="@version"><value-of select="@name"/></assert>
+            <assert id="COR-2-2" test="not(@version) or string-length(@version)!=0"/>
+            <assert id="COR-3-1" test="not(@version) or @versionScheme"/>
+            <assert id="COR-3-2" test="not(@versionScheme) or string-length(@versionScheme)!=0"/>
+            <assert id="COR-4-1" test="swid:Payload"/>
+            <assert id="COR-4-2" test="not(swid:Evidence)"/>
         </rule>
     </pattern>
     
@@ -232,6 +238,10 @@
     
     <pattern id="primary-non-auth">
         <rule id="primary-non-auth-software-identity" context="swid:SoftwareIdentity">
+            <assert id="PRI-4-1" test="@version"><value-of select="@name"/></assert>
+            <assert id="PRI-4-2" test="not(@version) or string-length(@version)!=0"/>
+            <assert id="PRI-5-1" test="not(@version) or @versionScheme"/>
+            <assert id="PRI-5-2" test="not(@versionScheme) or string-length(@versionScheme)!=0"/>
             <assert id="PRI-7-1" test="swid:Evidence"/>
             <assert id="PRI-7-2" test="not(swid:Payload)"/>
         </rule>

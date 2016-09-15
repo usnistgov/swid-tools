@@ -469,8 +469,13 @@
 			&lt;SoftwareIdentity&gt; @version attribute of the product's corpus
 			tag, if any.</statement>
 		<derived-requirements>
-			<derived-requirement id="COR-2-1" type="MUST">
-				<statement></statement>
+			<derived-requirement id="COR-2-1" type="MUST" conditional="true">
+				<statement>A corpus tag SHOULD provide a &lt;SoftwareIdentity&gt; @version attribute, if such a version value exists.</statement>
+				<message>The &lt;SoftwareIdentity&gt; element does not provide a @version attribute.</message>
+			</derived-requirement>
+			<derived-requirement id="COR-2-2" type="MUST">
+				<statement>If a corpus tag provides a &lt;SoftwareIdentity&gt; @version attribute, this attribute's value MUST be non-blank.</statement>
+				<message>The &lt;SoftwareIdentity&gt; element has a blank @version attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -483,7 +488,10 @@
 			value for the &lt;SoftwareIdentity&gt; @versionScheme attribute.</statement>
 		<derived-requirements>
 			<derived-requirement id="COR-3-1" type="MUST">
-				<statement></statement>
+				<statement>If the &lt;SoftwareIdentity&gt; @version attribute is provided, then the  &lt;SoftwareIdentity&gt; @versionScheme attribute MUST provide a value.</statement>
+			</derived-requirement>
+			<derived-requirement id="COR-3-2" type="MUST">
+				<statement>If the &lt;SoftwareIdentity&gt; @versionScheme attribute is provided, then the attribute value MUST be non-blank.</statement>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -497,8 +505,15 @@
 			enumerates every file that is included in the tagged installation
 			media.</statement>
 		<derived-requirements>
-			<derived-requirement id="COR-4-1" type="MUST">
-				<statement></statement>
+			<derived-requirement id="COR-4-1" type="SHOULD">
+				<summary>A &lt;Payload&gt; element is provided in the corpus tag.</summary>
+				<statement>A &lt;Payload&gt; element SHOULD be provided in a corpus tag.</statement>
+				<message>A &lt;Payload&gt; element was not provided.</message>
+			</derived-requirement>
+			<derived-requirement id="COR-4-2" type="MUST_NOT">
+				<summary>An &lt;Evidence&gt; element is not provided in the corpus tag.</summary>
+				<statement>An &lt;Evidence&gt; element MUST NOT be provided in a corpus tag.</statement>
+				<message>An &lt;Evidence&gt; element was provided, instead of a &lt;Payload&gt; element.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -554,7 +569,7 @@
 			<derived-requirement id="PRI-3-1" type="MUST">
 				<statement>If the &lt;SoftwareIdentity&gt; @version attribute is provided, then the  &lt;SoftwareIdentity&gt; @versionScheme attribute MUST provide a value.</statement>
 			</derived-requirement>
-			<derived-requirement id="PRI-3-1" type="MUST">
+			<derived-requirement id="PRI-3-2" type="MUST">
 				<statement>If the &lt;SoftwareIdentity&gt; @versionScheme attribute is provided, then the attribute value MUST be non-blank.</statement>
 			</derived-requirement>
 		</derived-requirements>
@@ -568,8 +583,13 @@
 			&lt;SoftwareIdentity&gt; @version attribute of the primary tag MUST
 			contain that value.</statement>
 		<derived-requirements>
-			<derived-requirement id="PRI-4-1" type="MUST">
-				<statement></statement>
+			<derived-requirement id="PRI-4-1" type="MUST" conditional="true">
+				<statement>A primary tag SHOULD provide a &lt;SoftwareIdentity&gt; @version attribute, if such a version value exists.</statement>
+				<message>The &lt;SoftwareIdentity&gt; element does not provide a @version attribute.</message>
+			</derived-requirement>
+			<derived-requirement id="PRI-4-2" type="MUST">
+				<statement>If a primary tag provides a &lt;SoftwareIdentity&gt; @version attribute, this attribute's value MUST be non-blank.</statement>
+				<message>The &lt;SoftwareIdentity&gt; element has a blank @version attribute value.</message>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>
@@ -584,7 +604,10 @@
 			MUST contain that version scheme value.</statement>
 		<derived-requirements>
 			<derived-requirement id="PRI-5-1" type="MUST">
-				<statement></statement>
+				<statement>If the &lt;SoftwareIdentity&gt; @version attribute is provided, then the  &lt;SoftwareIdentity&gt; @versionScheme attribute MUST provide a value.</statement>
+			</derived-requirement>
+			<derived-requirement id="PRI-5-2" type="MUST">
+				<statement>If the &lt;SoftwareIdentity&gt; @versionScheme attribute is provided, then the attribute value MUST be non-blank.</statement>
 			</derived-requirement>
 		</derived-requirements>
 	</requirement>

@@ -76,7 +76,7 @@ public class Application {
 		CLIParser cliParser = new CLIParser("java -jar <decima jar> (options) <swid tag path>");
 		cliParser.setVersion(Version.VERSION);
 
-		Option useCase = Option.builder(OPTION_USECASE).desc("the SWID tag type (default: primary)").hasArg().build();
+		Option useCase = Option.builder(OPTION_USECASE).desc("the SWID tag type, which is one of: primary, corpus, patch, or supplemental (default: primary)").hasArg().build();
 		EnumerationOptionValidator useCaseValidator = new EnumerationOptionValidator(useCase);
 		useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PRIMARY);
 		useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_CORPUS);
@@ -86,7 +86,7 @@ public class Application {
 
 		OptionGroup authGroup = new OptionGroup();
 		authGroup.addOption(Option.builder(OPTION_AUTHORITATIVE).desc("the tag is produced by an authoritative creator (default)").build());
-		authGroup.addOption(Option.builder(OPTION_NON_AUTHORITATIVE).desc("the tag is not produced by an authoritative creator (default)").build());
+		authGroup.addOption(Option.builder(OPTION_NON_AUTHORITATIVE).desc("the tag is not produced by an authoritative creator").build());
 		cliParser.addOptionGroup(authGroup);
 
 		return cliParser.parse(args);
