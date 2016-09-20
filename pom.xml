@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>gov.nist</groupId>
+	<artifactId>swidval-webapp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<packaging>war</packaging>
+
+	<name>swidval-webapp Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<jdk.version>1.8</jdk.version>
+		<spring.version>4.3.2.RELEASE</spring.version>
+		<jstl.version>1.2</jstl.version>
+		<servletapi.version>4.0.0-b01</servletapi.version>
+		<decima.version>0.0.1-SNAPSHOT</decima.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>gov.nist.decima</groupId>
+			<artifactId>swidval</artifactId>
+			<version>${decima.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jsignature.io-tools</groupId>
+			<artifactId>easystream</artifactId>
+			<version>1.2.15</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+		</dependency>
+
+		<!-- compile only, deployed container will provide this -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servletapi.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>swidval-webapp</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<!-- Used to pull bootstrap files from the JAR -->
+					<execution>
+						<id>unpack-bootstrap</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>gov.nist.decima</groupId>
+									<artifactId>core</artifactId>
+									<version>${decima.version}</version>
+									<classifier>bootstrap</classifier>
+									<type>jar</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/generated-webapp/bootstrap</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<directory>${project.build.directory}/generated-webapp</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.4.0.M1</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/swidval</contextPath>
+					</webApp>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
