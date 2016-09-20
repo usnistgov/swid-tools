@@ -52,11 +52,11 @@
 					<include>**/*.xsd</include>
 				</includes>
 			</resource>
-			<resource>
-				<directory>src/main/templates</directory>
-				<filtering>true</filtering>
-				<targetPath>${project.build.directory}/generated-sources/java</targetPath>
-			</resource>
+			<!-- <resource> -->
+			<!-- <directory>src/main/templates</directory> -->
+			<!-- <filtering>true</filtering> -->
+			<!-- <targetPath>${project.build.directory}/generated-sources/java</targetPath> -->
+			<!-- </resource> -->
 			<resource>
 				<directory>src/main/distro</directory>
 				<filtering>true</filtering>
@@ -68,44 +68,45 @@
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.eclipse.m2e</groupId> -->
-<!-- 					<artifactId>lifecycle-mapping</artifactId> -->
-<!-- 					<version>1.0.0</version> -->
-<!-- 					<configuration> -->
-<!-- 						<lifecycleMappingMetadata> -->
-<!-- 							<pluginExecutions> -->
-<!-- 								<pluginExecution> -->
-<!-- 									<pluginExecutionFilter> -->
-<!-- 										<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 										<artifactId>maven-dependency-plugin</artifactId> -->
-<!-- 										<versionRange>[0.0,)</versionRange> -->
-<!-- 										<goals> -->
-<!-- 											<goal>unpack</goal> -->
-<!-- 										</goals> -->
-<!-- 									</pluginExecutionFilter> -->
-<!-- 									<action> -->
-<!-- 										<ignore /> -->
-<!-- 									</action> -->
-<!-- 								</pluginExecution> -->
-<!-- 							</pluginExecutions> -->
-<!-- 						</lifecycleMappingMetadata> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
+				<!-- <plugin> -->
+				<!-- <groupId>org.eclipse.m2e</groupId> -->
+				<!-- <artifactId>lifecycle-mapping</artifactId> -->
+				<!-- <version>1.0.0</version> -->
+				<!-- <configuration> -->
+				<!-- <lifecycleMappingMetadata> -->
+				<!-- <pluginExecutions> -->
+				<!-- <pluginExecution> -->
+				<!-- <pluginExecutionFilter> -->
+				<!-- <groupId>org.apache.maven.plugins</groupId> -->
+				<!-- <artifactId>maven-dependency-plugin</artifactId> -->
+				<!-- <versionRange>[0.0,)</versionRange> -->
+				<!-- <goals> -->
+				<!-- <goal>unpack</goal> -->
+				<!-- </goals> -->
+				<!-- </pluginExecutionFilter> -->
+				<!-- <action> -->
+				<!-- <ignore /> -->
+				<!-- </action> -->
+				<!-- </pluginExecution> -->
+				<!-- </pluginExecutions> -->
+				<!-- </lifecycleMappingMetadata> -->
+				<!-- </configuration> -->
+				<!-- </plugin> -->
 			</plugins>
 		</pluginManagement>
 
 		<plugins>
 			<plugin>
-				<!-- Used to pull XSD files from the JAR -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
 				<executions>
+					<!-- Used to pull XSD files from the JAR -->
 					<execution>
 						<id>unpack-xsd-files</id>
 						<!-- Using the initialize phase because it is before the generate sources 
 							phase -->
-						<phase>initialize</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>unpack</goal>
 						</goals>
@@ -123,9 +124,10 @@
 							<outputDirectory>${project.basedir}/target/xsd-includes</outputDirectory>
 						</configuration>
 					</execution>
+					<!-- Used to pull bootstrap files from the JAR -->
 					<execution>
 						<id>unpack-bootstrap</id>
-						<phase>initialize</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>unpack</goal>
 						</goals>
@@ -227,23 +229,43 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.12</version>
+				<artifactId>templating-maven-plugin</artifactId>
+				<version>1.0.0</version>
 				<executions>
 					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
+						<id>filter-src</id>
 						<goals>
-							<goal>add-source</goal>
+							<goal>filter-sources</goal>
 						</goals>
 						<configuration>
-							<sources>
-								<source>${project.build.directory}/generated-sources/java/</source>
-							</sources>
+							<!-- Note the two following parameters are the default one. These 
+								are specified here just as a reminder. But as the Maven philosophy is strongly 
+								about conventions, it's better to just not specify them. -->
+							<sourceDirectory>${basedir}/src/main/java-templates</sourceDirectory>
+							<outputDirectory>${project.build.directory}/generated-sources/java-templates</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>build-helper-maven-plugin</artifactId> -->
+			<!-- <version>1.12</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>add-source</id> -->
+			<!-- <phase>generate-sources</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>add-source</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <sources> -->
+			<!-- <source>${project.build.directory}/generated-sources/java/</source> -->
+			<!-- </sources> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 </project>

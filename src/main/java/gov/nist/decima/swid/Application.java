@@ -1,22 +1,22 @@
 package gov.nist.decima.swid;
 
+import static gov.nist.decima.module.cli.CLIParser.DEFAULT_VALIDATION_REPORT_FILE;
+import static gov.nist.decima.module.cli.CLIParser.DEFAULT_VALIDATION_RESULT_FILE;
+import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_REPORT_FILE;
+import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -27,29 +27,21 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
-import gov.nist.decima.core.assessment.Assessment;
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
-import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
-import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.DefaultLoggingHandler;
+import gov.nist.decima.core.assessment.result.LoggingHandler;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
-import gov.nist.decima.core.assessment.result.ResultWriter;
-import gov.nist.decima.core.assessment.schema.SchemaAssessment;
-import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.core.assessment.result.XMLResultBuilder;
 import gov.nist.decima.core.document.JDOMDocument;
 import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.core.document.XMLDocumentException;
-import gov.nist.decima.core.requirement.DefaultRequirementsManager;
-import gov.nist.decima.core.requirement.MutableRequirementsManager;
-import gov.nist.decima.core.requirement.RequirementsParser;
+import gov.nist.decima.core.requirement.RequirementsManager;
 import gov.nist.decima.core.requirement.RequirementsParserException;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.EnumerationOptionValidator;
-
-import static gov.nist.decima.module.cli.CLIParser.*;
 
 public class Application {
 	private static final Logger log = LogManager.getLogger(Application.class);
@@ -118,11 +110,6 @@ public class Application {
 		log.info("  tag type: "+tagType.getName());
 		log.info("  authoritative tag: "+authoritative);
 
-		// Load the requirements
-		MutableRequirementsManager requirementsManager = new DefaultRequirementsManager();
-		RequirementsParser parser = new RequirementsParser(Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd")));
-		parser.parse(new URL("classpath:requirements.xml"), requirementsManager);
-
 //		 handle resultfile
 		File validationResultFile;
 		{
@@ -149,14 +136,15 @@ public class Application {
 		File file = new File(path);
 		XMLDocument doc = new JDOMDocument(file);
 
-
 		ExecutorService executorService = null;
 		AssessmentResults validationResult;
 		try {
 			executorService = Executors.newFixedThreadPool(2);
 	
 			// Configure the assessments
-			AssessmentExecutor executor = configureAssessments(executorService, requirementsManager, tagType, authoritative);
+			RequirementsManager requirementsManager = SWIDAssessmentFactory.getInstance().getRequirementsManager();
+			LoggingHandler loggingHandler = new DefaultLoggingHandler(requirementsManager);
+			AssessmentExecutor executor = SWIDAssessmentFactory.getInstance().newAssessmentExecutor(tagType, authoritative, executorService, loggingHandler);
 			validationResult = executor.execute(doc);
 		} finally {
 			if (executorService != null) {
@@ -165,7 +153,7 @@ public class Application {
 		}
 
 		// Output the results
-		ResultWriter writer = new ResultWriter();
+		XMLResultBuilder writer = new XMLResultBuilder();
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(validationResultFile))) {
 			log.info("Storing assessment results to: "+validationResultFile);
 			writer.write(validationResult, os);
@@ -182,45 +170,4 @@ public class Application {
 		reportGenerator.generate(validationResultFile, validationReportFile);
 		return 0;
 	}
-
-	private AssessmentExecutor configureAssessments(ExecutorService executorService,
-			MutableRequirementsManager requirementsManager, TagType tagType, boolean authoritative) throws AssessmentException, SchematronCompilationException, MalformedURLException {
-
-		List<Assessment> assessments = new ArrayList<Assessment>(2);
-		assessments.add(configureSchemaAssessment());
-		assessments.add(configureSchematronAssessment(tagType, authoritative));
-
-//		AssessmentExecutor executor = new BasicAssessmentExecutor(requirementsManager, assessments) {
-		AssessmentExecutor retval = new ConcurrentAssessmentExecutor(executorService, requirementsManager, assessments) {
-			@Override
-			protected AssessmentResultBuilder newAssessmentResultBuilder() {
-				AssessmentResultBuilder retval = new AssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, authoritative));
-						retval.setLoggingHandler(new DefaultLoggingHandler(requirementsManager));
-				return retval;
-			}
-		};
-		return retval;
-	}
-
-	private SchemaAssessment configureSchemaAssessment() throws AssessmentException {
-//		return new SchemaAssessment("GEN-1-1", Collections.singletonList(new StreamSource("classpath:swid-schema-20151006.xsd")));
-		return new SchemaAssessment("GEN-1-1", Collections.singletonList(new StreamSource("classpath:swid-schema-fixed-20160908.xsd")));
-	}
-
-	private SchematronAssessment configureSchematronAssessment(TagType tagType, boolean authoritative) throws AssessmentException, SchematronCompilationException, MalformedURLException {
-
-		String phase = createPhase(tagType.getName(), authoritative);
-
-		// Load the Schematron and create the assessment
-		SchematronAssessment assessment = new SchematronAssessment(new URL("classpath:schematron/swid-nistir-8060.sch"), phase);
-		assessment.addParameter("authoritative", Boolean.toString(authoritative));
-		assessment.addParameter("type", tagType.getName());
-		assessment.setResultDirectory(new File("svrl-result"));
-		return assessment;
-	}
-
-	protected String createPhase(String useCase, boolean authoritative) {
-		return "swid."+useCase+"."+ (authoritative ? "auth" : "non-auth");
-	}
-
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:res="http://decima.nist.gov/xml/assessment-results/0.1"
     xmlns:swid-ext="https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
     version="2.0">
 
@@ -8,6 +9,13 @@
     <xsl:param name="has-requirement-categorizations" select="true()"/>
     <xsl:template name="process-header">
     	<h1>SWID Tag <small>Validation Report</small></h1>
+    </xsl:template>
+
+    <xsl:template name="process-validation-summary">
+        <dt>Tag Type:</dt>
+        <dd><xsl:value-of select="res:assessment-results/res:properties/res:property[@name='tag-type']"/></dd>
+        <dt>Authoritative Tag:</dt>
+        <dd><xsl:value-of select="res:assessment-results/res:properties/res:property[@name='authoritative']"/></dd>
     </xsl:template>
 
     <xsl:template name="process-categorizations">
