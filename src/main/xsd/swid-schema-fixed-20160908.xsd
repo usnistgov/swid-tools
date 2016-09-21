@@ -894,6 +894,7 @@
           </xs:annotation>
         </xs:attribute>
 
+        <!-- FIX: changed the type of @type from xs:NMTOKEN to xs:token to allow the '+' character used in multipartnumeric+suffix. -->
         <xs:attribute
           name="versionScheme"
           type="xs:token"
