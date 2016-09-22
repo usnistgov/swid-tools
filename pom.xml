@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>gov.nist</groupId>
-		<artifactId>oss-maven-parent</artifactId>
+		<artifactId>oss-parent</artifactId>
 		<version>1</version>
 	</parent>
 
@@ -72,11 +72,6 @@
 
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>com.mycila</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>3.0</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -128,26 +123,6 @@
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/bootstrap</outputDirectory>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<header>src/license/nist/license.txt</header>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-					<failIfMissing>false</failIfMissing>
-				</configuration>
-				<executions>
-					<execution>
-						<id>check-license</id>
-						<goals>
-							<goal>check</goal>
-						</goals>
-						<phase>verify</phase>
 					</execution>
 				</executions>
 			</plugin>
