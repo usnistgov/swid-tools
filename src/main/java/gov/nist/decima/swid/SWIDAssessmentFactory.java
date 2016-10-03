@@ -26,24 +26,13 @@ package gov.nist.decima.swid;
 import gov.nist.decima.core.assessment.Assessment;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
 import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
-import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
-import gov.nist.decima.core.assessment.result.LoggingHandler;
 import gov.nist.decima.core.assessment.schema.SchemaAssessment;
 import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
-import gov.nist.decima.core.requirement.DefaultRequirementsManager;
-import gov.nist.decima.core.requirement.MutableRequirementsManager;
-import gov.nist.decima.core.requirement.RequirementsManager;
-import gov.nist.decima.core.requirement.RequirementsParser;
-import gov.nist.decima.core.requirement.RequirementsParserException;
 import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.core.schematron.Schematron;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
 
-import org.jdom2.JDOMException;
-import org.xml.sax.SAXException;
-
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,11 +43,8 @@ import javax.xml.transform.stream.StreamSource;
 
 public class SWIDAssessmentFactory {
   private static final SWIDAssessmentFactory INSTANCE;
-  protected static final String PROPERTY_KEY_AUTHORITATIVE = "authoritative";
-  protected static final String PROPERTY_KEY_TAG_TYPE = "tag-type";
   private final Schematron schematron;
   private final SchemaAssessment schemaAssessment;
-  private final RequirementsManager requirementsManager;
 
   public static String toPhase(TagType tagType, boolean authoritative) {
     return "swid." + tagType.getName() + "." + (authoritative ? "auth" : "non-auth");
@@ -75,20 +61,10 @@ public class SWIDAssessmentFactory {
   private SWIDAssessmentFactory() {
     this.schematron = createSchematron();
     this.schemaAssessment = createSchemaAssessment();
-    this.requirementsManager = loadRequirements();
   }
 
   public Schematron getSchematron() {
     return schematron;
-  }
-
-  public RequirementsManager getRequirementsManager() {
-    return requirementsManager;
-  }
-
-  public AssessmentExecutor newAssessmentExecutor(TagType tagType, boolean authoritative,
-      ExecutorService executorService) {
-    return newAssessmentExecutor(tagType, authoritative, executorService, null);
   }
 
   /**
@@ -98,49 +74,23 @@ public class SWIDAssessmentFactory {
    *          the software type supported by the tag
    * @param authoritative
    *          <code>true</code> if the tag was expected to be created by the software provider
-   * @param executorService the Java executor to use to run the assessments
-   * @param loggingHandler a logging callback handler
+   * @param executorService
+   *          the Java executor to use to run the assessments
    * @return a new executor
    */
   public AssessmentExecutor newAssessmentExecutor(TagType tagType, boolean authoritative,
-      ExecutorService executorService, LoggingHandler loggingHandler) {
-    SchematronAssessment assessment = new SchematronAssessment(schematron,
-        toPhase(tagType, authoritative));
-    assessment.addParameter("authoritative", Boolean.toString(authoritative));
-    assessment.addParameter("type", tagType.getName());
+      ExecutorService executorService) {
 
     List<Assessment> assessments = new ArrayList<Assessment>(2);
     assessments.add(schemaAssessment);
+
+    SchematronAssessment assessment = new SchematronAssessment(schematron, toPhase(tagType, authoritative));
+    assessment.addParameter("authoritative", Boolean.toString(authoritative));
+    assessment.addParameter("type", tagType.getName());
     assessments.add(assessment);
 
-    AssessmentExecutor executor = new ConcurrentAssessmentExecutor(executorService,
-        requirementsManager, assessments) {
-      @Override
-      protected AssessmentResultBuilder newAssessmentResultBuilder() {
-        AssessmentResultBuilder retval = new AssessmentResultBuilder(
-            new SWIDValResultStatusBehavior(tagType, true));
-        if (loggingHandler != null) {
-          retval.setLoggingHandler(loggingHandler);
-        }
-        retval.assignProperty(PROPERTY_KEY_AUTHORITATIVE, Boolean.toString(authoritative));
-        retval.assignProperty(PROPERTY_KEY_TAG_TYPE, tagType.getName());
-        return retval;
-      }
-    };
+    AssessmentExecutor executor = new ConcurrentAssessmentExecutor(executorService, assessments);
     return executor;
-  }
-
-  protected RequirementsManager loadRequirements() {
-    MutableRequirementsManager requirementsManager = new DefaultRequirementsManager();
-    try {
-      RequirementsParser parser = new RequirementsParser(
-          Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd")));
-      parser.parse(new URL("classpath:requirements.xml"), requirementsManager);
-    } catch (MalformedURLException | RequirementsParserException | URISyntaxException
-        | JDOMException | SAXException e) {
-      throw new RuntimeException(e);
-    }
-    return requirementsManager;
   }
 
   protected SchemaAssessment createSchemaAssessment() {

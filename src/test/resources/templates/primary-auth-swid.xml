@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template template="classpath:templates/minimal-swid.xml"
-	xmlns="http://decima.nist.gov/xml/template"
+	xmlns="http://csrc.nist.gov/ns/decima/template/1.0"
 	xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
     xmlns:n8060="http://csrc.nist.gov/ns/swid/2015-extensions/1.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

@@ -25,18 +25,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>decima-core</artifactId>
 			<version>${decima.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>testing</artifactId>
+			<artifactId>decima-testing</artifactId>
 			<version>${decima.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>module</artifactId>
+			<artifactId>decima-module</artifactId>
 			<version>${decima.version}</version>
 		</dependency>
 		<dependency>
@@ -129,15 +129,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>**/AssessmentTestSuite.class</include>
-					</includes>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -7,7 +7,7 @@
 	default value. This will cause this test to fail.
 	</description>
 	<template template="classpath:templates/primary-non-auth-swid.xml"
-		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns="http://csrc.nist.gov/ns/decima/template/1.0" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<modify-attribute xpath="//swid:Entity[@role='tagCreator']/@regid" value="http://invalid.unavailable" />
 	</template>

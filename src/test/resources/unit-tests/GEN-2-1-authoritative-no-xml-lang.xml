@@ -3,7 +3,7 @@
 	<requirement>GEN-2-1</requirement>
 	<description>An valid authoritative tag with the invalid condition where the SoftwareIdentity xml:lang is missing.</description>
 	<template template="classpath:templates/primary-auth-swid.xml"
-		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns="http://csrc.nist.gov/ns/decima/template/1.0" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<delete xpath="/swid:SoftwareIdentity/@xml:lang" />
 	</template>

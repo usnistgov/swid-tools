@@ -4,7 +4,7 @@
 	<description>A non-authoritative, primary tag produced by a 3rd party that should fail
 		because it is not authoritative.</description>
 	<template template="classpath:templates/primary-auth-swid.xml"
-		xmlns="http://decima.nist.gov/xml/template" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd">
+		xmlns="http://csrc.nist.gov/ns/decima/template/1.0" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd">
 		<delete xpath="//swid:Entity" />
 		<insert-child xpath="/swid:SoftwareIdentity">
 			<swid:Entity name="ACME Connection" regid="acme.org"

@@ -30,17 +30,15 @@ import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE
 
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.LoggingAssessmentNotifier;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
-import gov.nist.decima.core.assessment.result.DefaultLoggingHandler;
-import gov.nist.decima.core.assessment.result.LoggingHandler;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
 import gov.nist.decima.core.assessment.result.XMLResultBuilder;
 import gov.nist.decima.core.document.JDOMDocument;
 import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.core.document.XMLDocumentException;
-import gov.nist.decima.core.requirement.RequirementsManager;
 import gov.nist.decima.module.cli.CLIParser;
-import gov.nist.decima.module.cli.commons.cli.EnumerationOptionValidator;
+import gov.nist.decima.module.cli.commons.cli.OptionEnumerationValidator;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -98,7 +96,7 @@ public class Application {
         .desc("the SWID tag type, which is one of: primary, corpus, patch, or supplemental"
             + " (default: primary)")
         .hasArg().build();
-    EnumerationOptionValidator useCaseValidator = new EnumerationOptionValidator(useCase);
+    OptionEnumerationValidator useCaseValidator = new OptionEnumerationValidator(useCase);
     useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PRIMARY);
     useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_CORPUS);
     useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PATCH);
@@ -184,12 +182,13 @@ public class Application {
       executorService = Executors.newFixedThreadPool(2);
 
       // Configure the assessments
-      RequirementsManager requirementsManager = SWIDAssessmentFactory.getInstance()
-          .getRequirementsManager();
-      LoggingHandler loggingHandler = new DefaultLoggingHandler(requirementsManager);
+      SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
+      
       AssessmentExecutor executor = SWIDAssessmentFactory.getInstance()
-          .newAssessmentExecutor(tagType, authoritative, executorService, loggingHandler);
-      validationResult = executor.execute(doc);
+          .newAssessmentExecutor(tagType, authoritative, executorService);
+
+      reactor.pushAssessmentExecution(doc, executor);
+      validationResult = reactor.react(new LoggingAssessmentNotifier());
     } catch (AssessmentException e) {
       log.error("An error occured while performing the assessment", e);
       return -5;
