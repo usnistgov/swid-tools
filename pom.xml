@@ -7,8 +7,14 @@
 
 	<packaging>war</packaging>
 
-	<name>swidval-webapp Maven Webapp</name>
+	<name>SWID Validation Webapp</name>
 	<url>http://maven.apache.org</url>
+
+    <scm>
+        <connection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval-webapp/trunk</connection>
+        <developerConnection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval-webapp/trunk</developerConnection>
+        <url>https://subversion.nist.gov/external1/NVD/swidval-webapp/trunk</url>
+    </scm>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>
