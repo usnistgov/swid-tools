@@ -23,10 +23,8 @@
 
 package gov.nist.decima.swid;
 
+import gov.nist.decima.core.Decima;
 import gov.nist.decima.core.assessment.AssessmentException;
-import gov.nist.decima.core.assessment.BasicAssessmentExecutor;
-import gov.nist.decima.core.assessment.LoggingAssessmentNotifier;
-import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.BaseRequirementResult;
 import gov.nist.decima.core.assessment.result.DerivedRequirementResult;
@@ -35,13 +33,10 @@ import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
 import gov.nist.decima.core.document.DefaultXMLDocumentFactory;
 import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.core.document.XMLDocumentException;
-import gov.nist.decima.core.requirement.RequirementsManager;
 import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.core.schematron.Schematron;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
-import gov.nist.decima.testing.StubRequirementsManager;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -71,54 +66,14 @@ public class SchematronTest {
     // resultDir.mkdirs();
 
     // Perform the assessment
-    AssessmentResultBuilder builder = new AssessmentResultBuilder();
-    assessment.execute(doc, builder, new LoggingAssessmentNotifier());
-    builder.end();
+    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(TagType.PRIMARY, true);
+    reactor.pushAssessmentExecution(doc,
+        Decima.newAssessmentExecutorFactory().newAssessmentExecutor(Collections.singletonList(assessment)));
 
     // Generate the assessment results
-    // TODO: replace this once the requirements manager is implemented
-    RequirementsManager requirementsManager
-        = new StubRequirementsManager(builder.getDerivedRequirementsTestStatus().keySet());
-    builder.setAssessedDocument(doc);
-    AssessmentResults validationResult = builder.build(requirementsManager);
+    AssessmentResults validationResult = reactor.react();
 
     // Output the results
-    Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();
-    for (BaseRequirementResult reqResult : results) {
-      System.out.println(reqResult.getBaseRequirement().getId() + ": status=" + reqResult.getStatus());
-      for (DerivedRequirementResult derResult : reqResult.getDerivedRequirementResults()) {
-        System.out.println("  " + derResult.getDerivedRequirement().getId() + ": status=" + derResult.getStatus());
-        for (TestResult asrResult : derResult.getTestResults()) {
-          System.out.println("    status=" + asrResult.getStatus() + ", message=" + asrResult.getResultValues()
-              + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn() + ", xpath="
-              + asrResult.getContext().getXPath());
-        }
-      }
-    }
-  }
-
-  @Test
-  @Ignore
-  public void finalTest() throws SchematronCompilationException, MalformedURLException, IOException,
-      AssessmentException, XMLDocumentException {
-    // Load the document to assess
-    DefaultXMLDocumentFactory documentFactory = new DefaultXMLDocumentFactory();
-    XMLDocument documentToAssess = documentFactory.load(new URL("classpath:templates/primary-swid.xml"));
-
-    // Create the assessment
-    Schematron schematron
-        = new DefaultSchematronCompiler().newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
-    SchematronAssessment assessment = new SchematronAssessment(schematron, null);
-
-    // Establish the requirements
-    // TODO: Update this with a method to get an actual requirements manager instance
-    RequirementsManager requirementsManager = new StubRequirementsManager(Collections.emptySet());
-
-    // Perform the assessment
-    BasicAssessmentExecutor executor = new BasicAssessmentExecutor(Collections.singletonList(assessment));
-    AssessmentResultBuilder builder = new AssessmentResultBuilder();
-    executor.execute(documentToAssess, builder, new LoggingAssessmentNotifier());
-    AssessmentResults validationResult = builder.build(requirementsManager);
     Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();
     for (BaseRequirementResult reqResult : results) {
       System.out.println(reqResult.getBaseRequirement().getId() + ": status=" + reqResult.getStatus());

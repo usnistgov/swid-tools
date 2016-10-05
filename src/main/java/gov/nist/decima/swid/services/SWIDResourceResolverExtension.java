@@ -21,14 +21,17 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
+package gov.nist.decima.swid.services;
 
-package gov.nist.decima.swid;
+import gov.nist.decima.core.service.AbstractCatalogResourceResolverExtension;
 
-public class Version {
+import org.apache.xerces.util.XMLCatalogResolver;
+import org.w3c.dom.ls.LSResourceResolver;
+import org.xml.sax.ext.EntityResolver2;
 
-  public static String VERSION = "${project.version}";
+public class SWIDResourceResolverExtension extends AbstractCatalogResourceResolverExtension {
 
-  private Version() {
-    // disable
+  public SWIDResourceResolverExtension() {
+    super("classpath:swidval-catalog.xml");
   }
 }
