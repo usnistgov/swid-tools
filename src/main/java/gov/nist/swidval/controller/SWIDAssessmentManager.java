@@ -1,16 +1,13 @@
 package gov.nist.swidval.controller;
 
+import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.swid.SWIDAssessmentFactory;
+import gov.nist.decima.swid.TagType;
+
 import java.util.EnumMap;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import gov.nist.decima.core.assessment.AssessmentException;
-import gov.nist.decima.core.assessment.AssessmentExecutor;
-import gov.nist.decima.core.assessment.result.AssessmentResults;
-import gov.nist.decima.core.document.XMLDocument;
-import gov.nist.decima.swid.SWIDAssessmentFactory;
-import gov.nist.decima.swid.TagType;
 
 public class SWIDAssessmentManager {
 	private final ExecutorService executorService;
@@ -37,10 +34,5 @@ public class SWIDAssessmentManager {
 	public AssessmentExecutor getAssessmentExecutor(TagType tagType) {
 		Objects.requireNonNull(tagType, "tagType");
 		return assessmentExecutors.get(tagType);
-	}
-
-	public AssessmentResults performAssessment(XMLDocument document, TagType tagType) throws AssessmentException {
-		AssessmentExecutor executor = getAssessmentExecutor(tagType);
-		return executor.execute(document);
 	}
 }

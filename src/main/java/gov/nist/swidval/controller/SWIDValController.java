@@ -1,12 +1,15 @@
 package gov.nist.swidval.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import gov.nist.decima.core.assessment.AssessmentException;
+import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.LoggingAssessmentNotifier;
+import gov.nist.decima.core.assessment.result.AssessmentResults;
+import gov.nist.decima.core.assessment.result.ResultStatus;
+import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.core.document.JDOMDocument;
+import gov.nist.decima.core.document.XMLDocumentException;
+import gov.nist.decima.swid.SWIDAssessmentReactor;
+import gov.nist.decima.swid.TagType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import gov.nist.decima.core.assessment.AssessmentException;
-import gov.nist.decima.core.assessment.AssessmentExecutor;
-import gov.nist.decima.core.assessment.result.AssessmentResults;
-import gov.nist.decima.core.assessment.result.ResultStatus;
-import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
-import gov.nist.decima.core.document.JDOMDocument;
-import gov.nist.decima.core.document.XMLDocumentException;
-import gov.nist.decima.swid.TagType;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class SWIDValController {
@@ -35,14 +37,9 @@ public class SWIDValController {
 
 	private final SWIDAssessmentManager manager = new SWIDAssessmentManager();
 
-	public SWIDValController() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 //	@PostMapping("/validate.html")
 	@RequestMapping("/validate")
-	public ModelAndView validate(@RequestParam("file") MultipartFile file) throws AssessmentException, UnrecognizedContentException, XMLDocumentException, IOException {
+	public ModelAndView validate(@RequestParam("file") MultipartFile file, @RequestParam("tag-type") String tagType) throws AssessmentException, UnrecognizedContentException, XMLDocumentException, IOException {
 		if (file.isEmpty()) {
 			throw new UnrecognizedContentException("A valid SWID tag was not provided.");
 		}
@@ -51,9 +48,11 @@ public class SWIDValController {
 		tempFile.deleteOnExit();
 		file.transferTo(tempFile);
 
-		TagType tagType = TagType.PRIMARY;
-		AssessmentExecutor executor = manager.getAssessmentExecutor(tagType);
-		AssessmentResults results = executor.execute(new JDOMDocument(tempFile));
+		TagType type = TagType.lookup(tagType);
+		AssessmentExecutor executor = manager.getAssessmentExecutor(type);
+		SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(type, false);
+		reactor.pushAssessmentExecution(new JDOMDocument(tempFile), executor);
+		AssessmentResults results = reactor.react(new LoggingAssessmentNotifier());
 
 		if (!ResultStatus.PASS.equals(results.getBaseRequirementResult("GEN-1").getStatus())) {
 			throw new UnrecognizedContentException("The provided file was not a schema valid SWID tag.");

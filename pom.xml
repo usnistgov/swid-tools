@@ -80,7 +80,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>gov.nist.decima</groupId>
-									<artifactId>core</artifactId>
+									<artifactId>decima-core</artifactId>
 									<version>${decima.version}</version>
 									<classifier>bootstrap</classifier>
 									<type>jar</type>
