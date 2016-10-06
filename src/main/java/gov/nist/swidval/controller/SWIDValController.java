@@ -6,8 +6,9 @@ import gov.nist.decima.core.assessment.LoggingAssessmentNotifier;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.ResultStatus;
 import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.core.document.JDOMDocument;
-import gov.nist.decima.core.document.XMLDocumentException;
+import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.swid.SWIDAssessmentReactor;
 import gov.nist.decima.swid.TagType;
 
@@ -39,7 +40,7 @@ public class SWIDValController {
 
 //	@PostMapping("/validate.html")
 	@RequestMapping("/validate")
-	public ModelAndView validate(@RequestParam("file") MultipartFile file, @RequestParam("tag-type") String tagType) throws AssessmentException, UnrecognizedContentException, XMLDocumentException, IOException {
+	public ModelAndView validate(@RequestParam("file") MultipartFile file, @RequestParam("tag-type") String tagType) throws AssessmentException, UnrecognizedContentException, DocumentException, IOException {
 		if (file.isEmpty()) {
 			throw new UnrecognizedContentException("A valid SWID tag was not provided.");
 		}
@@ -49,10 +50,10 @@ public class SWIDValController {
 		file.transferTo(tempFile);
 
 		TagType type = TagType.lookup(tagType);
-		AssessmentExecutor executor = manager.getAssessmentExecutor(type);
+		AssessmentExecutor<XMLDocument> executor = manager.getAssessmentExecutor(type);
 		SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(type, false);
-		reactor.pushAssessmentExecution(new JDOMDocument(tempFile), executor);
-		AssessmentResults results = reactor.react(new LoggingAssessmentNotifier());
+		reactor.pushAssessmentExecution(new JDOMDocument(tempFile), executor, LoggingAssessmentNotifier.instance());
+		AssessmentResults results = reactor.react();
 
 		if (!ResultStatus.PASS.equals(results.getBaseRequirementResult("GEN-1").getStatus())) {
 			throw new UnrecognizedContentException("The provided file was not a schema valid SWID tag.");
