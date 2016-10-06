@@ -25,10 +25,6 @@ package gov.nist.decima.swid.services;
 
 import gov.nist.decima.core.service.AbstractCatalogResourceResolverExtension;
 
-import org.apache.xerces.util.XMLCatalogResolver;
-import org.w3c.dom.ls.LSResourceResolver;
-import org.xml.sax.ext.EntityResolver2;
-
 public class SWIDResourceResolverExtension extends AbstractCatalogResourceResolverExtension {
 
   public SWIDResourceResolverExtension() {

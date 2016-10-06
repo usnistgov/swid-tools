@@ -25,8 +25,8 @@ package gov.nist.decima.swid;
 
 import gov.nist.decima.core.requirement.DefaultRequirementsManager;
 import gov.nist.decima.core.requirement.RequirementsManager;
-import gov.nist.decima.core.requirement.RequirementsParser;
 import gov.nist.decima.core.requirement.RequirementsParserException;
+import gov.nist.decima.core.requirement.XMLRequirementsParser;
 
 import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
@@ -58,9 +58,9 @@ public class SWIDRequirementsManager extends DefaultRequirementsManager {
    */
   public SWIDRequirementsManager() {
     try {
-      load(new URL("classpath:requirements.xml"),
-          new RequirementsParser(Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd"))));
-    } catch (MalformedURLException | RequirementsParserException | URISyntaxException | JDOMException
+      load(new URL("classpath:requirements.xml"), new XMLRequirementsParser(
+          Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd"))));
+    } catch (URISyntaxException | MalformedURLException | RequirementsParserException | JDOMException
         | SAXException ex) {
       throw new RuntimeException(ex);
     }

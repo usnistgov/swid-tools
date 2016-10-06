@@ -25,7 +25,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>decima-core</artifactId>
+			<artifactId>decima-xml</artifactId>
 			<version>${decima.version}</version>
 		</dependency>
 		<dependency>

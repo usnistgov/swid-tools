@@ -34,9 +34,9 @@ import gov.nist.decima.core.assessment.LoggingAssessmentNotifier;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
 import gov.nist.decima.core.assessment.result.XMLResultBuilder;
+import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.core.document.JDOMDocument;
 import gov.nist.decima.core.document.XMLDocument;
-import gov.nist.decima.core.document.XMLDocumentException;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.OptionEnumerationValidator;
 
@@ -168,11 +168,11 @@ public class Application {
     XMLDocument doc;
     try {
       doc = new JDOMDocument(file);
-    } catch (FileNotFoundException e) {
-      log.error("Non-existant file argument: " + file.getPath(), e);
+    } catch (FileNotFoundException ex) {
+      log.error("Non-existant file argument: " + file.getPath(), ex);
       return -4;
-    } catch (XMLDocumentException e) {
-      log.error("Unable to parse the XML file: " + file.getPath(), e);
+    } catch (DocumentException ex) {
+      log.error("Unable to parse the XML file: " + file.getPath(), ex);
       return -5;
     }
 
@@ -184,11 +184,11 @@ public class Application {
       // Configure the assessments
       SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
       
-      AssessmentExecutor executor = SWIDAssessmentFactory.getInstance()
+      AssessmentExecutor<XMLDocument> executor = SWIDAssessmentFactory.getInstance()
           .newAssessmentExecutor(tagType, authoritative, executorService);
 
-      reactor.pushAssessmentExecution(doc, executor);
-      validationResult = reactor.react(new LoggingAssessmentNotifier());
+      reactor.pushAssessmentExecution(doc, executor, LoggingAssessmentNotifier.instance());
+      validationResult = reactor.react();
     } catch (AssessmentException e) {
       log.error("An error occured while performing the assessment", e);
       return -5;

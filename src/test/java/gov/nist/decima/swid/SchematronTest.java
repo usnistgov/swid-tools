@@ -23,6 +23,7 @@
 
 package gov.nist.decima.swid;
 
+import gov.nist.decima.core.AssessmentExecutorFactory;
 import gov.nist.decima.core.Decima;
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
@@ -31,8 +32,8 @@ import gov.nist.decima.core.assessment.result.DerivedRequirementResult;
 import gov.nist.decima.core.assessment.result.TestResult;
 import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
 import gov.nist.decima.core.document.DefaultXMLDocumentFactory;
+import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.core.document.XMLDocument;
-import gov.nist.decima.core.document.XMLDocumentException;
 import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.core.schematron.Schematron;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
@@ -50,7 +51,7 @@ public class SchematronTest {
 
   @Test
   public void temporaryTest() throws SchematronCompilationException, MalformedURLException, IOException,
-      AssessmentException, XMLDocumentException {
+      AssessmentException, DocumentException {
     // Load the document to assess
     DefaultXMLDocumentFactory documentFactory = new DefaultXMLDocumentFactory();
     XMLDocument doc = documentFactory.load(new URL("classpath:templates/primary-auth-swid.xml"));
@@ -67,8 +68,8 @@ public class SchematronTest {
 
     // Perform the assessment
     SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(TagType.PRIMARY, true);
-    reactor.pushAssessmentExecution(doc,
-        Decima.newAssessmentExecutorFactory().newAssessmentExecutor(Collections.singletonList(assessment)));
+    AssessmentExecutorFactory<XMLDocument> factory = Decima.newAssessmentExecutorFactory();
+    reactor.pushAssessmentExecution(doc, factory.newAssessmentExecutor(Collections.singletonList(assessment)));
 
     // Generate the assessment results
     AssessmentResults validationResult = reactor.react();
@@ -81,8 +82,8 @@ public class SchematronTest {
         System.out.println("  " + derResult.getDerivedRequirement().getId() + ": status=" + derResult.getStatus());
         for (TestResult asrResult : derResult.getTestResults()) {
           System.out.println("    status=" + asrResult.getStatus() + ", message=" + asrResult.getResultValues()
-              + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn() + ", xpath="
-              + asrResult.getContext().getXPath());
+              + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn());
+          // + ", xpath=" + asrResult.getContext().getXPath());
         }
       }
     }

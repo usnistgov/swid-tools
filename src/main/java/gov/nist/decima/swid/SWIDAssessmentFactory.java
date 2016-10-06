@@ -28,6 +28,7 @@ import gov.nist.decima.core.assessment.AssessmentExecutor;
 import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
 import gov.nist.decima.core.assessment.schema.SchemaAssessment;
 import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.core.schematron.Schematron;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
@@ -78,10 +79,10 @@ public class SWIDAssessmentFactory {
    *          the Java executor to use to run the assessments
    * @return a new executor
    */
-  public AssessmentExecutor newAssessmentExecutor(TagType tagType, boolean authoritative,
+  public AssessmentExecutor<XMLDocument> newAssessmentExecutor(TagType tagType, boolean authoritative,
       ExecutorService executorService) {
 
-    List<Assessment> assessments = new ArrayList<Assessment>(2);
+    List<Assessment<XMLDocument>> assessments = new ArrayList<Assessment<XMLDocument>>(2);
     assessments.add(schemaAssessment);
 
     SchematronAssessment assessment = new SchematronAssessment(schematron, toPhase(tagType, authoritative));
@@ -89,7 +90,8 @@ public class SWIDAssessmentFactory {
     assessment.addParameter("type", tagType.getName());
     assessments.add(assessment);
 
-    AssessmentExecutor executor = new ConcurrentAssessmentExecutor(executorService, assessments);
+    AssessmentExecutor<XMLDocument> executor
+        = new ConcurrentAssessmentExecutor<XMLDocument>(executorService, assessments);
     return executor;
   }
 
