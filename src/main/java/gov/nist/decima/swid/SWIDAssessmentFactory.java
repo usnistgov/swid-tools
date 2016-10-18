@@ -32,6 +32,7 @@ import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.core.schematron.Schematron;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
+import gov.nist.decima.xml.DecimaXML;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,8 +45,6 @@ import javax.xml.transform.stream.StreamSource;
 
 public class SWIDAssessmentFactory {
   private static final SWIDAssessmentFactory INSTANCE;
-  private final Schematron schematron;
-  private final SchemaAssessment schemaAssessment;
 
   public static String toPhase(TagType tagType, boolean authoritative) {
     return "swid." + tagType.getName() + "." + (authoritative ? "auth" : "non-auth");
@@ -58,6 +57,9 @@ public class SWIDAssessmentFactory {
   static {
     INSTANCE = new SWIDAssessmentFactory();
   }
+
+  private final Schematron schematron;
+  private final SchemaAssessment schemaAssessment;
 
   private SWIDAssessmentFactory() {
     this.schematron = createSchematron();
@@ -85,7 +87,7 @@ public class SWIDAssessmentFactory {
     List<Assessment<XMLDocument>> assessments = new ArrayList<Assessment<XMLDocument>>(2);
     assessments.add(schemaAssessment);
 
-    SchematronAssessment assessment = new SchematronAssessment(schematron, toPhase(tagType, authoritative));
+    SchematronAssessment assessment = DecimaXML.newSchematronAssessment(schematron, toPhase(tagType, authoritative));
     assessment.addParameter("authoritative", Boolean.toString(authoritative));
     assessment.addParameter("type", tagType.getName());
     assessments.add(assessment);
@@ -96,7 +98,7 @@ public class SWIDAssessmentFactory {
   }
 
   protected SchemaAssessment createSchemaAssessment() {
-    return new SchemaAssessment("GEN-1-1",
+    return DecimaXML.newSchemaAssessment("GEN-1-1",
         Collections.singletonList(new StreamSource("classpath:swid-schema-fixed-20160908.xsd")));
   }
 

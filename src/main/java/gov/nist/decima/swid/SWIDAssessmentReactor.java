@@ -25,6 +25,7 @@ package gov.nist.decima.swid;
 
 import gov.nist.decima.core.AssessmentReactor;
 import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
+import gov.nist.decima.core.assessment.result.DefaultAssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.DefaultLoggingHandler;
 
 import java.util.Objects;
@@ -54,7 +55,8 @@ public class SWIDAssessmentReactor extends AssessmentReactor {
 
   @Override
   protected AssessmentResultBuilder newAssessmentResultBuilder() {
-    AssessmentResultBuilder retval = new AssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, true));
+    DefaultAssessmentResultBuilder retval
+        = new DefaultAssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, true));
     retval.setLoggingHandler(new DefaultLoggingHandler(getRequirementsManager()));
     retval.assignProperty(PROPERTY_KEY_AUTHORITATIVE, Boolean.toString(authoritative));
     retval.assignProperty(PROPERTY_KEY_TAG_TYPE, tagType.getName());

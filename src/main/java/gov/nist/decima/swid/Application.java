@@ -35,10 +35,10 @@ import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
 import gov.nist.decima.core.assessment.result.XMLResultBuilder;
 import gov.nist.decima.core.document.DocumentException;
-import gov.nist.decima.core.document.JDOMDocument;
 import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.OptionEnumerationValidator;
+import gov.nist.decima.xml.DecimaXML;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -167,7 +167,7 @@ public class Application {
     File file = new File(path);
     XMLDocument doc;
     try {
-      doc = new JDOMDocument(file);
+      doc = DecimaXML.newXMLDocument(file);
     } catch (FileNotFoundException ex) {
       log.error("Non-existant file argument: " + file.getPath(), ex);
       return -4;

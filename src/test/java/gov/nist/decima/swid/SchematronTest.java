@@ -23,7 +23,6 @@
 
 package gov.nist.decima.swid;
 
-import gov.nist.decima.core.AssessmentExecutorFactory;
 import gov.nist.decima.core.Decima;
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
@@ -37,6 +36,7 @@ import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
 import gov.nist.decima.core.schematron.Schematron;
 import gov.nist.decima.core.schematron.SchematronCompilationException;
+import gov.nist.decima.xml.DecimaXML;
 
 import org.junit.Test;
 
@@ -61,15 +61,15 @@ public class SchematronTest {
         = new DefaultSchematronCompiler().newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
 
     // Create the assessment
-    SchematronAssessment assessment = new SchematronAssessment(schematron, "swid.primary.auth");
+    SchematronAssessment assessment = DecimaXML.newSchematronAssessment(schematron, "swid.primary.auth");
     File resultDir = new File("svrl-result");
     assessment.setResultDirectory(resultDir);
     // resultDir.mkdirs();
 
     // Perform the assessment
     SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(TagType.PRIMARY, true);
-    AssessmentExecutorFactory<XMLDocument> factory = Decima.newAssessmentExecutorFactory();
-    reactor.pushAssessmentExecution(doc, factory.newAssessmentExecutor(Collections.singletonList(assessment)));
+    reactor.pushAssessmentExecution(doc,
+        Decima.newAssessmentExecutorFactory().newAssessmentExecutor(Collections.singletonList(assessment)));
 
     // Generate the assessment results
     AssessmentResults validationResult = reactor.react();
