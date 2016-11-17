@@ -1,0 +1,193 @@
+concise-software-identity = {
+  global-attr,
+  ? entity-entry,
+  ? evidence-entry,
+  ? link-entry,
+  ? software-meta-entry,
+  ? payload-entry,
+  ? any-element-entry,
+  ? corpus,
+  ? patch,
+  ? media,
+  swid-name,
+  ? supplemental,
+  tag-id,
+  ? tag-version,
+  ? version,
+  ? version-scheme,
+}
+
+NMTOKEN = text            ; .regexp to add some validation?
+; NMTOKENS = [ * NMTOKEN ]
+NMTOKENS = text
+
+any-attr = text
+any-element = any
+
+date-time = time
+; any-uri = uri
+any-uri = text
+
+global-attr = (
+  * text => any-attr,
+  ? lang,
+)
+
+meta-type = (
+  global-attr,
+  * text => any-attr,
+)
+
+meta-element = [
+  global-attr,
+  * text => any-attr,
+]
+
+resource-collection = (
+  global-attr,
+  * (directory-entry // file-entry // process-entry // resource-entry)
+)
+
+file = {
+  filesystem-item,
+  ? size,
+  ? version,
+  ? file-hash,
+  * text => any-attr,
+}
+
+filesystem-item = (
+  meta-type,
+  ? key,
+  ? location,
+  fs-name,
+  ? root,
+)
+
+directory = {
+  filesystem-item,
+  path-elements,
+}
+
+process = {
+  global-attr,
+  process-name,
+  ? pid,
+}
+
+resource = {
+  global-attr,
+  type,
+}
+
+entity = {
+  global-attr,
+  meta-elements,
+  entity-name,
+  ? reg-id,
+  role,
+  ? thumbprint,
+}
+
+evidence = {
+  global-attr,
+  resource-collection,
+  ? date,
+  ? device-id,
+}
+
+link = {
+  global-attr,
+  ? artifact,
+  href,
+  ? media,
+  ? ownership,
+  rel,
+  ? type,
+  ? use,
+}
+
+software-meta = {
+  global-attr,
+  ? activation-status,
+  ? channel-type,
+  ? colloquial-version,
+  ? description,
+  ? edition,
+  ? entitlement-data-required,
+  ? entitlement-key,
+  ? generator,
+  ? persistent-id,
+  ? product,
+  ? product-family,
+  ? revision,
+  ? summary,
+  ? unspsc-code,
+  ? unspsc-version,
+}
+
+payload = {
+  global-attr,
+  resource-collection,
+}
+
+tag-id = (0: text)
+swid-name = (1: text)
+entity-entry = (2: [ * entity ])
+evidence-entry = (3: [ * evidence ])
+link-entry = (4: [ * link ])
+software-meta-entry = (5: [ * software-meta ])
+payload-entry = (6: [ * payload ])
+any-element-entry = (7: [ * any-element ])
+corpus = (8: bool)
+patch = (9: bool)
+media = (10: text)
+supplemental = (11: bool)
+tag-version = (12: integer)
+version = (13: text)
+version-scheme = (14: NMTOKEN)
+lang = (15: text)
+directory-entry = (16: directory)
+file-entry = (17: file)
+process-entry = (18: process)
+resource-entry = (19: resource)
+size = (20: integer)
+key = (21: bool)
+location = (22: text)
+fs-name = (23: text)
+root = (24: text)
+path-elements = (25: ({ * (directory-entry // file-entry) }))
+process-name = (26: text)
+pid = (27: integer)
+type = (28: text)
+meta-elements = (29: ([ * meta-element ]))
+entity-name = (30: text)
+reg-id = (31: any-uri)
+role = (32: NMTOKENS)
+thumbprint = (33: text)
+date = (34: date-time)
+device-id = (35: text)
+artifact = (36: text)
+href = (37: any-uri)
+ownership = (38: ("shared" / "private" / "abandon"))
+rel = (39: NMTOKEN)
+use = (40: ("optional" / "required" / "recommended"))
+activation-status = (41: text)
+channel-type = (42: text)
+colloquial-version = (43: text)
+description = (44: text)
+edition = (45: text)
+entitlement-data-required = (46: bool)
+entitlement-key = (47: text)
+generator = (48: text)
+persistent-id = (49: text)
+product = (50: text)
+product-family = (51: text)
+revision = (52: text)
+summary = (53: text)
+unspsc-code = (54: text)
+unspsc-version = (55: text)
+file-hash = (56: [ hash-alg-id: int / tstr,
+                   hash-value: bstr,
+                 ]
+            )
