@@ -51,7 +51,7 @@ public class SWIDConstants {
    */
   public static final String VERSION_SCHEME_MULTIPART_NUMERIC_WITH_SUFFIX = "multipartnumeric+suffix";
   /**
-   * Follows the {@link http://semver.org} specificatio.n
+   * Follows the <a href="http://semver.org/">Semantic Versioning</a> specificatio.
    */
   public static final String VERSION_SCHEME_SEMVER = "semver";
   /**

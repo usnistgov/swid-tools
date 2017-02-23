@@ -45,8 +45,8 @@ public abstract class AbstractBuilder<E extends AbstractBuilder<E>> {
 
   /**
    * Sets the to-be-built tag data element's language to the provided language value. It is expected
-   * that the language code conforms with ISO 639 language codes and ISO 3166‑1 country codes. See
-   * {@link https://tools.ietf.org/html/rfc5646 rfc5646}.
+   * that the language code conforms with ISO 639 language codes and ISO 3166‑1 country codes.
+   * @see <a href="https://tools.ietf.org/html/rfc5646">RFC5646</a>
    * 
    * @param lang
    *          the language value
@@ -60,6 +60,7 @@ public abstract class AbstractBuilder<E extends AbstractBuilder<E>> {
     return (E) this;
   }
 
+  // TODO: remove this method and use validate instead.
   public abstract boolean isValid();
 
   public abstract void validate();

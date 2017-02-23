@@ -142,8 +142,8 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
    * Provide the IANA MediaType for the resource targeted by the href attribute; this provides the
    * consumer with knowledge of the format of the referenced resource.
    * 
-   * See {@link http://www.iana.org/assignments/media-types/media-types.xhtml "The IANA Media Type
-   * Registry"} for more details on possible values.
+   * The <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">The IANA Media Type Registry</a>
+   * provides more details on possible values.
    * 
    * @param mediaType a valid media type value
    * @return the same builder instance

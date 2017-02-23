@@ -95,11 +95,11 @@ public class SimpleResourceEntry implements ResourceEntry {
    * 
    * @param path
    *          the path to set
+   * @return the current instance
    * @throws NullPointerException
    *           if the provided argument was {@code null}
    * @throws IllegalArgumentException
    *           if the provided argument is empty
-   * 
    */
   public SimpleResourceEntry path(String path) {
     Util.requireNonEmpty(path, "path");
@@ -112,6 +112,7 @@ public class SimpleResourceEntry implements ResourceEntry {
    * 
    * @param size
    *          the size to set
+   * @return the current instance
    */
   public SimpleResourceEntry size(long size) {
     this.size = size;
@@ -123,6 +124,7 @@ public class SimpleResourceEntry implements ResourceEntry {
    * 
    * @param version
    *          the version to set
+   * @return the current instance
    * @throws NullPointerException
    *           if the provided argument was {@code null}
    * @throws IllegalArgumentException
@@ -142,6 +144,7 @@ public class SimpleResourceEntry implements ResourceEntry {
    *          the hash function to set
    * @param bytes
    *          the list of bytes representing the digest value
+   * @return the current instance
    * @throws NullPointerException
    *           if the provided argument was {@code null}
    * @throws IllegalArgumentException

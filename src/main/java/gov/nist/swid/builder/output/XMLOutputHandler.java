@@ -78,10 +78,7 @@ public class XMLOutputHandler implements OutputHandler {
    * @return a JDOM2 {@link Document} based on the SWID information
    */
   public Document generateXML(SWIDBuilder builder) {
-    if (!builder.isValid()) {
-      // TODO: throw a meaningful exception
-      throw new RuntimeException();
-    }
+    builder.validate();
 
     Document retval = buildDocument(builder);
     return retval;
@@ -167,7 +164,7 @@ public class XMLOutputHandler implements OutputHandler {
       }
       sb.append(role);
     }
-    element.setAttribute("role", builder.toString());
+    element.setAttribute("role", sb.toString());
 
     // optional attributes
     buildAttribute("regid", builder.getRegid(), element);
@@ -233,7 +230,7 @@ public class XMLOutputHandler implements OutputHandler {
   }
 
   protected Element build(PayloadBuilder builder) {
-    Element element = new Element("Evidence", SWID_NAMESPACE);
+    Element element = new Element("Payload", SWID_NAMESPACE);
 
     buildAbstractResourceCollectionBuilder(builder, element);
 
@@ -280,6 +277,7 @@ public class XMLOutputHandler implements OutputHandler {
     public void generate(FileBuilder builder) {
 
       Element element = new Element("File", XMLOutputHandler.SWID_NAMESPACE);
+      this.element.addContent(element);
 
       buildAbstractFileSystemItem(builder, element);
 
@@ -300,8 +298,6 @@ public class XMLOutputHandler implements OutputHandler {
         }
         element.setAttribute("hash", hashValue, ns);
       }
-
-      this.element.addContent(element);
     }
 
     private static <E extends AbstractFileSystemItemBuilder<E>> void buildAbstractFileSystemItem(
