@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>gov.nist</groupId>
+		<groupId>gov.nist.secauto</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>1</version>
+		<version>6-SNAPSHOT</version>
 	</parent>
 
 	<groupId>gov.nist.decima</groupId>
@@ -95,7 +95,7 @@
 								<artifactItem>
 									<!-- Artifact that has the schema files -->
 									<groupId>gov.nist.decima</groupId>
-									<artifactId>decima-core</artifactId>
+									<artifactId>decima-xml</artifactId>
 									<version>${decima.version}</version>
 									<type>jar</type>
 								</artifactItem>
@@ -115,7 +115,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>gov.nist.decima</groupId>
-									<artifactId>decima-core</artifactId>
+									<artifactId>decima-xml</artifactId>
 									<version>${decima.version}</version>
 									<classifier>bootstrap</classifier>
 									<type>jar</type>
@@ -158,7 +158,7 @@
 				<!-- </configuration> -->
 				<dependencies>
 					<dependency>
-						<groupId>gov.nist</groupId>
+						<groupId>gov.nist.secauto</groupId>
 						<artifactId>assembly-swid-generator</artifactId>
 						<version>0.0.4-SNAPSHOT</version>
 					</dependency>

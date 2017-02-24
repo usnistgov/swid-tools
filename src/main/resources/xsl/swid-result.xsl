@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:res="http://decima.nist.gov/xml/assessment-results/0.1"
+    xmlns:res="http://csrc.nist.gov/ns/decima/results/1.0"
     xmlns:swid-ext="https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
     exclude-result-prefixes="#all"
     version="2.0">

@@ -30,10 +30,11 @@ import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE
 
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
-import gov.nist.decima.core.assessment.LoggingAssessmentNotifier;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
 import gov.nist.decima.core.assessment.result.XMLResultBuilder;
+import gov.nist.decima.core.assessment.util.AssessmentLoggingAssessmentNotifier;
+import gov.nist.decima.core.assessment.util.ResultLoggingAssessmentResultBuilder;
 import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.module.cli.CLIParser;
@@ -44,6 +45,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.ParseException;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -187,8 +189,10 @@ public class Application {
       AssessmentExecutor<XMLDocument> executor = SWIDAssessmentFactory.getInstance()
           .newAssessmentExecutor(tagType, authoritative, executorService);
 
-      reactor.pushAssessmentExecution(doc, executor, LoggingAssessmentNotifier.instance());
-      validationResult = reactor.react();
+      reactor.pushAssessmentExecution(doc, executor, AssessmentLoggingAssessmentNotifier.instance());
+
+      ResultLoggingAssessmentResultBuilder builder = new ResultLoggingAssessmentResultBuilder(Level.INFO);
+      validationResult = reactor.react(builder);
     } catch (AssessmentException e) {
       log.error("An error occured while performing the assessment", e);
       return -5;
@@ -222,6 +226,7 @@ public class Application {
       log.error("Invalid bootstrap location: " + bootsrapDir, e);
       return -8;
     }
+    reportGenerator.setHtmlTitle("SWID Tag validation Report");
     reportGenerator.setIgnoreNotTestedResults(true);
     reportGenerator.setIgnoreOutOfScopeResults(true);
     try {
