@@ -28,13 +28,18 @@ import static gov.nist.decima.module.cli.CLIParser.DEFAULT_VALIDATION_RESULT_FIL
 import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_REPORT_FILE;
 import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE;
 
+import gov.nist.decima.core.Decima;
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.ReportGenerator;
 import gov.nist.decima.core.assessment.result.XMLResultBuilder;
-import gov.nist.decima.core.assessment.util.AssessmentLoggingAssessmentNotifier;
-import gov.nist.decima.core.assessment.util.ResultLoggingAssessmentResultBuilder;
+import gov.nist.decima.core.assessment.util.AssessmentLoggingHandler;
+import gov.nist.decima.core.assessment.util.AssessmentSummarizingLoggingHandler;
+import gov.nist.decima.core.assessment.util.LoggingHandler;
+import gov.nist.decima.core.assessment.util.OverallSummaryLoggingHandler;
+import gov.nist.decima.core.assessment.util.TestResultLoggingHandler;
 import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.module.cli.CLIParser;
@@ -178,20 +183,29 @@ public class Application {
       return -5;
     }
 
+    // create the result builder and setup logging
+    LoggingHandler loggingHandler = new TestResultLoggingHandler(SWIDRequirementsManager.getInstance());
+    loggingHandler = new AssessmentLoggingHandler(Level.INFO, loggingHandler);
+    loggingHandler = new AssessmentSummarizingLoggingHandler(Level.INFO, loggingHandler);
+    loggingHandler = new OverallSummaryLoggingHandler(Level.INFO, loggingHandler);
+    AssessmentResultBuilder builder = Decima.newAssessmentResultBuilder();
+    builder.setLoggingHandler(loggingHandler);
+
+    // Configure the assessments
+    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
+
     ExecutorService executorService = null;
     AssessmentResults validationResult;
     try {
       executorService = Executors.newFixedThreadPool(2);
-
-      // Configure the assessments
-      SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
       
       AssessmentExecutor<XMLDocument> executor = SWIDAssessmentFactory.getInstance()
           .newAssessmentExecutor(tagType, authoritative, executorService);
 
-      reactor.pushAssessmentExecution(doc, executor, AssessmentLoggingAssessmentNotifier.instance());
+      // setup the document assessment
+      reactor.pushAssessmentExecution(doc, executor);
 
-      ResultLoggingAssessmentResultBuilder builder = new ResultLoggingAssessmentResultBuilder(Level.INFO);
+      // do the assessment
       validationResult = reactor.react(builder);
     } catch (AssessmentException e) {
       log.error("An error occured while performing the assessment", e);
