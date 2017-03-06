@@ -25,6 +25,7 @@
         <url>https://github.com/usnistgov/assembly-swid-generator</url>
         <connection>scm:git:https://github.com/usnistgov/assembly-swid-generator.git</connection>
         <developerConnection>scm:git:https://github.com/usnistgov/assembly-swid-generator.git</developerConnection>
+    </scm>
 
     <distributionManagement>
         <site>
