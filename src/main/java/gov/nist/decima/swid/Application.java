@@ -183,14 +183,6 @@ public class Application {
       return -5;
     }
 
-    // create the result builder and setup logging
-    LoggingHandler loggingHandler = new TestResultLoggingHandler(SWIDRequirementsManager.getInstance());
-    loggingHandler = new AssessmentLoggingHandler(Level.INFO, loggingHandler);
-    loggingHandler = new AssessmentSummarizingLoggingHandler(Level.INFO, loggingHandler);
-    loggingHandler = new OverallSummaryLoggingHandler(Level.INFO, loggingHandler);
-    AssessmentResultBuilder builder = Decima.newAssessmentResultBuilder();
-    builder.setLoggingHandler(loggingHandler);
-
     // Configure the assessments
     SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
 
@@ -206,7 +198,7 @@ public class Application {
       reactor.pushAssessmentExecution(doc, executor);
 
       // do the assessment
-      validationResult = reactor.react(builder);
+      validationResult = reactor.react();
     } catch (AssessmentException e) {
       log.error("An error occured while performing the assessment", e);
       return -5;

@@ -23,10 +23,16 @@
 
 package gov.nist.decima.swid;
 
-import gov.nist.decima.core.AssessmentReactor;
+import gov.nist.decima.core.assessment.AssessmentReactor;
 import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.DefaultAssessmentResultBuilder;
+import gov.nist.decima.core.assessment.util.AssessmentLoggingHandler;
+import gov.nist.decima.core.assessment.util.AssessmentSummarizingLoggingHandler;
+import gov.nist.decima.core.assessment.util.LoggingHandler;
+import gov.nist.decima.core.assessment.util.OverallSummaryLoggingHandler;
 import gov.nist.decima.core.assessment.util.TestResultLoggingHandler;
+
+import org.apache.logging.log4j.Level;
 
 import java.util.Objects;
 
@@ -55,9 +61,13 @@ public class SWIDAssessmentReactor extends AssessmentReactor {
 
   @Override
   protected AssessmentResultBuilder newAssessmentResultBuilder() {
+    LoggingHandler loggingHandler = new TestResultLoggingHandler(getRequirementsManager());
+    loggingHandler = new AssessmentLoggingHandler(Level.INFO, loggingHandler);
+    loggingHandler = new AssessmentSummarizingLoggingHandler(Level.INFO, loggingHandler);
+    loggingHandler = new OverallSummaryLoggingHandler(Level.INFO, loggingHandler);
     DefaultAssessmentResultBuilder retval
         = new DefaultAssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, true));
-    retval.setLoggingHandler(new TestResultLoggingHandler(getRequirementsManager()));
+    retval.setLoggingHandler(loggingHandler);
     retval.assignProperty(PROPERTY_KEY_AUTHORITATIVE, Boolean.toString(authoritative));
     retval.assignProperty(PROPERTY_KEY_TAG_TYPE, tagType.getName());
     return retval;
