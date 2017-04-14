@@ -13,14 +13,13 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
-
 package gov.nist.decima.swid;
 
 import static gov.nist.decima.module.cli.CLIParser.DEFAULT_VALIDATION_REPORT_FILE;
@@ -28,29 +27,21 @@ import static gov.nist.decima.module.cli.CLIParser.DEFAULT_VALIDATION_RESULT_FIL
 import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_REPORT_FILE;
 import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE;
 
-import gov.nist.decima.core.Decima;
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
-import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
-import gov.nist.decima.core.assessment.result.ReportGenerator;
-import gov.nist.decima.core.assessment.result.XMLResultBuilder;
-import gov.nist.decima.core.assessment.util.AssessmentLoggingHandler;
-import gov.nist.decima.core.assessment.util.AssessmentSummarizingLoggingHandler;
-import gov.nist.decima.core.assessment.util.LoggingHandler;
-import gov.nist.decima.core.assessment.util.OverallSummaryLoggingHandler;
-import gov.nist.decima.core.assessment.util.TestResultLoggingHandler;
 import gov.nist.decima.core.document.DocumentException;
-import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.module.cli.CLIParser;
 import gov.nist.decima.module.cli.commons.cli.OptionEnumerationValidator;
 import gov.nist.decima.xml.DecimaXML;
+import gov.nist.decima.xml.assessment.result.ReportGenerator;
+import gov.nist.decima.xml.assessment.result.XMLResultBuilder;
+import gov.nist.decima.xml.document.XMLDocument;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.ParseException;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -221,7 +221,7 @@
         </rule>
             
         <rule id="primary-payload-or-evidence" context="swid:Payload|swid:Evidence">
-            <assert id="PRI-8-1" test="exists(child::swid:File)"/>
+            <assert id="PRI-8-1" test="exists(descendant::swid:File)"/>
         </rule>
     </pattern>
     

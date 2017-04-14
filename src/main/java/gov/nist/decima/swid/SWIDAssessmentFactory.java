@@ -13,27 +13,27 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
-
 package gov.nist.decima.swid;
 
 import gov.nist.decima.core.assessment.Assessment;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
 import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
-import gov.nist.decima.core.assessment.schema.SchemaAssessment;
-import gov.nist.decima.core.assessment.schematron.SchematronAssessment;
-import gov.nist.decima.core.document.XMLDocument;
-import gov.nist.decima.core.schematron.DefaultSchematronCompiler;
-import gov.nist.decima.core.schematron.Schematron;
-import gov.nist.decima.core.schematron.SchematronCompilationException;
 import gov.nist.decima.xml.DecimaXML;
+import gov.nist.decima.xml.assessment.schema.SchemaAssessment;
+import gov.nist.decima.xml.assessment.schematron.SchematronAssessment;
+import gov.nist.decima.xml.document.XMLDocument;
+import gov.nist.decima.xml.schematron.DefaultSchematronCompiler;
+import gov.nist.decima.xml.schematron.Schematron;
+import gov.nist.decima.xml.schematron.SchematronCompilationException;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -91,6 +91,9 @@ public class SWIDAssessmentFactory {
     assessment.addParameter("authoritative", Boolean.toString(authoritative));
     assessment.addParameter("type", tagType.getName());
     assessments.add(assessment);
+    File resultDir = new File("schematon-results");
+    resultDir.mkdirs();
+    assessment.setResultDirectory(resultDir);
 
     AssessmentExecutor<XMLDocument> executor
         = new ConcurrentAssessmentExecutor<XMLDocument>(executorService, assessments);
