@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -62,10 +62,8 @@ public class ArchiveEntryResourceEntry extends AbstractObjectBasedResourceEntry<
     EnumMap<HashAlgorithm, List<Byte>> retval = new EnumMap<>(HashAlgorithm.class);
     // retrieve the entry to process
     PlexusIoResource resource = entry.getResource();
-    retval.put(HashAlgorithm.SHA_256,
-        HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_256, resource.getContents())));
-    retval.put(HashAlgorithm.SHA_512,
-        HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_512, resource.getContents())));
+    retval.put(HashAlgorithm.SHA_256, HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_256, resource.getContents())));
+    retval.put(HashAlgorithm.SHA_512, HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_512, resource.getContents())));
     return retval;
   }
 

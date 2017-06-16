@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -43,8 +43,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-@Component(role = ContainerDescriptorHandler.class, hint = "swid-generator",
-    instantiationStrategy = "per-lookup")
+@Component(role = ContainerDescriptorHandler.class, hint = "swid-generator", instantiationStrategy = "per-lookup")
 public class SWIDHandler implements ContainerDescriptorHandler {
   // @Parameter(defaultValue="${project}", readonly=true, required=true)
   @Requirement
@@ -53,8 +52,7 @@ public class SWIDHandler implements ContainerDescriptorHandler {
   @Requirement
   private Logger logger;
 
-  @Parameter(defaultValue = "${project.build.directory}/generated-swid", property = "tagOutputDir",
-      required = true)
+  @Parameter(defaultValue = "${project.build.directory}/generated-swid", property = "tagOutputDir", required = true)
   private File tagOutputDirectory;
 
   @Parameter(defaultValue = "SWIDTAG", required = true)
@@ -69,8 +67,8 @@ public class SWIDHandler implements ContainerDescriptorHandler {
   }
 
   public File getTagOutputDirectory() {
-    return tagOutputDirectory == null
-        ? new File(project.getBuild().getDirectory(), "generated-swid") : tagOutputDirectory;
+    return tagOutputDirectory == null ? new File(project.getBuild().getDirectory(), "generated-swid")
+        : tagOutputDirectory;
   }
 
   public void setTagOutputDirectory(File tagOutputDirectory) {
@@ -103,10 +101,9 @@ public class SWIDHandler implements ContainerDescriptorHandler {
           processor.addResourceEntry(r);
         }
       } catch (IOException e) {
-        String error = new StringBuilder()
-            .append(
-                "Unable to determine if the resource meets the inclusion/exclusion criteria: ")
-            .append(r.getName()).toString();
+        String error
+            = new StringBuilder().append("Unable to determine if the resource meets the inclusion/exclusion criteria: ")
+                .append(r.getName()).toString();
         logger.error(error, e);
         throw new ArchiverException(error, e);
       } catch (NoSuchAlgorithmException e) {

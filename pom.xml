@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>gov.nist.secauto</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>6-SNAPSHOT</version>
+		<version>6</version>
 	</parent>
 
 	<artifactId>assembly-swid-generator</artifactId>
@@ -51,7 +51,8 @@
 		<dependency>
 			<groupId>gov.nist.secauto</groupId>
 			<artifactId>swid-builder</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+<!-- 			<VERSION>0.0.4-SNAPSHOT</VERSION> -->
+            <version>0.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>

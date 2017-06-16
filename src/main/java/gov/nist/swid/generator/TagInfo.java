@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -146,7 +146,8 @@ public class TagInfo {
   /**
    * Sets the tagged project's version to the provided value.
    * 
-   * @param version the value
+   * @param version
+   *          the value
    */
   public void setProjectVersion(String version) {
     Util.requireNonEmpty(version, "version");
@@ -163,7 +164,8 @@ public class TagInfo {
    * hash function that digests every resource associated with a tag to calculate a combined digest
    * value.
    * 
-   * @param resourceDigest the digest value
+   * @param resourceDigest
+   *          the digest value
    */
   public void setResourceDigest(String resourceDigest) {
     Util.requireNonEmpty(resourceDigest, "resourceDigest");
@@ -177,7 +179,9 @@ public class TagInfo {
 
   /**
    * Sets the tagged project's identifer to the provided value.
-   * @param tagId the value
+   * 
+   * @param tagId
+   *          the value
    */
   public void setTagId(String tagId) {
     Util.requireNonEmpty(tagId, "tagId");
@@ -187,6 +191,7 @@ public class TagInfo {
 
   /**
    * Retrieves the tag's version.
+   * 
    * @return the version value
    */
   public int getTagVersion() {
@@ -200,7 +205,9 @@ public class TagInfo {
 
   /**
    * Sets the tag's version to the provided value.
-   * @param tagVersion the value
+   * 
+   * @param tagVersion
+   *          the value
    */
   public void setTagVersion(int tagVersion) {
     if (tagVersion < 0) {

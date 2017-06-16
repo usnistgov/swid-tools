@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -83,8 +83,7 @@ public class SWIDProcessor {
    * @throws IOException
    *           if an error occurs while load the tag information
    */
-  public SWIDProcessor(MavenProject mavenProject, String tagInfoPropertyFileName)
-      throws IOException {
+  public SWIDProcessor(MavenProject mavenProject, String tagInfoPropertyFileName) throws IOException {
     this.resourceCollection = new ResourceCollection();
     this.project = mavenProject;
     this.tagInfo = new TagInfo(new File(getProjectBuildDirectory(), tagInfoPropertyFileName));
@@ -106,8 +105,8 @@ public class SWIDProcessor {
   }
 
   public File getTagOutputDirectory() {
-    return tagOutputDirectory == null
-        ? new File(getProject().getBuild().getDirectory(), "generated-swid") : tagOutputDirectory;
+    return tagOutputDirectory == null ? new File(getProject().getBuild().getDirectory(), "generated-swid")
+        : tagOutputDirectory;
   }
 
   public void setTagOutputDirectory(File tagOutputDirectory) {
@@ -254,8 +253,7 @@ public class SWIDProcessor {
     PayloadBuilder payloadBuilder = PayloadBuilder.create();
     for (ResourceEntry entry : getResourceCollection().getResources()) {
 
-      FileBuilder fileBuilder
-          = payloadBuilder.newFileResource(PathRelativizer.relativize(swidPath, entry.getPath()));
+      FileBuilder fileBuilder = payloadBuilder.newFileResource(PathRelativizer.relativize(swidPath, entry.getPath()));
 
       String version = entry.getVersion();
       if (version != null) {
@@ -336,9 +334,12 @@ public class SWIDProcessor {
    * Associates a Maven Archiver entry with this processor, which will result in the resource being
    * recorded in the SWID tag.
    * 
-   * @param ae the Maven Archiver entry to add
-   * @throws NoSuchAlgorithmException if a required hash algorithm is not supported
-   * @throws IOException if an error occurred while determining a resource artifact path 
+   * @param ae
+   *          the Maven Archiver entry to add
+   * @throws NoSuchAlgorithmException
+   *           if a required hash algorithm is not supported
+   * @throws IOException
+   *           if an error occurred while determining a resource artifact path
    */
   public void addResourceEntry(ArchiveEntry ae) throws NoSuchAlgorithmException, IOException {
     PlexusIoResource resource = ae.getResource();
