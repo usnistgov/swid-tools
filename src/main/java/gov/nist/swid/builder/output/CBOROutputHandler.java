@@ -141,7 +141,6 @@ public class CBOROutputHandler implements OutputHandler {
       generator.writeStartArray();
       build(evidence, generator);
       generator.writeEndArray();
-      ;
     }
 
     List<LinkBuilder> links = builder.getLinks();
@@ -170,7 +169,6 @@ public class CBOROutputHandler implements OutputHandler {
       generator.writeStartArray();
       build(payload, generator);
       generator.writeEndArray();
-      ;
     }
 
     // optional attributes

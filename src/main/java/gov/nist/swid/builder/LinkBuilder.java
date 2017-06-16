@@ -179,7 +179,7 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
 
   @Override
   public boolean isValid() {
-    boolean retval = (href != null && rel != null && !rel.isEmpty());
+    boolean retval = href != null && rel != null && !rel.isEmpty();
     return retval;
   }
 
