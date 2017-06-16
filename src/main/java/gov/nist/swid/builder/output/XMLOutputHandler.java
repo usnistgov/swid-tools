@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -74,7 +74,9 @@ public class XMLOutputHandler implements OutputHandler {
 
   /**
    * Creates a JDOM2 XML Document based on the content of the builder.
-   * @param builder the {@link SWIDBuilder} to use the information from to build the XML model
+   * 
+   * @param builder
+   *          the {@link SWIDBuilder} to use the information from to build the XML model
    * @return a JDOM2 {@link Document} based on the SWID information
    */
   public Document generateXML(SWIDBuilder builder) {
@@ -206,7 +208,6 @@ public class XMLOutputHandler implements OutputHandler {
     return element;
   }
 
-
   protected Element build(MetaBuilder builder) {
     Element element = new Element("Meta", SWID_NAMESPACE);
 
@@ -225,7 +226,7 @@ public class XMLOutputHandler implements OutputHandler {
     buildAttribute("summary", builder.getSummary(), element);
     buildAttribute("unspscCode", builder.getUnspscCode(), element);
     buildAttribute("unspscVersion", builder.getUnspscVersion(), element);
-    
+
     return element;
   }
 
@@ -237,8 +238,8 @@ public class XMLOutputHandler implements OutputHandler {
     return element;
   }
 
-  private static <E extends AbstractResourceCollectionBuilder<E>> void buildAbstractResourceCollectionBuilder(
-      AbstractResourceCollectionBuilder<E> builder, Element element) {
+  private static <E extends AbstractResourceCollectionBuilder<E>> void
+      buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
     buildAbstractBuilder(builder, element);
 
     ResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator(element);
@@ -300,8 +301,8 @@ public class XMLOutputHandler implements OutputHandler {
       }
     }
 
-    private static <E extends AbstractFileSystemItemBuilder<E>> void buildAbstractFileSystemItem(
-        AbstractFileSystemItemBuilder<E> builder, Element element) {
+    private static <E extends AbstractFileSystemItemBuilder<E>> void
+        buildAbstractFileSystemItem(AbstractFileSystemItemBuilder<E> builder, Element element) {
       buildAbstractResourceBuilder(builder, element);
 
       XMLOutputHandler.buildAttribute("root", builder.getRoot(), element);
@@ -313,8 +314,8 @@ public class XMLOutputHandler implements OutputHandler {
       XMLOutputHandler.buildAttribute("key", builder.getKey(), element);
     }
 
-    private static <E extends AbstractResourceBuilder<E>> void buildAbstractResourceBuilder(
-        AbstractResourceBuilder<E> builder, Element element) {
+    private static <E extends AbstractResourceBuilder<E>> void
+        buildAbstractResourceBuilder(AbstractResourceBuilder<E> builder, Element element) {
       XMLOutputHandler.buildAbstractBuilder(builder, element);
     }
   }

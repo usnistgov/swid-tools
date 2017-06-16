@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -53,7 +53,9 @@ public class EvidenceBuilder extends AbstractResourceCollectionBuilder<EvidenceB
 
   /**
    * Sets the date/time for when the evidence was collected.
-   * @param date a non-null date
+   * 
+   * @param date
+   *          a non-null date
    * @return the current instance
    */
   public EvidenceBuilder date(ZonedDateTime date) {
@@ -64,7 +66,9 @@ public class EvidenceBuilder extends AbstractResourceCollectionBuilder<EvidenceB
 
   /**
    * Identifies the device on which the evidence was collected.
-   * @param deviceId the identifier for the device
+   * 
+   * @param deviceId
+   *          the identifier for the device
    * @return the current instance
    */
   public EvidenceBuilder deviceId(String deviceId) {

@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -107,7 +107,8 @@ public abstract class AbstractFileSystemItemBuilder<E extends AbstractFileSystem
    * Sets the path representing the location of a filesystem resource to the provided value, with
    * the name omitted.
    * 
-   * @param location a sequence of paths
+   * @param location
+   *          a sequence of paths
    * @return the same builder instance
    */
   @SuppressWarnings("unchecked")
@@ -123,7 +124,8 @@ public abstract class AbstractFileSystemItemBuilder<E extends AbstractFileSystem
   /**
    * Sets the name of a filesystem resource to the provided value.
    * 
-   * @param name the name value
+   * @param name
+   *          the name value
    * @return the same builder instance
    */
   @SuppressWarnings("unchecked")

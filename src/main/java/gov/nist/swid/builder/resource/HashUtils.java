@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -111,11 +111,15 @@ public class HashUtils {
    * Generates a hash value, in the form of an array of bytes, by digesting a provided input stream
    * based on the provided hash algorithm.
    * 
-   * @param algorithm the hash function to use
-   * @param is the input stream to read bytes from
+   * @param algorithm
+   *          the hash function to use
+   * @param is
+   *          the input stream to read bytes from
    * @return an array of bytes representing a hash value
-   * @throws NoSuchAlgorithmException if the selected hash function is not supported
-   * @throws IOException if an error occured while reading the input stream
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   * @throws IOException
+   *           if an error occured while reading the input stream
    */
   public static byte[] hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
     MessageDigest digest = MessageDigest.getInstance(algorithm.getName());

@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -219,7 +219,8 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
   /**
    * Adds a new entity to the tag.
    * 
-   * @param entity a entity builder representing the new entity to add
+   * @param entity
+   *          a entity builder representing the new entity to add
    * @return the same builder instance
    */
   public SWIDBuilder addEntity(EntityBuilder entity) {
@@ -230,7 +231,9 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
 
   /**
    * Adds a new link to the tag.
-   * @param link a link builder representing the new link to add
+   * 
+   * @param link
+   *          a link builder representing the new link to add
    * @return the same builder instance
    */
   public SWIDBuilder addLink(LinkBuilder link) {
@@ -241,7 +244,9 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
 
   /**
    * Adds a new meta to the tag.
-   * @param meta a meta builder representing the new meta to add
+   * 
+   * @param meta
+   *          a meta builder representing the new meta to add
    * @return the same builder instance
    */
   public SWIDBuilder addMeta(MetaBuilder meta) {
@@ -252,7 +257,9 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
 
   /**
    * Adds a new payload to the tag.
-   * @param payload a payload builder representing the new payload to add
+   * 
+   * @param payload
+   *          a payload builder representing the new payload to add
    * @return the same builder instance
    */
   public SWIDBuilder payload(PayloadBuilder payload) {
@@ -263,7 +270,9 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
 
   /**
    * Adds a new evidence to the tag.
-   * @param evidence a evidence builder representing the new evidence to add
+   * 
+   * @param evidence
+   *          a evidence builder representing the new evidence to add
    * @return the same builder instance
    */
   public SWIDBuilder evidence(EvidenceBuilder evidence) {

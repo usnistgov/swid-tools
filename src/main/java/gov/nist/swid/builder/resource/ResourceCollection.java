@@ -13,7 +13,7 @@
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
  * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
  * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE. IN NO EVENT
- * SHALL NASA BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
  * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM, OR
  * IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
  * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
@@ -82,9 +82,11 @@ public class ResourceCollection {
    * Retrieve a digest of all of the resources in the collection. This can be used to check if two
    * resource collections are equal.
    * 
-   * @param algorithm the hash function to use to generate the digest of the collection
+   * @param algorithm
+   *          the hash function to use to generate the digest of the collection
    * @return a digest based on the provided function
-   * @throws NoSuchAlgorithmException if the requested has function is unsupported
+   * @throws NoSuchAlgorithmException
+   *           if the requested has function is unsupported
    */
   public byte[] getMessageDigest(HashAlgorithm algorithm) throws NoSuchAlgorithmException {
     MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
