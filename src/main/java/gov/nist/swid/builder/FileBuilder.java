@@ -56,8 +56,8 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
   }
 
   @Override
-  public void accept(ResourceCollectionEntryGenerator creator) {
-    creator.generate(this);
+  public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
+      creator.generate(this, parentContext);
   }
 
   public Long getSize() {

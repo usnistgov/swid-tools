@@ -27,6 +27,7 @@ import gov.nist.swid.builder.AbstractBuilder;
 import gov.nist.swid.builder.AbstractFileSystemItemBuilder;
 import gov.nist.swid.builder.AbstractResourceBuilder;
 import gov.nist.swid.builder.AbstractResourceCollectionBuilder;
+import gov.nist.swid.builder.DirectoryBuilder;
 import gov.nist.swid.builder.EntityBuilder;
 import gov.nist.swid.builder.EvidenceBuilder;
 import gov.nist.swid.builder.FileBuilder;
@@ -242,9 +243,9 @@ public class XMLOutputHandler implements OutputHandler {
       buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
     buildAbstractBuilder(builder, element);
 
-    ResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator(element);
+    XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator(element);
     for (ResourceBuilder resourceBuilder : builder.getResources()) {
-      resourceBuilder.accept(creator);
+      resourceBuilder.accept(creator, element);
     }
   }
 
@@ -267,7 +268,7 @@ public class XMLOutputHandler implements OutputHandler {
     }
   }
 
-  private static class XMLResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator {
+  private static class XMLResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator<Element> {
     private final Element element;
 
     public XMLResourceCollectionEntryGenerator(Element element) {
@@ -275,17 +276,28 @@ public class XMLOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void generate(FileBuilder builder) {
+    public void generate(DirectoryBuilder builder, Element parent) {
+        Element element = new Element("Directory", XMLOutputHandler.SWID_NAMESPACE);
+        parent.addContent(element);
+
+        buildAbstractFileSystemItem(builder, element);
+
+        for (ResourceBuilder child : builder.getResources()) {
+            child.accept(this, element);
+        }
+    }
+
+    @Override
+    public void generate(FileBuilder builder, Element parent) {
 
       Element element = new Element("File", XMLOutputHandler.SWID_NAMESPACE);
-      this.element.addContent(element);
+      parent.addContent(element);
 
       buildAbstractFileSystemItem(builder, element);
 
       XMLOutputHandler.buildAttribute("size", builder.getSize(), element);
       XMLOutputHandler.buildAttribute("version", builder.getVersion(), element);
 
-      Element parent = element.getParentElement();
       for (Map.Entry<HashAlgorithm, String> entry : builder.getHashAlgorithmToValueMap().entrySet()) {
         HashAlgorithm algorithm = entry.getKey();
         String hashValue = entry.getValue();

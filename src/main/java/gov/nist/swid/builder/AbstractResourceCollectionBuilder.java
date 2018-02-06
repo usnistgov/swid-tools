@@ -24,48 +24,81 @@
 package gov.nist.swid.builder;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractResourceCollectionBuilder<T extends AbstractResourceCollectionBuilder<T>>
-    extends AbstractBuilder<T> {
-  private List<ResourceBuilder> resources;
+        extends AbstractBuilder<T> {
+    private Map<String, DirectoryBuilder> directoryMap;
+    private List<ResourceBuilder> resources;
 
-  public AbstractResourceCollectionBuilder() {
-    super();
-  }
+    public AbstractResourceCollectionBuilder() {
+        super();
+    }
 
-  @Override
-  public void reset() {
-    super.reset();
-    resources = new LinkedList<>();
-  }
+    @Override
+    public void reset() {
+        super.reset();
+        directoryMap = new LinkedHashMap<>();
+        resources = new LinkedList<>();
+    }
 
-  /**
-   * Creates a new file builder based on resource pointed to by a sequence of path segments.
-   * 
-   * @param pathSegments
-   *          a sequence of path segements that represent a path to a resource
-   * @return a new file builder representing the provided path
-   */
-  public FileBuilder newFileResource(List<String> pathSegments) {
-    FileBuilder retval = FileBuilder.create();
-    retval.nameAndLocation(pathSegments);
-    resources.add(retval);
-    return retval;
-  }
+    /**
+     * Creates a new file builder based on resource pointed to by a sequence of path segments.
+     * 
+     * @param pathSegments
+     *            a sequence of path segements that represent a path to a resource
+     * @return a new file builder representing the provided path
+     */
+    public FileBuilder newFileResource(List<String> pathSegments) {
+        FileBuilder retval;
+        String filename;
+        if (pathSegments.size() > 1) {
+            List<String> directoryPath = pathSegments.subList(0, pathSegments.size() - 1);
+            DirectoryBuilder directoryBuilder = getDirectoryBuilder(directoryPath);
+            filename = pathSegments.get(pathSegments.size() - 1);
+            retval = directoryBuilder.newFileResource(filename);
+        } else {
+            filename = pathSegments.get(0);
+            retval = FileBuilder.create();
+            retval.name(filename);
+            resources.add(retval);
+        }
+        return retval;
+    }
 
-  public List<ResourceBuilder> getResources() {
-    return Collections.unmodifiableList(resources);
-  }
+    private DirectoryBuilder getDirectoryBuilder(List<String> directoryPath) {
+        DirectoryBuilder retval = null;
+        for (String name : directoryPath) {
+            if (retval == null) {
+                DirectoryBuilder dir = directoryMap.get(name);
+                if (dir == null) {
+                    dir = DirectoryBuilder.create();
+                    dir.name(name);
+                    directoryMap.put(name, dir);
+                    resources.add(dir);
+                }
+                retval = dir;
+            } else {
+                retval = retval.getDirectoryResource(name);
+            }
+        }
+        return retval;
+    }
 
-  @Override
-  public boolean isValid() {
-    return false;
-  }
+    public List<ResourceBuilder> getResources() {
+        return Collections.unmodifiableList(resources);
+    }
 
-  @Override
-  public void validate() {
-  }
+    @Override
+    public boolean isValid() {
+        return false;
+    }
+
+    @Override
+    public void validate() {
+    }
 
 }

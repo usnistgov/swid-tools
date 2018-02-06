@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.builder;
 
 import gov.nist.swid.builder.EntityBuilder;
@@ -40,21 +41,21 @@ import java.util.UUID;
 
 public class SWIDBuilderTest {
 
-  @Rule
-  public TemporaryFolder folder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
-  @Test
-  public void test() throws IOException {
-    SWIDBuilder builder = SWIDBuilder.create();
-    builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
-        .addEntity(EntityBuilder.create().regid("gov.nist")
-            .name("National Institute of Standards and Technology, United States Department of Commerce")
-            .addRole(SWIDConstants.ROLE_TAG_CREATOR).addRole(SWIDConstants.ROLE_SOFTWARE_CREATOR));
-
-     File file = folder.newFile();
-     OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-     new CBOROutputHandler().write(builder, os);
-     os.close();
-  }
+    @Test
+    public void testCBOR() throws IOException {
+        SWIDBuilder builder = SWIDBuilder.create();
+        builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
+                .addEntity(EntityBuilder.create().regid("gov.nist")
+                        .name("National Institute of Standards and Technology, United States Department of Commerce")
+                        .addRole(SWIDConstants.ROLE_TAG_CREATOR).addRole(SWIDConstants.ROLE_SOFTWARE_CREATOR));
+            
+        File file = folder.newFile();
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+        new CBOROutputHandler().write(builder, os);
+        os.close();
+    }
 
 }

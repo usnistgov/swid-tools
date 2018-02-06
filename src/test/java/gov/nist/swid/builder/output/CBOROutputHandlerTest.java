@@ -36,7 +36,7 @@ import java.io.IOException;
 public class CBOROutputHandlerTest {
 
   @Test
-  public void test() throws IOException {
+  public void testCBOR() throws IOException {
     SWIDBuilder builder = SWIDBuilder.create();
     builder.addEntity(
         EntityBuilder.create().name("NIST").regid("nist.gov").addRole("tagCreator").addRole("softwareCreator"));

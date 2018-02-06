@@ -23,12 +23,18 @@
 
 package gov.nist.swid.builder;
 
-public interface ResourceCollectionEntryGenerator {
-  /**
-   * Adds the file, represented by the builder, to this resource collection.
-   * 
-   * @param builder
-   *          the file builder representing the file resource to add
-   */
-  void generate(FileBuilder builder);
+public interface ResourceCollectionEntryGenerator<T> {
+    /**
+     * Adds the file, represented by the builder, to this resource collection.
+     * 
+     * @param builder
+     *            the file builder representing the file resource to add
+     */
+    void generate(FileBuilder builder, T parent);
+
+    /**
+     * Adds the directory, represented by the builder, to this resource collection.
+     * @param directoryBuilder
+     */
+    void generate(DirectoryBuilder directoryBuilder, T parent);
 }
