@@ -24,22 +24,22 @@
 package gov.nist.swid.builder.resource;
 
 public enum HashAlgorithm {
-  SHA_256("SHA-256", "http://www.w3.org/2001/04/xmlenc#sha256"),
-  SHA_512("SHA-512", "http://www.w3.org/2001/04/xmlenc#sha512");
+    SHA_256("SHA-256", "http://www.w3.org/2001/04/xmlenc#sha256"),
+    SHA_512("SHA-512", "http://www.w3.org/2001/04/xmlenc#sha512");
 
-  private final String name;
-  private final String namespace;
+    private final String name;
+    private final String namespace;
 
-  private HashAlgorithm(String name, String namespace) {
-    this.name = name;
-    this.namespace = namespace;
-  }
+    private HashAlgorithm(String name, String namespace) {
+        this.name = name;
+        this.namespace = namespace;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getNamespace() {
-    return namespace;
-  }
+    public String getNamespace() {
+        return namespace;
+    }
 }

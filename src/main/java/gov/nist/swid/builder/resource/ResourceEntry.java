@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface ResourceEntry {
-  String getPath();
+    String getPath();
 
-  long getSize();
+    long getSize();
 
-  String getVersion();
+    String getVersion();
 
-  List<Byte> getDigestValue(HashAlgorithm key) throws NoSuchAlgorithmException;
+    List<Byte> getDigestValue(HashAlgorithm key) throws NoSuchAlgorithmException;
 
-  Map<HashAlgorithm, List<Byte>> getDigestValues();
+    Map<HashAlgorithm, List<Byte>> getDigestValues();
 }

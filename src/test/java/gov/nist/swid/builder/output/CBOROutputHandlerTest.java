@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.builder.output;
 
 import gov.nist.swid.builder.EntityBuilder;
@@ -35,17 +36,17 @@ import java.io.IOException;
 
 public class CBOROutputHandlerTest {
 
-  @Test
-  public void testCBOR() throws IOException {
-    SWIDBuilder builder = SWIDBuilder.create();
-    builder.addEntity(
-        EntityBuilder.create().name("NIST").regid("nist.gov").addRole("tagCreator").addRole("softwareCreator"));
-    builder.language("en-US").name("coswid app").tagId("tagId").tagType(TagType.PRIMARY).version("1.0.0")
-        .versionScheme("multipart-numeric");
+    @Test
+    public void testCBOR() throws IOException {
+        SWIDBuilder builder = SWIDBuilder.create();
+        builder.addEntity(
+                EntityBuilder.create().name("NIST").regid("nist.gov").addRole("tagCreator").addRole("softwareCreator"));
+        builder.language("en-US").name("coswid app").tagId("tagId").tagType(TagType.PRIMARY).version("1.0.0")
+                .versionScheme("multipart-numeric");
 
-    CBOROutputHandler handler = new CBOROutputHandler();
-    BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid.cbor")));
-    handler.write(builder, os);
-  }
+        CBOROutputHandler handler = new CBOROutputHandler();
+        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid.cbor")));
+        handler.write(builder, os);
+    }
 
 }

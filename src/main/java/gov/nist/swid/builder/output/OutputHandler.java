@@ -30,5 +30,5 @@ import java.io.OutputStream;
 
 public interface OutputHandler {
 
-  void write(SWIDBuilder builder, OutputStream os) throws IOException;
+    void write(SWIDBuilder builder, OutputStream os) throws IOException;
 }

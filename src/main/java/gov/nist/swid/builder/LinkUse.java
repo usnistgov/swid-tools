@@ -28,27 +28,27 @@ package gov.nist.swid.builder;
  *
  */
 public enum LinkUse {
-  /**
-   * The [Link]'d software is absolutely required for installation.
-   */
-  REQUIRED("required"),
-  /**
-   * Not absolutely required, but install the software unless directed not to.
-   */
-  RECOMMENDED("recommended"),
-  /**
-   * Not required, install only when asked.
-   */
-  OPTIONAL("optional");
+    /**
+     * The [Link]'d software is absolutely required for installation.
+     */
+    REQUIRED("required"),
+    /**
+     * Not absolutely required, but install the software unless directed not to.
+     */
+    RECOMMENDED("recommended"),
+    /**
+     * Not required, install only when asked.
+     */
+    OPTIONAL("optional");
 
-  private String text;
+    private String text;
 
-  private LinkUse(String text) {
-    this.text = text;
-  }
+    private LinkUse(String text) {
+        this.text = text;
+    }
 
-  @Override
-  public String toString() {
-    return text;
-  }
+    @Override
+    public String toString() {
+        return text;
+    }
 }

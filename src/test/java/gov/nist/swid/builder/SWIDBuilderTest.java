@@ -51,7 +51,7 @@ public class SWIDBuilderTest {
                 .addEntity(EntityBuilder.create().regid("gov.nist")
                         .name("National Institute of Standards and Technology, United States Department of Commerce")
                         .addRole(SWIDConstants.ROLE_TAG_CREATOR).addRole(SWIDConstants.ROLE_SOFTWARE_CREATOR));
-            
+
         File file = folder.newFile();
         OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
         new CBOROutputHandler().write(builder, os);

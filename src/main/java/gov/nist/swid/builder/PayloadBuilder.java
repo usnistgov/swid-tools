@@ -25,11 +25,11 @@ package gov.nist.swid.builder;
 
 public class PayloadBuilder extends AbstractResourceCollectionBuilder<PayloadBuilder> {
 
-  protected PayloadBuilder() {
-    super();
-  }
+    protected PayloadBuilder() {
+        super();
+    }
 
-  public static PayloadBuilder create() {
-    return new PayloadBuilder();
-  }
+    public static PayloadBuilder create() {
+        return new PayloadBuilder();
+    }
 }

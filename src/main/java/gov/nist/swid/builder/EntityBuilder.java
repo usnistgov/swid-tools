@@ -29,86 +29,87 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class EntityBuilder extends AbstractBuilder<EntityBuilder> {
-  private String name;
-  private String regid;
-  private List<String> roles;
-  private String thumbprint;
+    private String name;
+    private String regid;
+    private List<String> roles;
+    private String thumbprint;
 
-  protected EntityBuilder() {
-    super();
-  }
-
-  @Override
-  public void reset() {
-    super.reset();
-    name = null;
-    regid = null;
-    roles = new LinkedList<>();
-    thumbprint = null;
-  }
-
-  public static EntityBuilder create() {
-    return new EntityBuilder();
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getRegid() {
-    return (regid == null ? SWIDConstants.ENTITY_REGID_DEFAULT : regid);
-  }
-
-  public List<String> getRoles() {
-    return roles;
-  }
-
-  public String getThumbprint() {
-    return thumbprint;
-  }
-
-  public EntityBuilder name(String name) {
-    this.name = name;
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built entity's regid to the provided value.
-   * 
-   * @param regid
-   *          the regid value
-   * @return the same builder instance
-   */
-  public EntityBuilder regid(String regid) {
-    if (SWIDConstants.ENTITY_REGID_DEFAULT.equals(regid)) {
-      this.regid = null;
-    } else {
-      this.regid = regid;
+    protected EntityBuilder() {
+        super();
     }
-    return this;
-  }
 
-  public EntityBuilder thumbprint(String thumbprint) {
-    this.thumbprint = thumbprint;
-    return this;
-  }
-
-  public EntityBuilder addRole(String role) {
-    this.roles.add(role);
-    return this;
-  }
-
-  @Override
-  public boolean isValid() {
-    boolean retval = (name != null && !roles.isEmpty() && roles.contains(SWIDConstants.ROLE_TAG_CREATOR));
-    return retval;
-  }
-
-  @Override
-  public void validate() {
-    requireNonEmpty(name, "name");
-    if (roles.isEmpty() || !roles.contains(SWIDConstants.ROLE_TAG_CREATOR)) {
-      throw new IllegalStateException("at least the role '" + SWIDConstants.ROLE_TAG_CREATOR + "' must be provided");
+    @Override
+    public void reset() {
+        super.reset();
+        name = null;
+        regid = null;
+        roles = new LinkedList<>();
+        thumbprint = null;
     }
-  }
+
+    public static EntityBuilder create() {
+        return new EntityBuilder();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getRegid() {
+        return (regid == null ? SWIDConstants.ENTITY_REGID_DEFAULT : regid);
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public String getThumbprint() {
+        return thumbprint;
+    }
+
+    public EntityBuilder name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Sets the to-be-built entity's regid to the provided value.
+     * 
+     * @param regid
+     *            the regid value
+     * @return the same builder instance
+     */
+    public EntityBuilder regid(String regid) {
+        if (SWIDConstants.ENTITY_REGID_DEFAULT.equals(regid)) {
+            this.regid = null;
+        } else {
+            this.regid = regid;
+        }
+        return this;
+    }
+
+    public EntityBuilder thumbprint(String thumbprint) {
+        this.thumbprint = thumbprint;
+        return this;
+    }
+
+    public EntityBuilder addRole(String role) {
+        this.roles.add(role);
+        return this;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean retval = (name != null && !roles.isEmpty() && roles.contains(SWIDConstants.ROLE_TAG_CREATOR));
+        return retval;
+    }
+
+    @Override
+    public void validate() {
+        requireNonEmpty(name, "name");
+        if (roles.isEmpty() || !roles.contains(SWIDConstants.ROLE_TAG_CREATOR)) {
+            throw new IllegalStateException(
+                    "at least the role '" + SWIDConstants.ROLE_TAG_CREATOR + "' must be provided");
+        }
+    }
 }

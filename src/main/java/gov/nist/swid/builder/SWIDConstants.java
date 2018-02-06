@@ -27,44 +27,44 @@ import java.util.regex.Pattern;
 
 public class SWIDConstants {
 
-  public static final Pattern PATTERN_LANGUAGE = Pattern.compile("[a-zA-Z]{1,8}(?:-[a-zA-Z0-9]{1,8})*");
+    public static final Pattern PATTERN_LANGUAGE = Pattern.compile("[a-zA-Z]{1,8}(?:-[a-zA-Z0-9]{1,8})*");
 
-  public static final int TAG_VERSION_DEFAULT = 110;
-  public static final String VERSION_DEFAULT = "0.0";
+    public static final int TAG_VERSION_DEFAULT = 110;
+    public static final String VERSION_DEFAULT = "0.0";
 
-  /**
-   * an alpha-numeric string, that can be sorted based on alpha-numeric order.
-   */
-  public static final String VERSION_SCHEME_ALPHANUMERIC = "alphanumeric";
-  /**
-   * A decimal number (e.g., 1.25 is less than 1.3 ).
-   */
-  public static final String VERSION_SCHEME_DECIMAL = "decimal";
-  /**
-   * Numbers separated by dots, where the numbers are interpreted as integers (e.g., 1.2.3, 1.4.5.6,
-   * 1.2.3.4.5.6.7).
-   */
-  public static final String VERSION_SCHEME_MULTIPART_NUMERIC = "multipartnumeric";
-  /**
-   * Numbers separated by dots, where the numbers are interpreted as integers with an additional
-   * string suffix: (e.g., 1.2.3a).
-   */
-  public static final String VERSION_SCHEME_MULTIPART_NUMERIC_WITH_SUFFIX = "multipartnumeric+suffix";
-  /**
-   * Follows the <a href="http://semver.org/">Semantic Versioning</a> specificatio.
-   */
-  public static final String VERSION_SCHEME_SEMVER = "semver";
-  /**
-   * Unknown, no attempt should be made to order these.
-   */
-  public static final String VERSION_SCHEME_UNKNOWN = "unknown";
-  public static final String VERSION_SCHEME_DEFAULT = VERSION_SCHEME_MULTIPART_NUMERIC;
+    /**
+     * an alpha-numeric string, that can be sorted based on alpha-numeric order.
+     */
+    public static final String VERSION_SCHEME_ALPHANUMERIC = "alphanumeric";
+    /**
+     * A decimal number (e.g., 1.25 is less than 1.3 ).
+     */
+    public static final String VERSION_SCHEME_DECIMAL = "decimal";
+    /**
+     * Numbers separated by dots, where the numbers are interpreted as integers (e.g., 1.2.3,
+     * 1.4.5.6, 1.2.3.4.5.6.7).
+     */
+    public static final String VERSION_SCHEME_MULTIPART_NUMERIC = "multipartnumeric";
+    /**
+     * Numbers separated by dots, where the numbers are interpreted as integers with an additional
+     * string suffix: (e.g., 1.2.3a).
+     */
+    public static final String VERSION_SCHEME_MULTIPART_NUMERIC_WITH_SUFFIX = "multipartnumeric+suffix";
+    /**
+     * Follows the <a href="http://semver.org/">Semantic Versioning</a> specificatio.
+     */
+    public static final String VERSION_SCHEME_SEMVER = "semver";
+    /**
+     * Unknown, no attempt should be made to order these.
+     */
+    public static final String VERSION_SCHEME_UNKNOWN = "unknown";
+    public static final String VERSION_SCHEME_DEFAULT = VERSION_SCHEME_MULTIPART_NUMERIC;
 
-  public static final String ROLE_TAG_CREATOR = "tagCreator";
-  public static final String ROLE_SOFTWARE_CREATOR = "softwareCreator";
-  public static final String ROLE_AGGREGATOR = "aggregator";
-  public static final String ROLE_DISTRIBUTOR = "distributor";
-  public static final String ROLE_LICENSOR = "licensor";
+    public static final String ROLE_TAG_CREATOR = "tagCreator";
+    public static final String ROLE_SOFTWARE_CREATOR = "softwareCreator";
+    public static final String ROLE_AGGREGATOR = "aggregator";
+    public static final String ROLE_DISTRIBUTOR = "distributor";
+    public static final String ROLE_LICENSOR = "licensor";
 
-  public static final String ENTITY_REGID_DEFAULT = "http://invalid.unavailable";
+    public static final String ENTITY_REGID_DEFAULT = "http://invalid.unavailable";
 }

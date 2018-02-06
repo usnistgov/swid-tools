@@ -31,309 +31,309 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
-  private TagType tagType = TagType.PRIMARY;
-  private String name;
-  private String tagId;
-  private int tagVersion = SWIDConstants.TAG_VERSION_DEFAULT;
-  private String version;
-  private String versionScheme;
-  private List<EntityBuilder> entities = new LinkedList<>();
-  private EvidenceBuilder evidence;
-  private List<LinkBuilder> links = new LinkedList<>();
-  private List<MetaBuilder> metas = new LinkedList<>();
-  private PayloadBuilder payload;
-  private String media;
+    private TagType tagType = TagType.PRIMARY;
+    private String name;
+    private String tagId;
+    private int tagVersion = SWIDConstants.TAG_VERSION_DEFAULT;
+    private String version;
+    private String versionScheme;
+    private List<EntityBuilder> entities = new LinkedList<>();
+    private EvidenceBuilder evidence;
+    private List<LinkBuilder> links = new LinkedList<>();
+    private List<MetaBuilder> metas = new LinkedList<>();
+    private PayloadBuilder payload;
+    private String media;
 
-  protected SWIDBuilder() {
-    super();
-  }
-
-  @Override
-  public void reset() {
-    super.reset();
-
-    language(Locale.getDefault().toLanguageTag());
-
-    this.tagType = TagType.PRIMARY;
-    this.name = null;
-    this.tagId = null;
-    this.tagVersion = SWIDConstants.TAG_VERSION_DEFAULT;
-    this.version = null;
-    this.versionScheme = null;
-    this.entities = new LinkedList<>();
-    ;
-    this.evidence = null;
-    this.links = new LinkedList<>();
-    ;
-    this.metas = new LinkedList<>();
-    ;
-    this.payload = null;
-    this.media = null;
-  }
-
-  public static SWIDBuilder create() {
-    return new SWIDBuilder();
-  }
-
-  public String getTagId() {
-    return tagId;
-  }
-
-  public TagType getTagType() {
-    return tagType;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getTagVersion() {
-    return tagVersion;
-  }
-
-  public String getVersion() {
-    return (version == null ? SWIDConstants.VERSION_DEFAULT : version);
-  }
-
-  public String getVersionScheme() {
-    return (versionScheme == null ? SWIDConstants.VERSION_SCHEME_DEFAULT : versionScheme);
-  }
-
-  public List<EntityBuilder> getEntities() {
-    return entities;
-  }
-
-  public EvidenceBuilder getEvidence() {
-    return evidence;
-  }
-
-  public List<LinkBuilder> getLinks() {
-    return links;
-  }
-
-  public List<MetaBuilder> getMetas() {
-    return metas;
-  }
-
-  public PayloadBuilder getPayload() {
-    return payload;
-  }
-
-  public String getMedia() {
-    return media;
-  }
-
-  /**
-   * Sets the to-be-built tag's product type to the provided value.
-   * 
-   * @param type
-   *          the new type to set
-   * @return the same builder instance
-   */
-  public SWIDBuilder tagType(TagType type) {
-    Objects.requireNonNull(type, "tagType");
-    this.tagType = type;
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built tag's product name to the provided value.
-   * 
-   * @param name
-   *          the name of the software product
-   * @return the same builder instance
-   */
-  public SWIDBuilder name(String name) {
-    requireNonEmpty(name, "name");
-    this.name = name;
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built tag's product tag identifier to the provided value.
-   * 
-   * @param id
-   *          the tag identifier for the software product
-   * @return the same builder instance
-   */
-  public SWIDBuilder tagId(String id) {
-    requireNonEmpty(id, "id");
-    this.tagId = id;
-    return this;
-  }
-
-  public SWIDBuilder tagVersion(int version) {
-    this.tagVersion = version;
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built SWID tag's version to the provided value.
-   * 
-   * @param version
-   *          the version value to use
-   * @return the same builder instance
-   */
-  public SWIDBuilder version(String version) {
-    requireNonEmpty(version, "version");
-    if (SWIDConstants.VERSION_DEFAULT.equals(version)) {
-      this.version = null;
-    } else {
-      this.version = version;
-    }
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built SWID tag's versionSchema to the provided value. The version scheme
-   * identifies the structure of the provided version.
-   * 
-   * @param scheme
-   *          the version scheme for the tag
-   * @return the same builder instance
-   * @see #version(String)
-   */
-  public SWIDBuilder versionScheme(String scheme) {
-    requireNonEmpty(scheme, "versionScheme");
-    if (SWIDConstants.VERSION_DEFAULT.equals(scheme)) {
-      this.versionScheme = null;
-    } else {
-      this.versionScheme = scheme;
-    }
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built SWID tag's media to the provided value.
-   * 
-   * @param media
-   *          the media value to use
-   * @return the same builder instance
-   */
-  public SWIDBuilder media(String media) {
-    Objects.requireNonNull(media, "media");
-    this.media = media;
-    return this;
-  }
-
-  /**
-   * Adds a new entity to the tag.
-   * 
-   * @param entity
-   *          a entity builder representing the new entity to add
-   * @return the same builder instance
-   */
-  public SWIDBuilder addEntity(EntityBuilder entity) {
-    Objects.requireNonNull(entity, "entity");
-    this.entities.add(entity);
-    return this;
-  }
-
-  /**
-   * Adds a new link to the tag.
-   * 
-   * @param link
-   *          a link builder representing the new link to add
-   * @return the same builder instance
-   */
-  public SWIDBuilder addLink(LinkBuilder link) {
-    Objects.requireNonNull(link, "link");
-    this.links.add(link);
-    return this;
-  }
-
-  /**
-   * Adds a new meta to the tag.
-   * 
-   * @param meta
-   *          a meta builder representing the new meta to add
-   * @return the same builder instance
-   */
-  public SWIDBuilder addMeta(MetaBuilder meta) {
-    Objects.requireNonNull(meta, "meta");
-    this.metas.add(meta);
-    return this;
-  }
-
-  /**
-   * Adds a new payload to the tag.
-   * 
-   * @param payload
-   *          a payload builder representing the new payload to add
-   * @return the same builder instance
-   */
-  public SWIDBuilder payload(PayloadBuilder payload) {
-    Objects.requireNonNull(payload, "payload");
-    this.payload = payload;
-    return this;
-  }
-
-  /**
-   * Adds a new evidence to the tag.
-   * 
-   * @param evidence
-   *          a evidence builder representing the new evidence to add
-   * @return the same builder instance
-   */
-  public SWIDBuilder evidence(EvidenceBuilder evidence) {
-    Objects.requireNonNull(evidence, "evidence");
-    this.evidence = evidence;
-    return this;
-  }
-
-  @Override
-  public boolean isValid() {
-    boolean retval = (name != null && tagId != null);
-    if (retval) {
-      retval = !entities.isEmpty() && entities.stream().allMatch(e -> e.isValid());
+    protected SWIDBuilder() {
+        super();
     }
 
-    if (retval) {
-      retval = evidence == null || evidence.isValid();
+    @Override
+    public void reset() {
+        super.reset();
+
+        language(Locale.getDefault().toLanguageTag());
+
+        this.tagType = TagType.PRIMARY;
+        this.name = null;
+        this.tagId = null;
+        this.tagVersion = SWIDConstants.TAG_VERSION_DEFAULT;
+        this.version = null;
+        this.versionScheme = null;
+        this.entities = new LinkedList<>();
+        ;
+        this.evidence = null;
+        this.links = new LinkedList<>();
+        ;
+        this.metas = new LinkedList<>();
+        ;
+        this.payload = null;
+        this.media = null;
     }
 
-    if (retval) {
-      retval = links.isEmpty() || links.stream().allMatch(e -> e.isValid());
+    public static SWIDBuilder create() {
+        return new SWIDBuilder();
     }
 
-    if (retval) {
-      retval = metas.isEmpty() || metas.stream().allMatch(e -> e.isValid());
+    public String getTagId() {
+        return tagId;
     }
 
-    if (retval) {
-      retval = payload == null || payload.isValid();
-    }
-    return retval;
-  }
-
-  @Override
-  public void validate() {
-    requireNonEmpty(name, "name");
-    requireNonEmpty(tagId, "tagId");
-    if (entities.isEmpty()) {
-      throw new IllegalStateException("at least a single entity must be provided");
-    }
-    entities.stream().forEach(e -> e.validate());
-
-    if (payload != null && evidence != null) {
-      throw new IllegalStateException("evidence and payload cannot be both provided");
+    public TagType getTagType() {
+        return tagType;
     }
 
-    if (payload != null) {
-      payload.validate();
+    public String getName() {
+        return name;
     }
 
-    if (evidence != null) {
-      evidence.validate();
+    public int getTagVersion() {
+        return tagVersion;
     }
 
-    if (!links.isEmpty()) {
-      links.stream().forEach(e -> e.validate());
+    public String getVersion() {
+        return (version == null ? SWIDConstants.VERSION_DEFAULT : version);
     }
 
-    if (!metas.isEmpty()) {
-      metas.stream().forEach(e -> e.validate());
+    public String getVersionScheme() {
+        return (versionScheme == null ? SWIDConstants.VERSION_SCHEME_DEFAULT : versionScheme);
     }
-  }
+
+    public List<EntityBuilder> getEntities() {
+        return entities;
+    }
+
+    public EvidenceBuilder getEvidence() {
+        return evidence;
+    }
+
+    public List<LinkBuilder> getLinks() {
+        return links;
+    }
+
+    public List<MetaBuilder> getMetas() {
+        return metas;
+    }
+
+    public PayloadBuilder getPayload() {
+        return payload;
+    }
+
+    public String getMedia() {
+        return media;
+    }
+
+    /**
+     * Sets the to-be-built tag's product type to the provided value.
+     * 
+     * @param type
+     *            the new type to set
+     * @return the same builder instance
+     */
+    public SWIDBuilder tagType(TagType type) {
+        Objects.requireNonNull(type, "tagType");
+        this.tagType = type;
+        return this;
+    }
+
+    /**
+     * Sets the to-be-built tag's product name to the provided value.
+     * 
+     * @param name
+     *            the name of the software product
+     * @return the same builder instance
+     */
+    public SWIDBuilder name(String name) {
+        requireNonEmpty(name, "name");
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Sets the to-be-built tag's product tag identifier to the provided value.
+     * 
+     * @param id
+     *            the tag identifier for the software product
+     * @return the same builder instance
+     */
+    public SWIDBuilder tagId(String id) {
+        requireNonEmpty(id, "id");
+        this.tagId = id;
+        return this;
+    }
+
+    public SWIDBuilder tagVersion(int version) {
+        this.tagVersion = version;
+        return this;
+    }
+
+    /**
+     * Sets the to-be-built SWID tag's version to the provided value.
+     * 
+     * @param version
+     *            the version value to use
+     * @return the same builder instance
+     */
+    public SWIDBuilder version(String version) {
+        requireNonEmpty(version, "version");
+        if (SWIDConstants.VERSION_DEFAULT.equals(version)) {
+            this.version = null;
+        } else {
+            this.version = version;
+        }
+        return this;
+    }
+
+    /**
+     * Sets the to-be-built SWID tag's versionSchema to the provided value. The version scheme
+     * identifies the structure of the provided version.
+     * 
+     * @param scheme
+     *            the version scheme for the tag
+     * @return the same builder instance
+     * @see #version(String)
+     */
+    public SWIDBuilder versionScheme(String scheme) {
+        requireNonEmpty(scheme, "versionScheme");
+        if (SWIDConstants.VERSION_DEFAULT.equals(scheme)) {
+            this.versionScheme = null;
+        } else {
+            this.versionScheme = scheme;
+        }
+        return this;
+    }
+
+    /**
+     * Sets the to-be-built SWID tag's media to the provided value.
+     * 
+     * @param media
+     *            the media value to use
+     * @return the same builder instance
+     */
+    public SWIDBuilder media(String media) {
+        Objects.requireNonNull(media, "media");
+        this.media = media;
+        return this;
+    }
+
+    /**
+     * Adds a new entity to the tag.
+     * 
+     * @param entity
+     *            a entity builder representing the new entity to add
+     * @return the same builder instance
+     */
+    public SWIDBuilder addEntity(EntityBuilder entity) {
+        Objects.requireNonNull(entity, "entity");
+        this.entities.add(entity);
+        return this;
+    }
+
+    /**
+     * Adds a new link to the tag.
+     * 
+     * @param link
+     *            a link builder representing the new link to add
+     * @return the same builder instance
+     */
+    public SWIDBuilder addLink(LinkBuilder link) {
+        Objects.requireNonNull(link, "link");
+        this.links.add(link);
+        return this;
+    }
+
+    /**
+     * Adds a new meta to the tag.
+     * 
+     * @param meta
+     *            a meta builder representing the new meta to add
+     * @return the same builder instance
+     */
+    public SWIDBuilder addMeta(MetaBuilder meta) {
+        Objects.requireNonNull(meta, "meta");
+        this.metas.add(meta);
+        return this;
+    }
+
+    /**
+     * Adds a new payload to the tag.
+     * 
+     * @param payload
+     *            a payload builder representing the new payload to add
+     * @return the same builder instance
+     */
+    public SWIDBuilder payload(PayloadBuilder payload) {
+        Objects.requireNonNull(payload, "payload");
+        this.payload = payload;
+        return this;
+    }
+
+    /**
+     * Adds a new evidence to the tag.
+     * 
+     * @param evidence
+     *            a evidence builder representing the new evidence to add
+     * @return the same builder instance
+     */
+    public SWIDBuilder evidence(EvidenceBuilder evidence) {
+        Objects.requireNonNull(evidence, "evidence");
+        this.evidence = evidence;
+        return this;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean retval = (name != null && tagId != null);
+        if (retval) {
+            retval = !entities.isEmpty() && entities.stream().allMatch(e -> e.isValid());
+        }
+
+        if (retval) {
+            retval = evidence == null || evidence.isValid();
+        }
+
+        if (retval) {
+            retval = links.isEmpty() || links.stream().allMatch(e -> e.isValid());
+        }
+
+        if (retval) {
+            retval = metas.isEmpty() || metas.stream().allMatch(e -> e.isValid());
+        }
+
+        if (retval) {
+            retval = payload == null || payload.isValid();
+        }
+        return retval;
+    }
+
+    @Override
+    public void validate() {
+        requireNonEmpty(name, "name");
+        requireNonEmpty(tagId, "tagId");
+        if (entities.isEmpty()) {
+            throw new IllegalStateException("at least a single entity must be provided");
+        }
+        entities.stream().forEach(e -> e.validate());
+
+        if (payload != null && evidence != null) {
+            throw new IllegalStateException("evidence and payload cannot be both provided");
+        }
+
+        if (payload != null) {
+            payload.validate();
+        }
+
+        if (evidence != null) {
+            evidence.validate();
+        }
+
+        if (!links.isEmpty()) {
+            links.stream().forEach(e -> e.validate());
+        }
+
+        if (!metas.isEmpty()) {
+            metas.stream().forEach(e -> e.validate());
+        }
+    }
 
 }

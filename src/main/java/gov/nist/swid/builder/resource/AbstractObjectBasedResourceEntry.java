@@ -31,32 +31,32 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractObjectBasedResourceEntry<ENTRY_TYPE> implements ResourceEntry {
-  private final Map<HashAlgorithm, List<Byte>> digests;
-  private final ENTRY_TYPE resource;
+    private final Map<HashAlgorithm, List<Byte>> digests;
+    private final ENTRY_TYPE resource;
 
-  public AbstractObjectBasedResourceEntry(ENTRY_TYPE resource) throws NoSuchAlgorithmException, IOException {
-    this.resource = resource;
-    this.digests = processDigests(resource);
-  }
-
-  protected abstract EnumMap<HashAlgorithm, List<Byte>> processDigests(ENTRY_TYPE resource)
-      throws NoSuchAlgorithmException, IOException;
-
-  protected ENTRY_TYPE getResource() {
-    return resource;
-  }
-
-  @Override
-  public Map<HashAlgorithm, List<Byte>> getDigestValues() {
-    return Collections.unmodifiableMap(digests);
-  }
-
-  @Override
-  public List<Byte> getDigestValue(HashAlgorithm key) throws NoSuchAlgorithmException {
-    List<Byte> retval = digests.get(key);
-    if (retval == null) {
-      throw new NoSuchAlgorithmException(key.getName());
+    public AbstractObjectBasedResourceEntry(ENTRY_TYPE resource) throws NoSuchAlgorithmException, IOException {
+        this.resource = resource;
+        this.digests = processDigests(resource);
     }
-    return retval;
-  }
+
+    protected abstract EnumMap<HashAlgorithm, List<Byte>> processDigests(ENTRY_TYPE resource)
+            throws NoSuchAlgorithmException, IOException;
+
+    protected ENTRY_TYPE getResource() {
+        return resource;
+    }
+
+    @Override
+    public Map<HashAlgorithm, List<Byte>> getDigestValues() {
+        return Collections.unmodifiableMap(digests);
+    }
+
+    @Override
+    public List<Byte> getDigestValue(HashAlgorithm key) throws NoSuchAlgorithmException {
+        List<Byte> retval = digests.get(key);
+        if (retval == null) {
+            throw new NoSuchAlgorithmException(key.getName());
+        }
+        return retval;
+    }
 }

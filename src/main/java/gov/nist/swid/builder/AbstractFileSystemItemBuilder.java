@@ -30,119 +30,119 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileSystemItemBuilder<E extends AbstractFileSystemItemBuilder<E>>
-    extends AbstractResourceBuilder<E> {
-  private Boolean key;
-  private String root;
-  private List<String> location;
-  private String name;
+        extends AbstractResourceBuilder<E> {
+    private Boolean key;
+    private String root;
+    private List<String> location;
+    private String name;
 
-  protected AbstractFileSystemItemBuilder() {
-    super();
-  }
-
-  @Override
-  public void reset() {
-    super.reset();
-
-    this.key = null;
-    this.root = null;
-    this.location = null;
-    this.name = null;
-  }
-
-  public Boolean getKey() {
-    return key;
-  }
-
-  public String getRoot() {
-    return root;
-  }
-
-  public List<String> getLocation() {
-    return (location == null ? Collections.<String>emptyList() : Collections.unmodifiableList(location));
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Sets the path representing the location and name of a filesystem resource to the provided
-   * value. This is a shortcut for calling {@link #name(String)} and {@link #location(List)}
-   * 
-   * @param pathSegments
-   *          one or more path segments
-   * @return the same builder instance
-   * @see #name(String)
-   * @see #location(List)
-   */
-  @SuppressWarnings("unchecked")
-  public E nameAndLocation(List<String> pathSegments) {
-    Objects.requireNonNull(pathSegments, "pathSegments");
-    if (pathSegments.size() < 2) {
-      throw new IllegalArgumentException("two or more path segments must be provided");
+    protected AbstractFileSystemItemBuilder() {
+        super();
     }
 
-    this.name = pathSegments.get(pathSegments.size() - 1);
-    this.location = pathSegments.subList(0, pathSegments.size() - 1);
-    return (E) this;
-  }
+    @Override
+    public void reset() {
+        super.reset();
 
-  /**
-   * Sets the filesystem root of a filesystem resource to the provided value.
-   * 
-   * @param root
-   *          the filesystem root value
-   * @return the same builder instance
-   */
-  @SuppressWarnings("unchecked")
-  public E root(String root) {
-    requireNonEmpty(root, "root");
-    this.root = root;
-
-    return (E) this;
-  }
-
-  /**
-   * Sets the path representing the location of a filesystem resource to the provided value, with
-   * the name omitted.
-   * 
-   * @param location
-   *          a sequence of paths
-   * @return the same builder instance
-   */
-  @SuppressWarnings("unchecked")
-  public E location(List<String> location) {
-    Objects.requireNonNull(location, "location");
-    if (location.isEmpty()) {
-      throw new IllegalArgumentException("location");
+        this.key = null;
+        this.root = null;
+        this.location = null;
+        this.name = null;
     }
-    this.location = location;
-    return (E) this;
-  }
 
-  /**
-   * Sets the name of a filesystem resource to the provided value.
-   * 
-   * @param name
-   *          the name value
-   * @return the same builder instance
-   */
-  @SuppressWarnings("unchecked")
-  public E name(String name) {
-    requireNonEmpty(name, "name");
-    this.name = name;
+    public Boolean getKey() {
+        return key;
+    }
 
-    return (E) this;
-  }
+    public String getRoot() {
+        return root;
+    }
 
-  @Override
-  public boolean isValid() {
-    return true;
-  }
+    public List<String> getLocation() {
+        return (location == null ? Collections.<String>emptyList() : Collections.unmodifiableList(location));
+    }
 
-  @Override
-  public void validate() {
-  }
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the path representing the location and name of a filesystem resource to the provided
+     * value. This is a shortcut for calling {@link #name(String)} and {@link #location(List)}
+     * 
+     * @param pathSegments
+     *            one or more path segments
+     * @return the same builder instance
+     * @see #name(String)
+     * @see #location(List)
+     */
+    @SuppressWarnings("unchecked")
+    public E nameAndLocation(List<String> pathSegments) {
+        Objects.requireNonNull(pathSegments, "pathSegments");
+        if (pathSegments.size() < 2) {
+            throw new IllegalArgumentException("two or more path segments must be provided");
+        }
+
+        this.name = pathSegments.get(pathSegments.size() - 1);
+        this.location = pathSegments.subList(0, pathSegments.size() - 1);
+        return (E) this;
+    }
+
+    /**
+     * Sets the filesystem root of a filesystem resource to the provided value.
+     * 
+     * @param root
+     *            the filesystem root value
+     * @return the same builder instance
+     */
+    @SuppressWarnings("unchecked")
+    public E root(String root) {
+        requireNonEmpty(root, "root");
+        this.root = root;
+
+        return (E) this;
+    }
+
+    /**
+     * Sets the path representing the location of a filesystem resource to the provided value, with
+     * the name omitted.
+     * 
+     * @param location
+     *            a sequence of paths
+     * @return the same builder instance
+     */
+    @SuppressWarnings("unchecked")
+    public E location(List<String> location) {
+        Objects.requireNonNull(location, "location");
+        if (location.isEmpty()) {
+            throw new IllegalArgumentException("location");
+        }
+        this.location = location;
+        return (E) this;
+    }
+
+    /**
+     * Sets the name of a filesystem resource to the provided value.
+     * 
+     * @param name
+     *            the name value
+     * @return the same builder instance
+     */
+    @SuppressWarnings("unchecked")
+    public E name(String name) {
+        requireNonEmpty(name, "name");
+        this.name = name;
+
+        return (E) this;
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
+    public void validate() {
+    }
 
 }

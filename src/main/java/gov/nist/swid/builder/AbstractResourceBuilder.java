@@ -24,9 +24,9 @@
 package gov.nist.swid.builder;
 
 public abstract class AbstractResourceBuilder<E extends AbstractResourceBuilder<E>> extends AbstractBuilder<E>
-    implements ResourceBuilder {
+        implements ResourceBuilder {
 
-  protected AbstractResourceBuilder() {
-    super();
-  }
+    protected AbstractResourceBuilder() {
+        super();
+    }
 }

@@ -29,163 +29,163 @@ import java.net.URI;
 import java.util.Objects;
 
 public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
-  private String artifact;
-  private URI href;
-  private String media;
-  private LinkOwnership ownership;
-  private String rel;
-  private String mediaType;
-  private LinkUse use;
+    private String artifact;
+    private URI href;
+    private String media;
+    private LinkOwnership ownership;
+    private String rel;
+    private String mediaType;
+    private LinkUse use;
 
-  protected LinkBuilder() {
-    super();
-  }
+    protected LinkBuilder() {
+        super();
+    }
 
-  @Override
-  public void reset() {
-    super.reset();
-    this.artifact = null;
-    this.href = null;
-    this.media = null;
-    this.ownership = null;
-    this.rel = null;
-    this.mediaType = null;
-    this.use = null;
-  }
+    @Override
+    public void reset() {
+        super.reset();
+        this.artifact = null;
+        this.href = null;
+        this.media = null;
+        this.ownership = null;
+        this.rel = null;
+        this.mediaType = null;
+        this.use = null;
+    }
 
-  public String getArtifact() {
-    return artifact;
-  }
+    public String getArtifact() {
+        return artifact;
+    }
 
-  public URI getHref() {
-    return href;
-  }
+    public URI getHref() {
+        return href;
+    }
 
-  public String getMedia() {
-    return media;
-  }
+    public String getMedia() {
+        return media;
+    }
 
-  public LinkOwnership getOwnership() {
-    return ownership;
-  }
+    public LinkOwnership getOwnership() {
+        return ownership;
+    }
 
-  public String getRel() {
-    return rel;
-  }
+    public String getRel() {
+        return rel;
+    }
 
-  public String getMediaType() {
-    return mediaType;
-  }
+    public String getMediaType() {
+        return mediaType;
+    }
 
-  public LinkUse getUse() {
-    return use;
-  }
+    public LinkUse getUse() {
+        return use;
+    }
 
-  /**
-   * For use with rel="installationmedia" to identify the canonical name for an installation media
-   * resource.
-   * 
-   * @param artifact
-   *          a cononical name for the installation media
-   * @return the same builder instance
-   */
-  public LinkBuilder artifact(String artifact) {
-    requireNonEmpty(artifact, "artifact");
-    this.artifact = artifact;
-    return this;
-  }
+    /**
+     * For use with rel="installationmedia" to identify the canonical name for an installation media
+     * resource.
+     * 
+     * @param artifact
+     *            a cononical name for the installation media
+     * @return the same builder instance
+     */
+    public LinkBuilder artifact(String artifact) {
+        requireNonEmpty(artifact, "artifact");
+        this.artifact = artifact;
+        return this;
+    }
 
-  /**
-   * Sets the to-be-built link's href to the provided value.
-   * 
-   * @param uri
-   *          a URI identifying the linked resource
-   * @return the same builder instance
-   */
-  public LinkBuilder href(URI uri) {
-    Objects.requireNonNull(uri, "url");
-    this.href = uri;
-    return this;
-  }
+    /**
+     * Sets the to-be-built link's href to the provided value.
+     * 
+     * @param uri
+     *            a URI identifying the linked resource
+     * @return the same builder instance
+     */
+    public LinkBuilder href(URI uri) {
+        Objects.requireNonNull(uri, "url");
+        this.href = uri;
+        return this;
+    }
 
-  /**
-   * Sets the to-be-built link's media to the provided value.
-   * 
-   * @param query
-   *          a media query as defined by ISO/IEC 19770-2:2015
-   * @return the same builder instance
-   */
-  public LinkBuilder media(String query) {
-    requireNonEmpty(query, "query");
-    this.media = query;
-    return this;
-  }
+    /**
+     * Sets the to-be-built link's media to the provided value.
+     * 
+     * @param query
+     *            a media query as defined by ISO/IEC 19770-2:2015
+     * @return the same builder instance
+     */
+    public LinkBuilder media(String query) {
+        requireNonEmpty(query, "query");
+        this.media = query;
+        return this;
+    }
 
-  /**
-   * Sets the to-be-built link's ownership to the provided value.
-   * 
-   * @param ownership
-   *          a valid non-null enumeration value
-   * @return the same builder instance
-   */
-  public LinkBuilder ownership(LinkOwnership ownership) {
-    Objects.requireNonNull(ownership, "ownership");
-    this.ownership = ownership;
-    return this;
-  }
+    /**
+     * Sets the to-be-built link's ownership to the provided value.
+     * 
+     * @param ownership
+     *            a valid non-null enumeration value
+     * @return the same builder instance
+     */
+    public LinkBuilder ownership(LinkOwnership ownership) {
+        Objects.requireNonNull(ownership, "ownership");
+        this.ownership = ownership;
+        return this;
+    }
 
-  /**
-   * Sets the to-be-built link's rel to the provided value.
-   * 
-   * @param rel
-   *          the link relation type
-   * @return the same builder instance
-   */
-  public LinkBuilder rel(String rel) {
-    requireNonEmpty(rel, "rel");
-    this.rel = rel;
-    return this;
-  }
+    /**
+     * Sets the to-be-built link's rel to the provided value.
+     * 
+     * @param rel
+     *            the link relation type
+     * @return the same builder instance
+     */
+    public LinkBuilder rel(String rel) {
+        requireNonEmpty(rel, "rel");
+        this.rel = rel;
+        return this;
+    }
 
-  /**
-   * Provide the IANA MediaType for the resource targeted by the href attribute; this provides the
-   * consumer with knowledge of the format of the referenced resource.
-   * 
-   * The <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">The IANA Media Type
-   * Registry</a> provides more details on possible values.
-   * 
-   * @param mediaType
-   *          a valid media type value
-   * @return the same builder instance
-   */
-  public LinkBuilder mediaType(String mediaType) {
-    requireNonEmpty(mediaType, "mediaType");
-    this.mediaType = mediaType;
-    return this;
-  }
+    /**
+     * Provide the IANA MediaType for the resource targeted by the href attribute; this provides the
+     * consumer with knowledge of the format of the referenced resource.
+     * 
+     * The <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">The IANA Media
+     * Type Registry</a> provides more details on possible values.
+     * 
+     * @param mediaType
+     *            a valid media type value
+     * @return the same builder instance
+     */
+    public LinkBuilder mediaType(String mediaType) {
+        requireNonEmpty(mediaType, "mediaType");
+        this.mediaType = mediaType;
+        return this;
+    }
 
-  /**
-   * Sets the to-be-built link's use to the provided value.
-   * 
-   * @param use
-   *          a valid, non-null enumeration value
-   * @return the same builder instance
-   */
-  public LinkBuilder use(LinkUse use) {
-    Objects.requireNonNull(use, "use");
-    this.use = use;
-    return this;
-  }
+    /**
+     * Sets the to-be-built link's use to the provided value.
+     * 
+     * @param use
+     *            a valid, non-null enumeration value
+     * @return the same builder instance
+     */
+    public LinkBuilder use(LinkUse use) {
+        Objects.requireNonNull(use, "use");
+        this.use = use;
+        return this;
+    }
 
-  @Override
-  public boolean isValid() {
-    boolean retval = href != null && rel != null && !rel.isEmpty();
-    return retval;
-  }
+    @Override
+    public boolean isValid() {
+        boolean retval = href != null && rel != null && !rel.isEmpty();
+        return retval;
+    }
 
-  @Override
-  public void validate() {
-    Objects.requireNonNull(href, "href");
-    requireNonEmpty(rel, "rel");
-  }
+    @Override
+    public void validate() {
+        Objects.requireNonNull(href, "href");
+        requireNonEmpty(rel, "rel");
+    }
 }

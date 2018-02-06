@@ -32,68 +32,68 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class ResourceCollection {
-  Map<String, ResourcePath> pathToResourcePathMap;
-  Map<ResourcePath, ResourceEntry> resources;
+    Map<String, ResourcePath> pathToResourcePathMap;
+    Map<ResourcePath, ResourceEntry> resources;
 
-  /**
-   * Construct a new empty resource collection.
-   */
-  public ResourceCollection() {
-    super();
-    pathToResourcePathMap = new HashMap<>();
-    resources = new TreeMap<>();
-  }
-
-  /**
-   * Add a resource to the resource collection.
-   * 
-   * @param resource
-   *          the resource to add
-   */
-  public void addResource(ResourceEntry resource) {
-    ResourcePath key = new ResourcePath(resource.getPath());
-    pathToResourcePathMap.put(key.getPath(), key);
-    resources.put(key, resource);
-  }
-
-  public Collection<ResourceEntry> getResources() {
-    return Collections.unmodifiableCollection(resources.values());
-  }
-
-  /**
-   * Lookup a resource with a specific path.
-   * 
-   * @param path
-   *          the path to lookup a resource for
-   * @return a resource record or <code>null</code> if no record was found matching the path
-   */
-  public ResourceEntry getResource(String path) {
-    ResourcePath key = pathToResourcePathMap.get(path);
-    ResourceEntry retval;
-    if (key != null) {
-      retval = resources.get(key);
-    } else {
-      retval = null;
+    /**
+     * Construct a new empty resource collection.
+     */
+    public ResourceCollection() {
+        super();
+        pathToResourcePathMap = new HashMap<>();
+        resources = new TreeMap<>();
     }
-    return retval;
-  }
 
-  /**
-   * Retrieve a digest of all of the resources in the collection. This can be used to check if two
-   * resource collections are equal.
-   * 
-   * @param algorithm
-   *          the hash function to use to generate the digest of the collection
-   * @return a digest based on the provided function
-   * @throws NoSuchAlgorithmException
-   *           if the requested has function is unsupported
-   */
-  public byte[] getMessageDigest(HashAlgorithm algorithm) throws NoSuchAlgorithmException {
-    MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
-
-    for (ResourceEntry data : resources.values()) {
-      digest.update(HashUtils.toArray(data.getDigestValue(HashAlgorithm.SHA_512)));
+    /**
+     * Add a resource to the resource collection.
+     * 
+     * @param resource
+     *            the resource to add
+     */
+    public void addResource(ResourceEntry resource) {
+        ResourcePath key = new ResourcePath(resource.getPath());
+        pathToResourcePathMap.put(key.getPath(), key);
+        resources.put(key, resource);
     }
-    return digest.digest();
-  }
+
+    public Collection<ResourceEntry> getResources() {
+        return Collections.unmodifiableCollection(resources.values());
+    }
+
+    /**
+     * Lookup a resource with a specific path.
+     * 
+     * @param path
+     *            the path to lookup a resource for
+     * @return a resource record or <code>null</code> if no record was found matching the path
+     */
+    public ResourceEntry getResource(String path) {
+        ResourcePath key = pathToResourcePathMap.get(path);
+        ResourceEntry retval;
+        if (key != null) {
+            retval = resources.get(key);
+        } else {
+            retval = null;
+        }
+        return retval;
+    }
+
+    /**
+     * Retrieve a digest of all of the resources in the collection. This can be used to check if two
+     * resource collections are equal.
+     * 
+     * @param algorithm
+     *            the hash function to use to generate the digest of the collection
+     * @return a digest based on the provided function
+     * @throws NoSuchAlgorithmException
+     *             if the requested has function is unsupported
+     */
+    public byte[] getMessageDigest(HashAlgorithm algorithm) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
+
+        for (ResourceEntry data : resources.values()) {
+            digest.update(HashUtils.toArray(data.getDigestValue(HashAlgorithm.SHA_512)));
+        }
+        return digest.digest();
+    }
 }

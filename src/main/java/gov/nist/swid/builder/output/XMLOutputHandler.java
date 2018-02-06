@@ -54,281 +54,282 @@ import java.util.List;
 import java.util.Map;
 
 public class XMLOutputHandler implements OutputHandler {
-  public static final Namespace SWID_NAMESPACE
-      = Namespace.getNamespace("http://standards.iso.org/iso/19770/-2/2015/schema.xsd");
+    public static final Namespace SWID_NAMESPACE
+            = Namespace.getNamespace("http://standards.iso.org/iso/19770/-2/2015/schema.xsd");
 
-  private final Format format;
+    private final Format format;
 
-  public XMLOutputHandler() {
-    this(Format.getPrettyFormat());
-  }
-
-  public XMLOutputHandler(Format format) {
-    this.format = format;
-  }
-
-  @Override
-  public void write(SWIDBuilder builder, OutputStream os) throws IOException {
-    XMLOutputter out = new XMLOutputter(format);
-    out.output(generateXML(builder), os);
-  }
-
-  /**
-   * Creates a JDOM2 XML Document based on the content of the builder.
-   * 
-   * @param builder
-   *          the {@link SWIDBuilder} to use the information from to build the XML model
-   * @return a JDOM2 {@link Document} based on the SWID information
-   */
-  public Document generateXML(SWIDBuilder builder) {
-    builder.validate();
-
-    Document retval = buildDocument(builder);
-    return retval;
-  }
-
-  protected Document buildDocument(SWIDBuilder builder) {
-    return new Document(build(builder));
-  }
-
-  protected Element build(SWIDBuilder builder) {
-    Element element = new Element("SoftwareIdentity", SWID_NAMESPACE);
-
-    buildAbstractBuilder(builder, element);
-
-    // required attributes
-    element.setAttribute("name", builder.getName());
-    element.setAttribute("tagId", builder.getTagId());
-
-    // optional attributes
-    switch (builder.getTagType()) {
-    case PRIMARY:
-      break;
-    case CORPUS:
-      element.setAttribute("corpus", Boolean.TRUE.toString());
-      break;
-    case PATCH:
-      element.setAttribute("patch", Boolean.TRUE.toString());
-      break;
-    case SUPPLEMENTAL:
-      element.setAttribute("supplemental", Boolean.TRUE.toString());
-      break;
-    default:
-      throw new IllegalStateException("tagType: " + builder.getTagType().toString());
+    public XMLOutputHandler() {
+        this(Format.getPrettyFormat());
     }
 
-    element.setAttribute("tagVersion", Integer.toString(builder.getTagVersion()));
-
-    buildAttribute("version", builder.getVersion(), element);
-    buildAttribute("versionScheme", builder.getVersionScheme(), element);
-
-    // child elements
-    // Required
-    for (EntityBuilder entity : builder.getEntities()) {
-      element.addContent(build(entity));
-    }
-
-    // optional
-    EvidenceBuilder evidence = builder.getEvidence();
-    if (evidence != null) {
-      element.addContent(build(evidence));
-    }
-
-    for (LinkBuilder link : builder.getLinks()) {
-      element.addContent(build(link));
-    }
-
-    for (MetaBuilder meta : builder.getMetas()) {
-      element.addContent(build(meta));
-    }
-
-    PayloadBuilder payload = builder.getPayload();
-    if (payload != null) {
-      element.addContent(build(payload));
-    }
-
-    return element;
-  }
-
-  protected Element build(EntityBuilder builder) {
-    Element element = new Element("Entity", SWID_NAMESPACE);
-
-    buildAbstractBuilder(builder, element);
-
-    // required attributes
-    element.setAttribute("name", builder.getName());
-
-    StringBuilder sb = null;
-    for (String role : builder.getRoles()) {
-      if (sb == null) {
-        sb = new StringBuilder();
-      } else {
-        sb.append(' ');
-      }
-      sb.append(role);
-    }
-    element.setAttribute("role", sb.toString());
-
-    // optional attributes
-    buildAttribute("regid", builder.getRegid(), element);
-    buildAttribute("thumbprint", builder.getThumbprint(), element);
-
-    return element;
-  }
-
-  protected Element build(EvidenceBuilder builder) {
-    Element element = new Element("Evidence", SWID_NAMESPACE);
-
-    buildAbstractResourceCollectionBuilder(builder, element);
-
-    ZonedDateTime date = builder.getDate();
-    if (date != null) {
-      element.setAttribute("date", date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-    }
-    buildAttribute("deviceId", builder.getDeviceId(), element);
-
-    return element;
-  }
-
-  protected Element build(LinkBuilder builder) {
-    Element element = new Element("Link", SWID_NAMESPACE);
-
-    buildAbstractBuilder(builder, element);
-
-    // required attributes
-    element.setAttribute("href", builder.getHref().toString());
-    element.setAttribute("rel", builder.getRel());
-
-    // optional attributes
-    buildAttribute("artifact", builder.getArtifact(), element);
-    buildAttribute("media", builder.getMedia(), element);
-    buildAttribute("ownership", builder.getOwnership(), element);
-    buildAttribute("type", builder.getMediaType(), element);
-    buildAttribute("use", builder.getUse(), element);
-
-    return element;
-  }
-
-  protected Element build(MetaBuilder builder) {
-    Element element = new Element("Meta", SWID_NAMESPACE);
-
-    buildAttribute("activationStatus", builder.getActivationStatus(), element);
-    buildAttribute("channelType", builder.getChannelType(), element);
-    buildAttribute("colloquialVersion", builder.getColloquialVersion(), element);
-    buildAttribute("description", builder.getDescription(), element);
-    buildAttribute("edition", builder.getEdition(), element);
-    buildAttribute("entitlementDataRequired", builder.getEntitlementDataRequired(), element);
-    buildAttribute("entitlementKey", builder.getEntitlementKey(), element);
-    buildAttribute("generator", builder.getGenerator(), element);
-    buildAttribute("persistentId", builder.getPersistentId(), element);
-    buildAttribute("product", builder.getProductBaseName(), element);
-    buildAttribute("productFamily", builder.getProductFamily(), element);
-    buildAttribute("revision", builder.getRevision(), element);
-    buildAttribute("summary", builder.getSummary(), element);
-    buildAttribute("unspscCode", builder.getUnspscCode(), element);
-    buildAttribute("unspscVersion", builder.getUnspscVersion(), element);
-
-    return element;
-  }
-
-  protected Element build(PayloadBuilder builder) {
-    Element element = new Element("Payload", SWID_NAMESPACE);
-
-    buildAbstractResourceCollectionBuilder(builder, element);
-
-    return element;
-  }
-
-  private static <E extends AbstractResourceCollectionBuilder<E>> void
-      buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
-    buildAbstractBuilder(builder, element);
-
-    XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator(element);
-    for (ResourceBuilder resourceBuilder : builder.getResources()) {
-      resourceBuilder.accept(creator, element);
-    }
-  }
-
-  private static <E extends AbstractBuilder<E>> void buildAbstractBuilder(AbstractBuilder<E> builder, Element element) {
-    String language = builder.getLanguage();
-    if (language != null) {
-      element.setAttribute("lang", language, Namespace.XML_NAMESPACE);
-    }
-  }
-
-  private static void buildAttribute(String attributeName, String value, Element element) {
-    if (value != null) {
-      element.setAttribute(attributeName, value);
-    }
-  }
-
-  private static void buildAttribute(String attributeName, Object value, Element element) {
-    if (value != null) {
-      element.setAttribute(attributeName, value.toString());
-    }
-  }
-
-  private static class XMLResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator<Element> {
-    private final Element element;
-
-    public XMLResourceCollectionEntryGenerator(Element element) {
-      this.element = element;
+    public XMLOutputHandler(Format format) {
+        this.format = format;
     }
 
     @Override
-    public void generate(DirectoryBuilder builder, Element parent) {
-        Element element = new Element("Directory", XMLOutputHandler.SWID_NAMESPACE);
-        parent.addContent(element);
+    public void write(SWIDBuilder builder, OutputStream os) throws IOException {
+        XMLOutputter out = new XMLOutputter(format);
+        out.output(generateXML(builder), os);
+    }
 
-        buildAbstractFileSystemItem(builder, element);
+    /**
+     * Creates a JDOM2 XML Document based on the content of the builder.
+     * 
+     * @param builder
+     *            the {@link SWIDBuilder} to use the information from to build the XML model
+     * @return a JDOM2 {@link Document} based on the SWID information
+     */
+    public Document generateXML(SWIDBuilder builder) {
+        builder.validate();
 
-        for (ResourceBuilder child : builder.getResources()) {
-            child.accept(this, element);
+        Document retval = buildDocument(builder);
+        return retval;
+    }
+
+    protected Document buildDocument(SWIDBuilder builder) {
+        return new Document(build(builder));
+    }
+
+    protected Element build(SWIDBuilder builder) {
+        Element element = new Element("SoftwareIdentity", SWID_NAMESPACE);
+
+        buildAbstractBuilder(builder, element);
+
+        // required attributes
+        element.setAttribute("name", builder.getName());
+        element.setAttribute("tagId", builder.getTagId());
+
+        // optional attributes
+        switch (builder.getTagType()) {
+        case PRIMARY:
+            break;
+        case CORPUS:
+            element.setAttribute("corpus", Boolean.TRUE.toString());
+            break;
+        case PATCH:
+            element.setAttribute("patch", Boolean.TRUE.toString());
+            break;
+        case SUPPLEMENTAL:
+            element.setAttribute("supplemental", Boolean.TRUE.toString());
+            break;
+        default:
+            throw new IllegalStateException("tagType: " + builder.getTagType().toString());
+        }
+
+        element.setAttribute("tagVersion", Integer.toString(builder.getTagVersion()));
+
+        buildAttribute("version", builder.getVersion(), element);
+        buildAttribute("versionScheme", builder.getVersionScheme(), element);
+
+        // child elements
+        // Required
+        for (EntityBuilder entity : builder.getEntities()) {
+            element.addContent(build(entity));
+        }
+
+        // optional
+        EvidenceBuilder evidence = builder.getEvidence();
+        if (evidence != null) {
+            element.addContent(build(evidence));
+        }
+
+        for (LinkBuilder link : builder.getLinks()) {
+            element.addContent(build(link));
+        }
+
+        for (MetaBuilder meta : builder.getMetas()) {
+            element.addContent(build(meta));
+        }
+
+        PayloadBuilder payload = builder.getPayload();
+        if (payload != null) {
+            element.addContent(build(payload));
+        }
+
+        return element;
+    }
+
+    protected Element build(EntityBuilder builder) {
+        Element element = new Element("Entity", SWID_NAMESPACE);
+
+        buildAbstractBuilder(builder, element);
+
+        // required attributes
+        element.setAttribute("name", builder.getName());
+
+        StringBuilder sb = null;
+        for (String role : builder.getRoles()) {
+            if (sb == null) {
+                sb = new StringBuilder();
+            } else {
+                sb.append(' ');
+            }
+            sb.append(role);
+        }
+        element.setAttribute("role", sb.toString());
+
+        // optional attributes
+        buildAttribute("regid", builder.getRegid(), element);
+        buildAttribute("thumbprint", builder.getThumbprint(), element);
+
+        return element;
+    }
+
+    protected Element build(EvidenceBuilder builder) {
+        Element element = new Element("Evidence", SWID_NAMESPACE);
+
+        buildAbstractResourceCollectionBuilder(builder, element);
+
+        ZonedDateTime date = builder.getDate();
+        if (date != null) {
+            element.setAttribute("date", date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        }
+        buildAttribute("deviceId", builder.getDeviceId(), element);
+
+        return element;
+    }
+
+    protected Element build(LinkBuilder builder) {
+        Element element = new Element("Link", SWID_NAMESPACE);
+
+        buildAbstractBuilder(builder, element);
+
+        // required attributes
+        element.setAttribute("href", builder.getHref().toString());
+        element.setAttribute("rel", builder.getRel());
+
+        // optional attributes
+        buildAttribute("artifact", builder.getArtifact(), element);
+        buildAttribute("media", builder.getMedia(), element);
+        buildAttribute("ownership", builder.getOwnership(), element);
+        buildAttribute("type", builder.getMediaType(), element);
+        buildAttribute("use", builder.getUse(), element);
+
+        return element;
+    }
+
+    protected Element build(MetaBuilder builder) {
+        Element element = new Element("Meta", SWID_NAMESPACE);
+
+        buildAttribute("activationStatus", builder.getActivationStatus(), element);
+        buildAttribute("channelType", builder.getChannelType(), element);
+        buildAttribute("colloquialVersion", builder.getColloquialVersion(), element);
+        buildAttribute("description", builder.getDescription(), element);
+        buildAttribute("edition", builder.getEdition(), element);
+        buildAttribute("entitlementDataRequired", builder.getEntitlementDataRequired(), element);
+        buildAttribute("entitlementKey", builder.getEntitlementKey(), element);
+        buildAttribute("generator", builder.getGenerator(), element);
+        buildAttribute("persistentId", builder.getPersistentId(), element);
+        buildAttribute("product", builder.getProductBaseName(), element);
+        buildAttribute("productFamily", builder.getProductFamily(), element);
+        buildAttribute("revision", builder.getRevision(), element);
+        buildAttribute("summary", builder.getSummary(), element);
+        buildAttribute("unspscCode", builder.getUnspscCode(), element);
+        buildAttribute("unspscVersion", builder.getUnspscVersion(), element);
+
+        return element;
+    }
+
+    protected Element build(PayloadBuilder builder) {
+        Element element = new Element("Payload", SWID_NAMESPACE);
+
+        buildAbstractResourceCollectionBuilder(builder, element);
+
+        return element;
+    }
+
+    private static <E extends AbstractResourceCollectionBuilder<E>> void
+            buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
+        buildAbstractBuilder(builder, element);
+
+        XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator(element);
+        for (ResourceBuilder resourceBuilder : builder.getResources()) {
+            resourceBuilder.accept(creator, element);
         }
     }
 
-    @Override
-    public void generate(FileBuilder builder, Element parent) {
-
-      Element element = new Element("File", XMLOutputHandler.SWID_NAMESPACE);
-      parent.addContent(element);
-
-      buildAbstractFileSystemItem(builder, element);
-
-      XMLOutputHandler.buildAttribute("size", builder.getSize(), element);
-      XMLOutputHandler.buildAttribute("version", builder.getVersion(), element);
-
-      for (Map.Entry<HashAlgorithm, String> entry : builder.getHashAlgorithmToValueMap().entrySet()) {
-        HashAlgorithm algorithm = entry.getKey();
-        String hashValue = entry.getValue();
-        Namespace ns = Namespace.getNamespace(algorithm.getName(), algorithm.getNamespace());
-        Namespace nsOld = parent.getNamespace(ns.getPrefix());
-
-        if (nsOld == null) {
-          parent.addNamespaceDeclaration(ns);
-        } else if (!nsOld.getURI().equals(ns.getURI())) {
-          element.addNamespaceDeclaration(ns);
+    private static <E extends AbstractBuilder<E>> void buildAbstractBuilder(AbstractBuilder<E> builder,
+            Element element) {
+        String language = builder.getLanguage();
+        if (language != null) {
+            element.setAttribute("lang", language, Namespace.XML_NAMESPACE);
         }
-        element.setAttribute("hash", hashValue, ns);
-      }
     }
 
-    private static <E extends AbstractFileSystemItemBuilder<E>> void
-        buildAbstractFileSystemItem(AbstractFileSystemItemBuilder<E> builder, Element element) {
-      buildAbstractResourceBuilder(builder, element);
-
-      XMLOutputHandler.buildAttribute("root", builder.getRoot(), element);
-      List<String> location = builder.getLocation();
-      if (location != null && !location.isEmpty()) {
-        element.setAttribute("location", PathRelativizer.toURI(location).toString());
-      }
-      XMLOutputHandler.buildAttribute("name", builder.getName(), element);
-      XMLOutputHandler.buildAttribute("key", builder.getKey(), element);
+    private static void buildAttribute(String attributeName, String value, Element element) {
+        if (value != null) {
+            element.setAttribute(attributeName, value);
+        }
     }
 
-    private static <E extends AbstractResourceBuilder<E>> void
-        buildAbstractResourceBuilder(AbstractResourceBuilder<E> builder, Element element) {
-      XMLOutputHandler.buildAbstractBuilder(builder, element);
+    private static void buildAttribute(String attributeName, Object value, Element element) {
+        if (value != null) {
+            element.setAttribute(attributeName, value.toString());
+        }
     }
-  }
+
+    private static class XMLResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator<Element> {
+        private final Element element;
+
+        public XMLResourceCollectionEntryGenerator(Element element) {
+            this.element = element;
+        }
+
+        @Override
+        public void generate(DirectoryBuilder builder, Element parent) {
+            Element element = new Element("Directory", XMLOutputHandler.SWID_NAMESPACE);
+            parent.addContent(element);
+
+            buildAbstractFileSystemItem(builder, element);
+
+            for (ResourceBuilder child : builder.getResources()) {
+                child.accept(this, element);
+            }
+        }
+
+        @Override
+        public void generate(FileBuilder builder, Element parent) {
+
+            Element element = new Element("File", XMLOutputHandler.SWID_NAMESPACE);
+            parent.addContent(element);
+
+            buildAbstractFileSystemItem(builder, element);
+
+            XMLOutputHandler.buildAttribute("size", builder.getSize(), element);
+            XMLOutputHandler.buildAttribute("version", builder.getVersion(), element);
+
+            for (Map.Entry<HashAlgorithm, String> entry : builder.getHashAlgorithmToValueMap().entrySet()) {
+                HashAlgorithm algorithm = entry.getKey();
+                String hashValue = entry.getValue();
+                Namespace ns = Namespace.getNamespace(algorithm.getName(), algorithm.getNamespace());
+                Namespace nsOld = parent.getNamespace(ns.getPrefix());
+
+                if (nsOld == null) {
+                    parent.addNamespaceDeclaration(ns);
+                } else if (!nsOld.getURI().equals(ns.getURI())) {
+                    element.addNamespaceDeclaration(ns);
+                }
+                element.setAttribute("hash", hashValue, ns);
+            }
+        }
+
+        private static <E extends AbstractFileSystemItemBuilder<E>> void
+                buildAbstractFileSystemItem(AbstractFileSystemItemBuilder<E> builder, Element element) {
+            buildAbstractResourceBuilder(builder, element);
+
+            XMLOutputHandler.buildAttribute("root", builder.getRoot(), element);
+            List<String> location = builder.getLocation();
+            if (location != null && !location.isEmpty()) {
+                element.setAttribute("location", PathRelativizer.toURI(location).toString());
+            }
+            XMLOutputHandler.buildAttribute("name", builder.getName(), element);
+            XMLOutputHandler.buildAttribute("key", builder.getKey(), element);
+        }
+
+        private static <E extends AbstractResourceBuilder<E>> void
+                buildAbstractResourceBuilder(AbstractResourceBuilder<E> builder, Element element) {
+            XMLOutputHandler.buildAbstractBuilder(builder, element);
+        }
+    }
 }

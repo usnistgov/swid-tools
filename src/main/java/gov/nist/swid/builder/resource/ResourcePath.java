@@ -31,64 +31,64 @@ import java.util.Collections;
 import java.util.List;
 
 final class ResourcePath implements Comparable<ResourcePath> {
-  private final String path;
-  private final List<String> segments;
+    private final String path;
+    private final List<String> segments;
 
-  public ResourcePath(String path) {
-    Util.requireNonEmpty(path, path);
+    public ResourcePath(String path) {
+        Util.requireNonEmpty(path, path);
 
-    String[] segments = PathRelativizer.URI_SEPERATOR_PATTERN.split(path);
-    List<String> segmentsList = new ArrayList<>(segments.length);
-    for (String segment : segments) {
-      segmentsList.add(segment);
-    }
-    this.path = path;
-    this.segments = Collections.unmodifiableList(segmentsList);
-  }
-
-  public ResourcePath(String[] path) {
-    this(Arrays.asList(path));
-  }
-
-  public ResourcePath(List<String> path) {
-    this.path = String.join(PathRelativizer.URI_SEPERATOR, path);
-    this.segments = Collections.unmodifiableList(path);
-  }
-
-  @Override
-  public int hashCode() {
-    return segments.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    return segments.equals(obj);
-  }
-
-  @Override
-  public int compareTo(ResourcePath that) {
-    List<String> thisSegments = getSegments();
-    List<String> thatSegments = that.getSegments();
-    int retval = 0;
-    for (int i = 0; i < thisSegments.size() && i < thatSegments.size(); i++) {
-      String thisSegment = thisSegments.get(i);
-      String thatSegment = thatSegments.get(i);
-      if ((retval = thisSegment.compareTo(thatSegment)) != 0) {
-        break;
-      }
+        String[] segments = PathRelativizer.URI_SEPERATOR_PATTERN.split(path);
+        List<String> segmentsList = new ArrayList<>(segments.length);
+        for (String segment : segments) {
+            segmentsList.add(segment);
+        }
+        this.path = path;
+        this.segments = Collections.unmodifiableList(segmentsList);
     }
 
-    if (retval == 0) {
-      retval = thisSegments.size() - thatSegments.size();
+    public ResourcePath(String[] path) {
+        this(Arrays.asList(path));
     }
-    return retval;
-  }
 
-  public String getPath() {
-    return path;
-  }
+    public ResourcePath(List<String> path) {
+        this.path = String.join(PathRelativizer.URI_SEPERATOR, path);
+        this.segments = Collections.unmodifiableList(path);
+    }
 
-  public List<String> getSegments() {
-    return segments;
-  }
+    @Override
+    public int hashCode() {
+        return segments.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return segments.equals(obj);
+    }
+
+    @Override
+    public int compareTo(ResourcePath that) {
+        List<String> thisSegments = getSegments();
+        List<String> thatSegments = that.getSegments();
+        int retval = 0;
+        for (int i = 0; i < thisSegments.size() && i < thatSegments.size(); i++) {
+            String thisSegment = thisSegments.get(i);
+            String thatSegment = thatSegments.get(i);
+            if ((retval = thisSegment.compareTo(thatSegment)) != 0) {
+                break;
+            }
+        }
+
+        if (retval == 0) {
+            retval = thisSegments.size() - thatSegments.size();
+        }
+        return retval;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public List<String> getSegments() {
+        return segments;
+    }
 }
