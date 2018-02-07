@@ -23,10 +23,8 @@
 
 package gov.nist.swid.builder;
 
-import gov.nist.swid.builder.EntityBuilder;
-import gov.nist.swid.builder.SWIDBuilder;
-import gov.nist.swid.builder.SWIDConstants;
 import gov.nist.swid.builder.output.CBOROutputHandler;
+import gov.nist.swid.builder.output.XMLOutputHandler;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,6 +54,21 @@ public class SWIDBuilderTest {
         OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
         new CBOROutputHandler().write(builder, os);
         os.close();
+    }
+
+    @Test
+    public void testXML() throws IOException {
+        SWIDBuilder builder = SWIDBuilder.create();
+        builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
+                .addEntity(EntityBuilder.create().regid("gov.nist")
+                        .name("National Institute of Standards and Technology, United States Department of Commerce")
+                        .addRole(SWIDConstants.ROLE_TAG_CREATOR).addRole(SWIDConstants.ROLE_SOFTWARE_CREATOR));
+
+        File file = folder.newFile();
+
+        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+            new XMLOutputHandler().write(builder, os);
+        }
     }
 
 }
