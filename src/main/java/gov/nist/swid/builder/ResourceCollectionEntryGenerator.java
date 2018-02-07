@@ -35,7 +35,8 @@ public interface ResourceCollectionEntryGenerator<T> {
     /**
      * Adds the directory, represented by the builder, to this resource collection.
      * 
-     * @param directoryBuilder
+     * @param builder
+     *            the directory builder representing the directory resource to add
      */
-    void generate(DirectoryBuilder directoryBuilder, T parent);
+    void generate(DirectoryBuilder builder, T parent);
 }

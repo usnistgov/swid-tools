@@ -320,7 +320,7 @@ public class CBOROutputHandler implements OutputHandler {
             AbstractResourceCollectionBuilder<E> builder, CBORGenerator generator) throws IOException {
         buildGlobalAttributes(builder, generator);
 
-        CBORResourceCollectionEntryGenerator creator = new CBORResourceCollectionEntryGenerator(generator);
+        CBORResourceCollectionEntryGenerator creator = new CBORResourceCollectionEntryGenerator();
         for (ResourceBuilder resourceBuilder : builder.getResources()) {
             try {
                 resourceBuilder.accept(creator, generator);
@@ -372,55 +372,52 @@ public class CBOROutputHandler implements OutputHandler {
     public static class CBORResourceCollectionEntryGenerator
             implements ResourceCollectionEntryGenerator<CBORGenerator> {
 
-        private final CBORGenerator generator;
-
-        public CBORResourceCollectionEntryGenerator(CBORGenerator generator) {
-            this.generator = generator;
+        public CBORResourceCollectionEntryGenerator() {
         }
 
         @Override
         public void generate(DirectoryBuilder builder, CBORGenerator parent) {
             try {
                 // start of the payload
-                generator.writeFieldId(DIRECTORY_ENTRY_FIELD);
-                generator.writeStartObject();
+                parent.writeFieldId(DIRECTORY_ENTRY_FIELD);
+                parent.writeStartObject();
 
-                buildGlobalAttributes(builder, generator);
+                buildGlobalAttributes(builder, parent);
 
-                buildFileSystemItem(builder);
+                buildFileSystemItem(builder, parent);
 
                 List<ResourceBuilder> resources = builder.getResources();
                 if (!resources.isEmpty()) {
-                    generator.writeStartArray();
+                    parent.writeStartArray();
                     for (ResourceBuilder resource : resources) {
-                        resource.accept(this, generator);
+                        resource.accept(this, parent);
                     }
-                    generator.writeEndArray();
+                    parent.writeEndArray();
                 }
 
-                generator.writeEndObject();
+                parent.writeEndObject();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
 
         @Override
-        public void generate(FileBuilder builder, CBORGenerator generator) {
+        public void generate(FileBuilder builder, CBORGenerator parent) {
 
             try {
                 // start of the payload
-                generator.writeFieldId(FILE_ENTRY_FIELD);
-                generator.writeStartObject();
+                parent.writeFieldId(FILE_ENTRY_FIELD);
+                parent.writeStartObject();
 
-                buildGlobalAttributes(builder, generator);
+                buildGlobalAttributes(builder, parent);
 
-                buildFileSystemItem(builder);
+                buildFileSystemItem(builder, parent);
 
                 if (builder.getSize() != null) {
-                    writeLongField(generator, SIZE_FIELD, builder.getSize());
+                    writeLongField(parent, SIZE_FIELD, builder.getSize());
                 }
                 if (builder.getVersion() != null) {
-                    writeTextField(generator, VERSION_FIELD, builder.getVersion());
+                    writeTextField(parent, VERSION_FIELD, builder.getVersion());
                 }
                 //
                 // for (Map.Entry<HashAlgorithm, String> entry :
@@ -440,30 +437,30 @@ public class CBOROutputHandler implements OutputHandler {
                 // }
 
                 // end of the payload
-                generator.writeEndObject();
+                parent.writeEndObject();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
 
         private <E extends AbstractFileSystemItemBuilder<E>> void
-                buildFileSystemItem(AbstractFileSystemItemBuilder<E> builder) throws IOException {
+                buildFileSystemItem(AbstractFileSystemItemBuilder<E> builder, CBORGenerator parent) throws IOException {
 
             // TODO: support meta
 
             if (builder.getKey() != null) {
-                writeBooleanField(generator, KEY_FIELD, builder.getKey());
+                writeBooleanField(parent, KEY_FIELD, builder.getKey());
             }
 
             if (builder.getRoot() != null) {
-                writeTextField(generator, ROOT_FIELD, builder.getRoot());
+                writeTextField(parent, ROOT_FIELD, builder.getRoot());
             }
 
             List<String> location = builder.getLocation();
             if (location != null && !location.isEmpty()) {
-                writeTextField(generator, LOCATION_FIELD, PathRelativizer.toURI(location).toString());
+                writeTextField(parent, LOCATION_FIELD, PathRelativizer.toURI(location).toString());
             }
-            writeTextField(generator, FS_NAME_FIELD, builder.getName());
+            writeTextField(parent, FS_NAME_FIELD, builder.getName());
         }
 
     }

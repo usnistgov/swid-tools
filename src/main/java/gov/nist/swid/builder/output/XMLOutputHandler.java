@@ -243,7 +243,7 @@ public class XMLOutputHandler implements OutputHandler {
             buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
         buildAbstractBuilder(builder, element);
 
-        XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator(element);
+        XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator();
         for (ResourceBuilder resourceBuilder : builder.getResources()) {
             resourceBuilder.accept(creator, element);
         }
@@ -270,10 +270,7 @@ public class XMLOutputHandler implements OutputHandler {
     }
 
     private static class XMLResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator<Element> {
-        private final Element element;
-
-        public XMLResourceCollectionEntryGenerator(Element element) {
-            this.element = element;
+        public XMLResourceCollectionEntryGenerator() {
         }
 
         @Override
