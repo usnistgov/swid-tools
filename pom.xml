@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -7,33 +8,34 @@
 		<version>8-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>swid-builder</artifactId>
+	<groupId>gov.nist.secauto.swid</groupId>
+	<artifactId>parent</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>SWID Tag Generation Java API</name>
-	<description>Supports the generation of ISO/IEC 19770-2:2015 SWID tag in Java. A number of other formats are also supported (e.g., CBOR).</description>
+	<name>SWID Java Support Parent</name>
+	<description>A parent project object model (POM) for a collection of Java utilities for creating SWID Tags.</description>
 
 	<url>https://github.com/usnistgov/swid-builder</url>
 
-    <issueManagement>
-        <url>https://github.com/usnistgov/swid-builder/issues</url>
-        <system>GitHub Issues</system>
-    </issueManagement>
+	<issueManagement>
+		<url>https://github.com/usnistgov/swid-builder/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
 
-    <scm>
-        <url>https://github.com/usnistgov/swid-builder</url>
-        <connection>scm:git:https://github.com/usnistgov/swid-builder.git</connection>
-        <developerConnection>scm:git:https://github.com/usnistgov/swid-builder.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+	<scm>
+		<url>https://github.com/usnistgov/swid-builder</url>
+		<connection>scm:git:https://github.com/usnistgov/swid-builder.git</connection>
+		<developerConnection>scm:git:https://github.com/usnistgov/swid-builder.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
-    <distributionManagement>
-        <site>
-            <id>my.git.server</id>
-            <url>scm:git:https://github.com/usnistgov/swid-builder.git</url>
-        </site>
-    </distributionManagement>
+	<distributionManagement>
+		<site>
+			<id>my.git.server</id>
+			<url>scm:git:https://github.com/usnistgov/swid-builder.git</url>
+		</site>
+	</distributionManagement>
 
 	<developers>
 		<developer>
@@ -48,36 +50,33 @@
 		</developer>
 	</developers>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom2</artifactId>
-			<version>2.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-cbor</artifactId>
-			<version>2.8.3</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <properties>
+        <dependency.version.jackson>2.8.3</dependency.version.jackson>
+    </properties>
 
+    <modules>swid-builder</modules>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom2</artifactId>
+				<version>2.0.6</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.1.0.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-cbor</artifactId>
+				<version>${dependency.version.jackson}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<scope>test</scope>
+			</dependency>
+	</dependencyManagement>
 </project>
