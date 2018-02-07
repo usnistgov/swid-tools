@@ -54,7 +54,10 @@
         <dependency.version.jackson>2.8.3</dependency.version.jackson>
     </properties>
 
-    <modules>swid-builder</modules>
+    <modules>
+        <module>swid-builder</module>
+        <module>assembly-swid-generator</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>

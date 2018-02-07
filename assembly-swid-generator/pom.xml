@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>gov.nist.secauto</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>8-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>gov.nist.secauto.swid</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.0.4-SNAPSHOT</version>
+    </parent>
 
 	<artifactId>assembly-swid-generator</artifactId>
 	<version>0.0.6-SNAPSHOT</version>
@@ -14,26 +14,17 @@
 	<name>SWID Tag Generation Extension for the Maven Assembly Plugin</name>
 	<description>This project is a ContainerDescriptorHandler that generates an ISO/IEC 19770-2:2015 SWID tag within a Maven assembly plugin execution.</description>
 
-    <url>https://github.com/usnistgov/assembly-swid-generator</url>
+    <url>https://github.com/usnistgov/swid-builder/tree/master/assembly-swid-generator</url>
 
     <issueManagement>
-        <url>https://github.com/usnistgov/assembly-swid-generator/issues</url>
+        <url>https://github.com/usnistgov/swid-builder/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/usnistgov/assembly-swid-generator</url>
-        <connection>scm:git:https://github.com/usnistgov/assembly-swid-generator.git</connection>
-        <developerConnection>scm:git:https://github.com/usnistgov/assembly-swid-generator.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
-
-    <distributionManagement>
-        <site>
-            <id>my.git.server</id>
-            <url>scm:git:https://github.com/usnistgov/assembly-swid-generator.git</url>
-        </site>
-    </distributionManagement>
+        <url>https://github.com/usnistgov/swid-builder/tree/master/assembly-swid-generator</url>
+        <tag>HEAD</tag>
+    </scm>
 
 	<developers>
 		<developer>

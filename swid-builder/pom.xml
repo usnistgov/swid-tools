@@ -2,19 +2,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>gov.nist.secauto</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>8-SNAPSHOT</version>
+		<groupId>gov.nist.secauto.swid</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.4-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>swid-builder</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+
 	<packaging>jar</packaging>
 
 	<name>SWID Tag Generation Java API</name>
 	<description>Supports the generation of ISO/IEC 19770-2:2015 SWID tag in Java. A number of other formats are also supported (e.g., CBOR).</description>
 
-	<url>https://github.com/usnistgov/swid-builder</url>
+    <url>https://github.com/usnistgov/swid-builder/tree/master/swid-builder</url>
 
     <issueManagement>
         <url>https://github.com/usnistgov/swid-builder/issues</url>
@@ -22,18 +22,9 @@
     </issueManagement>
 
     <scm>
-        <url>https://github.com/usnistgov/swid-builder</url>
-        <connection>scm:git:https://github.com/usnistgov/swid-builder.git</connection>
-        <developerConnection>scm:git:https://github.com/usnistgov/swid-builder.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
-
-    <distributionManagement>
-        <site>
-            <id>my.git.server</id>
-            <url>scm:git:https://github.com/usnistgov/swid-builder.git</url>
-        </site>
-    </distributionManagement>
+        <url>https://github.com/usnistgov/swid-builder/tree/master/swid-builder</url>
+        <tag>HEAD</tag>
+    </scm>
 
 	<developers>
 		<developer>
@@ -70,7 +61,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>
