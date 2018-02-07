@@ -43,6 +43,7 @@ import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.components.io.resources.PlexusIoFileResource;
 import org.codehaus.plexus.components.io.resources.PlexusIoResource;
+import org.codehaus.plexus.logging.Logger;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -54,322 +55,329 @@ import java.security.NoSuchAlgorithmException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class SWIDProcessor {
-  private final ResourceCollection resourceCollection;
-  private final MavenProject project;
-  private final TagInfo tagInfo;
-  private String swidTagArchiveDir;
-  private File tagOutputDirectory;
-  private final List<Entity> entities = new LinkedList<>();
-  private final Map<String, Artifact> artifactLocationToArtifactMap;
+    private final ResourceCollection resourceCollection;
+    private final MavenProject project;
+    private final Logger logger;
+    private final TagInfo tagInfo;
+    private String swidTagArchiveDir;
+    private File tagOutputDirectory;
+    private final List<Entity> entities = new LinkedList<>();
+    private final Map<String, Artifact> artifactLocationToArtifactMap;
 
-  public SWIDProcessor(MavenProject project) throws IOException {
-    this(project, "tagInfo.properties");
-  }
-
-  /**
-   * Construct a new SWID tag information processor.
-   * 
-   * @param mavenProject
-   *          the calling maven project
-   * @param tagInfoPropertyFileName
-   *          the filename for cached tag-related metadata
-   * @throws IOException
-   *           if an error occurs while load the tag information
-   */
-  public SWIDProcessor(MavenProject mavenProject, String tagInfoPropertyFileName) throws IOException {
-    this.resourceCollection = new ResourceCollection();
-    this.project = mavenProject;
-    this.tagInfo = new TagInfo(new File(getProjectBuildDirectory(), tagInfoPropertyFileName));
-    this.artifactLocationToArtifactMap = initializeArtifactInfo(mavenProject);
-  }
-
-  private static Map<String, Artifact> initializeArtifactInfo(MavenProject project) {
-    Map<String, Artifact> retval = new HashMap<>();
-
-    Artifact target = project.getArtifact();
-    retval.put(target.getFile().getAbsolutePath(), target);
-
-    @SuppressWarnings("unchecked")
-    Collection<Artifact> artifacts = (Collection<Artifact>) project.getRuntimeArtifacts();
-    for (Artifact artifact : artifacts) {
-      retval.put(artifact.getFile().getAbsolutePath(), artifact);
-    }
-    return retval;
-  }
-
-  public File getTagOutputDirectory() {
-    return tagOutputDirectory == null ? new File(getProject().getBuild().getDirectory(), "generated-swid")
-        : tagOutputDirectory;
-  }
-
-  public void setTagOutputDirectory(File tagOutputDirectory) {
-    this.tagOutputDirectory = tagOutputDirectory;
-  }
-
-  public String getSwidTagArchiveDir() {
-    return swidTagArchiveDir == null ? "SWIDTAG" : swidTagArchiveDir;
-  }
-
-  public void setSwidTagArchiveDir(String relativeDir) {
-    this.swidTagArchiveDir = relativeDir;
-  }
-
-  /**
-   * Processes all gathered information to create a SWID tag.
-   * 
-   * @param archiver
-   *          the Maven Archiver instance to add the tag to
-   * @throws IOException
-   *           if an error occurs when validating tag information
-   */
-  public void process(Archiver archiver) throws IOException {
-    boolean changed = validateTagInfo();
-    getTagOutputDirectory().mkdirs();
-    File tagFile = getSWIDTagFile();
-    if (changed || !tagFile.exists()) {
-      generateSWIDTag();
-    }
-    archiver.addFile(tagFile, getSWIDTagArchivePath());
-
-  }
-
-  private boolean validateTagInfo() throws IOException {
-    boolean artifactInfoChanged = false;
-    if (!getProjectArtifactId().equals(tagInfo.getProjectArtifactId())) {
-      artifactInfoChanged = true;
-      tagInfo.setProjectArtifactId(getProjectArtifactId());
+    public SWIDProcessor(MavenProject project, Logger logger) throws IOException {
+        this(project, logger, "tagInfo.properties");
     }
 
-    if (!getProjectGroupId().equals(tagInfo.getProjectGroupId())) {
-      artifactInfoChanged = true;
-      tagInfo.setProjectGroupId(getProjectGroupId());
+    /**
+     * Construct a new SWID tag information processor.
+     * 
+     * @param mavenProject
+     *            the calling maven project
+     * @param tagInfoPropertyFileName
+     *            the filename for cached tag-related metadata
+     * @throws IOException
+     *             if an error occurs while load the tag information
+     */
+    public SWIDProcessor(MavenProject mavenProject, Logger logger, String tagInfoPropertyFileName) throws IOException {
+        this.resourceCollection = new ResourceCollection();
+        this.project = mavenProject;
+        this.logger = logger;
+        this.tagInfo = new TagInfo(new File(getProjectBuildDirectory(), tagInfoPropertyFileName));
+        this.artifactLocationToArtifactMap = initializeArtifactInfo(mavenProject, logger);
     }
 
-    if (!getProjectVersion().equals(tagInfo.getProjectVersion())) {
-      artifactInfoChanged = true;
-      tagInfo.setProjectVersion(getProjectVersion());
-    }
+    private static Map<String, Artifact> initializeArtifactInfo(MavenProject project, Logger logger) {
+        Map<String, Artifact> retval = new HashMap<>();
 
-    String digest;
-    try {
-      digest = HashUtils.toHexString(resourceCollection.getMessageDigest(HashAlgorithm.SHA_512));
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    }
-    boolean resourceDigestChanged = !digest.equals(tagInfo.getResourceDigest());
+        Artifact target = project.getArtifact();
+        retval.put(target.getFile().getAbsolutePath(), target);
 
-    if (artifactInfoChanged || (isSnapshotRelease() && resourceDigestChanged)) {
-      tagInfo.setTagId(generateTagId());
-      tagInfo.setTagVersion(TagInfo.TAG_VERISON_PROPERTY_DEFAULT);
-    }
-
-    if (resourceDigestChanged) {
-      tagInfo.setResourceDigest(digest);
-      int tagVersion = tagInfo.getTagVersion();
-      tagInfo.setTagVersion(++tagVersion);
-    }
-
-    boolean retval;
-    if (tagInfo.isModified()) {
-      tagInfo.saveProperties();
-      retval = true;
-    } else {
-      retval = false;
-    }
-    return retval;
-  }
-
-  protected ResourceCollection getResourceCollection() {
-    return resourceCollection;
-  }
-
-  protected MavenProject getProject() {
-    return project;
-  }
-
-  protected TagInfo getTagInfo() {
-    return tagInfo;
-  }
-
-  protected File getSWIDTagFile() {
-    return new File(getTagOutputDirectory(), getSWIDTagFilename());
-  }
-
-  protected String getSWIDTagFilename() {
-    return getTagInfo().getTagId() + ".swidtag";
-  }
-
-  protected String getSWIDTagArchivePath() {
-    return getSwidTagArchiveDir() + "/" + getSWIDTagFilename();
-  }
-
-  /**
-   * Creates and stores the SWID tag.
-   * 
-   * @throws ArchiverException
-   *           if an error occurs while writing the generated SWID tag
-   */
-  public void generateSWIDTag() throws ArchiverException {
-    SWIDBuilder builder = SWIDBuilder.create();
-
-    builder.name(generateName());
-    builder.tagVersion(getTagInfo().getTagVersion());
-    builder.version(getProjectVersion());
-
-    if (isSnapshotRelease()) {
-      builder.versionScheme(SWIDConstants.VERSION_SCHEME_MULTIPART_NUMERIC_WITH_SUFFIX);
-    } else {
-      builder.versionScheme(SWIDConstants.VERSION_SCHEME_MULTIPART_NUMERIC);
-    }
-    builder.tagId(getTagInfo().getTagId());
-
-    for (Entity entity : entities) {
-      EntityBuilder entityBuilder = EntityBuilder.create();
-      if (entity.getName() != null) {
-        entityBuilder.name(entity.getName());
-      }
-
-      if (entity.getRegid() != null) {
-        entityBuilder.regid(entity.getRegid());
-      }
-
-      if (entity.getRoles() != null) {
-        for (String role : entity.getRoles()) {
-          entityBuilder.addRole(role);
+        for (Artifact artifact : project.getArtifacts()) {
+            String scope = artifact.getScope();
+            if (Artifact.SCOPE_COMPILE.equals(scope) || Artifact.SCOPE_RUNTIME.equals(scope)) {
+                String path = artifact.getFile().getAbsolutePath();
+                logger.info("Found artifact: " + path);
+                retval.put(path, artifact);
+            } else {
+                logger.debug("Skipping artifact: " + artifact.getFile().getAbsolutePath());
+            }
         }
-      }
-      builder.addEntity(entityBuilder);
+        return retval;
     }
 
-    String swidPath = getSWIDTagArchivePath();
-
-    PayloadBuilder payloadBuilder = PayloadBuilder.create();
-    for (ResourceEntry entry : getResourceCollection().getResources()) {
-
-      FileBuilder fileBuilder = payloadBuilder.newFileResource(PathRelativizer.relativize(swidPath, entry.getPath()));
-
-      String version = entry.getVersion();
-      if (version != null) {
-        fileBuilder.version(version);
-      }
-
-      fileBuilder.size(entry.getSize());
-      for (Map.Entry<HashAlgorithm, List<Byte>> hashEntry : entry.getDigestValues().entrySet()) {
-        fileBuilder.hash(hashEntry.getKey(), HashUtils.toHexString(hashEntry.getValue()));
-      }
+    public File getTagOutputDirectory() {
+        return tagOutputDirectory == null ? new File(getProject().getBuild().getDirectory(), "generated-swid")
+                : tagOutputDirectory;
     }
-    builder.payload(payloadBuilder);
 
-    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(getSWIDTagFile()))) {
-      XMLOutputHandler handler = new XMLOutputHandler();
-      handler.write(builder, os);
-    } catch (FileNotFoundException e) {
-      throw new ArchiverException(e.getMessage());
-    } catch (IOException e) {
-      throw new ArchiverException(e.getMessage());
+    public void setTagOutputDirectory(File tagOutputDirectory) {
+        this.tagOutputDirectory = tagOutputDirectory;
     }
-  }
 
-  public String getProjectGroupId() {
-    return getProject().getGroupId();
-  }
-
-  public String getProjectArtifactId() {
-    return getProject().getArtifactId();
-  }
-
-  public String getProjectVersion() {
-    return getProject().getVersion();
-  }
-
-  public File getProjectBuildDirectory() {
-    return new File(getProject().getBuild().getDirectory());
-  }
-
-  public boolean isSnapshotRelease() {
-    String artifactId = getProjectVersion();
-    return artifactId.endsWith("SNAPSHOT");
-  }
-
-  protected String generateTagId() {
-    StringBuilder str = new StringBuilder();
-    str.append(getProjectGroupId());
-    str.append('-');
-    str.append(getProjectArtifactId());
-    str.append('-');
-    str.append(getProjectVersion());
-
-    if (isSnapshotRelease()) {
-      // Append a date/time to make this unique
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'kkmmss");
-      str.append("-");
-      // Use UTC to prevent information leakage around where the project is built
-      str.append(ZonedDateTime.now(ZoneId.of("UTC")).format(formatter));
+    public String getSwidTagArchiveDir() {
+        return swidTagArchiveDir == null ? "SWIDTAG" : swidTagArchiveDir;
     }
-    return str.toString();
-  }
 
-  protected String generateName() {
-    String name = getProject().getName();
-    if (name == null) {
-      StringBuilder str = new StringBuilder();
-      str.append(getProjectGroupId());
-      str.append('-');
-      str.append(getProjectArtifactId());
-      str.append('-');
-      str.append(getProjectVersion());
-      name = str.toString();
+    public void setSwidTagArchiveDir(String relativeDir) {
+        this.swidTagArchiveDir = relativeDir;
     }
-    return name;
-  }
 
-  /**
-   * Associates a Maven Archiver entry with this processor, which will result in the resource being
-   * recorded in the SWID tag.
-   * 
-   * @param ae
-   *          the Maven Archiver entry to add
-   * @throws NoSuchAlgorithmException
-   *           if a required hash algorithm is not supported
-   * @throws IOException
-   *           if an error occurred while determining a resource artifact path
-   */
-  public void addResourceEntry(ArchiveEntry ae) throws NoSuchAlgorithmException, IOException {
-    PlexusIoResource resource = ae.getResource();
-    Artifact artifact = null;
-    if (resource instanceof PlexusIoFileResource) {
-      PlexusIoFileResource fileResource = (PlexusIoFileResource) resource;
-      File file = fileResource.getFile();
-      artifact = artifactLocationToArtifactMap.get(file.getAbsolutePath());
+    /**
+     * Processes all gathered information to create a SWID tag.
+     * 
+     * @param archiver
+     *            the Maven Archiver instance to add the tag to
+     * @throws IOException
+     *             if an error occurs when validating tag information
+     */
+    public void process(Archiver archiver) throws IOException {
+        boolean changed = validateTagInfo();
+        getTagOutputDirectory().mkdirs();
+        File tagFile = getSWIDTagFile();
+        if (changed || !tagFile.exists()) {
+            generateSWIDTag();
+        }
+        archiver.addFile(tagFile, getSWIDTagArchivePath());
+
     }
-    ArchiveEntryResourceEntry entry = new ArchiveEntryResourceEntry(ae, artifact);
-    getResourceCollection().addResource(entry);
 
-  }
-  //
-  // public static void main(String[] args) throws ArchiverException, IOException,
-  // NoSuchAlgorithmException {
-  // Model model = new Model();
-  // model.setArtifactId("artifactId");
-  // model.setGroupId("groupId");
-  // model.setVersion("1.0.0-SNAPSHOT");
-  //
-  // MavenProject project = new MavenProject(model);
-  // SWIDProcessor processor = new SWIDProcessor(project);
-  // ArchiveEntry entry = ArchiveEntry.createFileEntry("bin/test", new File("pom.xml"),
-  // AbstractArchiver.DEFAULT_FILE_MODE, AbstractArchiver.DEFAULT_DIR_MODE);
-  // processor.processResource(entry);
-  // processor.process();
-  // }
+    private boolean validateTagInfo() throws IOException {
+        boolean artifactInfoChanged = false;
+        if (!getProjectArtifactId().equals(tagInfo.getProjectArtifactId())) {
+            artifactInfoChanged = true;
+            tagInfo.setProjectArtifactId(getProjectArtifactId());
+        }
 
-  public void addEntity(Entity entity) {
-    entities.add(entity);
-  }
+        if (!getProjectGroupId().equals(tagInfo.getProjectGroupId())) {
+            artifactInfoChanged = true;
+            tagInfo.setProjectGroupId(getProjectGroupId());
+        }
+
+        if (!getProjectVersion().equals(tagInfo.getProjectVersion())) {
+            artifactInfoChanged = true;
+            tagInfo.setProjectVersion(getProjectVersion());
+        }
+
+        String digest;
+        try {
+            digest = HashUtils.toHexString(resourceCollection.getMessageDigest(HashAlgorithm.SHA_512));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        boolean resourceDigestChanged = !digest.equals(tagInfo.getResourceDigest());
+
+        if (artifactInfoChanged || (isSnapshotRelease() && resourceDigestChanged)) {
+            tagInfo.setTagId(generateTagId());
+            tagInfo.setTagVersion(TagInfo.TAG_VERISON_PROPERTY_DEFAULT);
+        }
+
+        if (resourceDigestChanged) {
+            tagInfo.setResourceDigest(digest);
+            int tagVersion = tagInfo.getTagVersion();
+            tagInfo.setTagVersion(++tagVersion);
+        }
+
+        boolean retval;
+        if (tagInfo.isModified()) {
+            tagInfo.saveProperties();
+            retval = true;
+        } else {
+            retval = false;
+        }
+        return retval;
+    }
+
+    protected ResourceCollection getResourceCollection() {
+        return resourceCollection;
+    }
+
+    protected MavenProject getProject() {
+        return project;
+    }
+
+    protected TagInfo getTagInfo() {
+        return tagInfo;
+    }
+
+    protected File getSWIDTagFile() {
+        return new File(getTagOutputDirectory(), getSWIDTagFilename());
+    }
+
+    protected String getSWIDTagFilename() {
+        return getTagInfo().getTagId() + ".swidtag";
+    }
+
+    protected String getSWIDTagArchivePath() {
+        return getSwidTagArchiveDir() + "/" + getSWIDTagFilename();
+    }
+
+    /**
+     * Creates and stores the SWID tag.
+     * 
+     * @throws ArchiverException
+     *             if an error occurs while writing the generated SWID tag
+     */
+    public void generateSWIDTag() throws ArchiverException {
+        SWIDBuilder builder = SWIDBuilder.create();
+
+        builder.name(generateName());
+        builder.tagVersion(getTagInfo().getTagVersion());
+        builder.version(getProjectVersion());
+
+        if (isSnapshotRelease()) {
+            builder.versionScheme(SWIDConstants.VERSION_SCHEME_MULTIPART_NUMERIC_WITH_SUFFIX);
+        } else {
+            builder.versionScheme(SWIDConstants.VERSION_SCHEME_MULTIPART_NUMERIC);
+        }
+        builder.tagId(getTagInfo().getTagId());
+
+        for (Entity entity : entities) {
+            EntityBuilder entityBuilder = EntityBuilder.create();
+            if (entity.getName() != null) {
+                entityBuilder.name(entity.getName());
+            }
+
+            if (entity.getRegid() != null) {
+                entityBuilder.regid(entity.getRegid());
+            }
+
+            if (entity.getRoles() != null) {
+                for (String role : entity.getRoles()) {
+                    entityBuilder.addRole(role);
+                }
+            }
+            builder.addEntity(entityBuilder);
+        }
+
+        String swidPath = getSWIDTagArchivePath();
+
+        PayloadBuilder payloadBuilder = PayloadBuilder.create();
+        for (ResourceEntry entry : getResourceCollection().getResources()) {
+
+            FileBuilder fileBuilder
+                    = payloadBuilder.newFileResource(PathRelativizer.relativize(swidPath, entry.getPath()));
+
+            String version = entry.getVersion();
+            if (version != null) {
+                fileBuilder.version(version);
+            }
+
+            fileBuilder.size(entry.getSize());
+            for (Map.Entry<HashAlgorithm, List<Byte>> hashEntry : entry.getDigestValues().entrySet()) {
+                fileBuilder.hash(hashEntry.getKey(), HashUtils.toHexString(hashEntry.getValue()));
+            }
+        }
+        builder.payload(payloadBuilder);
+
+        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(getSWIDTagFile()))) {
+            XMLOutputHandler handler = new XMLOutputHandler();
+            handler.write(builder, os);
+        } catch (FileNotFoundException e) {
+            throw new ArchiverException(e.getMessage());
+        } catch (IOException e) {
+            throw new ArchiverException(e.getMessage());
+        }
+    }
+
+    public String getProjectGroupId() {
+        return getProject().getGroupId();
+    }
+
+    public String getProjectArtifactId() {
+        return getProject().getArtifactId();
+    }
+
+    public String getProjectVersion() {
+        return getProject().getVersion();
+    }
+
+    public File getProjectBuildDirectory() {
+        return new File(getProject().getBuild().getDirectory());
+    }
+
+    public boolean isSnapshotRelease() {
+        String artifactId = getProjectVersion();
+        return artifactId.endsWith("SNAPSHOT");
+    }
+
+    protected String generateTagId() {
+        StringBuilder str = new StringBuilder();
+        str.append(getProjectGroupId());
+        str.append('-');
+        str.append(getProjectArtifactId());
+        str.append('-');
+        str.append(getProjectVersion());
+
+        if (isSnapshotRelease()) {
+            // Append a date/time to make this unique
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'kkmmss");
+            str.append("-");
+            // Use UTC to prevent information leakage around where the project is built
+            str.append(ZonedDateTime.now(ZoneId.of("UTC")).format(formatter));
+        }
+        return str.toString();
+    }
+
+    protected String generateName() {
+        String name = getProject().getName();
+        if (name == null) {
+            StringBuilder str = new StringBuilder();
+            str.append(getProjectGroupId());
+            str.append('-');
+            str.append(getProjectArtifactId());
+            str.append('-');
+            str.append(getProjectVersion());
+            name = str.toString();
+        }
+        return name;
+    }
+
+    /**
+     * Associates a Maven Archiver entry with this processor, which will result in the resource
+     * being recorded in the SWID tag.
+     * 
+     * @param ae
+     *            the Maven Archiver entry to add
+     * @throws NoSuchAlgorithmException
+     *             if a required hash algorithm is not supported
+     * @throws IOException
+     *             if an error occurred while determining a resource artifact path
+     */
+    public void addResourceEntry(ArchiveEntry ae) throws NoSuchAlgorithmException, IOException {
+        PlexusIoResource resource = ae.getResource();
+        Artifact artifact = null;
+        if (resource instanceof PlexusIoFileResource) {
+            PlexusIoFileResource fileResource = (PlexusIoFileResource) resource;
+            File file = fileResource.getFile();
+            artifact = artifactLocationToArtifactMap.get(file.getAbsolutePath());
+        }
+        ArchiveEntryResourceEntry entry = new ArchiveEntryResourceEntry(ae, artifact);
+        getResourceCollection().addResource(entry);
+
+    }
+    //
+    // public static void main(String[] args) throws ArchiverException, IOException,
+    // NoSuchAlgorithmException {
+    // Model model = new Model();
+    // model.setArtifactId("artifactId");
+    // model.setGroupId("groupId");
+    // model.setVersion("1.0.0-SNAPSHOT");
+    //
+    // MavenProject project = new MavenProject(model);
+    // SWIDProcessor processor = new SWIDProcessor(project);
+    // ArchiveEntry entry = ArchiveEntry.createFileEntry("bin/test", new File("pom.xml"),
+    // AbstractArchiver.DEFAULT_FILE_MODE, AbstractArchiver.DEFAULT_DIR_MODE);
+    // processor.processResource(entry);
+    // processor.process();
+    // }
+
+    public void addEntity(Entity entity) {
+        entities.add(entity);
+    }
 }

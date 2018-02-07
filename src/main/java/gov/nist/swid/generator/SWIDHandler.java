@@ -23,8 +23,8 @@
 
 package gov.nist.swid.generator;
 
-import org.apache.maven.plugin.assembly.filter.ContainerDescriptorHandler;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.assembly.filter.ContainerDescriptorHandler;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.ArchiverException;
@@ -45,118 +45,118 @@ import java.util.List;
 
 @Component(role = ContainerDescriptorHandler.class, hint = "swid-generator", instantiationStrategy = "per-lookup")
 public class SWIDHandler implements ContainerDescriptorHandler {
-  // @Parameter(defaultValue="${project}", readonly=true, required=true)
-  @Requirement
-  private MavenProject project;
+    // @Parameter(defaultValue="${project}", readonly=true, required=true)
+    @Requirement
+    private MavenProject project;
 
-  @Requirement
-  private Logger logger;
+    @Requirement
+    private Logger logger;
 
-  @Parameter(defaultValue = "${project.build.directory}/generated-swid", property = "tagOutputDir", required = true)
-  private File tagOutputDirectory;
+    @Parameter(defaultValue = "${project.build.directory}/generated-swid", property = "tagOutputDir", required = true)
+    private File tagOutputDirectory;
 
-  @Parameter(defaultValue = "SWIDTAG", required = true)
-  private String tagPath;
+    @Parameter(defaultValue = "SWIDTAG", required = true)
+    private String tagPath;
 
-  private List<String> includes;
-  private List<String> excludes;
+    private List<String> includes;
+    private List<String> excludes;
 
-  private List<Entity> entities;
+    private List<Entity> entities;
 
-  public SWIDHandler() {
-  }
-
-  public File getTagOutputDirectory() {
-    return tagOutputDirectory == null ? new File(project.getBuild().getDirectory(), "generated-swid")
-        : tagOutputDirectory;
-  }
-
-  public void setTagOutputDirectory(File tagOutputDirectory) {
-    this.tagOutputDirectory = tagOutputDirectory;
-  }
-
-  public String getTagPath() {
-    return tagPath == null ? "SWIDTAG" : tagPath;
-  }
-
-  public void setTagPath(String tagPath) {
-    this.tagPath = tagPath;
-  }
-
-  @Override
-  public void finalizeArchiveCreation(Archiver archiver) throws ArchiverException {
-    SWIDProcessor processor;
-    try {
-      processor = new SWIDProcessor(project);
-    } catch (Exception e) {
-      throw new ArchiverException("unable to process SWID info", e);
+    public SWIDHandler() {
     }
 
-    FileSelector fileSelector = newFileSelector();
-    archiver.getResources().forEachRemaining(r -> {
-      try {
-        PlexusIoResource resource = r.getResource();
-        // We only care about file resources
-        if (resource.isFile() && fileSelector.isSelected(resource)) {
-          processor.addResourceEntry(r);
+    public File getTagOutputDirectory() {
+        return tagOutputDirectory == null ? new File(project.getBuild().getDirectory(), "generated-swid")
+                : tagOutputDirectory;
+    }
+
+    public void setTagOutputDirectory(File tagOutputDirectory) {
+        this.tagOutputDirectory = tagOutputDirectory;
+    }
+
+    public String getTagPath() {
+        return tagPath == null ? "SWIDTAG" : tagPath;
+    }
+
+    public void setTagPath(String tagPath) {
+        this.tagPath = tagPath;
+    }
+
+    @Override
+    public void finalizeArchiveCreation(Archiver archiver) throws ArchiverException {
+        SWIDProcessor processor;
+        try {
+            processor = new SWIDProcessor(project, logger);
+        } catch (Exception e) {
+            throw new ArchiverException("unable to process SWID info", e);
         }
-      } catch (IOException e) {
-        String error
-            = new StringBuilder().append("Unable to determine if the resource meets the inclusion/exclusion criteria: ")
-                .append(r.getName()).toString();
-        logger.error(error, e);
-        throw new ArchiverException(error, e);
-      } catch (NoSuchAlgorithmException e) {
-        String error = "Unable to generate hashes for the resource: " + r.getName();
-        logger.error(error, e);
-        throw new ArchiverException(error, e);
-      }
-    });
 
-    if (entities != null) {
-      for (Entity entity : entities) {
-        processor.addEntity(entity);
-      }
+        FileSelector fileSelector = newFileSelector();
+        archiver.getResources().forEachRemaining(r -> {
+            try {
+                PlexusIoResource resource = r.getResource();
+                // We only care about file resources
+                if (resource.isFile() && fileSelector.isSelected(resource)) {
+                    processor.addResourceEntry(r);
+                }
+            } catch (IOException e) {
+                String error = new StringBuilder()
+                        .append("Unable to determine if the resource meets the inclusion/exclusion criteria: ")
+                        .append(r.getName()).toString();
+                logger.error(error, e);
+                throw new ArchiverException(error, e);
+            } catch (NoSuchAlgorithmException e) {
+                String error = "Unable to generate hashes for the resource: " + r.getName();
+                logger.error(error, e);
+                throw new ArchiverException(error, e);
+            }
+        });
+
+        if (entities != null) {
+            for (Entity entity : entities) {
+                processor.addEntity(entity);
+            }
+        }
+        try {
+            processor.process(archiver);
+        } catch (IOException e) {
+            throw new ArchiverException("unable to generate SWID tag", e);
+        }
     }
-    try {
-      processor.process(archiver);
-    } catch (IOException e) {
-      throw new ArchiverException("unable to generate SWID tag", e);
+
+    protected FileSelector newFileSelector() {
+        FileSelector retval;
+        if (includes == null || includes.isEmpty() || excludes == null || excludes.isEmpty()) {
+            retval = new AllFilesFileSelector();
+        } else {
+            final IncludeExcludeFileSelector fileSelector = new IncludeExcludeFileSelector();
+            if (includes != null && !includes.isEmpty()) {
+                fileSelector.setIncludes(includes.toArray(new String[includes.size()]));
+            }
+
+            if (excludes != null && !excludes.isEmpty()) {
+                fileSelector.setExcludes(excludes.toArray(new String[excludes.size()]));
+            }
+            retval = fileSelector;
+        }
+        return retval;
     }
-  }
 
-  protected FileSelector newFileSelector() {
-    FileSelector retval;
-    if (includes == null || includes.isEmpty() || excludes == null || excludes.isEmpty()) {
-      retval = new AllFilesFileSelector();
-    } else {
-      final IncludeExcludeFileSelector fileSelector = new IncludeExcludeFileSelector();
-      if (includes != null && !includes.isEmpty()) {
-        fileSelector.setIncludes(includes.toArray(new String[includes.size()]));
-      }
-
-      if (excludes != null && !excludes.isEmpty()) {
-        fileSelector.setExcludes(excludes.toArray(new String[excludes.size()]));
-      }
-      retval = fileSelector;
+    @Override
+    public void finalizeArchiveExtraction(UnArchiver unarchiver) throws ArchiverException {
     }
-    return retval;
-  }
 
-  @Override
-  public void finalizeArchiveExtraction(UnArchiver unarchiver) throws ArchiverException {
-  }
+    @Override
+    public List<?> getVirtualFiles() {
+        // short for no virtual files
+        return null;
+    }
 
-  @Override
-  public List<?> getVirtualFiles() {
-    // short for no virtual files
-    return null;
-  }
-
-  @Override
-  public boolean isSelected(FileInfo fileInfo) throws IOException {
-    // Always return true
-    return true;
-  }
+    @Override
+    public boolean isSelected(FileInfo fileInfo) throws IOException {
+        // Always return true
+        return true;
+    }
 
 }

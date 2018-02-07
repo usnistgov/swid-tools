@@ -39,41 +39,44 @@ import java.util.List;
 
 public class ArchiveEntryResourceEntry extends AbstractObjectBasedResourceEntry<ArchiveEntry> {
 
-  private final Artifact artifact;
+    private final Artifact artifact;
 
-  public ArchiveEntryResourceEntry(ArchiveEntry entry, Artifact artifact) throws NoSuchAlgorithmException, IOException {
-    super(entry);
-    this.artifact = artifact;
-  }
-
-  @Override
-  public String getPath() {
-    return PathRelativizer.normalize(getResource().getName());
-  }
-
-  @Override
-  public long getSize() {
-    return getResource().getResource().getSize();
-  }
-
-  @Override
-  protected EnumMap<HashAlgorithm, List<Byte>> processDigests(ArchiveEntry entry)
-      throws NoSuchAlgorithmException, IOException {
-    EnumMap<HashAlgorithm, List<Byte>> retval = new EnumMap<>(HashAlgorithm.class);
-    // retrieve the entry to process
-    PlexusIoResource resource = entry.getResource();
-    retval.put(HashAlgorithm.SHA_256, HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_256, resource.getContents())));
-    retval.put(HashAlgorithm.SHA_512, HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_512, resource.getContents())));
-    return retval;
-  }
-
-  @Override
-  public String getVersion() {
-    String retval = null;
-    if (artifact != null) {
-      retval = artifact.getVersion();
+    public ArchiveEntryResourceEntry(ArchiveEntry entry, Artifact artifact)
+            throws NoSuchAlgorithmException, IOException {
+        super(entry);
+        this.artifact = artifact;
     }
-    return retval;
-  }
+
+    @Override
+    public String getPath() {
+        return PathRelativizer.normalize(getResource().getName());
+    }
+
+    @Override
+    public long getSize() {
+        return getResource().getResource().getSize();
+    }
+
+    @Override
+    protected EnumMap<HashAlgorithm, List<Byte>> processDigests(ArchiveEntry entry)
+            throws NoSuchAlgorithmException, IOException {
+        EnumMap<HashAlgorithm, List<Byte>> retval = new EnumMap<>(HashAlgorithm.class);
+        // retrieve the entry to process
+        PlexusIoResource resource = entry.getResource();
+        retval.put(HashAlgorithm.SHA_256,
+                HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_256, resource.getContents())));
+        retval.put(HashAlgorithm.SHA_512,
+                HashUtils.toList(HashUtils.hash(HashAlgorithm.SHA_512, resource.getContents())));
+        return retval;
+    }
+
+    @Override
+    public String getVersion() {
+        String retval = null;
+        if (artifact != null) {
+            retval = artifact.getVersion();
+        }
+        return retval;
+    }
 
 }
