@@ -1,0 +1,1 @@
+# Documentation for the swid-builder and related projects
