@@ -28,6 +28,9 @@ import static gov.nist.swid.builder.util.Util.requireNonEmpty;
 import gov.nist.swid.builder.resource.HashAlgorithm;
 import gov.nist.swid.builder.resource.HashUtils;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
@@ -94,6 +97,26 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
      * 
      * @param algorithm
      *            the algorithm to establish a hash value for
+     * @param file
+     *            the file to hash
+     * @return the same builder instance
+     * @throws NoSuchAlgorithmException
+     *             if the hash algorithm is not supported
+     * @throws IOException
+     *             if an error occurs while reading the stream
+     */
+    public FileBuilder hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
+        InputStream is = new BufferedInputStream(new FileInputStream(file));
+        return hash(algorithm, is);
+    }
+
+    /**
+     * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An
+     * {@link InputStream} is used to retrieve the files contents to calculate the hash value. The
+     * caller is resposnible for closing the stream used by this method.
+     * 
+     * @param algorithm
+     *            the algorithm to establish a hash value for
      * @param is
      *            an {@link InputStream} that can be used to read the file
      * @return the same builder instance
@@ -106,6 +129,11 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
         byte[] digest = HashUtils.hash(algorithm, is);
         String hashValue = HashUtils.toHexString(digest);
         return hash(algorithm, hashValue);
+    }
+
+    public FileBuilder hash(HashAlgorithm algorithm, byte[] hashBytes) {
+        hashAlgorithmToValueMap.put(algorithm, HashUtils.toHexString(hashBytes));
+        return this;
     }
 
     public FileBuilder hash(HashAlgorithm algorithm, String hashValue) {

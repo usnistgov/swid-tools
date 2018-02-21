@@ -23,6 +23,9 @@
 
 package gov.nist.swid.builder.resource;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -105,6 +108,24 @@ public class HashUtils {
             ++pos;
         }
         return new String(hexChars);
+    }
+
+    /**
+     * Generates a hash value, in the form of an array of bytes, by digesting a provided input
+     * stream based on the provided hash algorithm.
+     * 
+     * @param algorithm
+     *            the hash function to use
+     * @param file
+     *            the file to read bytes from
+     * @return an array of bytes representing a hash value
+     * @throws NoSuchAlgorithmException
+     *             if the selected hash function is not supported
+     * @throws IOException
+     *             if an error occured while reading the input stream
+     */
+    public static byte[] hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
+        return hash(algorithm, new BufferedInputStream(new FileInputStream(file)));
     }
 
     /**

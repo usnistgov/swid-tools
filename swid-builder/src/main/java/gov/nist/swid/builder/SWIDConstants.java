@@ -29,7 +29,7 @@ public class SWIDConstants {
 
     public static final Pattern PATTERN_LANGUAGE = Pattern.compile("[a-zA-Z]{1,8}(?:-[a-zA-Z0-9]{1,8})*");
 
-    public static final int TAG_VERSION_DEFAULT = 110;
+    public static final int TAG_VERSION_DEFAULT = 1;
     public static final String VERSION_DEFAULT = "0.0";
 
     /**

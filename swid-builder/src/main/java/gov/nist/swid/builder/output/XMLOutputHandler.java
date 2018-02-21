@@ -296,14 +296,19 @@ public class XMLOutputHandler implements OutputHandler {
             XMLOutputHandler.buildAttribute("size", builder.getSize(), element);
             XMLOutputHandler.buildAttribute("version", builder.getVersion(), element);
 
+            Element rootElement = parent;
+            while (rootElement.getParentElement() != null) {
+                rootElement = rootElement.getParentElement();
+            }
             for (Map.Entry<HashAlgorithm, String> entry : builder.getHashAlgorithmToValueMap().entrySet()) {
                 HashAlgorithm algorithm = entry.getKey();
                 String hashValue = entry.getValue();
+
                 Namespace ns = Namespace.getNamespace(algorithm.getName(), algorithm.getNamespace());
-                Namespace nsOld = parent.getNamespace(ns.getPrefix());
+                Namespace nsOld = rootElement.getNamespace(ns.getPrefix());
 
                 if (nsOld == null) {
-                    parent.addNamespaceDeclaration(ns);
+                    rootElement.addNamespaceDeclaration(ns);
                 } else if (!nsOld.getURI().equals(ns.getURI())) {
                     element.addNamespaceDeclaration(ns);
                 }

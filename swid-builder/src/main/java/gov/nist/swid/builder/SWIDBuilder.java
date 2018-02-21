@@ -107,6 +107,17 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
         return evidence;
     }
 
+    public PayloadBuilder getPayload() {
+        return payload;
+    }
+
+    public EvidenceBuilder newEvidence() {
+        if (evidence == null) {
+            evidence = EvidenceBuilder.create();
+        }
+        return evidence;
+    }
+
     public List<LinkBuilder> getLinks() {
         return links;
     }
@@ -115,7 +126,16 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
         return metas;
     }
 
-    public PayloadBuilder getPayload() {
+    /**
+     * Retrieves the existing PayloadBuilder or creates a new one if no PayloadBuilder has been
+     * created already.
+     * 
+     * @return the payload builder
+     */
+    public PayloadBuilder newPayload() {
+        if (payload == null) {
+            payload = PayloadBuilder.create();
+        }
         return payload;
     }
 

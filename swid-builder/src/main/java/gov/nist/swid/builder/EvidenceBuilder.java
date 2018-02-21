@@ -32,6 +32,10 @@ public class EvidenceBuilder extends AbstractResourceCollectionBuilder<EvidenceB
     private ZonedDateTime date;
     private String deviceId;
 
+    public static EvidenceBuilder create() {
+        return new EvidenceBuilder();
+    }
+
     protected EvidenceBuilder() {
         super();
     }

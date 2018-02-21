@@ -1,5 +1,6 @@
-/target/
-/.checkstyle
-/.classpath
-/.project
-/.settings/
+target/
+.checkstyle
+.classpath
+.project
+.settings/
+/swid-builder/swid.cbor

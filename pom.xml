@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -10,8 +11,9 @@
 
 	<groupId>gov.nist.secauto.swid</groupId>
 	<artifactId>parent</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>0.0.6-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
 
 	<name>SWID Java Support Parent</name>
 	<description>A parent project object model (POM) for a collection of Java utilities for creating SWID Tags.</description>
@@ -50,21 +52,23 @@
 		</developer>
 	</developers>
 
-    <properties>
-        <dependency.version.jackson>2.8.3</dependency.version.jackson>
-    </properties>
+	<properties>
+		<dependency.version.jackson>2.8.3</dependency.version.jackson>
+		<dependency.version.jdom2>2.0.6</dependency.version.jdom2>
+	</properties>
 
-    <modules>
-        <module>swid-builder</module>
-        <module>assembly-swid-generator</module>
-    </modules>
+	<modules>
+		<module>swid-builder</module>
+		<module>assembly-swid-generator</module>
+		<module>swid-maven-plugin</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.jdom</groupId>
 				<artifactId>jdom2</artifactId>
-				<version>2.0.6</version>
+				<version>${dependency.version.jdom2}</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.validation</groupId>
@@ -79,7 +83,9 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
+				<version>4.12</version>
 				<scope>test</scope>
 			</dependency>
+		</dependencies>
 	</dependencyManagement>
 </project>
