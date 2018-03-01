@@ -34,7 +34,8 @@ public class UnknownRole implements Role {
     public UnknownRole(Integer index, String name) {
         init(index, name);
         if (index != null && (index < 128 || index > 255)) {
-            throw new IllegalArgumentException("An unknown index value must be within the private use space (128 to 255)");
+            throw new IllegalArgumentException(
+                    "An unknown index value must be within the private use space (128 to 255)");
         }
         this.index = index;
         this.name = name;

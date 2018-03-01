@@ -46,6 +46,8 @@ public interface Role {
     }
 
     public static Role assignPrivateRole(int indexValue, String name) {
+        // force initialization of the known roles
+        KnownRole.values();
         Role retval = null;
         synchronized (byValueMap) {
             retval = byValueMap.get(indexValue);
@@ -61,6 +63,8 @@ public interface Role {
     }
 
     public static Role lookupByIndex(int value) {
+        // force initialization of the known roles
+        KnownRole.values();
         Role retval = null;
         synchronized (byIndexMap) {
             retval = byIndexMap.get(value);
@@ -69,6 +73,8 @@ public interface Role {
     }
 
     public static Role lookupByName(String name) {
+        // force initialization of the known roles
+        KnownRole.values();
         Role retval = null;
         synchronized (byValueMap) {
             retval = byValueMap.get(name);

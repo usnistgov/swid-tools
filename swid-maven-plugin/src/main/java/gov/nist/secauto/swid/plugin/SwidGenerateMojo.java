@@ -29,6 +29,8 @@ import gov.nist.secauto.swid.plugin.generate.MavenProjectSwidBuilderHelper;
 import gov.nist.secauto.swid.plugin.model.Entity;
 import gov.nist.swid.builder.SWIDBuilder;
 import gov.nist.swid.builder.ValidationException;
+import gov.nist.swid.builder.output.CBOROutputHandler;
+import gov.nist.swid.builder.output.OutputHandler;
 import gov.nist.swid.builder.output.XMLOutputHandler;
 
 /*
@@ -85,10 +87,13 @@ public class SwidGenerateMojo extends AbstractMojo {
             required = true)
     private String outputDirectory;
 
+    @Parameter(defaultValue = "XML", required = true)
+    private String tagFormat;
+
     @Parameter(defaultValue = "SWIDTAG", required = true)
     private String tagPath;
 
-    @Parameter(defaultValue = "swid-tag.xml", required = true)
+    @Parameter(defaultValue = "swid-tag", required = true)
     private String tagName;
 
     @Parameter
@@ -170,10 +175,51 @@ public class SwidGenerateMojo extends AbstractMojo {
 
         // now the tagFile
         String tagName = this.tagName;
+        if (tagName == null) {
+            tagName = "swid-tag";
+        }
+        
+        String tagFormat = getTagFormat();
+        switch (tagFormat) {
+        case "XML":
+            tagName = tagName + ".xml";
+            break;
+        case "CBOR":
+            tagName = tagName + ".cbor";
+            break;
+        default:
+            throw new UnsupportedOperationException("Invalid tag format '"+tagFormat+"'. Must be one of: XML or CBOR.");
+        }
+
         retval = new File(retval, tagName);
         return retval;
     }
 
+    public String getTagFormat() {
+        String retval = tagFormat;
+        if (retval == null) {
+            // the default
+            retval = "XML";
+        }
+        return retval;
+    }
+
+    public OutputHandler getOutputHander() {
+        String tagFormat =  getTagFormat();
+        
+        OutputHandler retval = null;
+        switch (tagFormat) {
+        case "XML":
+            retval = new XMLOutputHandler();
+            break;
+        case "CBOR":
+            retval = new CBOROutputHandler();
+            break;
+        default:
+            throw new UnsupportedOperationException("Invalid output handeler type '"+tagFormat+"'. Must be one of: XML or CBOR.");
+        }
+        return retval;
+    }
 //    private File getOutputDirectoryAsFile() {
 //
 //        File retval = new File(outputDirectory);
@@ -217,15 +263,16 @@ public class SwidGenerateMojo extends AbstractMojo {
             throw new MojoExecutionException("Unable to read file while building a SWID tag.", e);
         }
 
+        // Use the tag format to determine the output handler
         // Output the tag to a file
         File tagFile = getSwidTagFile();
-        XMLOutputHandler xmlHandler = new XMLOutputHandler();
+        OutputHandler outputHandler = getOutputHander();
         try {
-            xmlHandler.write(builder, new BufferedOutputStream(new FileOutputStream(tagFile)));
+            outputHandler.write(builder, new BufferedOutputStream(new FileOutputStream(tagFile)));
         } catch (IOException e) {
-            throw new MojoExecutionException("Unable to write SWID tag", e);
+            throw new MojoExecutionException("Unable to write tag", e);
         } catch (ValidationException e) {
-            throw new MojoExecutionException("The generated SWID tag was found to be invalid", e);
+            throw new MojoExecutionException("The generated tag was found to be invalid", e);
         }
     }
 

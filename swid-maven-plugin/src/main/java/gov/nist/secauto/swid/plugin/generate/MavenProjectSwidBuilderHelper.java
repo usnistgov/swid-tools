@@ -26,6 +26,8 @@ package gov.nist.secauto.swid.plugin.generate;
 import gov.nist.secauto.swid.plugin.entry.FileEntry;
 import gov.nist.secauto.swid.plugin.model.Entity;
 import gov.nist.swid.builder.EntityBuilder;
+import gov.nist.swid.builder.KnownVersionScheme;
+import gov.nist.swid.builder.Role;
 import gov.nist.swid.builder.SWIDBuilder;
 import gov.nist.swid.builder.SWIDConstants;
 import gov.nist.swid.builder.resource.AbstractResourceCollectionBuilder;
@@ -79,9 +81,9 @@ public class MavenProjectSwidBuilderHelper {
         builder.version(version);
 
         if (version.endsWith("SNAPSHOT")) {
-            builder.versionScheme(SWIDConstants.VERSION_SCHEME_MULTIPART_NUMERIC_WITH_SUFFIX);
+            builder.versionScheme(KnownVersionScheme.MULTIPART_NUMERIC_WITH_SUFFIX);
         } else {
-            builder.versionScheme(SWIDConstants.VERSION_SCHEME_MULTIPART_NUMERIC);
+            builder.versionScheme(KnownVersionScheme.MULTIPART_NUMERIC);
         }
         builder.tagId(generateTagId(project));
 
@@ -133,8 +135,8 @@ public class MavenProjectSwidBuilderHelper {
             }
 
             if (entity.getRoles() != null) {
-                for (String role : entity.getRoles()) {
-                    entityBuilder.addRole(role);
+                for (String roleValue : entity.getRoles()) {
+                    entityBuilder.addRole(Role.lookupByName(roleValue));
                 }
             }
             builder.addEntity(entityBuilder);

@@ -28,8 +28,9 @@ import java.util.Map;
 
 public interface VersionScheme {
     Integer getIndex();
+
     String getName();
-    
+
     static final Map<String, VersionScheme> byValueMap = new HashMap<>();
 
     static final Map<Integer, VersionScheme> byIndexMap = new HashMap<>();
@@ -46,6 +47,8 @@ public interface VersionScheme {
     }
 
     public static VersionScheme assignPrivateVersionScheme(int indexValue, String name) {
+        // force initialization of the known roles
+        KnownVersionScheme.values();
         VersionScheme retval = null;
         synchronized (byValueMap) {
             retval = byValueMap.get(indexValue);
@@ -55,12 +58,15 @@ public interface VersionScheme {
         } else if (retval.getName().equals(name)) {
             // return the current role
         } else {
-            throw new IllegalStateException("the version scheme with the name '"+retval.getName()+"' is already assigned to the index value '"+indexValue+"'");
+            throw new IllegalStateException("the version scheme with the name '" + retval.getName()
+                    + "' is already assigned to the index value '" + indexValue + "'");
         }
         return retval;
     }
 
     public static VersionScheme lookupByIndex(int value) {
+        // force initialization of the known roles
+        KnownVersionScheme.values();
         VersionScheme retval = null;
         synchronized (byIndexMap) {
             retval = byIndexMap.get(value);
@@ -69,6 +75,8 @@ public interface VersionScheme {
     }
 
     public static VersionScheme lookupByName(String name) {
+        // force initialization of the known roles
+        KnownVersionScheme.values();
         VersionScheme retval = null;
         synchronized (byValueMap) {
             retval = byValueMap.get(name);

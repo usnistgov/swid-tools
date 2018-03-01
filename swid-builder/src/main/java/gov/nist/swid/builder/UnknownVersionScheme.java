@@ -34,7 +34,8 @@ public class UnknownVersionScheme implements VersionScheme {
     public UnknownVersionScheme(Integer index, String name) {
         init(index, name);
         if (index != null && (index < 32768 || index > 65535)) {
-            throw new IllegalArgumentException("An unknown index value must be within the private use space (32768 to 65535)");
+            throw new IllegalArgumentException(
+                    "An unknown index value must be within the private use space (32768 to 65535)");
         }
         this.index = index;
         this.name = name;
