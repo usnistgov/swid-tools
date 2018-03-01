@@ -28,6 +28,7 @@ import gov.nist.secauto.swid.plugin.entry.resource.ResourceFileEntryProcessor;
 import gov.nist.secauto.swid.plugin.generate.MavenProjectSwidBuilderHelper;
 import gov.nist.secauto.swid.plugin.model.Entity;
 import gov.nist.swid.builder.SWIDBuilder;
+import gov.nist.swid.builder.ValidationException;
 import gov.nist.swid.builder.output.XMLOutputHandler;
 
 /*
@@ -173,14 +174,14 @@ public class SwidGenerateMojo extends AbstractMojo {
         return retval;
     }
 
-    private File getOutputDirectoryAsFile() {
-
-        File retval = new File(outputDirectory);
-        if (!retval.isAbsolute()) {
-            retval = new File(project.getBasedir(), outputDirectory);
-        }
-        return retval;
-    }
+//    private File getOutputDirectoryAsFile() {
+//
+//        File retval = new File(outputDirectory);
+//        if (!retval.isAbsolute()) {
+//            retval = new File(project.getBasedir(), outputDirectory);
+//        }
+//        return retval;
+//    }
 
     /**
      * Execute the mojo.
@@ -223,9 +224,9 @@ public class SwidGenerateMojo extends AbstractMojo {
             xmlHandler.write(builder, new BufferedOutputStream(new FileOutputStream(tagFile)));
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to write SWID tag", e);
+        } catch (ValidationException e) {
+            throw new MojoExecutionException("The generated SWID tag was found to be invalid", e);
         }
-
-        File resourceDir = getOutputDirectoryAsFile();
     }
 
 }

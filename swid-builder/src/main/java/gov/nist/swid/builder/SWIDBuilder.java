@@ -25,18 +25,22 @@ package gov.nist.swid.builder;
 
 import static gov.nist.swid.builder.util.Util.requireNonEmpty;
 
+import gov.nist.swid.builder.resource.EvidenceBuilder;
+import gov.nist.swid.builder.resource.PayloadBuilder;
+
+import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
+public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
     private TagType tagType = TagType.PRIMARY;
     private String name;
     private String tagId;
-    private int tagVersion = SWIDConstants.TAG_VERSION_DEFAULT;
+    private BigInteger tagVersion = SWIDConstants.TAG_VERSION_DEFAULT;
     private String version;
-    private String versionScheme;
+    private VersionScheme versionScheme;
     private List<EntityBuilder> entities = new LinkedList<>();
     private EvidenceBuilder evidence;
     private List<LinkBuilder> links = new LinkedList<>();
@@ -87,7 +91,7 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
         return name;
     }
 
-    public int getTagVersion() {
+    public BigInteger getTagVersion() {
         return tagVersion;
     }
 
@@ -95,7 +99,7 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
         return (version == null ? SWIDConstants.VERSION_DEFAULT : version);
     }
 
-    public String getVersionScheme() {
+    public VersionScheme getVersionScheme() {
         return (versionScheme == null ? SWIDConstants.VERSION_SCHEME_DEFAULT : versionScheme);
     }
 
@@ -182,7 +186,12 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
         return this;
     }
 
-    public SWIDBuilder tagVersion(int version) {
+    public SWIDBuilder tagVersion(long version) {
+        return tagVersion(BigInteger.valueOf(version));
+    }
+
+    public SWIDBuilder tagVersion(BigInteger version) {
+        Objects.requireNonNull(version, "tagVersion");
         this.tagVersion = version;
         return this;
     }
@@ -208,18 +217,17 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
      * Sets the to-be-built SWID tag's versionSchema to the provided value. The version scheme
      * identifies the structure of the provided version.
      * 
+     * @see VersionScheme#lookupByIndex(int)
+     * @see VersionScheme#lookupByName(String)
+     * @see VersionScheme#assignPrivateVersionScheme(int, String)
      * @param scheme
      *            the version scheme for the tag
      * @return the same builder instance
      * @see #version(String)
      */
-    public SWIDBuilder versionScheme(String scheme) {
-        requireNonEmpty(scheme, "versionScheme");
-        if (SWIDConstants.VERSION_DEFAULT.equals(scheme)) {
-            this.versionScheme = null;
-        } else {
-            this.versionScheme = scheme;
-        }
+    public SWIDBuilder versionScheme(VersionScheme scheme) {
+        Objects.requireNonNull(scheme, "versionScheme");
+        this.versionScheme = scheme;
         return this;
     }
 
@@ -302,41 +310,17 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
     }
 
     @Override
-    public boolean isValid() {
-        boolean retval = (name != null && tagId != null);
-        if (retval) {
-            retval = !entities.isEmpty() && entities.stream().allMatch(e -> e.isValid());
+    public void validate() throws ValidationException {
+        super.validate();
+        validateNonEmpty("name", name);
+        validateNonEmpty("tagId", tagId);
+        validateNonEmpty("entity", entities);
+        for (EntityBuilder entity : entities) {
+            entity.validate();
         }
-
-        if (retval) {
-            retval = evidence == null || evidence.isValid();
-        }
-
-        if (retval) {
-            retval = links.isEmpty() || links.stream().allMatch(e -> e.isValid());
-        }
-
-        if (retval) {
-            retval = metas.isEmpty() || metas.stream().allMatch(e -> e.isValid());
-        }
-
-        if (retval) {
-            retval = payload == null || payload.isValid();
-        }
-        return retval;
-    }
-
-    @Override
-    public void validate() {
-        requireNonEmpty(name, "name");
-        requireNonEmpty(tagId, "tagId");
-        if (entities.isEmpty()) {
-            throw new IllegalStateException("at least a single entity must be provided");
-        }
-        entities.stream().forEach(e -> e.validate());
 
         if (payload != null && evidence != null) {
-            throw new IllegalStateException("evidence and payload cannot be both provided");
+            throw new ValidationException("Only one of evidence or payload must be provided");
         }
 
         if (payload != null) {
@@ -348,11 +332,15 @@ public class SWIDBuilder extends AbstractBuilder<SWIDBuilder> {
         }
 
         if (!links.isEmpty()) {
-            links.stream().forEach(e -> e.validate());
+            for (LinkBuilder link : links) {
+                link.validate();
+            }
         }
 
         if (!metas.isEmpty()) {
-            metas.stream().forEach(e -> e.validate());
+            for (MetaBuilder meta : metas) {
+                meta.validate();
+            }
         }
     }
 

@@ -25,12 +25,12 @@ package gov.nist.secauto.swid.plugin.generate;
 
 import gov.nist.secauto.swid.plugin.entry.FileEntry;
 import gov.nist.secauto.swid.plugin.model.Entity;
-import gov.nist.swid.builder.AbstractResourceCollectionBuilder;
 import gov.nist.swid.builder.EntityBuilder;
-import gov.nist.swid.builder.FileBuilder;
 import gov.nist.swid.builder.SWIDBuilder;
 import gov.nist.swid.builder.SWIDConstants;
+import gov.nist.swid.builder.resource.AbstractResourceCollectionBuilder;
 import gov.nist.swid.builder.resource.HashAlgorithm;
+import gov.nist.swid.builder.resource.file.FileBuilder;
 
 import org.apache.maven.project.MavenProject;
 

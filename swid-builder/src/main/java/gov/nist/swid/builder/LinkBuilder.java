@@ -23,12 +23,12 @@
 
 package gov.nist.swid.builder;
 
-import static gov.nist.swid.builder.util.Util.requireNonEmpty;
+import gov.nist.swid.builder.util.Util;
 
 import java.net.URI;
 import java.util.Objects;
 
-public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
+public class LinkBuilder extends AbstractLanguageSpecificBuilder<LinkBuilder> {
     private String artifact;
     private URI href;
     private String media;
@@ -43,7 +43,6 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
 
     @Override
     public void reset() {
-        super.reset();
         this.artifact = null;
         this.href = null;
         this.media = null;
@@ -90,7 +89,7 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
      * @return the same builder instance
      */
     public LinkBuilder artifact(String artifact) {
-        requireNonEmpty(artifact, "artifact");
+        Util.requireNonEmpty(artifact, "artifact");
         this.artifact = artifact;
         return this;
     }
@@ -116,7 +115,7 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
      * @return the same builder instance
      */
     public LinkBuilder media(String query) {
-        requireNonEmpty(query, "query");
+        Util.requireNonEmpty(query, "query");
         this.media = query;
         return this;
     }
@@ -142,7 +141,7 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
      * @return the same builder instance
      */
     public LinkBuilder rel(String rel) {
-        requireNonEmpty(rel, "rel");
+        Util.requireNonEmpty(rel, "rel");
         this.rel = rel;
         return this;
     }
@@ -159,7 +158,7 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
      * @return the same builder instance
      */
     public LinkBuilder mediaType(String mediaType) {
-        requireNonEmpty(mediaType, "mediaType");
+        Util.requireNonEmpty(mediaType, "mediaType");
         this.mediaType = mediaType;
         return this;
     }
@@ -178,14 +177,10 @@ public class LinkBuilder extends AbstractBuilder<LinkBuilder> {
     }
 
     @Override
-    public boolean isValid() {
-        boolean retval = href != null && rel != null && !rel.isEmpty();
-        return retval;
-    }
-
-    @Override
-    public void validate() {
-        Objects.requireNonNull(href, "href");
-        requireNonEmpty(rel, "rel");
+    public void validate() throws ValidationException {
+        super.validate();
+        validateNonNull("href", href);
+        validateNonEmpty("href", href.toString());
+        validateNonEmpty("href", rel);
     }
 }

@@ -25,6 +25,7 @@ package gov.nist.swid.builder;
 
 import gov.nist.swid.builder.output.CBOROutputHandler;
 import gov.nist.swid.builder.output.XMLOutputHandler;
+import gov.nist.swid.builder.resource.HashAlgorithm;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 public class SWIDBuilderTest {
@@ -43,12 +45,12 @@ public class SWIDBuilderTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void testCBOR() throws IOException {
+    public void testCBOR() throws IOException, NoSuchAlgorithmException, ValidationException {
         SWIDBuilder builder = SWIDBuilder.create();
         builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
                 .addEntity(EntityBuilder.create().regid("gov.nist")
                         .name("National Institute of Standards and Technology, United States Department of Commerce")
-                        .addRole(SWIDConstants.ROLE_TAG_CREATOR).addRole(SWIDConstants.ROLE_SOFTWARE_CREATOR));
+                        .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
 
         File file = folder.newFile();
         OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
@@ -57,12 +59,29 @@ public class SWIDBuilderTest {
     }
 
     @Test
-    public void testXML() throws IOException {
+    public void testCBORFirmware() throws IOException, NoSuchAlgorithmException, ValidationException {
+        SWIDBuilder builder = SWIDBuilder.create();
+        builder.name("Bootloader").version("1.0.0").tagId(UUID.randomUUID().toString())
+                .addEntity(EntityBuilder.create().regid("org.ietf").name("Internet Engineering Task Force SUIT WG")
+                        .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR))
+                .newPayload().newFirmwareResource().hash(HashAlgorithm.SHA_256, new File("swid.cbor"))
+                .name("firmware.bin");
+
+        // File file = folder.newFile();
+        File file = new File("test.cbor");
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+        new CBOROutputHandler().write(builder, os);
+        os.close();
+        System.out.println(file.getAbsolutePath());
+    }
+
+    @Test
+    public void testXML() throws IOException, ValidationException {
         SWIDBuilder builder = SWIDBuilder.create();
         builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
                 .addEntity(EntityBuilder.create().regid("gov.nist")
                         .name("National Institute of Standards and Technology, United States Department of Commerce")
-                        .addRole(SWIDConstants.ROLE_TAG_CREATOR).addRole(SWIDConstants.ROLE_SOFTWARE_CREATOR));
+                        .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
 
         File file = folder.newFile();
 

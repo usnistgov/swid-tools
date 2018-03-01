@@ -21,64 +21,14 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource;
 
-import static gov.nist.swid.builder.util.Util.requireNonEmpty;
+import gov.nist.swid.builder.AbstractLanguageSpecificBuilder;
 
-import java.time.ZonedDateTime;
-import java.util.Objects;
+public abstract class AbstractResourceBuilder<E extends AbstractResourceBuilder<E>> extends AbstractLanguageSpecificBuilder<E>
+        implements ResourceBuilder {
 
-public class EvidenceBuilder extends AbstractResourceCollectionBuilder<EvidenceBuilder> {
-    private ZonedDateTime date;
-    private String deviceId;
-
-    public static EvidenceBuilder create() {
-        return new EvidenceBuilder();
-    }
-
-    protected EvidenceBuilder() {
+    protected AbstractResourceBuilder() {
         super();
     }
-
-    @Override
-    public void reset() {
-        super.reset();
-        this.date = null;
-        this.deviceId = null;
-    }
-
-    public ZonedDateTime getDate() {
-        return date;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    /**
-     * Sets the date/time for when the evidence was collected.
-     * 
-     * @param date
-     *            a non-null date
-     * @return the current instance
-     */
-    public EvidenceBuilder date(ZonedDateTime date) {
-        Objects.requireNonNull(date);
-        this.date = date;
-        return this;
-    }
-
-    /**
-     * Identifies the device on which the evidence was collected.
-     * 
-     * @param deviceId
-     *            the identifier for the device
-     * @return the current instance
-     */
-    public EvidenceBuilder deviceId(String deviceId) {
-        requireNonEmpty(deviceId, "deviceId");
-        this.deviceId = deviceId;
-        return this;
-    }
-
 }

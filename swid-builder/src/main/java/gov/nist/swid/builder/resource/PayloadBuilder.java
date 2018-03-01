@@ -21,49 +21,15 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource;
 
-import static gov.nist.swid.builder.util.Util.requireNonEmpty;
-import static gov.nist.swid.builder.util.Util.requirePatternMatch;
+public class PayloadBuilder extends AbstractResourceCollectionBuilder<PayloadBuilder> {
 
-public abstract class AbstractBuilder<E extends AbstractBuilder<E>> {
-
-    private String language;
-
-    public AbstractBuilder() {
+    protected PayloadBuilder() {
         super();
-        reset();
     }
 
-    public void reset() {
-        this.language = null;
+    public static PayloadBuilder create() {
+        return new PayloadBuilder();
     }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    /**
-     * Sets the to-be-built tag data element's language to the provided language value. It is
-     * expected that the language code conforms with ISO 639 language codes and ISO 3166‑1 country
-     * codes.
-     * 
-     * @see <a href="https://tools.ietf.org/html/rfc5646">RFC5646</a>
-     * 
-     * @param lang
-     *            the language value
-     * @return the same builder instance
-     */
-    @SuppressWarnings("unchecked")
-    public E language(String lang) {
-        requireNonEmpty(lang, "language");
-        requirePatternMatch(SWIDConstants.PATTERN_LANGUAGE, lang);
-        this.language = lang;
-        return (E) this;
-    }
-
-    // TODO: remove this method and use validate instead.
-    public abstract boolean isValid();
-
-    public abstract void validate();
 }

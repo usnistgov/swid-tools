@@ -23,22 +23,26 @@
 
 package gov.nist.swid.builder.output;
 
-import gov.nist.swid.builder.AbstractBuilder;
-import gov.nist.swid.builder.AbstractFileSystemItemBuilder;
-import gov.nist.swid.builder.AbstractResourceBuilder;
-import gov.nist.swid.builder.AbstractResourceCollectionBuilder;
-import gov.nist.swid.builder.DirectoryBuilder;
+import gov.nist.swid.builder.AbstractLanguageSpecificBuilder;
 import gov.nist.swid.builder.EntityBuilder;
-import gov.nist.swid.builder.EvidenceBuilder;
-import gov.nist.swid.builder.FileBuilder;
 import gov.nist.swid.builder.LinkBuilder;
 import gov.nist.swid.builder.MetaBuilder;
-import gov.nist.swid.builder.PayloadBuilder;
-import gov.nist.swid.builder.ResourceBuilder;
-import gov.nist.swid.builder.ResourceCollectionEntryGenerator;
+import gov.nist.swid.builder.Role;
 import gov.nist.swid.builder.SWIDBuilder;
+import gov.nist.swid.builder.ValidationException;
+import gov.nist.swid.builder.resource.AbstractResourceBuilder;
+import gov.nist.swid.builder.resource.AbstractResourceCollectionBuilder;
+import gov.nist.swid.builder.resource.EvidenceBuilder;
 import gov.nist.swid.builder.resource.HashAlgorithm;
+import gov.nist.swid.builder.resource.HashUtils;
 import gov.nist.swid.builder.resource.PathRelativizer;
+import gov.nist.swid.builder.resource.PayloadBuilder;
+import gov.nist.swid.builder.resource.ResourceBuilder;
+import gov.nist.swid.builder.resource.ResourceCollectionEntryGenerator;
+import gov.nist.swid.builder.resource.file.AbstractFileSystemItemBuilder;
+import gov.nist.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.swid.builder.resource.file.FileBuilder;
+import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -68,7 +72,7 @@ public class XMLOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void write(SWIDBuilder builder, OutputStream os) throws IOException {
+    public void write(SWIDBuilder builder, OutputStream os) throws IOException, ValidationException {
         XMLOutputter out = new XMLOutputter(format);
         out.output(generateXML(builder), os);
     }
@@ -79,8 +83,9 @@ public class XMLOutputHandler implements OutputHandler {
      * @param builder
      *            the {@link SWIDBuilder} to use the information from to build the XML model
      * @return a JDOM2 {@link Document} based on the SWID information
+     * @throws ValidationException if the SWID to be built is invalid
      */
-    public Document generateXML(SWIDBuilder builder) {
+    public Document generateXML(SWIDBuilder builder) throws ValidationException {
         builder.validate();
 
         Document retval = buildDocument(builder);
@@ -94,7 +99,7 @@ public class XMLOutputHandler implements OutputHandler {
     protected Element build(SWIDBuilder builder) {
         Element element = new Element("SoftwareIdentity", SWID_NAMESPACE);
 
-        buildAbstractBuilder(builder, element);
+        buildAbstractLanguageSpecificBuilder(builder, element);
 
         // required attributes
         element.setAttribute("name", builder.getName());
@@ -117,10 +122,10 @@ public class XMLOutputHandler implements OutputHandler {
             throw new IllegalStateException("tagType: " + builder.getTagType().toString());
         }
 
-        element.setAttribute("tagVersion", Integer.toString(builder.getTagVersion()));
+        element.setAttribute("tagVersion", builder.getTagVersion().toString());
 
         buildAttribute("version", builder.getVersion(), element);
-        buildAttribute("versionScheme", builder.getVersionScheme(), element);
+        buildAttribute("versionScheme", builder.getVersionScheme().getName(), element);
 
         // child elements
         // Required
@@ -153,19 +158,19 @@ public class XMLOutputHandler implements OutputHandler {
     protected Element build(EntityBuilder builder) {
         Element element = new Element("Entity", SWID_NAMESPACE);
 
-        buildAbstractBuilder(builder, element);
+        buildAbstractLanguageSpecificBuilder(builder, element);
 
         // required attributes
         element.setAttribute("name", builder.getName());
 
         StringBuilder sb = null;
-        for (String role : builder.getRoles()) {
+        for (Role role : builder.getRoles()) {
             if (sb == null) {
                 sb = new StringBuilder();
             } else {
                 sb.append(' ');
             }
-            sb.append(role);
+            sb.append(role.getName());
         }
         element.setAttribute("role", sb.toString());
 
@@ -193,7 +198,7 @@ public class XMLOutputHandler implements OutputHandler {
     protected Element build(LinkBuilder builder) {
         Element element = new Element("Link", SWID_NAMESPACE);
 
-        buildAbstractBuilder(builder, element);
+        buildAbstractLanguageSpecificBuilder(builder, element);
 
         // required attributes
         element.setAttribute("href", builder.getHref().toString());
@@ -241,7 +246,7 @@ public class XMLOutputHandler implements OutputHandler {
 
     private static <E extends AbstractResourceCollectionBuilder<E>> void
             buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
-        buildAbstractBuilder(builder, element);
+        buildAbstractLanguageSpecificBuilder(builder, element);
 
         XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator();
         for (ResourceBuilder resourceBuilder : builder.getResources()) {
@@ -249,7 +254,7 @@ public class XMLOutputHandler implements OutputHandler {
         }
     }
 
-    private static <E extends AbstractBuilder<E>> void buildAbstractBuilder(AbstractBuilder<E> builder,
+    private static <E extends AbstractLanguageSpecificBuilder<E>> void buildAbstractLanguageSpecificBuilder(AbstractLanguageSpecificBuilder<E> builder,
             Element element) {
         String language = builder.getLanguage();
         if (language != null) {
@@ -300,9 +305,9 @@ public class XMLOutputHandler implements OutputHandler {
             while (rootElement.getParentElement() != null) {
                 rootElement = rootElement.getParentElement();
             }
-            for (Map.Entry<HashAlgorithm, String> entry : builder.getHashAlgorithmToValueMap().entrySet()) {
+            for (Map.Entry<HashAlgorithm, byte[]> entry : builder.getHashAlgorithmToValueMap().entrySet()) {
                 HashAlgorithm algorithm = entry.getKey();
-                String hashValue = entry.getValue();
+                byte[] hashValue = entry.getValue();
 
                 Namespace ns = Namespace.getNamespace(algorithm.getName(), algorithm.getNamespace());
                 Namespace nsOld = rootElement.getNamespace(ns.getPrefix());
@@ -312,8 +317,13 @@ public class XMLOutputHandler implements OutputHandler {
                 } else if (!nsOld.getURI().equals(ns.getURI())) {
                     element.addNamespaceDeclaration(ns);
                 }
-                element.setAttribute("hash", hashValue, ns);
+                element.setAttribute("hash", HashUtils.toHexString(hashValue), ns);
             }
+        }
+
+        @Override
+        public void generate(FirmwareBuilder firmwareBuilder, Element parent) {
+            throw new UnsupportedOperationException("firmware is not supported by the XML SWID format");
         }
 
         private static <E extends AbstractFileSystemItemBuilder<E>> void
@@ -331,7 +341,7 @@ public class XMLOutputHandler implements OutputHandler {
 
         private static <E extends AbstractResourceBuilder<E>> void
                 buildAbstractResourceBuilder(AbstractResourceBuilder<E> builder, Element element) {
-            XMLOutputHandler.buildAbstractBuilder(builder, element);
+            XMLOutputHandler.buildAbstractLanguageSpecificBuilder(builder, element);
         }
     }
 }

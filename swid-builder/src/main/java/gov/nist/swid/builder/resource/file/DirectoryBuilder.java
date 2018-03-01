@@ -21,13 +21,17 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource.file;
+
+import gov.nist.swid.builder.resource.ResourceBuilder;
+import gov.nist.swid.builder.resource.ResourceCollectionEntryGenerator;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DirectoryBuilder extends AbstractFileSystemItemBuilder<DirectoryBuilder> {
     private Map<String, DirectoryBuilder> directoryMap = new LinkedHashMap<>();
@@ -54,6 +58,22 @@ public class DirectoryBuilder extends AbstractFileSystemItemBuilder<DirectoryBui
      */
     public List<ResourceBuilder> getResources() {
         return Collections.unmodifiableList(resources);
+    }
+
+    /**
+     * Retrieves the child resources that match the specified builder.
+     * 
+     * @param <T>
+     *            the type of builder to filter on
+     * @param clazz
+     *            the builder to filter on
+     * @return the matching resources
+     */
+    public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
+        @SuppressWarnings("unchecked")
+        List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e.getClass())).map(e -> (T) e)
+                .collect(Collectors.toList());
+        return Collections.unmodifiableList(retval);
     }
 
     /**

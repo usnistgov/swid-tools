@@ -24,8 +24,11 @@
 package gov.nist.swid.builder.output;
 
 import gov.nist.swid.builder.EntityBuilder;
+import gov.nist.swid.builder.KnownRole;
+import gov.nist.swid.builder.KnownVersionScheme;
 import gov.nist.swid.builder.SWIDBuilder;
 import gov.nist.swid.builder.TagType;
+import gov.nist.swid.builder.ValidationException;
 
 import org.junit.Test;
 
@@ -37,16 +40,22 @@ import java.io.IOException;
 public class CBOROutputHandlerTest {
 
     @Test
-    public void testCBOR() throws IOException {
+    public void testCBOR() throws IOException, ValidationException {
         SWIDBuilder builder = SWIDBuilder.create();
         builder.addEntity(
-                EntityBuilder.create().name("NIST").regid("nist.gov").addRole("tagCreator").addRole("softwareCreator"));
+                EntityBuilder.create().name("NIST").regid("nist.gov").addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
         builder.language("en-US").name("coswid app").tagId("tagId").tagType(TagType.PRIMARY).version("1.0.0")
-                .versionScheme("multipart-numeric");
+                .versionScheme(KnownVersionScheme.MULTIPART_NUMERIC);
 
-        CBOROutputHandler handler = new CBOROutputHandler();
-        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid.cbor")));
-        handler.write(builder, os);
+        CBOROutputHandler cborHandler = new CBOROutputHandler();
+        try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid-cbor.cbor")))) {
+            cborHandler.write(builder, os);
+        }
+
+        XMLOutputHandler xmlHandler = new XMLOutputHandler();
+        try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid-cbor.xml")))) {
+            xmlHandler.write(builder, os);
+        }
     }
 
 }

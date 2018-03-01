@@ -28,6 +28,7 @@ import gov.nist.secauto.swid.plugin.entry.archive.ArchiveEntryFileEntryProcessor
 import gov.nist.secauto.swid.plugin.generate.MavenProjectSwidBuilderHelper;
 import gov.nist.secauto.swid.plugin.model.Entity;
 import gov.nist.swid.builder.SWIDBuilder;
+import gov.nist.swid.builder.ValidationException;
 import gov.nist.swid.builder.output.XMLOutputHandler;
 
 import org.apache.maven.monitor.logging.DefaultLog;
@@ -223,6 +224,8 @@ public class SwidContainerDescriptorHandler implements ContainerDescriptorHandle
         } catch (FileNotFoundException e) {
             throw new ArchiverException(e.getMessage());
         } catch (IOException e) {
+            throw new ArchiverException(e.getMessage());
+        } catch (ValidationException e) {
             throw new ArchiverException(e.getMessage());
         }
 

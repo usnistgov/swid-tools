@@ -25,7 +25,7 @@ package gov.nist.swid.builder;
 
 import static gov.nist.swid.builder.util.Util.requireNonEmpty;
 
-public class MetaBuilder extends AbstractBuilder<MetaBuilder> {
+public class MetaBuilder extends AbstractLanguageSpecificBuilder<MetaBuilder> {
     private String activationStatus;
     private String channelType;
     private String colloquialVersion;
@@ -48,7 +48,6 @@ public class MetaBuilder extends AbstractBuilder<MetaBuilder> {
 
     @Override
     public void reset() {
-        super.reset();
         this.activationStatus = null;
         this.channelType = null;
         this.colloquialVersion = null;
@@ -397,11 +396,7 @@ public class MetaBuilder extends AbstractBuilder<MetaBuilder> {
     }
 
     @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
-    public void validate() {
+    public void validate() throws ValidationException {
+        super.validate();
     }
 }

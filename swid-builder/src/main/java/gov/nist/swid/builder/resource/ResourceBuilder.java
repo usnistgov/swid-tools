@@ -21,12 +21,10 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource;
 
-public abstract class AbstractResourceBuilder<E extends AbstractResourceBuilder<E>> extends AbstractBuilder<E>
-        implements ResourceBuilder {
+import gov.nist.swid.builder.Builder;
 
-    protected AbstractResourceBuilder() {
-        super();
-    }
+public interface ResourceBuilder extends Builder {
+    <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext);
 }

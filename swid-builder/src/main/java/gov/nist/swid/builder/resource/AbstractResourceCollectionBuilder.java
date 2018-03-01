@@ -21,16 +21,23 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource;
+
+import gov.nist.swid.builder.AbstractLanguageSpecificBuilder;
+import gov.nist.swid.builder.ValidationException;
+import gov.nist.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.swid.builder.resource.file.FileBuilder;
+import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public abstract class AbstractResourceCollectionBuilder<T extends AbstractResourceCollectionBuilder<T>>
-        extends AbstractBuilder<T> {
+public abstract class AbstractResourceCollectionBuilder<E extends AbstractResourceCollectionBuilder<E>>
+        extends AbstractLanguageSpecificBuilder<E> {
     private Map<String, DirectoryBuilder> directoryMap;
     private List<ResourceBuilder> resources;
 
@@ -69,6 +76,12 @@ public abstract class AbstractResourceCollectionBuilder<T extends AbstractResour
         return retval;
     }
 
+    public FirmwareBuilder newFirmwareResource() {
+        FirmwareBuilder retval = FirmwareBuilder.create();
+        resources.add(retval);
+        return retval;
+    }
+
     private DirectoryBuilder getDirectoryBuilder(List<String> directoryPath) {
         DirectoryBuilder retval = null;
         for (String name : directoryPath) {
@@ -88,17 +101,35 @@ public abstract class AbstractResourceCollectionBuilder<T extends AbstractResour
         return retval;
     }
 
+    /**
+     * Retrieves the child resources that match the specified builder..
+     * 
+     * @param <T>
+     *            the type of builder to filter on
+     * @param clazz
+     *            the builder to filter on
+     * @return the matching resources
+     */
+    public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
+//        List<T> retval = new LinkedList<>();
+//        for (ResourceBuilder builder : resources) {
+//            if (clazz.isInstance(builder)) {
+//                retval.add((T)builder);
+//            }
+//        }
+        @SuppressWarnings("unchecked")
+        List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e)).map(e -> (T) e)
+                .collect(Collectors.toList());
+        return Collections.unmodifiableList(retval);
+    }
+
     public List<ResourceBuilder> getResources() {
         return Collections.unmodifiableList(resources);
     }
 
     @Override
-    public boolean isValid() {
-        return false;
-    }
-
-    @Override
-    public void validate() {
+    public void validate() throws ValidationException {
+        super.validate();
     }
 
 }

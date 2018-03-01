@@ -53,13 +53,12 @@
 	</developers>
 
 	<properties>
-		<dependency.version.jackson>2.8.3</dependency.version.jackson>
+		<dependency.version.jackson>2.9.3</dependency.version.jackson>
 		<dependency.version.jdom2>2.0.6</dependency.version.jdom2>
 	</properties>
 
 	<modules>
 		<module>swid-builder</module>
-		<module>assembly-swid-generator</module>
 		<module>swid-maven-plugin</module>
 	</modules>
 
@@ -79,6 +78,11 @@
 				<groupId>com.fasterxml.jackson.dataformat</groupId>
 				<artifactId>jackson-dataformat-cbor</artifactId>
 				<version>${dependency.version.jackson}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>4.1</version>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>

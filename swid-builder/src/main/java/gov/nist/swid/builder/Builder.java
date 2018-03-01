@@ -23,6 +23,11 @@
 
 package gov.nist.swid.builder;
 
-public interface ResourceBuilder {
-    <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext);
+public interface Builder {
+    public void reset();
+
+    // TODO: remove this method and use validate instead.
+    public boolean isValid();
+
+    public void validate() throws ValidationException;
 }

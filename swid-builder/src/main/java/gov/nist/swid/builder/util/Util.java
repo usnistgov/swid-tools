@@ -91,6 +91,44 @@ public class Util {
     }
 
     /**
+     * Checks that the provided string is not empty.
+     * 
+     * @param array
+     *            the array to check
+     * @return the same array
+     * @throws NullPointerException
+     *             if the provided array is <code>null</code>
+     * @throws IllegalArgumentException
+     *             if the provided array is zero length
+     */
+    public static Object[] requireNonEmpty(Object[] array) {
+        if (array.length == 0) {
+            throw new IllegalArgumentException();
+        }
+        return array;
+    }
+
+    /**
+     * Checks that the provided string is not empty.
+     * 
+     * @param array
+     *            the array to check
+     * @param message
+     *            the exception message to use
+     * @return the same array
+     * @throws NullPointerException
+     *             if the provided array is <code>null</code>
+     * @throws IllegalArgumentException
+     *             if the provided string is zero length
+     */
+    public static Object[] requireNonEmpty(Object[] array, String message) {
+        if (array.length == 0) {
+            throw new IllegalArgumentException(message);
+        }
+        return array;
+    }
+
+    /**
      * Checks that the provided string matches the provided pattern.
      * 
      * @param pattern
@@ -102,10 +140,10 @@ public class Util {
      * @throws IllegalArgumentException
      *             if the provided string is empty or if the string doesn't match the pattern
      */
-    public static void requirePatternMatch(Pattern pattern, String str) {
+    public static void requirePatternMatch(Pattern pattern, String str, String message) {
         requireNonEmpty(str);
         if (!pattern.matcher(str).matches()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(message);
         }
     }
 }

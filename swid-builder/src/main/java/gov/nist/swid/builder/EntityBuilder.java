@@ -23,15 +23,16 @@
 
 package gov.nist.swid.builder;
 
-import static gov.nist.swid.builder.util.Util.requireNonEmpty;
+import gov.nist.swid.builder.util.Util;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-public class EntityBuilder extends AbstractBuilder<EntityBuilder> {
+public class EntityBuilder extends AbstractLanguageSpecificBuilder<EntityBuilder> {
     private String name;
     private String regid;
-    private List<String> roles;
+    private List<Role> roles;
     private String thumbprint;
 
     protected EntityBuilder() {
@@ -59,7 +60,7 @@ public class EntityBuilder extends AbstractBuilder<EntityBuilder> {
         return (regid == null ? SWIDConstants.ENTITY_REGID_DEFAULT : regid);
     }
 
-    public List<String> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
@@ -68,6 +69,7 @@ public class EntityBuilder extends AbstractBuilder<EntityBuilder> {
     }
 
     public EntityBuilder name(String name) {
+        Util.requireNonEmpty(name);
         this.name = name;
         return this;
     }
@@ -93,23 +95,29 @@ public class EntityBuilder extends AbstractBuilder<EntityBuilder> {
         return this;
     }
 
-    public EntityBuilder addRole(String role) {
+    /**
+     * Assigns the identified role to the entity.
+     * 
+     * @see Role#assignPrivateRole(int, String)
+     * @see Role#lookupByIndex(int)
+     * @see Role#lookupByName(String)
+     * @param role the role to assign
+     * @return the same builder instance
+     */
+    public EntityBuilder addRole(Role role) {
+        Objects.requireNonNull(role, "role");
         this.roles.add(role);
         return this;
     }
 
     @Override
-    public boolean isValid() {
-        boolean retval = (name != null && !roles.isEmpty() && roles.contains(SWIDConstants.ROLE_TAG_CREATOR));
-        return retval;
-    }
-
-    @Override
-    public void validate() {
-        requireNonEmpty(name, "name");
-        if (roles.isEmpty() || !roles.contains(SWIDConstants.ROLE_TAG_CREATOR)) {
-            throw new IllegalStateException(
-                    "at least the role '" + SWIDConstants.ROLE_TAG_CREATOR + "' must be provided");
+    public void validate() throws ValidationException {
+        super.validate();
+        validateNonEmpty("name", name);
+        validateNonEmpty("role", roles);
+        if (!roles.contains(KnownRole.TAG_CREATOR)) {
+            throw new ValidationException(
+                    "at least the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
         }
     }
 }

@@ -24,11 +24,12 @@
 package gov.nist.swid.builder.output;
 
 import gov.nist.swid.builder.SWIDBuilder;
+import gov.nist.swid.builder.ValidationException;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 public interface OutputHandler {
 
-    void write(SWIDBuilder builder, OutputStream os) throws IOException;
+    void write(SWIDBuilder builder, OutputStream os) throws IOException, ValidationException;
 }

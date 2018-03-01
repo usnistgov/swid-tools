@@ -23,41 +23,49 @@
 
 package gov.nist.swid.builder.output;
 
-import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
 
-import gov.nist.swid.builder.AbstractBuilder;
-import gov.nist.swid.builder.AbstractFileSystemItemBuilder;
-import gov.nist.swid.builder.AbstractResourceCollectionBuilder;
-import gov.nist.swid.builder.DirectoryBuilder;
+import gov.nist.swid.builder.AbstractLanguageSpecificBuilder;
 import gov.nist.swid.builder.EntityBuilder;
-import gov.nist.swid.builder.EvidenceBuilder;
-import gov.nist.swid.builder.FileBuilder;
 import gov.nist.swid.builder.LinkBuilder;
 import gov.nist.swid.builder.MetaBuilder;
-import gov.nist.swid.builder.PayloadBuilder;
-import gov.nist.swid.builder.ResourceBuilder;
-import gov.nist.swid.builder.ResourceCollectionEntryGenerator;
+import gov.nist.swid.builder.Role;
 import gov.nist.swid.builder.SWIDBuilder;
+import gov.nist.swid.builder.ValidationException;
+import gov.nist.swid.builder.VersionScheme;
+import gov.nist.swid.builder.resource.AbstractResourceCollectionBuilder;
+import gov.nist.swid.builder.resource.EvidenceBuilder;
+import gov.nist.swid.builder.resource.HashAlgorithm;
 import gov.nist.swid.builder.resource.PathRelativizer;
+import gov.nist.swid.builder.resource.PayloadBuilder;
+import gov.nist.swid.builder.resource.ResourceBuilder;
+import gov.nist.swid.builder.resource.ResourceCollectionEntryGenerator;
+import gov.nist.swid.builder.resource.file.AbstractFileSystemItemBuilder;
+import gov.nist.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.swid.builder.resource.file.FileBuilder;
+import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CBOROutputHandler implements OutputHandler {
     /**
      * The tag identifier (text).
      */
     private static final long TAG_ID_FIELD = 0L;
+
     /**
      * A name (text).
      */
     private static final long SWID_NAME_FIELD = 1L;
-    private static final long ENTITY_FIELD = 2L;
+    private static final long ENTITY_ENTRY_FIELD = 2L;
     private static final long EVIDENCE_ENTRY_FIELD = 3L;
     private static final long LINK_ENTRY_FIELD = 4L;
     private static final long SOFTWARE_META_ENTRY_FIELD = 5L;
@@ -67,7 +75,7 @@ public class CBOROutputHandler implements OutputHandler {
     private static final long MEDIA_FIELD = 10L;
     private static final long SUPPLEMENTAL_FIELD = 11L;
     private static final long TAG_VERSION_FIELD = 12L;
-    private static final long VERSION_FIELD = 13L;
+    private static final long SOFTWARE_VERSION_FIELD = 13L;
     private static final long VERSION_SCHEME_FIELD = 14L;
     private static final long LANG_FIELD = 15L;
     private static final long DIRECTORY_ENTRY_FIELD = 16L;
@@ -76,103 +84,111 @@ public class CBOROutputHandler implements OutputHandler {
      * The size of a file (number: long).
      */
     private static final long SIZE_FIELD = 20L;
+    private static final long FILE_VERSION_FIELD = 21L;
     /**
      * (bool).
      */
-    private static final long KEY_FIELD = 21L;
-    private static final long LOCATION_FIELD = 22L;
-    private static final long FS_NAME_FIELD = 23L;
-    private static final long ROOT_FIELD = 24L;
-    private static final long MEDIA_TYPE_FIELD = 28L;
-    private static final long META_ELEMENTS_FIELD = 29L;
-    private static final long ENTITY_NAME_FIELD = 30L;
-    private static final long REGID_FIELD = 31L;
+    private static final long KEY_FIELD = 22L;
+    private static final long LOCATION_FIELD = 23L;
+    private static final long FS_NAME_FIELD = 24L;
+    private static final long ROOT_FIELD = 25L;
+    private static final long PATH_ELEMENTS_FIELD = 26L;
+
+    // private static final long META_ELEMENTS_FIELD = 29L;
+    private static final long ENTITY_NAME_FIELD = 31L;
+    private static final long REGID_FIELD = 32L;
 
     /**
      * The roles (text: space separated).
      */
-    private static final long ROLE_FIELD = 32L;
-    private static final long THUMBPRINT_FIELD = 33L;
-    private static final long DATE_FIELD = 34L;
-    private static final long DEVICE_ID_FIELD = 35L;
-    private static final long ARTIFACT_FIELD = 36L;
-    private static final long HREF_FIELD = 37L;
-    private static final long OWNERSHIP_FIELD = 38L;
-    private static final long REL_FIELD = 39L;
-    private static final long USE_FIELD = 40L;
+    private static final long ROLE_FIELD = 33L;
+    private static final long THUMBPRINT_FIELD = 34L;
+
+    private static final long DATE_FIELD = 35L;
+    private static final long DEVICE_ID_FIELD = 36L;
+    private static final long ARTIFACT_FIELD = 37L;
+    private static final long HREF_FIELD = 38L;
+    private static final long OWNERSHIP_FIELD = 39L;
+    private static final long REL_FIELD = 40L;
+    private static final long MEDIA_TYPE_FIELD = 41L;
+    private static final long USE_FIELD = 42L;
+    private static final long TYPE_FIELD = 29L;
+
+    private static final long ACTIVATION_STATUS_FIELD = 43L;
+    private static final long CHANNEL_TYPE_FIELD = 44L;
+    // colloquial-version = (45: text)
+    // description = (46: text)
+    // edition = (47: text)
+    // entitlement-data-required = (48: bool)
+    // entitlement-key = (49: text)
+    // generator = (50: text)
+    // persistent-id = (51: text)
+    // product = (52: text)
+    // product-family = (53: text)
+    // revision = (54: text)
+    // summary = (55: text)
+    // unspsc-code = (56: text)
+    // unspsc-version = (57: text)
+
+    private static final long HASH_ENTRY_FIELD = 58L;
+
+    /**
+     * Firmware.
+     */
+    private static final long FIRMWARE_ENTRY_FIELD = 59L;
+    private static final long FIRMWARE_NAME_FIELD = 60L;
+    private static final long FIRMWARE_VERSION_FIELD = 61L;
+    private static final long FIRMWARE_COMPONENT_INDEX_FIELD = 62L;
+    private static final long FIRMWARE_MODEL_LABEL_FIELD = 63L;
+    private static final long FIRMWARE_BLOCK_DEVICE_IDENTIFIER_FIELD = 64L;
+    private static final long FIRMWARE_CMS_FIRMWARE_PACKAGE_FIELD = 65L;
+    private static final long FIRMWARE_PACKAGE_IDENTIFIER_FIELD = 66L;
+    private static final long FIRMWARE_TARGET_HARDWARE_IDENTIFIER_FIELD = 67L;
+
+    private static final Pattern INTEGER_PATTERN = Pattern.compile("[-]?[1-9]\\d*");
 
     public CBOROutputHandler() {
     }
 
     @Override
-    public void write(SWIDBuilder builder, OutputStream os) throws IOException {
+    public void write(SWIDBuilder builder, OutputStream os) throws IOException, ValidationException {
+        builder.validate();
 
         CBORFactory factory = new CBORFactory();
 
-        CBORGenerator generator = factory.createGenerator(os, JsonEncoding.UTF8);
+        CBORGenerator generator = factory.createGenerator(os);
 
         build(builder, generator);
 
         generator.close();
     }
 
-    protected void build(SWIDBuilder builder, CBORGenerator generator) throws IOException {
-
+    protected static void build(SWIDBuilder builder, CBORGenerator generator) throws IOException {
         generator.writeStartObject();
 
         buildGlobalAttributes(builder, generator);
 
         // required attributes
-        writeTextField(generator, SWID_NAME_FIELD, builder.getName());
         writeTextField(generator, TAG_ID_FIELD, builder.getTagId());
 
-        // child elements
-        // Required
-        generator.writeFieldId(ENTITY_FIELD);
-        generator.writeStartArray();
-        for (EntityBuilder entity : builder.getEntities()) {
-            build(entity, generator);
-        }
-        generator.writeEndArray();
+        writeIntegerField(generator, TAG_VERSION_FIELD, builder.getTagVersion());
 
-        // optional
-        EvidenceBuilder evidence = builder.getEvidence();
-        if (evidence != null) {
-            generator.writeFieldId(EVIDENCE_ENTRY_FIELD);
-            generator.writeStartArray();
-            build(evidence, generator);
-            generator.writeEndArray();
+        writeTextField(generator, SWID_NAME_FIELD, builder.getName());
+        if (builder.getVersion() != null) {
+            writeTextField(generator, SOFTWARE_VERSION_FIELD, builder.getVersion());
         }
-
-        List<LinkBuilder> links = builder.getLinks();
-        if (!links.isEmpty()) {
-            generator.writeFieldId(LINK_ENTRY_FIELD);
-            generator.writeStartArray();
-            for (LinkBuilder link : links) {
-                build(link, generator);
+        VersionScheme versionScheme = builder.getVersionScheme();
+        if (versionScheme != null) {
+            generator.writeFieldId(VERSION_SCHEME_FIELD);
+            Integer index = versionScheme.getIndex();
+            if (index != null) {
+                generator.writeNumber(index);
+            } else {
+                generator.writeString(versionScheme.getName());
             }
-            generator.writeEndArray();
         }
 
-        List<MetaBuilder> metas = builder.getMetas();
-        if (!links.isEmpty()) {
-            generator.writeFieldId(SOFTWARE_META_ENTRY_FIELD);
-            generator.writeStartArray();
-            for (MetaBuilder meta : metas) {
-                build(meta, generator);
-            }
-            generator.writeEndArray();
-        }
-
-        PayloadBuilder payload = builder.getPayload();
-        if (payload != null) {
-            generator.writeFieldId(PAYLOAD_ENTRY_FIELD);
-            generator.writeStartArray();
-            build(payload, generator);
-            generator.writeEndArray();
-        }
-
-        // optional attributes
+        // optional attribute
         switch (builder.getTagType()) {
         case PRIMARY:
             break;
@@ -189,21 +205,70 @@ public class CBOROutputHandler implements OutputHandler {
             throw new IllegalStateException("tagType: " + builder.getTagType().toString());
         }
 
+        // child elements
+        // Required
+        generator.writeFieldId(ENTITY_ENTRY_FIELD);
+        List<EntityBuilder> entities = builder.getEntities();
+        if (entities.size() > 1) {
+            generator.writeStartArray();
+        }
+
+        for (EntityBuilder entity : builder.getEntities()) {
+            build(entity, generator);
+        }
+
+        if (entities.size() > 1) {
+            generator.writeEndArray();
+        }
+
+        // optional
+        EvidenceBuilder evidence = builder.getEvidence();
+        if (evidence != null) {
+            generator.writeFieldId(EVIDENCE_ENTRY_FIELD);
+            build(evidence, generator);
+        }
+
+        List<LinkBuilder> links = builder.getLinks();
+        if (!links.isEmpty()) {
+            generator.writeFieldId(LINK_ENTRY_FIELD);
+            if (links.size() > 1) {
+                generator.writeStartArray();
+            }
+            for (LinkBuilder link : links) {
+                build(link, generator);
+            }
+            if (links.size() > 1) {
+                generator.writeEndArray();
+            }
+        }
+
+        List<MetaBuilder> metas = builder.getMetas();
+        if (!links.isEmpty()) {
+            generator.writeFieldId(SOFTWARE_META_ENTRY_FIELD);
+            if (metas.size() > 1) {
+                generator.writeStartArray();
+            }
+            for (MetaBuilder meta : metas) {
+                build(meta, generator);
+            }
+            if (metas.size() > 1) {
+                generator.writeEndArray();
+            }
+        }
+
+        PayloadBuilder payload = builder.getPayload();
+        if (payload != null) {
+            generator.writeFieldId(PAYLOAD_ENTRY_FIELD);
+            build(payload, generator);
+        }
+
         // TODO: media
-
-        writeIntegerField(generator, TAG_VERSION_FIELD, builder.getTagVersion());
-
-        if (builder.getVersion() != null) {
-            writeTextField(generator, VERSION_FIELD, builder.getVersion());
-        }
-        if (builder.getVersionScheme() != null) {
-            writeTextField(generator, VERSION_SCHEME_FIELD, builder.getVersionScheme());
-        }
         //
         // generator.writeStringField("test", "test");
+        generator.writeEndObject();
     }
 
-    protected void build(EntityBuilder builder, CBORGenerator generator) throws IOException {
+    protected static void build(EntityBuilder builder, CBORGenerator generator) throws IOException {
 
         // start of the entity
         generator.writeStartObject();
@@ -215,28 +280,37 @@ public class CBOROutputHandler implements OutputHandler {
             writeTextField(generator, REGID_FIELD, builder.getRegid());
         }
 
-        List<String> roles = builder.getRoles();
+        List<Role> roles = builder.getRoles();
         generator.writeFieldId(ROLE_FIELD);
-        generator.writeStartArray();
-        for (String role : roles) {
-            generator.writeString(role);
+        if (roles.size() > 1) {
+            generator.writeStartArray();
         }
-        generator.writeEndArray();
+        for (Role role : roles) {
+            Integer index = role.getIndex();
+            if (index != null) {
+                generator.writeNumber(index);
+            } else {
+                generator.writeString(role.getName());
+            }
+        }
+        if (roles.size() > 1) {
+            generator.writeEndArray();
+        }
 
         if (builder.getThumbprint() != null) {
             writeTextField(generator, THUMBPRINT_FIELD, builder.getThumbprint());
         }
 
         // for empty meta
-        generator.writeFieldId(META_ELEMENTS_FIELD);
-        generator.writeStartArray();
-        generator.writeEndArray();
+        // generator.writeFieldId(META_ELEMENTS_FIELD);
+        // generator.writeStartArray();
+        // generator.writeEndArray();
 
         // end of the entity
         generator.writeEndObject();
     }
 
-    private void build(EvidenceBuilder builder, CBORGenerator generator) throws IOException {
+    private static void build(EvidenceBuilder builder, CBORGenerator generator) throws IOException {
 
         // start of the evidence
         generator.writeStartObject();
@@ -258,7 +332,7 @@ public class CBOROutputHandler implements OutputHandler {
         generator.writeEndObject();
     }
 
-    private void build(LinkBuilder builder, CBORGenerator generator) throws IOException {
+    private static void build(LinkBuilder builder, CBORGenerator generator) throws IOException {
 
         // start of the link
         generator.writeStartObject();
@@ -290,7 +364,7 @@ public class CBOROutputHandler implements OutputHandler {
         generator.writeEndObject();
     }
 
-    private void build(MetaBuilder builder, CBORGenerator generator) throws IOException {
+    private static void build(MetaBuilder builder, CBORGenerator generator) throws IOException {
 
         // start of the meta
         generator.writeStartObject();
@@ -303,7 +377,7 @@ public class CBOROutputHandler implements OutputHandler {
         generator.writeEndObject();
     }
 
-    private void build(PayloadBuilder builder, CBORGenerator generator) throws IOException {
+    private static void build(PayloadBuilder builder, CBORGenerator generator) throws IOException {
 
         // start of the payload
         generator.writeStartObject();
@@ -321,22 +395,68 @@ public class CBOROutputHandler implements OutputHandler {
         buildGlobalAttributes(builder, generator);
 
         CBORResourceCollectionEntryGenerator creator = new CBORResourceCollectionEntryGenerator();
-        for (ResourceBuilder resourceBuilder : builder.getResources()) {
-            try {
-                resourceBuilder.accept(creator, generator);
-            } catch (RuntimeException ex) {
-                Throwable cause = ex.getCause();
-                if (cause instanceof IOException) {
-                    throw (IOException) cause;
-                } else {
-                    throw ex;
-                }
+        {
+            List<DirectoryBuilder> directories = builder.getResources(DirectoryBuilder.class);
+            if (!directories.isEmpty()) {
+                writeDirectories(directories, generator, creator);
+            }
+        }
+        {
+            List<FileBuilder> files = builder.getResources(FileBuilder.class);
+            if (!files.isEmpty()) {
+                writeFiles(files, generator, creator);
+            }
+        }
+        {
+            List<FirmwareBuilder> firmwares = builder.getResources(FirmwareBuilder.class);
+            if (!firmwares.isEmpty()) {
+                writeFirmware(firmwares, generator, creator);
             }
         }
     }
 
-    private static <E extends AbstractBuilder<E>> void buildGlobalAttributes(AbstractBuilder<E> builder,
-            CBORGenerator generator) throws IOException {
+    private static void writeDirectories(List<DirectoryBuilder> directories, CBORGenerator generator,
+            CBORResourceCollectionEntryGenerator creator) throws IOException {
+        generator.writeFieldId(DIRECTORY_ENTRY_FIELD);
+        writeResources(directories, generator, creator);
+    }
+
+    private static void writeFiles(List<FileBuilder> files, CBORGenerator generator,
+            CBORResourceCollectionEntryGenerator creator) throws IOException {
+        generator.writeFieldId(FILE_ENTRY_FIELD);
+        writeResources(files, generator, creator);
+    }
+
+    private static void writeFirmware(List<FirmwareBuilder> firmwares, CBORGenerator generator,
+            CBORResourceCollectionEntryGenerator creator) throws IOException {
+        generator.writeFieldId(FIRMWARE_ENTRY_FIELD);
+        writeResources(firmwares, generator, creator);
+    }
+
+    private static void writeResources(List<? extends ResourceBuilder> resources, CBORGenerator generator,
+            CBORResourceCollectionEntryGenerator creator) throws IOException {
+        // use an array for more than one
+        if (resources.size() > 1) {
+            generator.writeStartArray();
+        }
+        for (ResourceBuilder builder : resources) {
+            builder.accept(creator, generator);
+        }
+        if (resources.size() > 1) {
+            generator.writeEndArray();
+        }
+    }
+
+    private static void writeHash(HashAlgorithm algorithm, byte[] bytes, CBORGenerator generator) throws IOException {
+        generator.writeFieldId(HASH_ENTRY_FIELD);
+        generator.writeStartArray();
+        generator.writeNumber(algorithm.getIndex());
+        generator.writeBinary(bytes);
+        generator.writeEndArray();
+    }
+
+    private static <E extends AbstractLanguageSpecificBuilder<E>> void buildGlobalAttributes(
+            AbstractLanguageSpecificBuilder<E> builder, CBORGenerator generator) throws IOException {
         String language = builder.getLanguage();
         if (language != null) {
             writeTextField(generator, LANG_FIELD, language);
@@ -364,9 +484,25 @@ public class CBOROutputHandler implements OutputHandler {
         generator.writeNumber(value);
     }
 
-    private void writeDateTimeField(CBORGenerator generator, long fieldId, ZonedDateTime dateTime) throws IOException {
+    private static void writeIntegerField(CBORGenerator generator, long fieldId, BigInteger value) throws IOException {
+        generator.writeFieldId(fieldId);
+        generator.writeNumber(value);
+    }
+
+    private static void writeDateTimeField(CBORGenerator generator, long fieldId, ZonedDateTime dateTime)
+            throws IOException {
         generator.writeFieldId(fieldId);
         generator.writeString(dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+    }
+
+    private static void writeIntegerOrTextField(CBORGenerator generator, long firmwareVersionField, String value)
+            throws IOException {
+        if (INTEGER_PATTERN.matcher(value).matches()) {
+            BigInteger intValue = new BigInteger(value);
+            writeIntegerField(generator, FIRMWARE_VERSION_FIELD, intValue);
+        } else {
+            writeTextField(generator, FIRMWARE_VERSION_FIELD, value);
+        }
     }
 
     public static class CBORResourceCollectionEntryGenerator
@@ -378,21 +514,23 @@ public class CBOROutputHandler implements OutputHandler {
         @Override
         public void generate(DirectoryBuilder builder, CBORGenerator parent) {
             try {
-                // start of the payload
-                parent.writeFieldId(DIRECTORY_ENTRY_FIELD);
                 parent.writeStartObject();
 
                 buildGlobalAttributes(builder, parent);
 
                 buildFileSystemItem(builder, parent);
 
-                List<ResourceBuilder> resources = builder.getResources();
-                if (!resources.isEmpty()) {
-                    parent.writeStartArray();
-                    for (ResourceBuilder resource : resources) {
-                        resource.accept(this, parent);
+                {
+                    List<DirectoryBuilder> directories = builder.getResources(DirectoryBuilder.class);
+                    if (!directories.isEmpty()) {
+                        writeDirectories(directories, parent, this);
                     }
-                    parent.writeEndArray();
+                }
+                {
+                    List<FileBuilder> files = builder.getResources(FileBuilder.class);
+                    if (!files.isEmpty()) {
+                        writeFiles(files, parent, this);
+                    }
                 }
 
                 parent.writeEndObject();
@@ -405,8 +543,6 @@ public class CBOROutputHandler implements OutputHandler {
         public void generate(FileBuilder builder, CBORGenerator parent) {
 
             try {
-                // start of the payload
-                parent.writeFieldId(FILE_ENTRY_FIELD);
                 parent.writeStartObject();
 
                 buildGlobalAttributes(builder, parent);
@@ -417,27 +553,65 @@ public class CBOROutputHandler implements OutputHandler {
                     writeLongField(parent, SIZE_FIELD, builder.getSize());
                 }
                 if (builder.getVersion() != null) {
-                    writeTextField(parent, VERSION_FIELD, builder.getVersion());
+                    writeTextField(parent, SOFTWARE_VERSION_FIELD, builder.getVersion());
                 }
-                //
-                // for (Map.Entry<HashAlgorithm, String> entry :
-                // builder.getHashAlgorithmToValueMap().entrySet()) {
-                // HashAlgorithm algorithm = entry.getKey();
-                // String hashValue = entry.getValue();
-                // Namespace ns = Namespace.getNamespace(algorithm.getName(),
-                // algorithm.getNamespace());
-                // Namespace nsOld = parent.getNamespace(ns.getPrefix());
-                //
-                // if (nsOld == null) {
-                // parent.addNamespaceDeclaration(ns);
-                // } else if (!nsOld.getURI().equals(ns.getURI())) {
-                // element.addNamespaceDeclaration(ns);
-                // }
-                // element.setAttribute("hash", hashValue, ns);
-                // }
+
+                Map<HashAlgorithm, byte[]> hashMap = builder.getHashAlgorithmToValueMap();
+                if (!hashMap.isEmpty()) {
+                    if (hashMap.size() > 1) {
+                        throw new UnsupportedOperationException("Only a single hash value is allowed");
+                    }
+
+                    Map.Entry<HashAlgorithm, byte[]> entry = hashMap.entrySet().iterator().next();
+                    writeHash(entry.getKey(), entry.getValue(), parent);
+                }
 
                 // end of the payload
                 parent.writeEndObject();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        @Override
+        public void generate(FirmwareBuilder builder, CBORGenerator generator) {
+            try {
+                generator.writeStartObject();
+
+                writeTextField(generator, FIRMWARE_NAME_FIELD, builder.getName());
+
+                if (builder.getVersion() != null) {
+                    writeIntegerOrTextField(generator, FIRMWARE_VERSION_FIELD, builder.getVersion());
+                }
+
+                if (builder.getPackageIdentifier() != null) {
+                    writeTextField(generator, FIRMWARE_PACKAGE_IDENTIFIER_FIELD, builder.getPackageIdentifier());
+                }
+
+                if (builder.getComponentIndex() != null) {
+                    writeIntegerField(generator, FIRMWARE_PACKAGE_IDENTIFIER_FIELD, builder.getComponentIndex());
+                }
+
+                if (builder.getBlockDeviceIdentifier() != null) {
+                    writeIntegerOrTextField(generator, FIRMWARE_BLOCK_DEVICE_IDENTIFIER_FIELD, builder.getBlockDeviceIdentifier());
+                }
+
+                if (builder.getTargetHardwareIdentifier() != null) {
+                    writeTextField(generator, FIRMWARE_TARGET_HARDWARE_IDENTIFIER_FIELD, builder.getTargetHardwareIdentifier());
+                }
+
+//                writeIntegerOrTextField(generator, FIRMWARE_MODEL_LABEL_FIELD, builder.getModelLabel());
+
+                if (builder.getHashAlgorithm() != null && builder.getHashValue() != null) {
+                    writeHash(builder.getHashAlgorithm(), builder.getHashValue(), generator);
+                }
+
+                if (builder.getCmsFirmwarePackage() != null) {
+                    generator.writeFieldId(FIRMWARE_CMS_FIRMWARE_PACKAGE_FIELD);
+                    generator.writeBinary(builder.getCmsFirmwarePackage());
+                }
+
+                generator.writeEndObject();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -462,6 +636,5 @@ public class CBOROutputHandler implements OutputHandler {
             }
             writeTextField(parent, FS_NAME_FIELD, builder.getName());
         }
-
     }
 }

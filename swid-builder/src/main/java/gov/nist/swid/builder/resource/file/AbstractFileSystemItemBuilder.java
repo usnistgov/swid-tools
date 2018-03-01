@@ -21,9 +21,12 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource.file;
 
 import static gov.nist.swid.builder.util.Util.requireNonEmpty;
+
+import gov.nist.swid.builder.ValidationException;
+import gov.nist.swid.builder.resource.AbstractResourceBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -137,12 +140,9 @@ public abstract class AbstractFileSystemItemBuilder<E extends AbstractFileSystem
     }
 
     @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
-    public void validate() {
+    public void validate() throws ValidationException {
+        super.validate();
+        validateNonEmpty("name", name);
     }
 
 }

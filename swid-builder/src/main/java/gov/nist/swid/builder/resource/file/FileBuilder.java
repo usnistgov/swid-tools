@@ -21,12 +21,13 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource.file;
 
 import static gov.nist.swid.builder.util.Util.requireNonEmpty;
 
 import gov.nist.swid.builder.resource.HashAlgorithm;
 import gov.nist.swid.builder.resource.HashUtils;
+import gov.nist.swid.builder.resource.ResourceCollectionEntryGenerator;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -36,11 +37,12 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
     private Long size;
     private String version;
-    private Map<HashAlgorithm, String> hashAlgorithmToValueMap = new LinkedHashMap<>();
+    private Map<HashAlgorithm, byte[]> hashAlgorithmToValueMap = new LinkedHashMap<>();
 
     protected FileBuilder() {
         super();
@@ -71,7 +73,7 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
         return version;
     }
 
-    public Map<HashAlgorithm, String> getHashAlgorithmToValueMap() {
+    public Map<HashAlgorithm, byte[]> getHashAlgorithmToValueMap() {
         return hashAlgorithmToValueMap;
     }
 
@@ -127,17 +129,13 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
      */
     public FileBuilder hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
         byte[] digest = HashUtils.hash(algorithm, is);
-        String hashValue = HashUtils.toHexString(digest);
-        return hash(algorithm, hashValue);
+        return hash(algorithm, digest);
     }
 
     public FileBuilder hash(HashAlgorithm algorithm, byte[] hashBytes) {
-        hashAlgorithmToValueMap.put(algorithm, HashUtils.toHexString(hashBytes));
-        return this;
-    }
-
-    public FileBuilder hash(HashAlgorithm algorithm, String hashValue) {
-        hashAlgorithmToValueMap.put(algorithm, hashValue);
+        Objects.requireNonNull(algorithm, "algorithm");
+        Objects.requireNonNull(hashBytes, "hashBytes");
+        hashAlgorithmToValueMap.put(algorithm, hashBytes);
         return this;
     }
 

@@ -21,15 +21,28 @@
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
 
-package gov.nist.swid.builder;
+package gov.nist.swid.builder.resource;
 
-public class PayloadBuilder extends AbstractResourceCollectionBuilder<PayloadBuilder> {
+import gov.nist.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.swid.builder.resource.file.FileBuilder;
+import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
 
-    protected PayloadBuilder() {
-        super();
-    }
+public interface ResourceCollectionEntryGenerator<T> {
+    /**
+     * Adds the file, represented by the builder, to this resource collection.
+     * 
+     * @param builder
+     *            the file builder representing the file resource to add
+     */
+    void generate(FileBuilder builder, T parent);
 
-    public static PayloadBuilder create() {
-        return new PayloadBuilder();
-    }
+    /**
+     * Adds the directory, represented by the builder, to this resource collection.
+     * 
+     * @param builder
+     *            the directory builder representing the directory resource to add
+     */
+    void generate(DirectoryBuilder builder, T parent);
+
+    void generate(FirmwareBuilder firmwareBuilder, T parent);
 }

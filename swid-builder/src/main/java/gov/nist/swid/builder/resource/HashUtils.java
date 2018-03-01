@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HashUtils {
@@ -152,6 +153,10 @@ public class HashUtils {
         }
 
         byte[] mdbytes = digest.digest();
+        int valueLength = algorithm.getValueLength() / 8;
+        if (valueLength < mdbytes.length) {
+            mdbytes = Arrays.copyOfRange(mdbytes, 0, valueLength);
+        }
         return mdbytes;
 
         // //convert the bytes to hex format
