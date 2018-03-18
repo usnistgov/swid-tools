@@ -30,94 +30,100 @@ import java.util.List;
 import java.util.Objects;
 
 public class EntityBuilder extends AbstractLanguageSpecificBuilder<EntityBuilder> {
-    private String name;
-    private String regid;
-    private List<Role> roles;
-    private String thumbprint;
+  private String name;
+  private String regid;
+  private List<Role> roles;
+  private String thumbprint;
 
-    protected EntityBuilder() {
-        super();
-    }
+  protected EntityBuilder() {
+    super();
+  }
 
-    @Override
-    public void reset() {
-        super.reset();
-        name = null;
-        regid = null;
-        roles = new LinkedList<>();
-        thumbprint = null;
-    }
+  @Override
+  public void reset() {
+    super.reset();
+    name = null;
+    regid = null;
+    roles = new LinkedList<>();
+    thumbprint = null;
+  }
 
-    public static EntityBuilder create() {
-        return new EntityBuilder();
-    }
+  public static EntityBuilder create() {
+    return new EntityBuilder();
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getRegid() {
-        return (regid == null ? SWIDConstants.ENTITY_REGID_DEFAULT : regid);
-    }
+  public String getRegid() {
+    return (regid == null ? SWIDConstants.ENTITY_REGID_DEFAULT : regid);
+  }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
+  public List<Role> getRoles() {
+    return roles;
+  }
 
-    public String getThumbprint() {
-        return thumbprint;
-    }
+  public String getThumbprint() {
+    return thumbprint;
+  }
 
-    public EntityBuilder name(String name) {
-        Util.requireNonEmpty(name);
-        this.name = name;
-        return this;
-    }
+  /**
+   * Set the name of the entity.
+   * 
+   * @param name a non-{@code null} name value
+   * @return the sane builder instance
+   */
+  public EntityBuilder name(String name) {
+    Util.requireNonEmpty(name);
+    this.name = name;
+    return this;
+  }
 
-    /**
-     * Sets the to-be-built entity's regid to the provided value.
-     * 
-     * @param regid
-     *            the regid value
-     * @return the same builder instance
-     */
-    public EntityBuilder regid(String regid) {
-        if (SWIDConstants.ENTITY_REGID_DEFAULT.equals(regid)) {
-            this.regid = null;
-        } else {
-            this.regid = regid;
-        }
-        return this;
+  /**
+   * Sets the to-be-built entity's regid to the provided value.
+   * 
+   * @param regid
+   *          the regid value
+   * @return the same builder instance
+   */
+  public EntityBuilder regid(String regid) {
+    if (SWIDConstants.ENTITY_REGID_DEFAULT.equals(regid)) {
+      this.regid = null;
+    } else {
+      this.regid = regid;
     }
+    return this;
+  }
 
-    public EntityBuilder thumbprint(String thumbprint) {
-        this.thumbprint = thumbprint;
-        return this;
-    }
+  public EntityBuilder thumbprint(String thumbprint) {
+    this.thumbprint = thumbprint;
+    return this;
+  }
 
-    /**
-     * Assigns the identified role to the entity.
-     * 
-     * @see Role#assignPrivateRole(int, String)
-     * @see Role#lookupByIndex(int)
-     * @see Role#lookupByName(String)
-     * @param role the role to assign
-     * @return the same builder instance
-     */
-    public EntityBuilder addRole(Role role) {
-        Objects.requireNonNull(role, "role");
-        this.roles.add(role);
-        return this;
-    }
+  /**
+   * Assigns the identified role to the entity.
+   * 
+   * @see Role#assignPrivateRole(int, String)
+   * @see Role#lookupByIndex(int)
+   * @see Role#lookupByName(String)
+   * @param role
+   *          the role to assign
+   * @return the same builder instance
+   */
+  public EntityBuilder addRole(Role role) {
+    Objects.requireNonNull(role, "role");
+    this.roles.add(role);
+    return this;
+  }
 
-    @Override
-    public void validate() throws ValidationException {
-        super.validate();
-        validateNonEmpty("name", name);
-        validateNonEmpty("role", roles);
-        if (!roles.contains(KnownRole.TAG_CREATOR)) {
-            throw new ValidationException(
-                    "at least the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
-        }
+  @Override
+  public void validate() throws ValidationException {
+    super.validate();
+    validateNonEmpty("name", name);
+    validateNonEmpty("role", roles);
+    if (!roles.contains(KnownRole.TAG_CREATOR)) {
+      throw new ValidationException("at least the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
     }
+  }
 }

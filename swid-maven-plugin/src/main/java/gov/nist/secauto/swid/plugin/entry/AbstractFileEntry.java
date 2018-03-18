@@ -34,89 +34,89 @@ import java.util.List;
 
 public abstract class AbstractFileEntry implements FileEntry {
 
-    public AbstractFileEntry() {
+  public AbstractFileEntry() {
+  }
+
+  /**
+   * Retrieve the base of the file's path, which can be excluded.
+   * 
+   * @return the base
+   */
+  protected abstract Path getBase();
+
+  /**
+   * Retrieve the full path to the file.
+   * 
+   * @return the filePath
+   */
+  public abstract Path getPath();
+
+  /**
+   * Retrieve the relative path of the file with the base removed.
+   * 
+   * @return the file's relative path
+   */
+  protected Path getRelativePath() {
+    return getBase().relativize(getPath());
+  }
+
+  protected abstract String getOutputBase();
+
+  @Override
+  public String getOutputRelativePath() {
+    StringBuilder builder = new StringBuilder();
+    // Should be null if no base is provided or a path using the '/' sperator
+    String base = getOutputBase();
+    if (base != null) {
+      builder.append(base);
+      builder.append('/');
     }
 
-    /**
-     * Retrieve the base of the file's path, which can be excluded.
-     * 
-     * @return the base
-     */
-    protected abstract Path getBase();
-
-    /**
-     * Retrieve the full path to the file.
-     * 
-     * @return the filePath
-     */
-    public abstract Path getPath();
-
-    /**
-     * Retrieve the relative path of the file with the base removed.
-     * 
-     * @return the file's relative path
-     */
-    protected Path getRelativePath() {
-        return getBase().relativize(getPath());
+    Path relativePath = getRelativePath();
+    String relativePathString = relativePath.toString();
+    String seperator = relativePath.getFileSystem().getSeparator();
+    if (!"/".equals(seperator)) {
+      relativePathString = relativePathString.replace(seperator, "/");
     }
+    builder.append(relativePathString);
+    return builder.toString();
 
-    protected abstract String getOutputBase();
+  }
+
+  public List<String> getRelativePathSegements(String swidTagPath) {
+    return PathRelativizer.relativize(swidTagPath, getOutputRelativePath());
+  }
+
+  @Override
+  public FileInfo asFileInfo() {
+    return new ResourceFileInfo();
+  }
+
+  private class ResourceFileInfo implements FileInfo {
 
     @Override
-    public String getOutputRelativePath() {
-        StringBuilder builder = new StringBuilder();
-        // Should be null if no base is provided or a path using the '/' sperator
-        String base = getOutputBase();
-        if (base != null) {
-            builder.append(base);
-            builder.append('/');
-        }
-
-        Path relativePath = getRelativePath();
-        String relativePathString = relativePath.toString();
-        String seperator = relativePath.getFileSystem().getSeparator();
-        if (!"/".equals(seperator)) {
-            relativePathString = relativePathString.replace(seperator, "/");
-        }
-        builder.append(relativePathString);
-        return builder.toString();
-
-    }
-
-    public List<String> getRelativePathSegements(String swidTagPath) {
-        return PathRelativizer.relativize(swidTagPath, getOutputRelativePath());
+    public String getName() {
+      return AbstractFileEntry.this.getOutputRelativePath().toString();
     }
 
     @Override
-    public FileInfo asFileInfo() {
-        return new ResourceFileInfo();
+    public InputStream getContents() throws IOException {
+      return AbstractFileEntry.this.getInputStream();
     }
 
-    private class ResourceFileInfo implements FileInfo {
-
-        @Override
-        public String getName() {
-            return AbstractFileEntry.this.getOutputRelativePath().toString();
-        }
-
-        @Override
-        public InputStream getContents() throws IOException {
-            return AbstractFileEntry.this.getInputStream();
-        }
-
-        @Override
-        public boolean isFile() {
-            return true;
-        }
-
-        @Override
-        public boolean isDirectory() {
-            return false;
-        }
-
-        @Override
-        public boolean isSymbolicLink() {
-            return false;
-        }
+    @Override
+    public boolean isFile() {
+      return true;
     }
+
+    @Override
+    public boolean isDirectory() {
+      return false;
+    }
+
+    @Override
+    public boolean isSymbolicLink() {
+      return false;
+    }
+  }
 }

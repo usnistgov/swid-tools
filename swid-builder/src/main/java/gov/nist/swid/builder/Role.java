@@ -27,62 +27,96 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface Role {
-    Integer getIndex();
-    String getName();
-    
-    static final Map<String, Role> byValueMap = new HashMap<>();
+  Integer getIndex();
 
-    static final Map<Integer, Role> byIndexMap = new HashMap<>();
+  String getName();
 
-    default void init(Integer index, String value) {
-        if (index != null) {
-            synchronized (byIndexMap) {
-                byIndexMap.put(index, this);
-            }
-        }
-        synchronized (byValueMap) {
-            byValueMap.put(value, this);
-        }
+  static final Map<String, Role> byValueMap = new HashMap<>();
+
+  static final Map<Integer, Role> byIndexMap = new HashMap<>();
+
+  /**
+   * Initialize the mapping of role index and text values.
+   * 
+   * @param index
+   *          the index position
+   * @param value
+   *          the human-readable value
+   */
+  default void init(Integer index, String value) {
+    if (index != null) {
+      synchronized (byIndexMap) {
+        byIndexMap.put(index, this);
+      }
+    }
+    synchronized (byValueMap) {
+      byValueMap.put(value, this);
+    }
+  }
+
+  /**
+   * Assign a new role to the private id space.
+   * 
+   * @param indexValue
+   *          the index value to use
+   * @param name
+   *          the human-readable name
+   * @return the new role
+   */
+  public static Role assignPrivateRole(int indexValue, String name) {
+    // force initialization of the known roles
+    KnownRole.values();
+    Role retval = null;
+    synchronized (byValueMap) {
+      @SuppressWarnings("unlikely-arg-type")
+      Role value = byValueMap.get(indexValue);
+      retval = value;
+    }
+    if (retval == null) {
+      retval = new UnknownRole(indexValue, name);
+    } else if (retval.getName().equals(name)) {
+      // return the current role
+    } else {
+      throw new IllegalStateException("the role with the name '" + retval.getName()
+          + "' is already assigned to the index value '" + indexValue + "'");
+    }
+    return retval;
+  }
+
+  /**
+   * Lookup a role by the provided index value.
+   * 
+   * @param value
+   *          the index value to lookup the role for
+   * @return the matching role or {@code null} if no matching role was not found.
+   */
+  public static Role lookupByIndex(int value) {
+    // force initialization of the known roles
+    KnownRole.values();
+    Role retval = null;
+    synchronized (byIndexMap) {
+      retval = byIndexMap.get(value);
+    }
+    return retval;
+  }
+
+  /**
+   * Lookup a role by the provided human-readable name.
+   * 
+   * @param name the name to lookup the role by
+   * @return the matching role or {@code null} if no matching role was not found.
+   */
+  public static Role lookupByName(String name) {
+    // force initialization of the known roles
+    KnownRole.values();
+    Role retval = null;
+    synchronized (byValueMap) {
+      retval = byValueMap.get(name);
     }
 
-    public static Role assignPrivateRole(int indexValue, String name) {
-        // force initialization of the known roles
-        KnownRole.values();
-        Role retval = null;
-        synchronized (byValueMap) {
-            retval = byValueMap.get(indexValue);
-        }
-        if (retval == null) {
-            retval = new UnknownRole(indexValue, name);
-        } else if (retval.getName().equals(name)) {
-            // return the current role
-        } else {
-            throw new IllegalStateException("the role with the name '"+retval.getName()+"' is already assigned to the index value '"+indexValue+"'");
-        }
-        return retval;
+    if (retval == null) {
+      retval = new UnknownRole(name);
     }
-
-    public static Role lookupByIndex(int value) {
-        // force initialization of the known roles
-        KnownRole.values();
-        Role retval = null;
-        synchronized (byIndexMap) {
-            retval = byIndexMap.get(value);
-        }
-        return retval;
-    }
-
-    public static Role lookupByName(String name) {
-        // force initialization of the known roles
-        KnownRole.values();
-        Role retval = null;
-        synchronized (byValueMap) {
-            retval = byValueMap.get(name);
-        }
-
-        if (retval == null) {
-            retval = new UnknownRole(name);
-        }
-        return retval;
-    }
+    return retval;
+  }
 }

@@ -24,30 +24,38 @@
 package gov.nist.swid.builder;
 
 public class UnknownVersionScheme implements VersionScheme {
-    private final Integer index;
-    private final String name;
+  private final Integer index;
+  private final String name;
 
-    public UnknownVersionScheme(String name) {
-        this(null, name);
-    }
+  public UnknownVersionScheme(String name) {
+    this(null, name);
+  }
 
-    public UnknownVersionScheme(Integer index, String name) {
-        init(index, name);
-        if (index != null && (index < 32768 || index > 65535)) {
-            throw new IllegalArgumentException(
-                    "An unknown index value must be within the private use space (32768 to 65535)");
-        }
-        this.index = index;
-        this.name = name;
+  /**
+   * Create a new custom version scheme.
+   * 
+   * @param index
+   *          the integer index value
+   * @param name
+   *          the human-readable name
+   */
+  public UnknownVersionScheme(Integer index, String name) {
+    init(index, name);
+    if (index != null && (index < 32768 || index > 65535)) {
+      throw new IllegalArgumentException(
+          "An unknown index value must be within the private use space (32768 to 65535)");
     }
+    this.index = index;
+    this.name = name;
+  }
 
-    @Override
-    public Integer getIndex() {
-        return index;
-    }
+  @Override
+  public Integer getIndex() {
+    return index;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 }

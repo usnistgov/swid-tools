@@ -29,16 +29,16 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class FileSelectorPredicate implements Predicate<FileEntry> {
-    private final IncludeExcludeFileSelector selector;
+  private final IncludeExcludeFileSelector selector;
 
-    public FileSelectorPredicate(IncludeExcludeFileSelector selector) {
-        Objects.requireNonNull(selector);
-        this.selector = selector;
-    }
+  public FileSelectorPredicate(IncludeExcludeFileSelector selector) {
+    Objects.requireNonNull(selector);
+    this.selector = selector;
+  }
 
-    @Override
-    public boolean test(FileEntry entry) {
-        return selector.isSelected(entry.asFileInfo());
-    }
+  @Override
+  public boolean test(FileEntry entry) {
+    return selector.isSelected(entry.asFileInfo());
+  }
 
 }

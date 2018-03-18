@@ -24,24 +24,22 @@
 package gov.nist.swid.builder;
 
 public enum LinkOwnership {
-    ABANDON("abandon"),
-    PRIVATE("private"),
-    /**
-     * If the software described by the the tag containing this link is uninstalled, then the
-     * software that is the target of the Link should be removed, unless another software is sharing
-     * this referenced software.
-     */
-    SHARED("shared");
+  ABANDON("abandon"), PRIVATE("private"),
+  /**
+   * If the software described by the the tag containing this link is uninstalled, then the software that is the target
+   * of the Link should be removed, unless another software is sharing this referenced software.
+   */
+  SHARED("shared");
 
-    private String text;
+  private String text;
 
-    private LinkOwnership(String text) {
-        this.text = text;
-    }
+  private LinkOwnership(String text) {
+    this.text = text;
+  }
 
-    @Override
-    public String toString() {
-        return text;
-    }
+  @Override
+  public String toString() {
+    return text;
+  }
 
 }

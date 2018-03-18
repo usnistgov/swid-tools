@@ -32,46 +32,45 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileEntryProcessor<T> {
-    private final Log log;
+  private final Log log;
 
+  /**
+   * Construct a new processor.
+   * 
+   * @param log
+   *          the Maven logger
+   */
+  public AbstractFileEntryProcessor(Log log) {
+    super();
+    Objects.requireNonNull(log);
+    this.log = log;
+  }
 
-    /**
-     * Construct a new processor.
-     * 
-     * @param log
-     *            the Maven logger
-     */
-    public AbstractFileEntryProcessor(Log log) {
-        super();
-        Objects.requireNonNull(log);
-        this.log = log;
+  /**
+   * Retrieve the Maven logger instance.
+   * 
+   * @return the log
+   */
+  public Log getLog() {
+    return log;
+  }
+
+  /**
+   * Process a collection of resources, extracting matching files.
+   * 
+   * @param resources
+   *          the resources to process
+   * @return a list of FileEntry instances representing the matching files
+   * @throws IOException
+   *           if an error occurred while processing the files
+   */
+  public List<FileEntry> process(List<? extends T> resources) throws IOException {
+    List<FileEntry> retval = new LinkedList<>();
+    for (T record : resources) {
+      retval.addAll(generateFileEntries(record));
     }
+    return retval;
+  }
 
-    /**
-     * Retrieve the Maven logger instance.
-     * 
-     * @return the log
-     */
-    public Log getLog() {
-        return log;
-    }
-
-    /**
-     * Process a collection of resources, extracting matching files.
-     * 
-     * @param resources
-     *            the resources to process
-     * @return a list of FileEntry instances representing the matching files
-     * @throws IOException
-     *             if an error occurred while processing the files
-     */
-    public List<FileEntry> process(List<? extends T> resources) throws IOException {
-        List<FileEntry> retval = new LinkedList<>();
-        for (T record : resources) {
-            retval.addAll(generateFileEntries(record));
-        }
-        return retval;
-    }
-
-    protected abstract Collection<? extends FileEntry> generateFileEntries(T record) throws IOException;
+  protected abstract Collection<? extends FileEntry> generateFileEntries(T record) throws IOException;
 }

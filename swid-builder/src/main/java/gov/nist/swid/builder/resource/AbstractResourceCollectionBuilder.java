@@ -37,99 +37,104 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class AbstractResourceCollectionBuilder<E extends AbstractResourceCollectionBuilder<E>>
-        extends AbstractLanguageSpecificBuilder<E> {
-    private Map<String, DirectoryBuilder> directoryMap;
-    private List<ResourceBuilder> resources;
+    extends AbstractLanguageSpecificBuilder<E> {
+  private Map<String, DirectoryBuilder> directoryMap;
+  private List<ResourceBuilder> resources;
 
-    public AbstractResourceCollectionBuilder() {
-        super();
+  public AbstractResourceCollectionBuilder() {
+    super();
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+    directoryMap = new LinkedHashMap<>();
+    resources = new LinkedList<>();
+  }
+
+  /**
+   * Creates a new file builder based on resource pointed to by a sequence of path segments.
+   * 
+   * @param pathSegments
+   *          a sequence of path segements that represent a path to a resource
+   * @return a new file builder representing the provided path
+   */
+  public FileBuilder newFileResource(List<String> pathSegments) {
+    FileBuilder retval;
+    String filename;
+    if (pathSegments.size() > 1) {
+      List<String> directoryPath = pathSegments.subList(0, pathSegments.size() - 1);
+      DirectoryBuilder directoryBuilder = getDirectoryBuilder(directoryPath);
+      filename = pathSegments.get(pathSegments.size() - 1);
+      retval = directoryBuilder.newFileResource(filename);
+    } else {
+      filename = pathSegments.get(0);
+      retval = FileBuilder.create();
+      retval.name(filename);
+      resources.add(retval);
     }
+    return retval;
+  }
 
-    @Override
-    public void reset() {
-        super.reset();
-        directoryMap = new LinkedHashMap<>();
-        resources = new LinkedList<>();
-    }
+  /**
+   * Creates a new firmware resource, adding it to this resource collection.
+   * 
+   * @return the new firmware builder
+   */
+  public FirmwareBuilder newFirmwareResource() {
+    FirmwareBuilder retval = FirmwareBuilder.create();
+    resources.add(retval);
+    return retval;
+  }
 
-    /**
-     * Creates a new file builder based on resource pointed to by a sequence of path segments.
-     * 
-     * @param pathSegments
-     *            a sequence of path segements that represent a path to a resource
-     * @return a new file builder representing the provided path
-     */
-    public FileBuilder newFileResource(List<String> pathSegments) {
-        FileBuilder retval;
-        String filename;
-        if (pathSegments.size() > 1) {
-            List<String> directoryPath = pathSegments.subList(0, pathSegments.size() - 1);
-            DirectoryBuilder directoryBuilder = getDirectoryBuilder(directoryPath);
-            filename = pathSegments.get(pathSegments.size() - 1);
-            retval = directoryBuilder.newFileResource(filename);
-        } else {
-            filename = pathSegments.get(0);
-            retval = FileBuilder.create();
-            retval.name(filename);
-            resources.add(retval);
+  private DirectoryBuilder getDirectoryBuilder(List<String> directoryPath) {
+    DirectoryBuilder retval = null;
+    for (String name : directoryPath) {
+      if (retval == null) {
+        DirectoryBuilder dir = directoryMap.get(name);
+        if (dir == null) {
+          dir = DirectoryBuilder.create();
+          dir.name(name);
+          directoryMap.put(name, dir);
+          resources.add(dir);
         }
-        return retval;
+        retval = dir;
+      } else {
+        retval = retval.getDirectoryResource(name);
+      }
     }
+    return retval;
+  }
 
-    public FirmwareBuilder newFirmwareResource() {
-        FirmwareBuilder retval = FirmwareBuilder.create();
-        resources.add(retval);
-        return retval;
-    }
+  /**
+   * Retrieves the child resources that match the specified builder..
+   * 
+   * @param <T>
+   *          the type of builder to filter on
+   * @param clazz
+   *          the builder to filter on
+   * @return the matching resources
+   */
+  public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
+    // List<T> retval = new LinkedList<>();
+    // for (ResourceBuilder builder : resources) {
+    // if (clazz.isInstance(builder)) {
+    // retval.add((T)builder);
+    // }
+    // }
+    @SuppressWarnings("unchecked")
+    List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e)).map(e -> (T) e)
+        .collect(Collectors.toList());
+    return Collections.unmodifiableList(retval);
+  }
 
-    private DirectoryBuilder getDirectoryBuilder(List<String> directoryPath) {
-        DirectoryBuilder retval = null;
-        for (String name : directoryPath) {
-            if (retval == null) {
-                DirectoryBuilder dir = directoryMap.get(name);
-                if (dir == null) {
-                    dir = DirectoryBuilder.create();
-                    dir.name(name);
-                    directoryMap.put(name, dir);
-                    resources.add(dir);
-                }
-                retval = dir;
-            } else {
-                retval = retval.getDirectoryResource(name);
-            }
-        }
-        return retval;
-    }
+  public List<ResourceBuilder> getResources() {
+    return Collections.unmodifiableList(resources);
+  }
 
-    /**
-     * Retrieves the child resources that match the specified builder..
-     * 
-     * @param <T>
-     *            the type of builder to filter on
-     * @param clazz
-     *            the builder to filter on
-     * @return the matching resources
-     */
-    public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
-//        List<T> retval = new LinkedList<>();
-//        for (ResourceBuilder builder : resources) {
-//            if (clazz.isInstance(builder)) {
-//                retval.add((T)builder);
-//            }
-//        }
-        @SuppressWarnings("unchecked")
-        List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e)).map(e -> (T) e)
-                .collect(Collectors.toList());
-        return Collections.unmodifiableList(retval);
-    }
-
-    public List<ResourceBuilder> getResources() {
-        return Collections.unmodifiableList(resources);
-    }
-
-    @Override
-    public void validate() throws ValidationException {
-        super.validate();
-    }
+  @Override
+  public void validate() throws ValidationException {
+    super.validate();
+  }
 
 }

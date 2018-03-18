@@ -34,78 +34,78 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DirectoryBuilder extends AbstractFileSystemItemBuilder<DirectoryBuilder> {
-    private Map<String, DirectoryBuilder> directoryMap = new LinkedHashMap<>();
-    private List<ResourceBuilder> resources = new LinkedList<>();
+  private Map<String, DirectoryBuilder> directoryMap = new LinkedHashMap<>();
+  private List<ResourceBuilder> resources = new LinkedList<>();
 
-    @Override
-    public void reset() {
-        super.reset();
-    }
+  @Override
+  public void reset() {
+    super.reset();
+  }
 
-    public static DirectoryBuilder create() {
-        return new DirectoryBuilder();
-    }
+  public static DirectoryBuilder create() {
+    return new DirectoryBuilder();
+  }
 
-    @Override
-    public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
-        creator.generate(this, parentContext);
-    }
+  @Override
+  public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
+    creator.generate(this, parentContext);
+  }
 
-    /**
-     * Retrieves the child resources.
-     * 
-     * @return the resources
-     */
-    public List<ResourceBuilder> getResources() {
-        return Collections.unmodifiableList(resources);
-    }
+  /**
+   * Retrieves the child resources.
+   * 
+   * @return the resources
+   */
+  public List<ResourceBuilder> getResources() {
+    return Collections.unmodifiableList(resources);
+  }
 
-    /**
-     * Retrieves the child resources that match the specified builder.
-     * 
-     * @param <T>
-     *            the type of builder to filter on
-     * @param clazz
-     *            the builder to filter on
-     * @return the matching resources
-     */
-    public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
-        @SuppressWarnings("unchecked")
-        List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e.getClass())).map(e -> (T) e)
-                .collect(Collectors.toList());
-        return Collections.unmodifiableList(retval);
-    }
+  /**
+   * Retrieves the child resources that match the specified builder.
+   * 
+   * @param <T>
+   *          the type of builder to filter on
+   * @param clazz
+   *          the builder to filter on
+   * @return the matching resources
+   */
+  public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
+    @SuppressWarnings("unchecked")
+    List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e.getClass())).map(e -> (T) e)
+        .collect(Collectors.toList());
+    return Collections.unmodifiableList(retval);
+  }
 
-    /**
-     * Retrieves or creates the named directory resource if it doesn't exist.
-     * 
-     * @param name
-     *            the directory name
-     * @return a directory resource
-     */
-    public DirectoryBuilder getDirectoryResource(String name) {
-        DirectoryBuilder retval = directoryMap.get(name);
-        if (retval == null) {
-            retval = DirectoryBuilder.create();
-            retval.name(name);
-            directoryMap.put(name, retval);
-            resources.add(retval);
-        }
-        return retval;
+  /**
+   * Retrieves or creates the named directory resource if it doesn't exist.
+   * 
+   * @param name
+   *          the directory name
+   * @return a directory resource
+   */
+  public DirectoryBuilder getDirectoryResource(String name) {
+    DirectoryBuilder retval = directoryMap.get(name);
+    if (retval == null) {
+      retval = DirectoryBuilder.create();
+      retval.name(name);
+      directoryMap.put(name, retval);
+      resources.add(retval);
     }
+    return retval;
+  }
 
-    /**
-     * Adds a new file resource to this directory
-     * 
-     * @param filename
-     *            the file name to add
-     * @return the new FileBuilder
-     */
-    public FileBuilder newFileResource(String filename) {
-        FileBuilder retval = FileBuilder.create();
-        retval.name(filename);
-        resources.add(retval);
-        return retval;
-    }
+  /**
+   * Adds a new file resource to this directory.
+   * 
+   * @param filename
+   *          the file name to add
+   * @return the new FileBuilder
+   */
+  public FileBuilder newFileResource(String filename) {
+    FileBuilder retval = FileBuilder.create();
+    retval.name(filename);
+    resources.add(retval);
+    return retval;
+  }
 
 }

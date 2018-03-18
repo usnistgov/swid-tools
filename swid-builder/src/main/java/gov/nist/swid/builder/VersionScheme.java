@@ -27,65 +27,89 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface VersionScheme {
-    Integer getIndex();
+  Integer getIndex();
 
-    String getName();
+  String getName();
 
-    static final Map<String, VersionScheme> byValueMap = new HashMap<>();
+  static final Map<String, VersionScheme> byValueMap = new HashMap<>();
 
-    static final Map<Integer, VersionScheme> byIndexMap = new HashMap<>();
+  static final Map<Integer, VersionScheme> byIndexMap = new HashMap<>();
 
-    default void init(Integer index, String value) {
-        if (index != null) {
-            synchronized (byIndexMap) {
-                byIndexMap.put(index, this);
-            }
-        }
-        synchronized (byValueMap) {
-            byValueMap.put(value, this);
-        }
+  /**
+   * Initialize the mapping of version scheme index and text values.
+   * 
+   * @param index
+   *          the index position
+   * @param value
+   *          the human-readable value
+   */
+  default void init(Integer index, String value) {
+    if (index != null) {
+      synchronized (byIndexMap) {
+        byIndexMap.put(index, this);
+      }
+    }
+    synchronized (byValueMap) {
+      byValueMap.put(value, this);
+    }
+  }
+
+  public static VersionScheme assignPrivateVersionScheme(int indexValue, String name) {
+    // force initialization of the known roles
+    KnownVersionScheme.values();
+    VersionScheme retval = null;
+    synchronized (byValueMap) {
+      @SuppressWarnings("unlikely-arg-type")
+      VersionScheme value = byValueMap.get(indexValue);
+      retval = value;
+    }
+    if (retval == null) {
+      retval = new UnknownVersionScheme(indexValue, name);
+    } else if (retval.getName().equals(name)) {
+      // return the current role
+    } else {
+      throw new IllegalStateException("the version scheme with the name '" + retval.getName()
+          + "' is already assigned to the index value '" + indexValue + "'");
+    }
+    return retval;
+  }
+
+  /**
+   * Lookup a version scheme by an index value.F
+   * 
+   * @param value
+   *          the index value to search for
+   * @return the matching role or {@code null} if no matching role was not found.
+   */
+  public static VersionScheme lookupByIndex(int value) {
+    // force initialization of the known roles
+    KnownVersionScheme.values();
+    VersionScheme retval = null;
+    synchronized (byIndexMap) {
+      retval = byIndexMap.get(value);
+    }
+    return retval;
+  }
+
+  /**
+   * Lookup a version scheme by a human-readable name.
+   * 
+   * @param name
+   *          the name to lookup
+   * @return the matching version scheme or {@code null} if no matching version scheme was not found.
+   */
+  public static VersionScheme lookupByName(String name) {
+    // force initialization of the known roles
+    KnownVersionScheme.values();
+    VersionScheme retval = null;
+    synchronized (byValueMap) {
+      retval = byValueMap.get(name);
     }
 
-    public static VersionScheme assignPrivateVersionScheme(int indexValue, String name) {
-        // force initialization of the known roles
-        KnownVersionScheme.values();
-        VersionScheme retval = null;
-        synchronized (byValueMap) {
-            retval = byValueMap.get(indexValue);
-        }
-        if (retval == null) {
-            retval = new UnknownVersionScheme(indexValue, name);
-        } else if (retval.getName().equals(name)) {
-            // return the current role
-        } else {
-            throw new IllegalStateException("the version scheme with the name '" + retval.getName()
-                    + "' is already assigned to the index value '" + indexValue + "'");
-        }
-        return retval;
+    if (retval == null) {
+      retval = new UnknownVersionScheme(name);
     }
-
-    public static VersionScheme lookupByIndex(int value) {
-        // force initialization of the known roles
-        KnownVersionScheme.values();
-        VersionScheme retval = null;
-        synchronized (byIndexMap) {
-            retval = byIndexMap.get(value);
-        }
-        return retval;
-    }
-
-    public static VersionScheme lookupByName(String name) {
-        // force initialization of the known roles
-        KnownVersionScheme.values();
-        VersionScheme retval = null;
-        synchronized (byValueMap) {
-            retval = byValueMap.get(name);
-        }
-
-        if (retval == null) {
-            retval = new UnknownVersionScheme(name);
-        }
-        return retval;
-    }
+    return retval;
+  }
 
 }

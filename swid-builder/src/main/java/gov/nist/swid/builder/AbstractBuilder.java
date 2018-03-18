@@ -27,51 +27,51 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 public abstract class AbstractBuilder implements Builder {
-    protected void validateNonNull(String field, Object value) throws ValidationException {
-        if (value == null) {
-            throw new ValidationException("the field '" + field + "' must be provided");
-        }
+  protected void validateNonNull(String field, Object value) throws ValidationException {
+    if (value == null) {
+      throw new ValidationException("the field '" + field + "' must be provided");
+    }
+  }
+
+  protected void validateNonEmpty(String field, String value) throws ValidationException {
+    validateNonNull(field, value);
+
+    if (value.isEmpty()) {
+      throw new ValidationException("the field '" + field + "' must contain a non-empty value");
     }
 
-    protected void validateNonEmpty(String field, String value) throws ValidationException {
-        validateNonNull(field, value);
+  }
 
-        if (value.isEmpty()) {
-            throw new ValidationException("the field '" + field + "' must contain a non-empty value");
-        }
+  protected <T> void validateNonEmpty(String field, Collection<T> value) throws ValidationException {
+    validateNonNull(field, value);
 
+    if (value.isEmpty()) {
+      throw new ValidationException("the field '" + field + "' must contain a non-empty value");
     }
 
-    protected <T> void validateNonEmpty(String field, Collection<T> value) throws ValidationException {
-        validateNonNull(field, value);
+  }
 
-        if (value.isEmpty()) {
-            throw new ValidationException("the field '" + field + "' must contain a non-empty value");
-        }
+  protected void validatePatternMatch(String field, Pattern pattern, String value) throws ValidationException {
+    validateNonNull(field, value);
 
+    if (!pattern.matcher(value).matches()) {
+      StringBuilder builder = new StringBuilder();
+      builder.append("the value for field '");
+      builder.append(field);
+      builder.append("' must match the pattern '");
+      builder.append(pattern.pattern());
+      builder.append('\'');
+      throw new ValidationException(builder.toString());
     }
+  }
 
-    protected void validatePatternMatch(String field, Pattern pattern, String value) throws ValidationException {
-        validateNonNull(field, value);
-
-        if (!pattern.matcher(value).matches()) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("the value for field '");
-            builder.append(field);
-            builder.append("' must match the pattern '");
-            builder.append(pattern.pattern());
-            builder.append('\'');
-            throw new ValidationException(builder.toString());
-        }
+  @Override
+  public final boolean isValid() {
+    try {
+      validate();
+    } catch (RuntimeException | ValidationException e) {
+      return false;
     }
-
-    @Override
-    public final boolean isValid() {
-        try {
-            validate();
-        } catch (RuntimeException | ValidationException e) {
-            return false;
-        }
-        return true;
-    }
+    return true;
+  }
 }

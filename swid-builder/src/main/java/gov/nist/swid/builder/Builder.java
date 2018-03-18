@@ -24,10 +24,10 @@
 package gov.nist.swid.builder;
 
 public interface Builder {
-    public void reset();
+  public void reset();
 
-    // TODO: remove this method and use validate instead.
-    public boolean isValid();
+  // TODO: remove this method and use validate instead.
+  public boolean isValid();
 
-    public void validate() throws ValidationException;
+  public void validate() throws ValidationException;
 }

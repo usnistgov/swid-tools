@@ -29,7 +29,6 @@ import gov.nist.swid.builder.EntityBuilder;
 import gov.nist.swid.builder.KnownVersionScheme;
 import gov.nist.swid.builder.Role;
 import gov.nist.swid.builder.SWIDBuilder;
-import gov.nist.swid.builder.SWIDConstants;
 import gov.nist.swid.builder.resource.AbstractResourceCollectionBuilder;
 import gov.nist.swid.builder.resource.HashAlgorithm;
 import gov.nist.swid.builder.resource.file.FileBuilder;
@@ -46,173 +45,173 @@ import java.util.Collection;
 import java.util.List;
 
 public class MavenProjectSwidBuilderHelper {
-    private MavenProjectSwidBuilderHelper() {
-        // disable construction
+  private MavenProjectSwidBuilderHelper() {
+    // disable construction
+  }
+
+  /**
+   * Apply Maven project metadata to populate the core SWID Tag data elements.
+   * 
+   * @param builder
+   *          the SWID Tag builder
+   * @param project
+   *          the Maven project instance
+   * @return the SWID Tag builder instance
+   */
+  public static SWIDBuilder applyProjectMetadata(SWIDBuilder builder, MavenProject project) {
+    String groupId = project.getGroupId();
+    String artifactId = project.getArtifactId();
+    String version = project.getVersion();
+
+    String name = project.getName();
+    if (name == null) {
+      StringBuilder str = new StringBuilder();
+      str.append(groupId);
+      str.append('-');
+      str.append(artifactId);
+      str.append('-');
+      str.append(version);
+      name = str.toString();
+    }
+    builder.name(name);
+
+    // no specific tag vaersion
+
+    builder.version(version);
+
+    if (version.endsWith("SNAPSHOT")) {
+      builder.versionScheme(KnownVersionScheme.MULTIPART_NUMERIC_WITH_SUFFIX);
+    } else {
+      builder.versionScheme(KnownVersionScheme.MULTIPART_NUMERIC);
+    }
+    builder.tagId(generateTagId(project));
+
+    return builder;
+  }
+
+  protected static String generateTagId(MavenProject project) {
+    String groupId = project.getGroupId();
+    String artifactId = project.getArtifactId();
+    String version = project.getVersion();
+
+    StringBuilder str = new StringBuilder();
+    str.append(groupId);
+    str.append('-');
+    str.append(artifactId);
+    str.append('-');
+    str.append(version);
+
+    // detect if this is a snapshot version
+    if (version.endsWith("SNAPSHOT")) {
+      // Append a date/time to make this snapshot unique
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'kkmmss");
+      str.append("-");
+      // Use UTC to prevent information leakage around where the project is built
+      str.append(ZonedDateTime.now(ZoneId.of("UTC")).format(formatter));
+    }
+    return str.toString();
+  }
+
+  /**
+   * Append the provided SWID Tag entities to the tag.
+   * 
+   * @param builder
+   *          the SWID Tag builder
+   * @param entities
+   *          the list of entities to append
+   * @return the SWID Tag builder instance
+   */
+  public static SWIDBuilder applyEntities(SWIDBuilder builder, List<Entity> entities) {
+
+    for (Entity entity : entities) {
+      EntityBuilder entityBuilder = EntityBuilder.create();
+      if (entity.getName() != null) {
+        entityBuilder.name(entity.getName());
+      }
+
+      if (entity.getRegid() != null) {
+        entityBuilder.regid(entity.getRegid());
+      }
+
+      if (entity.getRoles() != null) {
+        for (String roleValue : entity.getRoles()) {
+          entityBuilder.addRole(Role.lookupByName(roleValue));
+        }
+      }
+      builder.addEntity(entityBuilder);
+    }
+    return builder;
+  }
+
+  /**
+   * Apply the provided file entries to the tag's payload.
+   * 
+   * @param builder
+   *          the payload's builder
+   * @param swidTagPath
+   *          the output path of the tag
+   * @param swidFiles
+   *          the files to build payload entries for
+   * @param hashAlgorithms
+   *          the hash algorithms to use to calculate file digests
+   * @throws NoSuchAlgorithmException
+   *           if a hash algorithm is not supported
+   * @throws IOException
+   *           if an error occured while processing the payload files
+   */
+  public static void applyFileEnties(AbstractResourceCollectionBuilder<?> builder, String swidTagPath,
+      List<FileEntry> swidFiles, Collection<HashAlgorithm> hashAlgorithms)
+      throws NoSuchAlgorithmException, IOException {
+    for (FileEntry entry : swidFiles) {
+
+      FileBuilder fileBuilder = builder.newFileResource(entry.getRelativePathSegements(swidTagPath));
+
+      String version = entry.getVersion();
+      if (version != null) {
+        fileBuilder.version(version);
+      }
+
+      Long size = entry.getSize();
+      if (size != null) {
+        fileBuilder.size(size);
+      }
+
+      for (HashAlgorithm algorithm : hashAlgorithms) {
+        fileBuilder.hash(algorithm, entry.getInputStream());
+      }
+    }
+  }
+
+  /**
+   * Build a SWID Tag using Maven project metadata and provided Entity and FileEntry information.
+   * 
+   * @param project
+   *          the MavenProject to build the tag for
+   * @param swidTagPath
+   *          the output path of the tag
+   * @param entities
+   *          the SWID Tag entities to include
+   * @param swidFiles
+   *          the files to build payload entries for
+   * @return a builder instance for the tag
+   * @throws NoSuchAlgorithmException
+   *           if a hash algorithm is not supported
+   * @throws IOException
+   *           if an error occured while processing the payload files
+   */
+  public static SWIDBuilder buildSwidTag(MavenProject project, String swidTagPath, List<Entity> entities,
+      List<FileEntry> swidFiles) throws NoSuchAlgorithmException, IOException {
+    SWIDBuilder builder = SWIDBuilder.create();
+
+    MavenProjectSwidBuilderHelper.applyProjectMetadata(builder, project);
+
+    if (entities != null && !entities.isEmpty()) {
+      MavenProjectSwidBuilderHelper.applyEntities(builder, entities);
     }
 
-    /**
-     * Apply Maven project metadata to populate the core SWID Tag data elements.
-     * 
-     * @param builder
-     *            the SWID Tag builder
-     * @param project
-     *            the Maven project instance
-     * @return the SWID Tag builder instance
-     */
-    public static SWIDBuilder applyProjectMetadata(SWIDBuilder builder, MavenProject project) {
-        String groupId = project.getGroupId();
-        String artifactId = project.getArtifactId();
-        String version = project.getVersion();
-
-        String name = project.getName();
-        if (name == null) {
-            StringBuilder str = new StringBuilder();
-            str.append(groupId);
-            str.append('-');
-            str.append(artifactId);
-            str.append('-');
-            str.append(version);
-            name = str.toString();
-        }
-        builder.name(name);
-
-        // no specific tag vaersion
-
-        builder.version(version);
-
-        if (version.endsWith("SNAPSHOT")) {
-            builder.versionScheme(KnownVersionScheme.MULTIPART_NUMERIC_WITH_SUFFIX);
-        } else {
-            builder.versionScheme(KnownVersionScheme.MULTIPART_NUMERIC);
-        }
-        builder.tagId(generateTagId(project));
-
-        return builder;
-    }
-
-    protected static String generateTagId(MavenProject project) {
-        String groupId = project.getGroupId();
-        String artifactId = project.getArtifactId();
-        String version = project.getVersion();
-
-        StringBuilder str = new StringBuilder();
-        str.append(groupId);
-        str.append('-');
-        str.append(artifactId);
-        str.append('-');
-        str.append(version);
-
-        // detect if this is a snapshot version
-        if (version.endsWith("SNAPSHOT")) {
-            // Append a date/time to make this snapshot unique
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'kkmmss");
-            str.append("-");
-            // Use UTC to prevent information leakage around where the project is built
-            str.append(ZonedDateTime.now(ZoneId.of("UTC")).format(formatter));
-        }
-        return str.toString();
-    }
-
-    /**
-     * Append the provided SWID Tag entities to the tag.
-     * 
-     * @param builder
-     *            the SWID Tag builder
-     * @param entities
-     *            the list of entities to append
-     * @return the SWID Tag builder instance
-     */
-    public static SWIDBuilder applyEntities(SWIDBuilder builder, List<Entity> entities) {
-
-        for (Entity entity : entities) {
-            EntityBuilder entityBuilder = EntityBuilder.create();
-            if (entity.getName() != null) {
-                entityBuilder.name(entity.getName());
-            }
-
-            if (entity.getRegid() != null) {
-                entityBuilder.regid(entity.getRegid());
-            }
-
-            if (entity.getRoles() != null) {
-                for (String roleValue : entity.getRoles()) {
-                    entityBuilder.addRole(Role.lookupByName(roleValue));
-                }
-            }
-            builder.addEntity(entityBuilder);
-        }
-        return builder;
-    }
-
-    /**
-     * Apply the provided file entries to the tag's payload.
-     * 
-     * @param builder
-     *            the payload's builder
-     * @param swidTagPath
-     *            the output path of the tag
-     * @param swidFiles
-     *            the files to build payload entries for
-     * @param hashAlgorithms
-     *            the hash algorithms to use to calculate file digests
-     * @throws NoSuchAlgorithmException
-     *             if a hash algorithm is not supported
-     * @throws IOException
-     *             if an error occured while processing the payload files
-     */
-    public static void applyFileEnties(AbstractResourceCollectionBuilder<?> builder, String swidTagPath,
-            List<FileEntry> swidFiles, Collection<HashAlgorithm> hashAlgorithms)
-            throws NoSuchAlgorithmException, IOException {
-        for (FileEntry entry : swidFiles) {
-
-            FileBuilder fileBuilder = builder.newFileResource(entry.getRelativePathSegements(swidTagPath));
-
-            String version = entry.getVersion();
-            if (version != null) {
-                fileBuilder.version(version);
-            }
-
-            Long size = entry.getSize();
-            if (size != null) {
-                fileBuilder.size(size);
-            }
-
-            for (HashAlgorithm algorithm : hashAlgorithms) {
-                fileBuilder.hash(algorithm, entry.getInputStream());
-            }
-        }
-    }
-
-    /**
-     * Build a SWID Tag using Maven project metadata and provided Entity and FileEntry information.
-     * 
-     * @param project
-     *            the MavenProject to build the tag for
-     * @param swidTagPath
-     *            the output path of the tag
-     * @param entities
-     *            the SWID Tag entities to include
-     * @param swidFiles
-     *            the files to build payload entries for
-     * @return a builder instance for the tag
-     * @throws NoSuchAlgorithmException
-     *             if a hash algorithm is not supported
-     * @throws IOException
-     *             if an error occured while processing the payload files
-     */
-    public static SWIDBuilder buildSwidTag(MavenProject project, String swidTagPath, List<Entity> entities,
-            List<FileEntry> swidFiles) throws NoSuchAlgorithmException, IOException {
-        SWIDBuilder builder = SWIDBuilder.create();
-
-        MavenProjectSwidBuilderHelper.applyProjectMetadata(builder, project);
-
-        if (entities != null && !entities.isEmpty()) {
-            MavenProjectSwidBuilderHelper.applyEntities(builder, entities);
-        }
-
-        MavenProjectSwidBuilderHelper.applyFileEnties(builder.newPayload(), swidTagPath, swidFiles,
-                Arrays.asList(HashAlgorithm.SHA_512, HashAlgorithm.SHA_256));
-        return builder;
-    }
+    MavenProjectSwidBuilderHelper.applyFileEnties(builder.newPayload(), swidTagPath, swidFiles,
+        Arrays.asList(HashAlgorithm.SHA_512, HashAlgorithm.SHA_256));
+    return builder;
+  }
 
 }

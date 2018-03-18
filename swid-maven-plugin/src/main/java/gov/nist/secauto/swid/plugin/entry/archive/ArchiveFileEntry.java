@@ -37,70 +37,76 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 public class ArchiveFileEntry implements FileEntry {
 
-    private final ArchiveEntry archiveEntry;
-    private final Artifact artifact;
+  private final ArchiveEntry archiveEntry;
+  private final Artifact artifact;
 
-    public ArchiveFileEntry(ArchiveEntry archiveEntry, Artifact artifact) {
-        super();
-        this.archiveEntry = archiveEntry;
-        this.artifact = artifact;
+  /**
+   * Construct a new file entry based on archive data. 
+   * @param archiveEntry the archive metadata
+   * @param artifact optional artifact metadata
+   */
+  public ArchiveFileEntry(ArchiveEntry archiveEntry, Artifact artifact) {
+    Objects.requireNonNull(archiveEntry, "archiveEntry");
+    this.archiveEntry = archiveEntry;
+    this.artifact = artifact;
+  }
+
+  @Override
+  public Long getSize() {
+    PlexusIoResource resource = archiveEntry.getResource();
+
+    File file = null;
+    if (resource instanceof PlexusIoFileResource) {
+      file = ((PlexusIoFileResource) resource).getFile();
     }
 
-    @Override
-    public Long getSize() {
-        PlexusIoResource resource = archiveEntry.getResource();
+    return (file == null) ? null : file.length();
+  }
 
-        File file = null;
-        if (resource instanceof PlexusIoFileResource) {
-            file = ((PlexusIoFileResource) resource).getFile();
-        }
+  @Override
+  public InputStream getInputStream() throws IOException {
+    return archiveEntry.getInputStream();
+  }
 
-        return (file == null) ? null : file.length();
+  @Override
+  public String getVersion() {
+    String retval = null;
+    if (artifact != null) {
+      retval = artifact.getVersion();
+    }
+    return retval;
+  }
+
+  @Override
+  public Path getPath() {
+    PlexusIoResource resource = archiveEntry.getResource();
+
+    File file = null;
+    if (resource instanceof PlexusIoFileResource) {
+      file = ((PlexusIoFileResource) resource).getFile();
     }
 
-    @Override
-    public InputStream getInputStream() throws IOException {
-        return archiveEntry.getInputStream();
-    }
+    return (file == null) ? null : file.toPath();
+  }
 
-    @Override
-    public String getVersion() {
-        String retval = null;
-        if (artifact != null) {
-            retval = artifact.getVersion();
-        }
-        return retval;
-    }
+  @Override
+  public String getOutputRelativePath() {
+    return archiveEntry.getName();
+  }
 
-    @Override
-    public Path getPath() {
-        PlexusIoResource resource = archiveEntry.getResource();
+  @Override
+  public List<String> getRelativePathSegements(String swidTagPath) {
+    return PathRelativizer.relativize(swidTagPath, getOutputRelativePath());
+  }
 
-        File file = null;
-        if (resource instanceof PlexusIoFileResource) {
-            file = ((PlexusIoFileResource) resource).getFile();
-        }
-
-        return (file == null) ? null : file.toPath();
-    }
-
-    @Override
-    public String getOutputRelativePath() {
-        return archiveEntry.getName();
-    }
-
-    @Override
-    public List<String> getRelativePathSegements(String swidTagPath) {
-        return PathRelativizer.relativize(swidTagPath, getOutputRelativePath());
-    }
-
-    @Override
-    public FileInfo asFileInfo() {
-        PlexusIoResource resource = archiveEntry.getResource();
-        return resource;
-    }
+  @Override
+  public FileInfo asFileInfo() {
+    PlexusIoResource resource = archiveEntry.getResource();
+    return resource;
+  }
 
 }

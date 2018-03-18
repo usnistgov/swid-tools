@@ -24,30 +24,37 @@
 package gov.nist.swid.builder;
 
 public class UnknownRole implements Role {
-    private final Integer index;
-    private final String name;
+  private final Integer index;
+  private final String name;
 
-    public UnknownRole(String name) {
-        this(null, name);
-    }
+  public UnknownRole(String name) {
+    this(null, name);
+  }
 
-    public UnknownRole(Integer index, String name) {
-        init(index, name);
-        if (index != null && (index < 128 || index > 255)) {
-            throw new IllegalArgumentException(
-                    "An unknown index value must be within the private use space (128 to 255)");
-        }
-        this.index = index;
-        this.name = name;
+  /**
+   * Create a new custom Role.
+   * 
+   * @param index
+   *          the integer index value
+   * @param name
+   *          the human-readable name
+   */
+  public UnknownRole(Integer index, String name) {
+    init(index, name);
+    if (index != null && (index < 128 || index > 255)) {
+      throw new IllegalArgumentException("An unknown index value must be within the private use space (128 to 255)");
     }
+    this.index = index;
+    this.name = name;
+  }
 
-    @Override
-    public Integer getIndex() {
-        return index;
-    }
+  @Override
+  public Integer getIndex() {
+    return index;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 }

@@ -24,8 +24,5 @@
 package gov.nist.swid.builder;
 
 public enum TagType {
-    CORPUS,
-    PATCH,
-    SUPPLEMENTAL,
-    PRIMARY;
+  CORPUS, PATCH, SUPPLEMENTAL, PRIMARY;
 }

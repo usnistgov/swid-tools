@@ -35,53 +35,53 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class ResourceFileEntry extends AbstractFileEntry {
-    private final Resource resource;
-    private final Path file;
+  private final Resource resource;
+  private final Path file;
 
-    /**
-     * Construct a new File entry contained with a Maven resource folder.
-     * 
-     * @param resource
-     *            the containing Maven resource
-     * @param file
-     *            the file for this entry
-     */
-    public ResourceFileEntry(Resource resource, Path file) {
-        super();
-        Objects.requireNonNull(resource);
-        Objects.requireNonNull(file);
-        this.resource = resource;
-        this.file = file;
-    }
+  /**
+   * Construct a new File entry contained with a Maven resource folder.
+   * 
+   * @param resource
+   *          the containing Maven resource
+   * @param file
+   *          the file for this entry
+   */
+  public ResourceFileEntry(Resource resource, Path file) {
+    super();
+    Objects.requireNonNull(resource);
+    Objects.requireNonNull(file);
+    this.resource = resource;
+    this.file = file;
+  }
 
-    @Override
-    public Path getBase() {
-        return Paths.get(resource.getDirectory());
-    }
+  @Override
+  public Path getBase() {
+    return Paths.get(resource.getDirectory());
+  }
 
-    @Override
-    protected String getOutputBase() {
-        return resource.getTargetPath();
-    }
+  @Override
+  protected String getOutputBase() {
+    return resource.getTargetPath();
+  }
 
-    @Override
-    public Path getPath() {
-        return file;
-    }
+  @Override
+  public Path getPath() {
+    return file;
+  }
 
-    @Override
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new FileInputStream(file.toFile());
-    }
+  @Override
+  public InputStream getInputStream() throws FileNotFoundException {
+    return new FileInputStream(file.toFile());
+  }
 
-    @Override
-    public String getVersion() {
-        // these files are not versioned
-        return null;
-    }
+  @Override
+  public String getVersion() {
+    // these files are not versioned
+    return null;
+  }
 
-    @Override
-    public Long getSize() {
-        return file.toFile().length();
-    }
+  @Override
+  public Long getSize() {
+    return file.toFile().length();
+  }
 }

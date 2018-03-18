@@ -64,7 +64,7 @@ public class SWIDBuilderTest {
         builder.name("Bootloader").version("1.0.0").tagId(UUID.randomUUID().toString())
                 .addEntity(EntityBuilder.create().regid("org.ietf").name("Internet Engineering Task Force SUIT WG")
                         .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR))
-                .newPayload().newFirmwareResource().hash(HashAlgorithm.SHA_256, new File("swid.cbor"))
+                .newPayload().newFirmwareResource().hash(HashAlgorithm.SHA_256, this.getClass().getResourceAsStream("/firmware"))
                 .name("firmware.bin");
 
         // File file = folder.newFile();

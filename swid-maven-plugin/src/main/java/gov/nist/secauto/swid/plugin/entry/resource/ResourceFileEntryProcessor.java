@@ -45,77 +45,77 @@ import java.util.stream.Collectors;
 
 public class ResourceFileEntryProcessor extends AbstractFileEntryProcessor<Resource> {
 
-    private IncludeExcludeFileSelector selector = new IncludeExcludeFileSelector();
-    private final String buildOutputDirectory;
+  private IncludeExcludeFileSelector selector = new IncludeExcludeFileSelector();
+  private final String buildOutputDirectory;
 
-    /**
-     * Construct a new entry processor.
-     * 
-     * @param buildOutputDirectory
-     *            the directory where built classes are stored
-     * @param log
-     *            the Maven logger instance
-     */
-    public ResourceFileEntryProcessor(String buildOutputDirectory, Log log) {
-        super(log);
-        Objects.requireNonNull(buildOutputDirectory);
-        this.buildOutputDirectory = buildOutputDirectory;
+  /**
+   * Construct a new entry processor.
+   * 
+   * @param buildOutputDirectory
+   *          the directory where built classes are stored
+   * @param log
+   *          the Maven logger instance
+   */
+  public ResourceFileEntryProcessor(String buildOutputDirectory, Log log) {
+    super(log);
+    Objects.requireNonNull(buildOutputDirectory);
+    this.buildOutputDirectory = buildOutputDirectory;
+  }
+
+  public void setIncludes(String[] includes) {
+    selector.setIncludes(includes);
+  }
+
+  public void setExcludes(String[] excludes) {
+    selector.setExcludes(excludes);
+  }
+
+  @Override
+  public List<FileEntry> process(List<? extends Resource> resources) throws IOException {
+    List<FileEntry> processedResources = super.process(resources);
+    List<FileEntry> processedClasses = generateClassFileEntries();
+
+    int size = processedResources.size() + processedClasses.size();
+    List<FileEntry> retval;
+    if (size == 0) {
+      retval = Collections.emptyList();
+    } else {
+      retval = new ArrayList<>(size);
+      retval.addAll(processedResources);
+      retval.addAll(processedClasses);
     }
+    return retval;
+  }
 
-    public void setIncludes(String[] includes) {
-        selector.setIncludes(includes);
+  private List<FileEntry> generateClassFileEntries() throws IOException {
+    getLog().debug("Processing classes: " + buildOutputDirectory);
+
+    Path path = Paths.get(buildOutputDirectory);
+
+    List<FileEntry> retval;
+    if (path.toFile().exists()) {
+      retval = Files.walk(path).filter(Files::isRegularFile).map(p -> new FileFileEntry(p, path))
+          .filter(new FileSelectorPredicate(selector)).collect(Collectors.toList());
+    } else {
+      retval = Collections.emptyList();
     }
+    return retval;
+  }
 
-    public void setExcludes(String[] excludes) {
-        selector.setExcludes(excludes);
+  @Override
+  protected Collection<? extends FileEntry> generateFileEntries(Resource resource) throws IOException {
+    getLog().debug("Processing resource: " + resource.getDirectory());
+
+    Path path = Paths.get(resource.getDirectory());
+
+    List<FileEntry> retval;
+    if (path.toFile().exists()) {
+      retval = Files.walk(path).filter(Files::isRegularFile).map(p -> new ResourceFileEntry(resource, p))
+          .filter(new FileSelectorPredicate(selector)).collect(Collectors.toList());
+    } else {
+      retval = Collections.emptyList();
     }
-
-    @Override
-    public List<FileEntry> process(List<? extends Resource> resources) throws IOException {
-        List<FileEntry> processedResources = super.process(resources);
-        List<FileEntry> processedClasses = generateClassFileEntries();
-
-        int size = processedResources.size() + processedClasses.size();
-        List<FileEntry> retval;
-        if (size == 0) {
-            retval = Collections.emptyList();
-        } else {
-            retval = new ArrayList<>(size);
-            retval.addAll(processedResources);
-            retval.addAll(processedClasses);
-        }
-        return retval;
-    }
-
-    private List<FileEntry> generateClassFileEntries() throws IOException {
-        getLog().debug("Processing classes: " + buildOutputDirectory);
-
-        Path path = Paths.get(buildOutputDirectory);
-
-        List<FileEntry> retval;
-        if (path.toFile().exists()) {
-            retval = Files.walk(path).filter(Files::isRegularFile).map(p -> new FileFileEntry(p, path))
-                    .filter(new FileSelectorPredicate(selector)).collect(Collectors.toList());
-        } else {
-            retval = Collections.emptyList();
-        }
-        return retval;
-    }
-
-    @Override
-    protected Collection<? extends FileEntry> generateFileEntries(Resource resource) throws IOException {
-        getLog().debug("Processing resource: " + resource.getDirectory());
-
-        Path path = Paths.get(resource.getDirectory());
-
-        List<FileEntry> retval;
-        if (path.toFile().exists()) {
-            retval = Files.walk(path).filter(Files::isRegularFile).map(p -> new ResourceFileEntry(resource, p))
-                    .filter(new FileSelectorPredicate(selector)).collect(Collectors.toList());
-        } else {
-            retval = Collections.emptyList();
-        }
-        return retval;
-    }
+    return retval;
+  }
 
 }

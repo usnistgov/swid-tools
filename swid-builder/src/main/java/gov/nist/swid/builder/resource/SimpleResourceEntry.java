@@ -30,129 +30,128 @@ import java.util.List;
 import java.util.Map;
 
 public class SimpleResourceEntry implements ResourceEntry {
-    private String path;
-    private Long size;
-    private String version;
-    private Map<HashAlgorithm, List<Byte>> digestValues;
+  private String path;
+  private Long size;
+  private String version;
+  private Map<HashAlgorithm, List<Byte>> digestValues;
 
-    /**
-     * Construct a new {@link ResourceEntry} using simple provided values.
-     * 
-     * @param path
-     *            a path with '/' separators
-     * @param digestValues
-     *            a mapping of digest algorithms to bytes based on the resources contents, which may
-     *            be {@code null} or empty
-     * @param size
-     *            the size in bytes of the resource contents, which may be {@code null}
-     * @param version
-     *            the version of the resource, which may be {@code null}
-     */
-    public SimpleResourceEntry(String path, Map<HashAlgorithm, List<Byte>> digestValues, Long size, String version) {
-        Util.requireNonEmpty(path, "path");
+  /**
+   * Construct a new {@link ResourceEntry} using simple provided values.
+   * 
+   * @param path
+   *          a path with '/' separators
+   * @param digestValues
+   *          a mapping of digest algorithms to bytes based on the resources contents, which may be {@code null} or
+   *          empty
+   * @param size
+   *          the size in bytes of the resource contents, which may be {@code null}
+   * @param version
+   *          the version of the resource, which may be {@code null}
+   */
+  public SimpleResourceEntry(String path, Map<HashAlgorithm, List<Byte>> digestValues, Long size, String version) {
+    Util.requireNonEmpty(path, "path");
 
-        if (version != null) {
-            Util.requireNonEmpty(version, "version");
-        }
-
-        if (digestValues == null) {
-            this.digestValues = Collections.emptyMap();
-        } else {
-            this.digestValues = Collections.unmodifiableMap(digestValues);
-        }
-        this.path = path;
-        this.size = size;
-        this.version = version;
+    if (version != null) {
+      Util.requireNonEmpty(version, "version");
     }
 
-    @Override
-    public String getPath() {
-        return path;
+    if (digestValues == null) {
+      this.digestValues = Collections.emptyMap();
+    } else {
+      this.digestValues = Collections.unmodifiableMap(digestValues);
     }
+    this.path = path;
+    this.size = size;
+    this.version = version;
+  }
 
-    @Override
-    public long getSize() {
-        return size;
-    }
+  @Override
+  public String getPath() {
+    return path;
+  }
 
-    @Override
-    public String getVersion() {
-        return version;
-    }
+  @Override
+  public long getSize() {
+    return size;
+  }
 
-    @Override
-    public List<Byte> getDigestValue(HashAlgorithm key) {
-        return digestValues.get(key);
-    }
+  @Override
+  public String getVersion() {
+    return version;
+  }
 
-    @Override
-    public Map<HashAlgorithm, List<Byte>> getDigestValues() {
-        return Collections.unmodifiableMap(digestValues);
-    }
+  @Override
+  public List<Byte> getDigestValue(HashAlgorithm key) {
+    return digestValues.get(key);
+  }
 
-    /**
-     * Set the path for this entry.
-     * 
-     * @param path
-     *            the path to set
-     * @return the current instance
-     * @throws NullPointerException
-     *             if the provided argument was {@code null}
-     * @throws IllegalArgumentException
-     *             if the provided argument is empty
-     */
-    public SimpleResourceEntry path(String path) {
-        Util.requireNonEmpty(path, "path");
-        this.path = path;
-        return this;
-    }
+  @Override
+  public Map<HashAlgorithm, List<Byte>> getDigestValues() {
+    return Collections.unmodifiableMap(digestValues);
+  }
 
-    /**
-     * Set the size in bytes for this entry.
-     * 
-     * @param size
-     *            the size to set
-     * @return the current instance
-     */
-    public SimpleResourceEntry size(long size) {
-        this.size = size;
-        return this;
-    }
+  /**
+   * Set the path for this entry.
+   * 
+   * @param path
+   *          the path to set
+   * @return the current instance
+   * @throws NullPointerException
+   *           if the provided argument was {@code null}
+   * @throws IllegalArgumentException
+   *           if the provided argument is empty
+   */
+  public SimpleResourceEntry path(String path) {
+    Util.requireNonEmpty(path, "path");
+    this.path = path;
+    return this;
+  }
 
-    /**
-     * Set the version for this entry.
-     * 
-     * @param version
-     *            the version to set
-     * @return the current instance
-     * @throws NullPointerException
-     *             if the provided argument was {@code null}
-     * @throws IllegalArgumentException
-     *             if the provided argument is empty
-     */
-    public SimpleResourceEntry version(String version) {
-        Util.requireNonEmpty(version, "version");
-        this.version = version;
-        return this;
-    }
+  /**
+   * Set the size in bytes for this entry.
+   * 
+   * @param size
+   *          the size to set
+   * @return the current instance
+   */
+  public SimpleResourceEntry size(long size) {
+    this.size = size;
+    return this;
+  }
 
-    /**
-     * Associate a list of bytes representing a digest with the hash function used to generate the
-     * digest for this entry.
-     * 
-     * @param algorithm
-     *            the hash function to set
-     * @param bytes
-     *            the list of bytes representing the digest value
-     * @return the current instance
-     * @throws NullPointerException
-     *             if the provided argument was {@code null}
-     * @throws IllegalArgumentException
-     *             if the provided argument is empty
-     */
-    public SimpleResourceEntry digestValue(HashAlgorithm algorithm, List<Byte> bytes) {
-        this.digestValues.put(algorithm, bytes);
-        return this;
-    }
+  /**
+   * Set the version for this entry.
+   * 
+   * @param version
+   *          the version to set
+   * @return the current instance
+   * @throws NullPointerException
+   *           if the provided argument was {@code null}
+   * @throws IllegalArgumentException
+   *           if the provided argument is empty
+   */
+  public SimpleResourceEntry version(String version) {
+    Util.requireNonEmpty(version, "version");
+    this.version = version;
+    return this;
+  }
+
+  /**
+   * Associate a list of bytes representing a digest with the hash function used to generate the digest for this entry.
+   * 
+   * @param algorithm
+   *          the hash function to set
+   * @param bytes
+   *          the list of bytes representing the digest value
+   * @return the current instance
+   * @throws NullPointerException
+   *           if the provided argument was {@code null}
+   * @throws IllegalArgumentException
+   *           if the provided argument is empty
+   */
+  public SimpleResourceEntry digestValue(HashAlgorithm algorithm, List<Byte> bytes) {
+    this.digestValues.put(algorithm, bytes);
+    return this;
+  }
 
 }

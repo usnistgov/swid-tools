@@ -26,45 +26,45 @@ package gov.nist.secauto.swid.plugin.model;
 import java.util.List;
 
 /**
- * This class is a data transfer object used for conveying entity component configuration settings
- * for the {@link SWIDHandler} plexus component.
+ * This class is a data transfer object used for conveying entity component configuration settings for the
+ * {@link SWIDHandler} plexus component.
  *
  */
 public class Entity {
-    private String name;
-    private String regid;
-    private List<String> roles;
+  private String name;
+  private String regid;
+  private List<String> roles;
 
-    /**
-     * Construct an Entity with no assigned information.
-     */
-    public Entity() {
-    }
+  /**
+   * Construct an Entity with no assigned information.
+   */
+  public Entity() {
+  }
 
-    /**
-     * Retrieve the assigned name for the entity.
-     * 
-     * @return the name or <code>null</code> if one isn't assigned
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Retrieve the assigned name for the entity.
+   * 
+   * @return the name or <code>null</code> if one isn't assigned
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Retrieve the registration identifier (regid) for the entity.
-     * 
-     * @return the regid or <code>null</code> if one isn't assigned
-     */
-    public String getRegid() {
-        return regid;
-    }
+  /**
+   * Retrieve the registration identifier (regid) for the entity.
+   * 
+   * @return the regid or <code>null</code> if one isn't assigned
+   */
+  public String getRegid() {
+    return regid;
+  }
 
-    /**
-     * Retrieve the roles assigned to the entity.
-     * 
-     * @return the list of roles or <code>null</code> if a role isn't assigned
-     */
-    public List<String> getRoles() {
-        return roles;
-    }
+  /**
+   * Retrieve the roles assigned to the entity.
+   * 
+   * @return the list of roles or <code>null</code> if a role isn't assigned
+   */
+  public List<String> getRoles() {
+    return roles;
+  }
 }

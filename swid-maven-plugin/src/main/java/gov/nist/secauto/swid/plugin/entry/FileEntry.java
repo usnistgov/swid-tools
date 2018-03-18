@@ -33,51 +33,51 @@ import java.util.List;
 
 public interface FileEntry {
 
-    /**
-     * Retrieve the path to the file.
-     * 
-     * @return the path
-     */
-    public Path getPath();
+  /**
+   * Retrieve the path to the file.
+   * 
+   * @return the path
+   */
+  public Path getPath();
 
-    /**
-     * Retrieve the path to the file relative to where it is to be output.
-     * 
-     * @return the path
-     */
-    public String getOutputRelativePath();
+  /**
+   * Retrieve the path to the file relative to where it is to be output.
+   * 
+   * @return the path
+   */
+  public String getOutputRelativePath();
 
-    /**
-     * Retrieve the relative path of to the SWID Tag.
-     * 
-     * @return the file's relative path
-     */
-    public List<String> getRelativePathSegements(String swidTagPath);
+  /**
+   * Retrieve the relative path of to the SWID Tag.
+   * 
+   * @return the file's relative path
+   */
+  public List<String> getRelativePathSegements(String swidTagPath);
 
-    /**
-     * Retrieve the file's size.
-     * 
-     * @return the size in bytes
-     */
-    public Long getSize();
+  /**
+   * Retrieve the file's size.
+   * 
+   * @return the size in bytes
+   */
+  public Long getSize();
 
-    /**
-     * Retrieve an input stream that can be used to read the file.
-     * 
-     * @return an input stream
-     * @throws FileNotFoundException
-     *             if the file does not exist
-     * @throws IOException
-     *             if the file cannot be read
-     */
-    public InputStream getInputStream() throws FileNotFoundException, IOException;
+  /**
+   * Retrieve an input stream that can be used to read the file.
+   * 
+   * @return an input stream
+   * @throws FileNotFoundException
+   *           if the file does not exist
+   * @throws IOException
+   *           if the file cannot be read
+   */
+  public InputStream getInputStream() throws FileNotFoundException, IOException;
 
-    /**
-     * Retrieve the file's version.
-     * 
-     * @return the file's version or <code>null</code> if a version cannot be determined
-     */
-    public String getVersion();
+  /**
+   * Retrieve the file's version.
+   * 
+   * @return the file's version or <code>null</code> if a version cannot be determined
+   */
+  public String getVersion();
 
-    public FileInfo asFileInfo();
+  public FileInfo asFileInfo();
 }

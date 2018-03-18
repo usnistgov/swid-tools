@@ -30,55 +30,55 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class FileFileEntry extends AbstractFileEntry {
-    private Path file;
-    private Path base;
+  private Path file;
+  private Path base;
 
-    /**
-     * Construct a new file entry for a file, keeping track of the file's base directory.
-     * 
-     * @param file
-     *            the file for this entry
-     * @param base
-     *            the base directory containing the path to this file
-     */
-    public FileFileEntry(Path file, Path base) {
-        super();
-        Objects.requireNonNull(file);
-        Objects.requireNonNull(base);
-        this.file = file;
-        this.base = base;
-    }
+  /**
+   * Construct a new file entry for a file, keeping track of the file's base directory.
+   * 
+   * @param file
+   *          the file for this entry
+   * @param base
+   *          the base directory containing the path to this file
+   */
+  public FileFileEntry(Path file, Path base) {
+    super();
+    Objects.requireNonNull(file);
+    Objects.requireNonNull(base);
+    this.file = file;
+    this.base = base;
+  }
 
-    @Override
-    public Long getSize() {
-        return file.toFile().length();
-    }
+  @Override
+  public Long getSize() {
+    return file.toFile().length();
+  }
 
-    @Override
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new FileInputStream(file.toFile());
-    }
+  @Override
+  public InputStream getInputStream() throws FileNotFoundException {
+    return new FileInputStream(file.toFile());
+  }
 
-    @Override
-    public String getVersion() {
-        // these files are not versioned
-        return null;
-    }
+  @Override
+  public String getVersion() {
+    // these files are not versioned
+    return null;
+  }
 
-    @Override
-    protected Path getBase() {
-        return base;
-    }
+  @Override
+  protected Path getBase() {
+    return base;
+  }
 
-    @Override
-    public Path getPath() {
-        return file;
-    }
+  @Override
+  public Path getPath() {
+    return file;
+  }
 
-    @Override
-    protected String getOutputBase() {
-        // these files do not have an output base
-        return null;
-    }
+  @Override
+  protected String getOutputBase() {
+    // these files do not have an output base
+    return null;
+  }
 
 }

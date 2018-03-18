@@ -28,17 +28,16 @@ import java.util.regex.Pattern;
 
 public class SWIDConstants {
 
-    public static final Pattern PATTERN_LANGUAGE = Pattern.compile("[a-zA-Z]{1,8}(?:-[a-zA-Z0-9]{1,8})*");
+  public static final Pattern PATTERN_LANGUAGE = Pattern.compile("[a-zA-Z]{1,8}(?:-[a-zA-Z0-9]{1,8})*");
 
-    public static final BigInteger TAG_VERSION_DEFAULT = BigInteger.ONE;
-    public static final String VERSION_DEFAULT = "0.0";
+  public static final BigInteger TAG_VERSION_DEFAULT = BigInteger.ONE;
+  public static final String VERSION_DEFAULT = "0.0";
 
-    /**
-     * Unknown, no attempt should be made to order these.
-     */
-    public static final String VERSION_SCHEME_UNKNOWN = "unknown";
-    public static final VersionScheme VERSION_SCHEME_DEFAULT = KnownVersionScheme.MULTIPART_NUMERIC;
+  /**
+   * Unknown, no attempt should be made to order these.
+   */
+  public static final String VERSION_SCHEME_UNKNOWN = "unknown";
+  public static final VersionScheme VERSION_SCHEME_DEFAULT = KnownVersionScheme.MULTIPART_NUMERIC;
 
-
-    public static final String ENTITY_REGID_DEFAULT = "http://invalid.unavailable";
+  public static final String ENTITY_REGID_DEFAULT = "http://invalid.unavailable";
 }

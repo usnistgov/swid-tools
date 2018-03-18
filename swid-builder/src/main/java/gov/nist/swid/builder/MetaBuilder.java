@@ -26,377 +26,377 @@ package gov.nist.swid.builder;
 import static gov.nist.swid.builder.util.Util.requireNonEmpty;
 
 public class MetaBuilder extends AbstractLanguageSpecificBuilder<MetaBuilder> {
-    private String activationStatus;
-    private String channelType;
-    private String colloquialVersion;
-    private String description;
-    private String edition;
-    private String entitlementDataRequired;
-    private String entitlementKey;
-    private String generator;
-    private String persistentId;
-    private String productBaseName;
-    private String productFamily;
-    private String revision;
-    private String summary;
-    private String unspscCode;
-    private String unspscVersion;
+  private String activationStatus;
+  private String channelType;
+  private String colloquialVersion;
+  private String description;
+  private String edition;
+  private String entitlementDataRequired;
+  private String entitlementKey;
+  private String generator;
+  private String persistentId;
+  private String productBaseName;
+  private String productFamily;
+  private String revision;
+  private String summary;
+  private String unspscCode;
+  private String unspscVersion;
 
-    protected MetaBuilder() {
-        super();
-    }
+  protected MetaBuilder() {
+    super();
+  }
 
-    @Override
-    public void reset() {
-        this.activationStatus = null;
-        this.channelType = null;
-        this.colloquialVersion = null;
-        this.description = null;
-        this.edition = null;
-        this.entitlementDataRequired = null;
-        this.entitlementKey = null;
-        this.generator = null;
-        this.persistentId = null;
-        this.productBaseName = null;
-        this.productFamily = null;
-        this.revision = null;
-        this.summary = null;
-        this.unspscCode = null;
-        this.unspscVersion = null;
-    }
+  @Override
+  public void reset() {
+    this.activationStatus = null;
+    this.channelType = null;
+    this.colloquialVersion = null;
+    this.description = null;
+    this.edition = null;
+    this.entitlementDataRequired = null;
+    this.entitlementKey = null;
+    this.generator = null;
+    this.persistentId = null;
+    this.productBaseName = null;
+    this.productFamily = null;
+    this.revision = null;
+    this.summary = null;
+    this.unspscCode = null;
+    this.unspscVersion = null;
+  }
 
-    /**
-     * Retrieves the activation status.
-     * 
-     * @return the activationStatus or {@code null} if one hasn't been set
-     */
-    public String getActivationStatus() {
-        return activationStatus;
-    }
+  /**
+   * Retrieves the activation status.
+   * 
+   * @return the activationStatus or {@code null} if one hasn't been set
+   */
+  public String getActivationStatus() {
+    return activationStatus;
+  }
 
-    /**
-     * Sets the activation status.
-     * 
-     * @param activationStatus
-     *            the activationStatus to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setActivationStatus(String activationStatus) {
-        requireNonEmpty(activationStatus, "activationStatus");
-        this.activationStatus = activationStatus;
-        return this;
-    }
+  /**
+   * Sets the activation status.
+   * 
+   * @param activationStatus
+   *          the activationStatus to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setActivationStatus(String activationStatus) {
+    requireNonEmpty(activationStatus, "activationStatus");
+    this.activationStatus = activationStatus;
+    return this;
+  }
 
-    /**
-     * Retrieves the channel type.
-     * 
-     * @return the channelType or {@code null} if one hasn't been set
-     */
-    public String getChannelType() {
-        return channelType;
-    }
+  /**
+   * Retrieves the channel type.
+   * 
+   * @return the channelType or {@code null} if one hasn't been set
+   */
+  public String getChannelType() {
+    return channelType;
+  }
 
-    /**
-     * Sets the channel type.
-     * 
-     * @param channelType
-     *            the channelType to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setChannelType(String channelType) {
-        requireNonEmpty(channelType, "channelType");
-        this.channelType = channelType;
-        return this;
-    }
+  /**
+   * Sets the channel type.
+   * 
+   * @param channelType
+   *          the channelType to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setChannelType(String channelType) {
+    requireNonEmpty(channelType, "channelType");
+    this.channelType = channelType;
+    return this;
+  }
 
-    /**
-     * Retrieves the colloquial version.
-     * 
-     * @return the colloquialVersion or {@code null} if one hasn't been set
-     */
-    public String getColloquialVersion() {
-        return colloquialVersion;
-    }
+  /**
+   * Retrieves the colloquial version.
+   * 
+   * @return the colloquialVersion or {@code null} if one hasn't been set
+   */
+  public String getColloquialVersion() {
+    return colloquialVersion;
+  }
 
-    /**
-     * Sets the colloquial version.
-     * 
-     * @param colloquialVersion
-     *            the colloquialVersion to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setColloquialVersion(String colloquialVersion) {
-        requireNonEmpty(colloquialVersion, "colloquialVersion");
-        this.colloquialVersion = colloquialVersion;
-        return this;
-    }
+  /**
+   * Sets the colloquial version.
+   * 
+   * @param colloquialVersion
+   *          the colloquialVersion to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setColloquialVersion(String colloquialVersion) {
+    requireNonEmpty(colloquialVersion, "colloquialVersion");
+    this.colloquialVersion = colloquialVersion;
+    return this;
+  }
 
-    /**
-     * Retrieves the description.
-     * 
-     * @return the description or {@code null} if one hasn't been set
-     */
-    public String getDescription() {
-        return description;
-    }
+  /**
+   * Retrieves the description.
+   * 
+   * @return the description or {@code null} if one hasn't been set
+   */
+  public String getDescription() {
+    return description;
+  }
 
-    /**
-     * Sets the description.
-     * 
-     * @param description
-     *            the description to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setDescription(String description) {
-        requireNonEmpty(description, "description");
-        this.description = description;
-        return this;
-    }
+  /**
+   * Sets the description.
+   * 
+   * @param description
+   *          the description to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setDescription(String description) {
+    requireNonEmpty(description, "description");
+    this.description = description;
+    return this;
+  }
 
-    /**
-     * Retrieves the edition.
-     * 
-     * @return the edition or {@code null} if one hasn't been set
-     */
-    public String getEdition() {
-        return edition;
-    }
+  /**
+   * Retrieves the edition.
+   * 
+   * @return the edition or {@code null} if one hasn't been set
+   */
+  public String getEdition() {
+    return edition;
+  }
 
-    /**
-     * Sets the edition.
-     * 
-     * @param edition
-     *            the edition to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setEdition(String edition) {
-        requireNonEmpty(edition, "edition");
-        this.edition = edition;
-        return this;
-    }
+  /**
+   * Sets the edition.
+   * 
+   * @param edition
+   *          the edition to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setEdition(String edition) {
+    requireNonEmpty(edition, "edition");
+    this.edition = edition;
+    return this;
+  }
 
-    /**
-     * Retrieves the indicator of if entitlement data is required.
-     * 
-     * @return the entitlementDataRequired or {@code null} if one hasn't been set
-     */
-    public String getEntitlementDataRequired() {
-        return entitlementDataRequired;
-    }
+  /**
+   * Retrieves the indicator of if entitlement data is required.
+   * 
+   * @return the entitlementDataRequired or {@code null} if one hasn't been set
+   */
+  public String getEntitlementDataRequired() {
+    return entitlementDataRequired;
+  }
 
-    /**
-     * Sets the indicator of if entitlement data is required.
-     * 
-     * @param entitlementDataRequired
-     *            the entitlementDataRequired to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setEntitlementDataRequired(String entitlementDataRequired) {
-        requireNonEmpty(entitlementDataRequired, "entitlementDataRequired");
-        this.entitlementDataRequired = entitlementDataRequired;
-        return this;
-    }
+  /**
+   * Sets the indicator of if entitlement data is required.
+   * 
+   * @param entitlementDataRequired
+   *          the entitlementDataRequired to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setEntitlementDataRequired(String entitlementDataRequired) {
+    requireNonEmpty(entitlementDataRequired, "entitlementDataRequired");
+    this.entitlementDataRequired = entitlementDataRequired;
+    return this;
+  }
 
-    /**
-     * Retrieves the entitlement key.
-     * 
-     * @return the entitlementKey or {@code null} if one hasn't been set
-     */
-    public String getEntitlementKey() {
-        return entitlementKey;
-    }
+  /**
+   * Retrieves the entitlement key.
+   * 
+   * @return the entitlementKey or {@code null} if one hasn't been set
+   */
+  public String getEntitlementKey() {
+    return entitlementKey;
+  }
 
-    /**
-     * Sets the entitlement key.
-     * 
-     * @param entitlementKey
-     *            the entitlementKey to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setEntitlementKey(String entitlementKey) {
-        requireNonEmpty(entitlementKey, "entitlementKey");
-        this.entitlementKey = entitlementKey;
-        return this;
-    }
+  /**
+   * Sets the entitlement key.
+   * 
+   * @param entitlementKey
+   *          the entitlementKey to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setEntitlementKey(String entitlementKey) {
+    requireNonEmpty(entitlementKey, "entitlementKey");
+    this.entitlementKey = entitlementKey;
+    return this;
+  }
 
-    /**
-     * Retrieves the generator.
-     * 
-     * @return the generator or {@code null} if one hasn't been set
-     */
-    public String getGenerator() {
-        return generator;
-    }
+  /**
+   * Retrieves the generator.
+   * 
+   * @return the generator or {@code null} if one hasn't been set
+   */
+  public String getGenerator() {
+    return generator;
+  }
 
-    /**
-     * Sets the generator.
-     * 
-     * @param generator
-     *            the generator to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setGenerator(String generator) {
-        requireNonEmpty(generator, "generator");
-        this.generator = generator;
-        return this;
-    }
+  /**
+   * Sets the generator.
+   * 
+   * @param generator
+   *          the generator to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setGenerator(String generator) {
+    requireNonEmpty(generator, "generator");
+    this.generator = generator;
+    return this;
+  }
 
-    /**
-     * Retrieves the persistentId.
-     * 
-     * @return the persistentId or {@code null} if one hasn't been set
-     */
-    public String getPersistentId() {
-        return persistentId;
-    }
+  /**
+   * Retrieves the persistentId.
+   * 
+   * @return the persistentId or {@code null} if one hasn't been set
+   */
+  public String getPersistentId() {
+    return persistentId;
+  }
 
-    /**
-     * Sets the persistentId.
-     * 
-     * @param persistentId
-     *            the persistentId to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setPersistentId(String persistentId) {
-        requireNonEmpty(persistentId, "persistentId");
-        this.persistentId = persistentId;
-        return this;
-    }
+  /**
+   * Sets the persistentId.
+   * 
+   * @param persistentId
+   *          the persistentId to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setPersistentId(String persistentId) {
+    requireNonEmpty(persistentId, "persistentId");
+    this.persistentId = persistentId;
+    return this;
+  }
 
-    /**
-     * Retrieves the product base name.
-     * 
-     * @return the productBaseName or {@code null} if one hasn't been set
-     */
-    public String getProductBaseName() {
-        return productBaseName;
-    }
+  /**
+   * Retrieves the product base name.
+   * 
+   * @return the productBaseName or {@code null} if one hasn't been set
+   */
+  public String getProductBaseName() {
+    return productBaseName;
+  }
 
-    /**
-     * Sets the product base name.
-     * 
-     * @param productBaseName
-     *            the productBaseName to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setProductBaseName(String productBaseName) {
-        requireNonEmpty(productBaseName, "productBaseName");
-        this.productBaseName = productBaseName;
-        return this;
-    }
+  /**
+   * Sets the product base name.
+   * 
+   * @param productBaseName
+   *          the productBaseName to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setProductBaseName(String productBaseName) {
+    requireNonEmpty(productBaseName, "productBaseName");
+    this.productBaseName = productBaseName;
+    return this;
+  }
 
-    /**
-     * Retrieves the product family.
-     * 
-     * @return the productFamily or {@code null} if one hasn't been set
-     */
-    public String getProductFamily() {
-        return productFamily;
-    }
+  /**
+   * Retrieves the product family.
+   * 
+   * @return the productFamily or {@code null} if one hasn't been set
+   */
+  public String getProductFamily() {
+    return productFamily;
+  }
 
-    /**
-     * Sets the product family.
-     * 
-     * @param productFamily
-     *            the productFamily to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setProductFamily(String productFamily) {
-        requireNonEmpty(productFamily, "productFamily");
-        this.productFamily = productFamily;
-        return this;
-    }
+  /**
+   * Sets the product family.
+   * 
+   * @param productFamily
+   *          the productFamily to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setProductFamily(String productFamily) {
+    requireNonEmpty(productFamily, "productFamily");
+    this.productFamily = productFamily;
+    return this;
+  }
 
-    /**
-     * Retrieves the revision.
-     * 
-     * @return the revision or {@code null} if one hasn't been set
-     */
-    public String getRevision() {
-        return revision;
-    }
+  /**
+   * Retrieves the revision.
+   * 
+   * @return the revision or {@code null} if one hasn't been set
+   */
+  public String getRevision() {
+    return revision;
+  }
 
-    /**
-     * Sets the revision.
-     * 
-     * @param revision
-     *            the revision to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setRevision(String revision) {
-        requireNonEmpty(revision, "revision");
-        this.revision = revision;
-        return this;
-    }
+  /**
+   * Sets the revision.
+   * 
+   * @param revision
+   *          the revision to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setRevision(String revision) {
+    requireNonEmpty(revision, "revision");
+    this.revision = revision;
+    return this;
+  }
 
-    /**
-     * Retrieves the summary.
-     * 
-     * @return the summary or {@code null} if one hasn't been set
-     */
-    public String getSummary() {
-        return summary;
-    }
+  /**
+   * Retrieves the summary.
+   * 
+   * @return the summary or {@code null} if one hasn't been set
+   */
+  public String getSummary() {
+    return summary;
+  }
 
-    /**
-     * Sets the summary.
-     * 
-     * @param summary
-     *            the summary to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setSummary(String summary) {
-        requireNonEmpty(summary, "summary");
-        this.summary = summary;
-        return this;
-    }
+  /**
+   * Sets the summary.
+   * 
+   * @param summary
+   *          the summary to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setSummary(String summary) {
+    requireNonEmpty(summary, "summary");
+    this.summary = summary;
+    return this;
+  }
 
-    /**
-     * Retrieves the UNSPSC code.
-     * 
-     * @return the unspscCode or {@code null} if one hasn't been set
-     */
-    public String getUnspscCode() {
-        return unspscCode;
-    }
+  /**
+   * Retrieves the UNSPSC code.
+   * 
+   * @return the unspscCode or {@code null} if one hasn't been set
+   */
+  public String getUnspscCode() {
+    return unspscCode;
+  }
 
-    /**
-     * Sets the UNSPSC code.
-     * 
-     * @param unspscCode
-     *            the unspscCode to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setUnspscCode(String unspscCode) {
-        requireNonEmpty(unspscCode, "unspscCode");
-        this.unspscCode = unspscCode;
-        return this;
-    }
+  /**
+   * Sets the UNSPSC code.
+   * 
+   * @param unspscCode
+   *          the unspscCode to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setUnspscCode(String unspscCode) {
+    requireNonEmpty(unspscCode, "unspscCode");
+    this.unspscCode = unspscCode;
+    return this;
+  }
 
-    /**
-     * Retrieves the UNSPSC version.
-     * 
-     * @return the unspscVersion or {@code null} if one hasn't been set
-     */
-    public String getUnspscVersion() {
-        return unspscVersion;
-    }
+  /**
+   * Retrieves the UNSPSC version.
+   * 
+   * @return the unspscVersion or {@code null} if one hasn't been set
+   */
+  public String getUnspscVersion() {
+    return unspscVersion;
+  }
 
-    /**
-     * Sets the UNSPSC version.
-     * 
-     * @param unspscVersion
-     *            the unspscVersion to set
-     * @return the current builder instance
-     */
-    public MetaBuilder setUnspscVersion(String unspscVersion) {
-        requireNonEmpty(unspscVersion, "unspscVersion");
-        this.unspscVersion = unspscVersion;
-        return this;
-    }
+  /**
+   * Sets the UNSPSC version.
+   * 
+   * @param unspscVersion
+   *          the unspscVersion to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setUnspscVersion(String unspscVersion) {
+    requireNonEmpty(unspscVersion, "unspscVersion");
+    this.unspscVersion = unspscVersion;
+    return this;
+  }
 
-    @Override
-    public void validate() throws ValidationException {
-        super.validate();
-    }
+  @Override
+  public void validate() throws ValidationException {
+    super.validate();
+  }
 }

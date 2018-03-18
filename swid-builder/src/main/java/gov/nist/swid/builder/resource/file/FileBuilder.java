@@ -40,116 +40,125 @@ import java.util.Map;
 import java.util.Objects;
 
 public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
-    private Long size;
-    private String version;
-    private Map<HashAlgorithm, byte[]> hashAlgorithmToValueMap = new LinkedHashMap<>();
+  private Long size;
+  private String version;
+  private Map<HashAlgorithm, byte[]> hashAlgorithmToValueMap = new LinkedHashMap<>();
 
-    protected FileBuilder() {
-        super();
-    }
+  protected FileBuilder() {
+    super();
+  }
 
-    @Override
-    public void reset() {
-        super.reset();
-        this.size = null;
-        this.version = null;
-        this.hashAlgorithmToValueMap = new LinkedHashMap<>();
-    }
+  @Override
+  public void reset() {
+    super.reset();
+    this.size = null;
+    this.version = null;
+    this.hashAlgorithmToValueMap = new LinkedHashMap<>();
+  }
 
-    public static FileBuilder create() {
-        return new FileBuilder();
-    }
+  public static FileBuilder create() {
+    return new FileBuilder();
+  }
 
-    @Override
-    public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
-        creator.generate(this, parentContext);
-    }
+  @Override
+  public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
+    creator.generate(this, parentContext);
+  }
 
-    public Long getSize() {
-        return size;
-    }
+  public Long getSize() {
+    return size;
+  }
 
-    public String getVersion() {
-        return version;
-    }
+  public String getVersion() {
+    return version;
+  }
 
-    public Map<HashAlgorithm, byte[]> getHashAlgorithmToValueMap() {
-        return hashAlgorithmToValueMap;
-    }
+  public Map<HashAlgorithm, byte[]> getHashAlgorithmToValueMap() {
+    return hashAlgorithmToValueMap;
+  }
 
-    /**
-     * Sets the to-be-built file's size to the provided value.
-     * 
-     * @param size
-     *            a non-zero integer indicating the file's size in bytes
-     * @return the same builder instance
-     */
-    public FileBuilder size(long size) {
-        if (size < 0) {
-            throw new IllegalArgumentException("the size value must be a positive number");
-        }
-        this.size = size;
-        return this;
+  /**
+   * Sets the to-be-built file's size to the provided value.
+   * 
+   * @param size
+   *          a non-zero integer indicating the file's size in bytes
+   * @return the same builder instance
+   */
+  public FileBuilder size(long size) {
+    if (size < 0) {
+      throw new IllegalArgumentException("the size value must be a positive number");
     }
+    this.size = size;
+    return this;
+  }
 
-    /**
-     * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An
-     * {@link InputStream} is used to retrieve the files contents to calculate the hash value. The
-     * caller is resposnible for closing the stream used by this method.
-     * 
-     * @param algorithm
-     *            the algorithm to establish a hash value for
-     * @param file
-     *            the file to hash
-     * @return the same builder instance
-     * @throws NoSuchAlgorithmException
-     *             if the hash algorithm is not supported
-     * @throws IOException
-     *             if an error occurs while reading the stream
-     */
-    public FileBuilder hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
-        InputStream is = new BufferedInputStream(new FileInputStream(file));
-        return hash(algorithm, is);
-    }
+  /**
+   * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An {@link InputStream}
+   * is used to retrieve the files contents to calculate the hash value. The caller is resposnible for closing the
+   * stream used by this method.
+   * 
+   * @param algorithm
+   *          the algorithm to establish a hash value for
+   * @param file
+   *          the file to hash
+   * @return the same builder instance
+   * @throws NoSuchAlgorithmException
+   *           if the hash algorithm is not supported
+   * @throws IOException
+   *           if an error occurs while reading the stream
+   */
+  public FileBuilder hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
+    InputStream is = new BufferedInputStream(new FileInputStream(file));
+    return hash(algorithm, is);
+  }
 
-    /**
-     * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An
-     * {@link InputStream} is used to retrieve the files contents to calculate the hash value. The
-     * caller is resposnible for closing the stream used by this method.
-     * 
-     * @param algorithm
-     *            the algorithm to establish a hash value for
-     * @param is
-     *            an {@link InputStream} that can be used to read the file
-     * @return the same builder instance
-     * @throws NoSuchAlgorithmException
-     *             if the hash algorithm is not supported
-     * @throws IOException
-     *             if an error occurs while reading the stream
-     */
-    public FileBuilder hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
-        byte[] digest = HashUtils.hash(algorithm, is);
-        return hash(algorithm, digest);
-    }
+  /**
+   * Sets the file's hash value, for the provided algorithm, to the provided value. An {@link InputStream} is used to
+   * retrieve the files contents to calculate the hash value. The caller is responsible for closing the stream used by
+   * this method.
+   * 
+   * @param algorithm
+   *          the algorithm to establish a hash value for
+   * @param is
+   *          an {@link InputStream} that can be used to read the file
+   * @return the same builder instance
+   * @throws NoSuchAlgorithmException
+   *           if the hash algorithm is not supported
+   * @throws IOException
+   *           if an error occurs while reading the stream
+   */
+  public FileBuilder hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
+    byte[] digest = HashUtils.hash(algorithm, is);
+    return hash(algorithm, digest);
+  }
 
-    public FileBuilder hash(HashAlgorithm algorithm, byte[] hashBytes) {
-        Objects.requireNonNull(algorithm, "algorithm");
-        Objects.requireNonNull(hashBytes, "hashBytes");
-        hashAlgorithmToValueMap.put(algorithm, hashBytes);
-        return this;
-    }
+  /**
+   * Sets the file's hash value, for the provided algorithm, to the provided value.
+   * 
+   * @param algorithm
+   *          the algorithm to establish a hash value for
+   * @param hashBytes
+   *          the digest value as a byte array.
+   * @return the same builder instance
+   */
+  public FileBuilder hash(HashAlgorithm algorithm, byte[] hashBytes) {
+    Objects.requireNonNull(algorithm, "algorithm");
+    Objects.requireNonNull(hashBytes, "hashBytes");
+    hashAlgorithmToValueMap.put(algorithm, hashBytes);
+    return this;
+  }
 
-    /**
-     * Sets the to-be-built file's version to the provided value.
-     * 
-     * @param version
-     *            the version value to use
-     * @return the same builder instance
-     */
-    public FileBuilder version(String version) {
-        requireNonEmpty(version, "version");
-        this.version = version;
-        return this;
-    }
+  /**
+   * Sets the to-be-built file's version to the provided value.
+   * 
+   * @param version
+   *          the version value to use
+   * @return the same builder instance
+   */
+  public FileBuilder version(String version) {
+    requireNonEmpty(version, "version");
+    this.version = version;
+    return this;
+  }
 
 }

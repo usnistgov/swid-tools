@@ -37,37 +37,37 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class ArchiveEntryFileEntryProcessor extends AbstractFileEntryProcessor<ArchiveEntry> {
-    private final ArtifactMap artifactMap;
-    private IncludeExcludeFileSelector selector = new IncludeExcludeFileSelector();
+  private final ArtifactMap artifactMap;
+  private IncludeExcludeFileSelector selector = new IncludeExcludeFileSelector();
 
-    public ArchiveEntryFileEntryProcessor(MavenProject project, Log log) {
-        super(log);
-        artifactMap = new ArtifactMap(project);
+  public ArchiveEntryFileEntryProcessor(MavenProject project, Log log) {
+    super(log);
+    artifactMap = new ArtifactMap(project);
+  }
+
+  public void setIncludes(String[] includes) {
+    selector.setIncludes(includes);
+  }
+
+  public void setExcludes(String[] excludes) {
+    selector.setExcludes(excludes);
+  }
+
+  protected Artifact lookupArtifact(ArchiveEntry entry) {
+    return artifactMap.lookupArtifactForArchiveEntry(entry);
+  }
+
+  @Override
+  protected Collection<? extends FileEntry> generateFileEntries(ArchiveEntry entry) throws IOException {
+    Artifact artifact = lookupArtifact(entry);
+    ArchiveFileEntry archiveFileEntry = new ArchiveFileEntry(entry, artifact);
+
+    Collection<? extends FileEntry> retval;
+    if (selector.isSelected(archiveFileEntry.asFileInfo())) {
+      retval = Collections.singleton(archiveFileEntry);
+    } else {
+      retval = Collections.emptyList();
     }
-
-    public void setIncludes(String[] includes) {
-        selector.setIncludes(includes);
-    }
-
-    public void setExcludes(String[] excludes) {
-        selector.setExcludes(excludes);
-    }
-
-    protected Artifact lookupArtifact(ArchiveEntry entry) {
-        return artifactMap.lookupArtifactForArchiveEntry(entry);
-    }
-
-    @Override
-    protected Collection<? extends FileEntry> generateFileEntries(ArchiveEntry entry) throws IOException {
-        Artifact artifact = lookupArtifact(entry);
-        ArchiveFileEntry archiveFileEntry = new ArchiveFileEntry(entry, artifact);
-
-        Collection<? extends FileEntry> retval;
-        if (selector.isSelected(archiveFileEntry.asFileInfo())) {
-            retval = Collections.singleton(archiveFileEntry);
-        } else {
-            retval = Collections.emptyList();
-        }
-        return retval;
-    }
+    return retval;
+  }
 }

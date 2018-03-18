@@ -48,102 +48,102 @@ package gov.nist.swid.builder.util;
 import java.util.regex.Pattern;
 
 public class Util {
-    private Util() {
-        // disable construction
-    }
+  private Util() {
+    // disable construction
+  }
 
-    /**
-     * Checks that the provided string is not empty.
-     * 
-     * @param str
-     *            the string to check
-     * @return the same string
-     * @throws NullPointerException
-     *             if the provided string is <code>null</code>
-     * @throws IllegalArgumentException
-     *             if the provided string is empty
-     */
-    public static String requireNonEmpty(String str) {
-        if (str.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        return str;
+  /**
+   * Checks that the provided string is not empty.
+   * 
+   * @param str
+   *          the string to check
+   * @return the same string
+   * @throws NullPointerException
+   *           if the provided string is <code>null</code>
+   * @throws IllegalArgumentException
+   *           if the provided string is empty
+   */
+  public static String requireNonEmpty(String str) {
+    if (str.isEmpty()) {
+      throw new IllegalArgumentException();
     }
+    return str;
+  }
 
-    /**
-     * Checks that the provided string is not empty.
-     * 
-     * @param str
-     *            the string to check
-     * @param message
-     *            the exception message to use
-     * @return the same string
-     * @throws NullPointerException
-     *             if the provided string is <code>null</code>
-     * @throws IllegalArgumentException
-     *             if the provided string is empty
-     */
-    public static String requireNonEmpty(String str, String message) {
-        if (str.isEmpty()) {
-            throw new IllegalArgumentException(message);
-        }
-        return str;
+  /**
+   * Checks that the provided string is not empty.
+   * 
+   * @param str
+   *          the string to check
+   * @param message
+   *          the exception message to use
+   * @return the same string
+   * @throws NullPointerException
+   *           if the provided string is <code>null</code>
+   * @throws IllegalArgumentException
+   *           if the provided string is empty
+   */
+  public static String requireNonEmpty(String str, String message) {
+    if (str.isEmpty()) {
+      throw new IllegalArgumentException(message);
     }
+    return str;
+  }
 
-    /**
-     * Checks that the provided string is not empty.
-     * 
-     * @param array
-     *            the array to check
-     * @return the same array
-     * @throws NullPointerException
-     *             if the provided array is <code>null</code>
-     * @throws IllegalArgumentException
-     *             if the provided array is zero length
-     */
-    public static Object[] requireNonEmpty(Object[] array) {
-        if (array.length == 0) {
-            throw new IllegalArgumentException();
-        }
-        return array;
+  /**
+   * Checks that the provided string is not empty.
+   * 
+   * @param array
+   *          the array to check
+   * @return the same array
+   * @throws NullPointerException
+   *           if the provided array is <code>null</code>
+   * @throws IllegalArgumentException
+   *           if the provided array is zero length
+   */
+  public static Object[] requireNonEmpty(Object[] array) {
+    if (array.length == 0) {
+      throw new IllegalArgumentException();
     }
+    return array;
+  }
 
-    /**
-     * Checks that the provided string is not empty.
-     * 
-     * @param array
-     *            the array to check
-     * @param message
-     *            the exception message to use
-     * @return the same array
-     * @throws NullPointerException
-     *             if the provided array is <code>null</code>
-     * @throws IllegalArgumentException
-     *             if the provided string is zero length
-     */
-    public static Object[] requireNonEmpty(Object[] array, String message) {
-        if (array.length == 0) {
-            throw new IllegalArgumentException(message);
-        }
-        return array;
+  /**
+   * Checks that the provided string is not empty.
+   * 
+   * @param array
+   *          the array to check
+   * @param message
+   *          the exception message to use
+   * @return the same array
+   * @throws NullPointerException
+   *           if the provided array is <code>null</code>
+   * @throws IllegalArgumentException
+   *           if the provided string is zero length
+   */
+  public static Object[] requireNonEmpty(Object[] array, String message) {
+    if (array.length == 0) {
+      throw new IllegalArgumentException(message);
     }
+    return array;
+  }
 
-    /**
-     * Checks that the provided string matches the provided pattern.
-     * 
-     * @param pattern
-     *            the pattern to match against
-     * @param str
-     *            the string to check
-     * @throws NullPointerException
-     *             if the provided string is <code>null</code>
-     * @throws IllegalArgumentException
-     *             if the provided string is empty or if the string doesn't match the pattern
-     */
-    public static void requirePatternMatch(Pattern pattern, String str, String message) {
-        requireNonEmpty(str);
-        if (!pattern.matcher(str).matches()) {
-            throw new IllegalArgumentException(message);
-        }
+  /**
+   * Checks that the provided string matches the provided pattern.
+   * 
+   * @param pattern
+   *          the pattern to match against
+   * @param str
+   *          the string to check
+   * @throws NullPointerException
+   *           if the provided string is <code>null</code>
+   * @throws IllegalArgumentException
+   *           if the provided string is empty or if the string doesn't match the pattern
+   */
+  public static void requirePatternMatch(Pattern pattern, String str, String message) {
+    requireNonEmpty(str);
+    if (!pattern.matcher(str).matches()) {
+      throw new IllegalArgumentException(message);
     }
+  }
 }

@@ -24,32 +24,32 @@
 package gov.nist.swid.builder;
 
 public enum KnownRole implements Role {
-    TAG_CREATOR(0, "tagCreator"),
-    SOFTWARE_CREATOR(1, "softwareCreator"),
-    AGGREGATOR(2, "aggregator"),
-    DISTRIBUTOR(3 , "distributor"),
-    LICENSOR(4, "licensor");
+  TAG_CREATOR(0, "tagCreator"), SOFTWARE_CREATOR(1, "softwareCreator"), AGGREGATOR(2, "aggregator"), DISTRIBUTOR(3,
+      "distributor"), LICENSOR(4, "licensor");
 
-    private final int index;
-    private final String name;
+  private final int index;
+  private final String name;
 
-    private KnownRole(int index, String name) {
-        this.index = index;
-        this.name = name;
-        init(index, name);
-    }
+  private KnownRole(int index, String name) {
+    this.index = index;
+    this.name = name;
+    init(index, name);
+  }
 
-    /**
-     * @return the index
-     */
-    public Integer getIndex() {
-        return index;
-    }
+  /**
+   * Get the integer index value for the role.
+   * 
+   * @return the index
+   */
+  public Integer getIndex() {
+    return index;
+  }
 
-    /**
-     * @return the value
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Get the human-readable text value for the role.
+   * @return the value
+   */
+  public String getName() {
+    return name;
+  }
 }

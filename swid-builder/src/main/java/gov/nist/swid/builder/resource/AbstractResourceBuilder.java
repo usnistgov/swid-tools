@@ -25,10 +25,10 @@ package gov.nist.swid.builder.resource;
 
 import gov.nist.swid.builder.AbstractLanguageSpecificBuilder;
 
-public abstract class AbstractResourceBuilder<E extends AbstractResourceBuilder<E>> extends AbstractLanguageSpecificBuilder<E>
-        implements ResourceBuilder {
+public abstract class AbstractResourceBuilder<E extends AbstractResourceBuilder<E>>
+    extends AbstractLanguageSpecificBuilder<E> implements ResourceBuilder {
 
-    protected AbstractResourceBuilder() {
-        super();
-    }
+  protected AbstractResourceBuilder() {
+    super();
+  }
 }
