@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-unit-test xmlns="http://decima.nist.gov/xml/unit-test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<requirement>GEN-1</requirement>
+	<description>Baseline test of bare minimum tag where only schema validation should pass.</description>
+	<template template="classpath:templates/minimal-swid.xml" xmlns="http://csrc.nist.gov/ns/decima/template/1.0"/>
+	<assessments>
+		<schema-assessment derived-requirement="GEN-1"/>
+	</assessments>
+	<assertions>
+		<assert-overall result="PASS" quantifier="ALL" />
+	</assertions>
+</content-unit-test>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<requirements xmlns="http://csrc.nist.gov/ns/decima/requirements/1.0"
+    xmlns:swid-ext="https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://csrc.nist.gov/ns/decima/requirements/1.0 http://csrc.nist.gov/schema/decima/requirements/decima-requirements-0.1.xsd https://csrc.nist.gov/ns/swidval/swid-requirements-ext/0.1 https://csrc.nist.gov/schema/swidval/swid-requirements-ext/swidval-swid-requirements-ext-0.1.xsd">
+    <resource id="iso-iec-19770-2-2015" name="ISO/IEC 19770-2:2015" />
+    <requirement id="SWID-1" swid-ext:tag-type="patch"
+        swid-ext:scope="all" swid-ext:category="Tag Relationships">
+        <summary>The patch tag contains a link with a @rel attribute value of "patch" pointing to the patched software.</summary>
+        <reference ref="iso-iec-19770-2-2015" section="5.3.3"/>
+        <statement>Every patch with a SWID tag must include a Link to the product(s) it patches and the link
+            must use the rel value of “patches”.</statement>
+    </requirement>
+    <requirement id="SWID-2" swid-ext:tag-type="patch"
+        swid-ext:scope="all" swid-ext:category="Tag Relationships">
+        <summary>The patch tag contains a link with a @rel attribute value of "patch" pointing to the patched software.</summary>
+        <reference ref="iso-iec-19770-2-2015" section="5.3.3"/>
+        <statement>Every patch with a SWID tag must include a Link to the product(s) it patches and the link
+            must use the rel value of “patches”.</statement>
+    </requirement>
+    <!-- TODO: section 6.1.5.2 on regid -->
+    <!-- TODO: section 6.1.7: IEEE 1003.1:2013, 3.278 for filenames for tagId; .swidtag for file extension -->
+    <!-- TODO: section 6.1.9: UTF-8 encoding -->
+    <!-- TODO: section 8.2: entity with role of tagCreator with regid and name -->
+    <!-- TODO: section 8.3: Recommended (SHOULD) values: Meta/product; conditional Meta/edition, Meta/colloquialVersion, and Meta/revision -->
+    <!-- TODO: signing requirements based on tagvault guidance? Address use of xml:ids? -->
+</requirements>

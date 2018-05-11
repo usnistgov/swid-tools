@@ -1,0 +1,214 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>gov.nist.secauto</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>8-SNAPSHOT</version>
+	</parent>
+
+	<groupId>gov.nist.decima</groupId>
+	<artifactId>swidval</artifactId>
+	<version>0.5.1-SNAPSHOT</version>
+
+	<scm>
+		<connection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval/trunk</connection>
+		<developerConnection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval/trunk</developerConnection>
+		<url>https://subversion.nist.gov/external1/NVD/swidval/trunk</url>
+	</scm>
+
+	<properties>
+		<decima.version>0.6.2-SNAPSHOT</decima.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>gov.nist.decima</groupId>
+			<artifactId>decima-xml-assessment</artifactId>
+			<version>${decima.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.decima</groupId>
+			<artifactId>decima-xml-testing</artifactId>
+			<version>${decima.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.decima</groupId>
+			<artifactId>decima-module</artifactId>
+			<version>${decima.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/xsd</directory>
+				<includes>
+					<include>**/*.xsd</include>
+				</includes>
+			</resource>
+			<!-- <resource> -->
+			<!-- <directory>src/main/templates</directory> -->
+			<!-- <filtering>true</filtering> -->
+			<!-- <targetPath>${project.build.directory}/generated-sources/java</targetPath> -->
+			<!-- </resource> -->
+			<resource>
+				<directory>src/main/distro</directory>
+				<filtering>true</filtering>
+				<targetPath>${project.build.directory}/generated-distro</targetPath>
+			</resource>
+		</resources>
+
+		<pluginManagement>
+			<plugins>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<!-- Used to pull XSD files from the JAR -->
+					<execution>
+						<id>unpack-xsd-files</id>
+						<!-- Using the initialize phase because it is before the generate sources 
+							phase -->
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<!-- Artifact that has the schema files -->
+									<groupId>gov.nist.decima</groupId>
+									<artifactId>decima-xml</artifactId>
+									<version>${decima.version}</version>
+									<type>jar</type>
+								</artifactItem>
+                                <artifactItem>
+                                    <!-- Artifact that has the schema files -->
+                                    <groupId>gov.nist.decima</groupId>
+                                    <artifactId>decima-xml-assessment</artifactId>
+                                    <version>${decima.version}</version>
+                                    <type>jar</type>
+                                </artifactItem>
+							</artifactItems>
+							<includes>**/*.xsd</includes>
+							<outputDirectory>${project.basedir}/target/xsd-includes</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<!-- TODO: Update to 3.0.2 once the m2e bug is fixed -->
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>gov.nist.decima.swid.Application</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<classpathLayoutType>custom</classpathLayoutType>
+							<customClasspathLayout>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</customClasspathLayout>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<!-- <configuration> -->
+				<!-- <archive> -->
+				<!-- <manifest> -->
+				<!-- <mainClass>gov.nist.decima.swid.Application</mainClass> -->
+				<!-- </manifest> -->
+				<!-- </archive> -->
+				<!-- </configuration> -->
+				<dependencies>
+					<dependency>
+						<groupId>gov.nist.secauto</groupId>
+						<artifactId>assembly-swid-generator</artifactId>
+						<version>0.0.6-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<!-- <execution> -->
+					<!-- <id>make-assembly</id> this is used for inheritance merges -->
+					<!-- <phase>package</phase> bind to the packaging phase -->
+					<!-- <goals> -->
+					<!-- <goal>single</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <descriptorRefs> -->
+					<!-- <descriptorRef>jar-with-dependencies</descriptorRef> -->
+					<!-- </descriptorRefs> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+					<execution>
+						<id>make-assembly-bin</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/bin.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>templating-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<id>filter-src</id>
+						<goals>
+							<goal>filter-sources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>build-helper-maven-plugin</artifactId> -->
+			<!-- <version>1.12</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>add-source</id> -->
+			<!-- <phase>generate-sources</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>add-source</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <sources> -->
+			<!-- <source>${project.build.directory}/generated-sources/java/</source> -->
+			<!-- </sources> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
+		</plugins>
+	</build>
+</project>

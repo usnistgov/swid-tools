@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
+	<requirement>GEN-2-1</requirement>
+	<description>A non-authoritative, primary tag produced by a 3rd party that should fail
+		because it is not authoritative.</description>
+	<template template="classpath:templates/primary-auth-swid.xml"
+		xmlns="http://csrc.nist.gov/ns/decima/template/1.0" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd">
+		<delete xpath="//swid:Entity" />
+		<insert-child xpath="/swid:SoftwareIdentity">
+			<swid:Entity name="ACME Connection" regid="acme.org"
+				role="softwareCreator" />
+			<swid:Entity name="ACME Connection 3rd-party" regid="acme.com"
+				role="tagCreator" />
+		</insert-child>
+	</template>
+	<assessments>
+		<schema-assessment derived-requirement="GEN-1" />
+		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"
+			phase="swid.primary.auth">
+			<parameter name="authoritative">true</parameter>
+			<parameter name="type">primary</parameter>
+		</schematron-assessment>
+	</assessments>
+	<assertions>
+		<assert-derived-requirement result="FAIL"
+			requirement-id="GEN-8-1" />
+		<assert-remaining quantifier="ALL" result="PASS" />
+	</assertions>
+</content-unit-test>
