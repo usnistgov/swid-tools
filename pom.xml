@@ -17,18 +17,19 @@
     </scm>
 
 	<properties>
-		<jdk.version>1.8</jdk.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<jstl.version>1.2</jstl.version>
 		<servletapi.version>4.0.0-b01</servletapi.version>
-		<decima.version>0.0.1-SNAPSHOT</decima.version>
+		<swidval.version>0.5.1-SNAPSHOT</swidval.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
 			<artifactId>swidval</artifactId>
-			<version>${decima.version}</version>
+			<version>${swidval.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -72,40 +73,8 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
-				<executions>
-					<!-- Used to pull bootstrap files from the JAR -->
-					<execution>
-						<id>unpack-bootstrap</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>gov.nist.decima</groupId>
-									<artifactId>decima-core</artifactId>
-									<version>${decima.version}</version>
-									<classifier>bootstrap</classifier>
-									<type>jar</type>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/generated-webapp/bootstrap</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

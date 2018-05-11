@@ -4,7 +4,7 @@
     </head>
     <body>
         <h1>Please select a SWID tag to validate</h1>
-        <form method="post" action="validate.html" enctype="multipart/form-data">
+        <form method="post" action="validate-form" enctype="multipart/form-data">
             <input type="file" name="file"/>
             <select name="tag-type">
             	<option label="primary" value="primary">Primary</option>

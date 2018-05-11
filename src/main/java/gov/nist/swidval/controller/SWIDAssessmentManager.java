@@ -1,9 +1,9 @@
 package gov.nist.swidval.controller;
 
 import gov.nist.decima.core.assessment.AssessmentExecutor;
-import gov.nist.decima.core.document.XMLDocument;
 import gov.nist.decima.swid.SWIDAssessmentFactory;
 import gov.nist.decima.swid.TagType;
+import gov.nist.decima.xml.document.XMLDocument;
 
 import java.util.EnumMap;
 import java.util.Objects;

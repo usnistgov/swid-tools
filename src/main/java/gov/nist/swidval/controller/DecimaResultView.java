@@ -12,8 +12,8 @@ import org.jdom2.transform.JDOMSource;
 import org.springframework.web.servlet.view.AbstractView;
 
 import gov.nist.decima.core.assessment.result.AssessmentResults;
-import gov.nist.decima.core.assessment.result.ReportGenerator;
-import gov.nist.decima.core.assessment.result.XMLResultBuilder;
+import gov.nist.decima.xml.assessment.result.ReportGenerator;
+import gov.nist.decima.xml.assessment.result.XMLResultBuilder;
 
 
 public class DecimaResultView extends AbstractView {
@@ -29,8 +29,8 @@ public class DecimaResultView extends AbstractView {
 		reportGenerator.setIgnoreNotTestedResults(true);
 		reportGenerator.setIgnoreOutOfScopeResults(true);
 		reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
-		reportGenerator.setTargetName(model.get(SWIDValController.MODEL_KEY_FILENAME).toString());
-		reportGenerator.generate(new JDOMSource(document), new StreamResult(response.getOutputStream()), "bootstrap");
+//		reportGenerator.setTargetName(model.get(SWIDValController.MODEL_KEY_FILENAME).toString());
+		reportGenerator.generate(new JDOMSource(document), new StreamResult(response.getOutputStream()));
 	}
 
 }
