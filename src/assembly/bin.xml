@@ -27,16 +27,6 @@
 	</dependencySets>
 	<fileSets>
 		<fileSet>
-			<directory>${project.build.directory}/bootstrap</directory>
-			<outputDirectory>bootstrap</outputDirectory>
-			<includes>
-				<include>**/*</include>
-			</includes>
-			<excludes>
-				<exclude>**/META-INF/**</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
 			<directory>${project.build.directory}/generated-distro</directory>
 			<outputDirectory></outputDirectory>
 			<includes>

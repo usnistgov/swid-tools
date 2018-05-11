@@ -1,3 +1,4 @@
+
 /**
  * Portions of this software was developed by employees of the National Institute
  * of Standards and Technology (NIST), an agency of the Federal Government.
@@ -20,17 +21,17 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
-import org.junit.runner.RunWith;
+import gov.nist.decima.xml.testing.PathRunner;
 
-import gov.nist.decima.testing.PathRunner;
+import org.junit.runner.RunWith;
 
 @RunWith(PathRunner.class)
 @PathRunner.Paths("src/test/resources/unit-tests")
 @PathRunner.Requirements(value = "classpath:requirements.xml", extensions = "classpath:swid-requirements-ext.xsd")
 public class UnitIntegrationTest {
-  // public static List<File> paths() {
-  // return Collections.singletonList(new
-  // File("src/test/resources/unit-tests/baseline-minimal.xml"));
-  // return Collections.singletonList(new File("src/test/resources/unit-tests"));
-  // }
+    // public static List<File> paths() {
+    // return Collections.singletonList(new
+    // File("src/test/resources/unit-tests/baseline-minimal.xml"));
+    // return Collections.singletonList(new File("src/test/resources/unit-tests"));
+    // }
 }

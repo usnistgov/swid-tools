@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.decima.swid;
 
 import gov.nist.decima.core.assessment.AssessmentReactor;
@@ -36,40 +37,40 @@ import org.apache.logging.log4j.Level;
 import java.util.Objects;
 
 public class SWIDAssessmentReactor extends AssessmentReactor {
-  protected static final String PROPERTY_KEY_AUTHORITATIVE = "authoritative";
-  protected static final String PROPERTY_KEY_TAG_TYPE = "tag-type";
+    protected static final String PROPERTY_KEY_AUTHORITATIVE = "authoritative";
+    protected static final String PROPERTY_KEY_TAG_TYPE = "tag-type";
 
-  private final TagType tagType;
-  private final boolean authoritative;
+    private final TagType tagType;
+    private final boolean authoritative;
 
-  /**
-   * An {@link AssessmentReactor} tailored to the SWID tag requirements model.
-   * 
-   * @param tagType
-   *          the type of tag to validate (i.e., primary, patch, corpus, supplemental)
-   * @param authoritative
-   *          {@code true} if the tag is produced by a 1st or 2nd party software provider, or
-   *          {@code false} otherwise
-   */
-  public SWIDAssessmentReactor(TagType tagType, boolean authoritative) {
-    super(SWIDRequirementsManager.getInstance());
-    Objects.requireNonNull(tagType, "tagType");
-    this.tagType = tagType;
-    this.authoritative = authoritative;
-  }
+    /**
+     * An {@link AssessmentReactor} tailored to the SWID tag requirements model.
+     * 
+     * @param tagType
+     *            the type of tag to validate (i.e., primary, patch, corpus, supplemental)
+     * @param authoritative
+     *            {@code true} if the tag is produced by a 1st or 2nd party software provider, or
+     *            {@code false} otherwise
+     */
+    public SWIDAssessmentReactor(TagType tagType, boolean authoritative) {
+        super(SWIDRequirementsManager.getInstance());
+        Objects.requireNonNull(tagType, "tagType");
+        this.tagType = tagType;
+        this.authoritative = authoritative;
+    }
 
-  @Override
-  protected AssessmentResultBuilder newAssessmentResultBuilder() {
-    LoggingHandler loggingHandler = new TestResultLoggingHandler(getRequirementsManager());
-    loggingHandler = new AssessmentLoggingHandler(Level.INFO, loggingHandler);
-    loggingHandler = new AssessmentSummarizingLoggingHandler(Level.INFO, loggingHandler);
-    loggingHandler = new OverallSummaryLoggingHandler(Level.INFO, loggingHandler);
-    DefaultAssessmentResultBuilder retval
-        = new DefaultAssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, true));
-    retval.setLoggingHandler(loggingHandler);
-    retval.assignProperty(PROPERTY_KEY_AUTHORITATIVE, Boolean.toString(authoritative));
-    retval.assignProperty(PROPERTY_KEY_TAG_TYPE, tagType.getName());
-    return retval;
-  }
+    @Override
+    protected AssessmentResultBuilder newAssessmentResultBuilder() {
+        LoggingHandler loggingHandler = new TestResultLoggingHandler(getRequirementsManager());
+        loggingHandler = new AssessmentLoggingHandler(Level.INFO, loggingHandler);
+        loggingHandler = new AssessmentSummarizingLoggingHandler(Level.INFO, loggingHandler);
+        loggingHandler = new OverallSummaryLoggingHandler(Level.INFO, loggingHandler);
+        DefaultAssessmentResultBuilder retval
+                = new DefaultAssessmentResultBuilder(new SWIDValResultStatusBehavior(tagType, true));
+        retval.setLoggingHandler(loggingHandler);
+        retval.assignProperty(PROPERTY_KEY_AUTHORITATIVE, Boolean.toString(authoritative));
+        retval.assignProperty(PROPERTY_KEY_TAG_TYPE, tagType.getName());
+        return retval;
+    }
 
 }

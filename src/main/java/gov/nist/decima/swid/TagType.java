@@ -20,36 +20,37 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.decima.swid;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public enum TagType {
-  CORPUS("corpus"),
-  PRIMARY("primary"),
-  PATCH("patch"),
-  SUPPLEMENTAL("supplemental");
+    CORPUS("corpus"),
+    PRIMARY("primary"),
+    PATCH("patch"),
+    SUPPLEMENTAL("supplemental");
 
-  private static final Map<String, TagType> lookupMap = new HashMap<>();
+    private static final Map<String, TagType> lookupMap = new HashMap<>();
 
-  static {
-    for (TagType type : TagType.values()) {
-      lookupMap.put(type.getName(), type);
+    static {
+        for (TagType type : TagType.values()) {
+            lookupMap.put(type.getName(), type);
+        }
     }
-  }
 
-  public static TagType lookup(String value) {
-    return lookupMap.get(value);
-  }
+    public static TagType lookup(String value) {
+        return lookupMap.get(value);
+    }
 
-  private final String name;
+    private final String name;
 
-  private TagType(String name) {
-    this.name = name;
-  }
+    private TagType(String name) {
+        this.name = name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

@@ -20,12 +20,13 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.decima.swid;
 
 import gov.nist.decima.core.assessment.Assessment;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
 import gov.nist.decima.core.assessment.ConcurrentAssessmentExecutor;
-import gov.nist.decima.xml.DecimaXML;
+import gov.nist.decima.xml.assessment.Factory;
 import gov.nist.decima.xml.assessment.schema.SchemaAssessment;
 import gov.nist.decima.xml.assessment.schematron.SchematronAssessment;
 import gov.nist.decima.xml.document.XMLDocument;
@@ -44,75 +45,96 @@ import java.util.concurrent.ExecutorService;
 import javax.xml.transform.stream.StreamSource;
 
 public class SWIDAssessmentFactory {
-  private static final SWIDAssessmentFactory INSTANCE;
+    private static final SWIDAssessmentFactory INSTANCE;
 
-  public static String toPhase(TagType tagType, boolean authoritative) {
-    return "swid." + tagType.getName() + "." + (authoritative ? "auth" : "non-auth");
-  }
-
-  public static SWIDAssessmentFactory getInstance() {
-    return INSTANCE;
-  }
-
-  static {
-    INSTANCE = new SWIDAssessmentFactory();
-  }
-
-  private final Schematron schematron;
-  private final SchemaAssessment schemaAssessment;
-
-  private SWIDAssessmentFactory() {
-    this.schematron = createSchematron();
-    this.schemaAssessment = createSchemaAssessment();
-  }
-
-  public Schematron getSchematron() {
-    return schematron;
-  }
-
-  /**
-   * Produces a new assessment executor for assessing a SWID tag.
-   * 
-   * @param tagType
-   *          the software type supported by the tag
-   * @param authoritative
-   *          <code>true</code> if the tag was expected to be created by the software provider
-   * @param executorService
-   *          the Java executor to use to run the assessments
-   * @return a new executor
-   */
-  public AssessmentExecutor<XMLDocument> newAssessmentExecutor(TagType tagType, boolean authoritative,
-      ExecutorService executorService) {
-
-    List<Assessment<XMLDocument>> assessments = new ArrayList<Assessment<XMLDocument>>(2);
-    assessments.add(schemaAssessment);
-
-    SchematronAssessment assessment = DecimaXML.newSchematronAssessment(schematron, toPhase(tagType, authoritative));
-    assessment.addParameter("authoritative", Boolean.toString(authoritative));
-    assessment.addParameter("type", tagType.getName());
-    assessments.add(assessment);
-    File resultDir = new File("schematon-results");
-    resultDir.mkdirs();
-    assessment.setResultDirectory(resultDir);
-
-    AssessmentExecutor<XMLDocument> executor
-        = new ConcurrentAssessmentExecutor<XMLDocument>(executorService, assessments);
-    return executor;
-  }
-
-  protected SchemaAssessment createSchemaAssessment() {
-    return DecimaXML.newSchemaAssessment("GEN-1-1",
-        Collections.singletonList(new StreamSource("classpath:swid-schema-fixed-20160908.xsd")));
-  }
-
-  protected Schematron createSchematron() {
-    URL schematronURL;
-    try {
-      schematronURL = new URL("classpath:schematron/swid-nistir-8060.sch");
-      return new DefaultSchematronCompiler().newSchematron(schematronURL);
-    } catch (MalformedURLException | SchematronCompilationException e) {
-      // this should not happen if the classpath is resolvable and valid
-      throw new RuntimeException(e);
+    public static String toPhase(TagType tagType, boolean authoritative) {
+        return "swid." + tagType.getName() + "." + (authoritative ? "auth" : "non-auth");
     }
-  }
+
+    public static SWIDAssessmentFactory getInstance() {
+        return INSTANCE;
+    }
+
+    static {
+        INSTANCE = new SWIDAssessmentFactory();
+    }
+
+    private final Schematron schematron;
+    private final SchemaAssessment schemaAssessment;
+    private File resultDirectory;
+
+    private SWIDAssessmentFactory() {
+        this.schematron = createSchematron();
+        this.schemaAssessment = createSchemaAssessment();
+    }
+
+    public Schematron getSchematron() {
+        return schematron;
+    }
+
+    /**
+     * Retrieve the result directory.
+     * 
+     * @return the resultDirectory or <code>null</code> if no directory is set
+     */
+    public File getResultDirectory() {
+        return resultDirectory;
+    }
+
+    /**
+     * Set the result directory to use.
+     * 
+     * @param resultDirectory
+     *            the resultDirectory to set
+     */
+    public void setResultDirectory(File resultDirectory) {
+        this.resultDirectory = resultDirectory;
+    }
+
+    /**
+     * Produces a new assessment executor for assessing a SWID tag.
+     * 
+     * @param tagType
+     *            the software type supported by the tag
+     * @param authoritative
+     *            <code>true</code> if the tag was expected to be created by the software provider
+     * @param executorService
+     *            the Java executor to use to run the assessments
+     * @return a new executor
+     */
+    public AssessmentExecutor<XMLDocument> newAssessmentExecutor(TagType tagType, boolean authoritative,
+            ExecutorService executorService) {
+
+        List<Assessment<XMLDocument>> assessments = new ArrayList<Assessment<XMLDocument>>(2);
+        assessments.add(schemaAssessment);
+
+        SchematronAssessment assessment = Factory.newSchematronAssessment(schematron, toPhase(tagType, authoritative));
+        assessment.addParameter("authoritative", Boolean.toString(authoritative));
+        assessment.addParameter("type", tagType.getName());
+        assessments.add(assessment);
+        if (resultDirectory != null) {
+            resultDirectory.mkdirs();
+            assessment.setResultDirectory(resultDirectory);
+        }
+
+        AssessmentExecutor<XMLDocument> executor
+                = new ConcurrentAssessmentExecutor<XMLDocument>(executorService, assessments);
+        return executor;
+    }
+
+    protected SchemaAssessment createSchemaAssessment() {
+        return Factory.newSchemaAssessment("GEN-1-1",
+                Collections.singletonList(new StreamSource("classpath:swid-schema-fixed-20160908.xsd")));
+    }
+
+    protected Schematron createSchematron() {
+        URL schematronURL;
+        try {
+            schematronURL = new URL("classpath:schematron/swid-nistir-8060.sch");
+            return new DefaultSchematronCompiler().newSchematron(schematronURL);
+        } catch (MalformedURLException | SchematronCompilationException e) {
+            // this should not happen if the classpath is resolvable and valid
+            throw new RuntimeException(e);
+        }
+    }
 }

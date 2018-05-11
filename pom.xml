@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>gov.nist.secauto</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<version>8-SNAPSHOT</version>
 	</parent>
 
 	<groupId>gov.nist.decima</groupId>
@@ -18,18 +19,18 @@
 	</scm>
 
 	<properties>
-		<decima.version>0.5.0</decima.version>
+		<decima.version>0.6.2-SNAPSHOT</decima.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>decima-xml</artifactId>
+			<artifactId>decima-xml-assessment</artifactId>
 			<version>${decima.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
-			<artifactId>decima-testing</artifactId>
+			<artifactId>decima-xml-testing</artifactId>
 			<version>${decima.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -98,29 +99,16 @@
 									<version>${decima.version}</version>
 									<type>jar</type>
 								</artifactItem>
+                                <artifactItem>
+                                    <!-- Artifact that has the schema files -->
+                                    <groupId>gov.nist.decima</groupId>
+                                    <artifactId>decima-xml-assessment</artifactId>
+                                    <version>${decima.version}</version>
+                                    <type>jar</type>
+                                </artifactItem>
 							</artifactItems>
 							<includes>**/*.xsd</includes>
 							<outputDirectory>${project.basedir}/target/xsd-includes</outputDirectory>
-						</configuration>
-					</execution>
-					<!-- Used to pull bootstrap files from the JAR -->
-					<execution>
-						<id>unpack-bootstrap</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>gov.nist.decima</groupId>
-									<artifactId>decima-xml</artifactId>
-									<version>${decima.version}</version>
-									<classifier>bootstrap</classifier>
-									<type>jar</type>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/bootstrap</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -159,7 +147,7 @@
 					<dependency>
 						<groupId>gov.nist.secauto</groupId>
 						<artifactId>assembly-swid-generator</artifactId>
-						<version>0.0.5</version>
+						<version>0.0.6-SNAPSHOT</version>
 					</dependency>
 				</dependencies>
 				<executions>

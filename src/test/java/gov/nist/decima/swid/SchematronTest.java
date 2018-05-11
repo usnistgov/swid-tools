@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.decima.swid;
 
 import gov.nist.decima.core.Decima;
@@ -29,7 +30,7 @@ import gov.nist.decima.core.assessment.result.BaseRequirementResult;
 import gov.nist.decima.core.assessment.result.DerivedRequirementResult;
 import gov.nist.decima.core.assessment.result.TestResult;
 import gov.nist.decima.core.document.DocumentException;
-import gov.nist.decima.xml.DecimaXML;
+import gov.nist.decima.xml.assessment.Factory;
 import gov.nist.decima.xml.assessment.schematron.SchematronAssessment;
 import gov.nist.decima.xml.document.DefaultXMLDocumentFactory;
 import gov.nist.decima.xml.document.XMLDocument;
@@ -48,43 +49,45 @@ import java.util.Collections;
 
 public class SchematronTest {
 
-  @Test
-  public void temporaryTest() throws SchematronCompilationException, MalformedURLException, IOException,
-      AssessmentException, DocumentException {
-    // Load the document to assess
-    DefaultXMLDocumentFactory documentFactory = new DefaultXMLDocumentFactory();
-    XMLDocument doc = documentFactory.load(new URL("classpath:templates/primary-auth-swid.xml"));
+    @Test
+    public void temporaryTest() throws SchematronCompilationException, MalformedURLException, IOException,
+            AssessmentException, DocumentException {
+        // Load the document to assess
+        DefaultXMLDocumentFactory documentFactory = new DefaultXMLDocumentFactory();
+        XMLDocument doc = documentFactory.load(new URL("classpath:templates/primary-auth-swid.xml"));
 
-    // Load the schematron
-    Schematron schematron
-        = new DefaultSchematronCompiler().newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
+        // Load the schematron
+        Schematron schematron
+                = new DefaultSchematronCompiler().newSchematron(new URL("classpath:schematron/swid-nistir-8060.sch"));
 
-    // Create the assessment
-    SchematronAssessment assessment = DecimaXML.newSchematronAssessment(schematron, "swid.primary.auth");
-    File resultDir = new File("svrl-result");
-    assessment.setResultDirectory(resultDir);
-    // resultDir.mkdirs();
+        // Create the assessment
+        SchematronAssessment assessment = Factory.newSchematronAssessment(schematron, "swid.primary.auth");
+        File resultDir = new File("svrl-result");
+        assessment.setResultDirectory(resultDir);
+        // resultDir.mkdirs();
 
-    // Perform the assessment
-    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(TagType.PRIMARY, true);
-    reactor.pushAssessmentExecution(doc,
-        Decima.newAssessmentExecutorFactory().newAssessmentExecutor(Collections.singletonList(assessment)));
+        // Perform the assessment
+        SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(TagType.PRIMARY, true);
+        reactor.pushAssessmentExecution(doc,
+                Decima.newAssessmentExecutorFactory().newAssessmentExecutor(Collections.singletonList(assessment)));
 
-    // Generate the assessment results
-    AssessmentResults validationResult = reactor.react();
+        // Generate the assessment results
+        AssessmentResults validationResult = reactor.react();
 
-    // Output the results
-    Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();
-    for (BaseRequirementResult reqResult : results) {
-      System.out.println(reqResult.getBaseRequirement().getId() + ": status=" + reqResult.getStatus());
-      for (DerivedRequirementResult derResult : reqResult.getDerivedRequirementResults()) {
-        System.out.println("  " + derResult.getDerivedRequirement().getId() + ": status=" + derResult.getStatus());
-        for (TestResult asrResult : derResult.getTestResults()) {
-          System.out.println("    status=" + asrResult.getStatus() + ", message=" + asrResult.getResultValues()
-              + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn());
-          // + ", xpath=" + asrResult.getContext().getXPath());
+        // Output the results
+        Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();
+        for (BaseRequirementResult reqResult : results) {
+            System.out.println(reqResult.getBaseRequirement().getId() + ": status=" + reqResult.getStatus());
+            for (DerivedRequirementResult derResult : reqResult.getDerivedRequirementResults()) {
+                System.out.println(
+                        "  " + derResult.getDerivedRequirement().getId() + ": status=" + derResult.getStatus());
+                for (TestResult asrResult : derResult.getTestResults()) {
+                    System.out.println("    status=" + asrResult.getStatus() + ", message="
+                            + asrResult.getResultValues() + ", location=" + asrResult.getContext().getLine() + ","
+                            + asrResult.getContext().getColumn());
+                    // + ", xpath=" + asrResult.getContext().getXPath());
+                }
+            }
         }
-      }
     }
-  }
 }
