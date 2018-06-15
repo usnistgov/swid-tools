@@ -82,12 +82,12 @@
 				<version>2.6</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<webResources>
-						<resource>
-							<!-- this is relative to the pom.xml directory -->
-							<directory>${project.build.directory}/generated-webapp</directory>
-						</resource>
-					</webResources>
+<!-- 					<webResources> -->
+<!-- 						<resource> -->
+<!-- 							this is relative to the pom.xml directory -->
+<!-- 							<directory>${project.build.directory}/generated-webapp</directory> -->
+<!-- 						</resource> -->
+<!-- 					</webResources> -->
 				</configuration>
 			</plugin>
 			<plugin>
