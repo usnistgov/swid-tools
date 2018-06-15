@@ -42,6 +42,24 @@ public abstract class AbstractBuilder implements Builder {
 
   }
 
+  protected void validateNonEmpty(String field, Object[] value) throws ValidationException {
+    validateNonNull(field, value);
+
+    if (value.length == 0) {
+      throw new ValidationException("the field '" + field + "' must be a non-empty array");
+    }
+
+  }
+
+  protected void validateNonEmpty(String field, byte[] value) throws ValidationException {
+    validateNonNull(field, value);
+
+    if (value.length == 0) {
+      throw new ValidationException("the field '" + field + "' must be a non-empty array");
+    }
+
+  }
+
   protected <T> void validateNonEmpty(String field, Collection<T> value) throws ValidationException {
     validateNonNull(field, value);
 

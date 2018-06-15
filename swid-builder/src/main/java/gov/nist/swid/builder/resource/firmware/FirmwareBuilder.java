@@ -25,300 +25,296 @@ package gov.nist.swid.builder.resource.firmware;
 
 import gov.nist.swid.builder.ValidationException;
 import gov.nist.swid.builder.resource.AbstractResourceBuilder;
-import gov.nist.swid.builder.resource.HashAlgorithm;
-import gov.nist.swid.builder.resource.HashUtils;
 import gov.nist.swid.builder.resource.ResourceCollectionEntryGenerator;
 import gov.nist.swid.builder.util.Util;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
+import java.time.ZonedDateTime;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
-  private String name;
-  private String version;
-  private String packageIdentifier;
-  private BigInteger componentIndex;
-  private String blockDeviceIdentifier;
-  private String targetHardwareIdentifier;
-  private String modelLabel;
-  private HashAlgorithm hashAlgorithm;
-  private byte[] hashValue;
-  private byte[] cmsFirmwarePackage;
+    private FirmwareIdentifier id;
+    private ZonedDateTime creationTimestamp = ZonedDateTime.now();
+    private BigInteger version;
+    private String description;
+    private byte[] nonce;
+    private List<ResourceReference> aliases = new LinkedList<>();
+    private List<ResourceReference> dependencies = new LinkedList<>();
+    private String blockDeviceIdentifier;
+    private DeviceIdentifier targetDeviceIdentifier;
+    private List<FirmwarePayloadBuilder> payloads = new LinkedList<>();
+    private Map<Integer, byte[]> extensions = new LinkedHashMap<>();
 
-  @Override
-  public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
-    creator.generate(this, parentContext);
-  }
-
-  /**
-   * Retrieve the name of the firmware.
-   * 
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Retrieve the version of the firmware.
-   * 
-   * @return the version
-   */
-  public String getVersion() {
-    return version;
-  }
-
-  /**
-   * Retrieve the package identifier of the firmware.
-   * 
-   * @return the packageIdentifier
-   */
-  public String getPackageIdentifier() {
-    return packageIdentifier;
-  }
-
-  /**
-   * Retrieve the index value of the firmware component.
-   * 
-   * @return the componentIndex
-   */
-  public BigInteger getComponentIndex() {
-    return componentIndex;
-  }
-
-  /**
-   * Retrieve the block device identifier for the firmware.
-   * 
-   * @return the blockDeviceIdentifier
-   */
-  public String getBlockDeviceIdentifier() {
-    return blockDeviceIdentifier;
-  }
-
-  /**
-   * Retrieve the target hardware identifier for the firmware.
-   * 
-   * @return the targetHardwareIdentifier
-   */
-  public String getTargetHardwareIdentifier() {
-    return targetHardwareIdentifier;
-  }
-
-  /**
-   * Retrieve the model label for the firmware.
-   * 
-   * @return the modelLabel
-   */
-  public String getModelLabel() {
-    return modelLabel;
-  }
-
-  /**
-   * Retrieve the hash algorithm used to verify the firmware.
-   * 
-   * @return the hashAlgorithm
-   */
-  public HashAlgorithm getHashAlgorithm() {
-    return hashAlgorithm;
-  }
-
-  /**
-   * Retrieve the hash value for the firmware.
-   * 
-   * @return the hashValue
-   */
-  public byte[] getHashValue() {
-    return hashValue;
-  }
-
-  /**
-   * Retrieve the actual firmware.
-   * 
-   * @return the cmsFirmwarePackage
-   */
-  public byte[] getCmsFirmwarePackage() {
-    return cmsFirmwarePackage;
-  }
-
-  /**
-   * Set the name of the firmware.
-   * 
-   * @param name
-   *          the firmware's name
-   * @return the same builder instance
-   */
-  public FirmwareBuilder name(String name) {
-    Util.requireNonEmpty(name, "name");
-    this.name = name;
-    return this;
-  }
-
-  /**
-   * Set the version of the firmware.
-   * 
-   * @param version
-   *          the firmware's version
-   * @return the same builder instance
-   */
-  public FirmwareBuilder version(String version) {
-    Util.requireNonEmpty(version, "version");
-    this.version = version;
-    return this;
-  }
-
-  /**
-   * Set the package identifier.
-   * 
-   * @param packageIdentifier
-   *          a {@code non-null} package identifier
-   * @return the same builder instance
-   */
-  public FirmwareBuilder packageIdentifier(String packageIdentifier) {
-    Util.requireNonEmpty(packageIdentifier, "packageIdentifier");
-    this.packageIdentifier = packageIdentifier;
-    return this;
-  }
-
-  /**
-   * Set the component index.
-   * 
-   * @param componentIndex
-   *          a {@code non-null} component index
-   * @return the same builder instance
-   */
-  public FirmwareBuilder componentIndex(BigInteger componentIndex) {
-    Objects.requireNonNull(componentIndex, "componentIndex");
-    this.componentIndex = componentIndex;
-    return this;
-  }
-
-  /**
-   * Set the block device identifier.
-   * 
-   * @param blockDeviceIdentifier
-   *          a {@code non-null} block device identifier
-   * @return the same builder instance
-   */
-  public FirmwareBuilder blockDeviceIdentifier(String blockDeviceIdentifier) {
-    Util.requireNonEmpty(blockDeviceIdentifier, "blockDeviceIdentifier");
-    this.blockDeviceIdentifier = blockDeviceIdentifier;
-    return this;
-  }
-
-  /**
-   * Set the target hardware identifier.
-   * 
-   * @param targetHardwareIdentifier
-   *          a {@code non-null} target hardware identifier
-   * @return the same builder instance
-   */
-  public FirmwareBuilder targetHardwareIdentifier(String targetHardwareIdentifier) {
-    Util.requireNonEmpty(targetHardwareIdentifier, "targetHardwareIdentifier");
-    this.targetHardwareIdentifier = targetHardwareIdentifier;
-    return this;
-  }
-
-  /**
-   * Set the model label.
-   * 
-   * @param modelLabel
-   *          a {@code non-null} model label
-   * @return the same builder instance
-   */
-  public FirmwareBuilder modelLabel(String modelLabel) {
-    Util.requireNonEmpty(modelLabel, "modelLabel");
-    this.modelLabel = modelLabel;
-    return this;
-  }
-
-  /**
-   * Set the firmware package.
-   * 
-   * @param cmsFirmwarePackage
-   *          a {@code non-null} array of bytes containing the actual firmware
-   * @return the same builder instance
-   */
-  public FirmwareBuilder cmsFirmwarePackage(byte[] cmsFirmwarePackage) {
-    Objects.requireNonNull(cmsFirmwarePackage, "cmsFirmwarePackage");
-    this.cmsFirmwarePackage = cmsFirmwarePackage;
-    return this;
-  }
-
-  /**
-   * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An {@link InputStream}
-   * is used to retrieve the files contents to calculate the hash value. The caller is resposnible for closing the
-   * stream used by this method.
-   * 
-   * @param algorithm
-   *          the algorithm to establish a hash value for
-   * @param file
-   *          the file to hash
-   * @return the same builder instance
-   * @throws NoSuchAlgorithmException
-   *           if the hash algorithm is not supported
-   * @throws IOException
-   *           if an error occurs while reading the stream
-   */
-  public FirmwareBuilder hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
-    InputStream is = new BufferedInputStream(new FileInputStream(file));
-    return hash(algorithm, is);
-  }
-
-  /**
-   * Sets the file's hash value, for the provided algorithm, to the provided value. An {@link InputStream} is used to
-   * retrieve the files contents to calculate the hash value. The caller is responsible for closing the stream used by
-   * this method.
-   * 
-   * @param algorithm
-   *          the algorithm to establish a hash value for
-   * @param is
-   *          an {@link InputStream} that can be used to read the file
-   * @return the same builder instance
-   * @throws NoSuchAlgorithmException
-   *           if the hash algorithm is not supported
-   * @throws IOException
-   *           if an error occurs while reading the stream
-   */
-  public FirmwareBuilder hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
-    byte[] digest = HashUtils.hash(algorithm, is);
-    return hash(algorithm, digest);
-  }
-
-  /**
-   * Sets the file's hash value, for the provided algorithm, to the provided value.
-   * 
-   * @param algorithm
-   *          the algorithm to establish a hash value for
-   * @param hashBytes
-   *          an rray of bytes representing the digest value
-   * @return the same builder instance
-   */
-  public FirmwareBuilder hash(HashAlgorithm algorithm, byte[] hashBytes) {
-    Objects.requireNonNull(algorithm, "algorithm");
-    Objects.requireNonNull(hashBytes, "hashBytes");
-    this.hashAlgorithm = algorithm;
-    this.hashValue = hashBytes;
-    return this;
-  }
-
-  @Override
-  public void validate() throws ValidationException {
-    validateNonEmpty("name", name);
-    // validateNonEmpty("modelLabel", modelLabel);
-
-    if (hashValue != null && hashValue.length == 0) {
-      throw new ValidationException("the field 'hashValue' must contain a value with a non-zero length");
+    public FirmwareBuilder() {
+        super();
+        byte[] nonceData = new byte[8];
+        new Random().nextBytes(nonceData);
+        this.nonce = nonceData;
     }
-  }
 
-  public static FirmwareBuilder create() {
-    return new FirmwareBuilder();
-  }
+    @Override
+    public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
+        creator.generate(this, parentContext);
+    }
+
+    /**
+     * Retrieve the identifier of the firmware manifest.
+     * 
+     * @return the id
+     */
+    public FirmwareIdentifier getId() {
+        return id;
+    }
+
+    /**
+     * Set the id of the firmware manifest.
+     * 
+     * @param name
+     *            the firmware's name
+     * @return the same builder instance
+     */
+    public FirmwareBuilder id(FirmwareIdentifier id) {
+        Objects.requireNonNull(id, "id");
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Retrieve the identifier of the firmware manifest.
+     * 
+     * @return the creationTimestamp
+     */
+    public ZonedDateTime getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    /**
+     * Set the creation timestamp of the firmware manifest.
+     * 
+     * @param creationTimestamp
+     *            the creationTimestamp to set
+     */
+    public FirmwareBuilder creationTimestamp(ZonedDateTime dateTime) {
+        Objects.requireNonNull(dateTime, "dateTime");
+        this.creationTimestamp = dateTime;
+        return this;
+    }
+
+    /**
+     * Retrieve the version of the firmware manifest.
+     * 
+     * @return the version
+     */
+    public BigInteger getVersion() {
+        return version;
+    }
+
+    /**
+     * Set the version of the firmware manifest.
+     * 
+     * @param version
+     *            the firmware's version
+     * @return the same builder instance
+     */
+    public FirmwareBuilder version(BigInteger version) {
+        Objects.requireNonNull(version, "version");
+        this.version = version;
+        return this;
+    }
+
+    /**
+     * Retrieve the description of the firmware manifest.
+     * 
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the version of the firmware manifest.
+     * 
+     * @param description
+     *            the firmware's description
+     * @return the same builder instance
+     */
+    public FirmwareBuilder description(String description) {
+        Util.requireNonEmpty(description, "description");
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Retrieve the nonce of the firmware manifest.
+     * 
+     * @return the nonce
+     */
+    public byte[] getNonce() {
+        return nonce;
+    }
+
+    /**
+     * Set the nonce of the firmware manifest.
+     * 
+     * @param nonce
+     *            the firmware's nonce
+     * @return the same builder instance
+     */
+    public FirmwareBuilder nonce(byte[] nonce) {
+        Objects.requireNonNull(nonce, "nonce");
+        this.nonce = nonce;
+        return this;
+    }
+
+    /**
+     * Retrieve the aliases of the firmware manifest.
+     * 
+     * @return the aliases
+     */
+    public List<ResourceReference> getAliases() {
+        return aliases;
+    }
+
+    /**
+     * Adds a new alias to the list of aliases.
+     * 
+     * @param aliases
+     *            the alias to add
+     * @return the same builder instance
+     */
+    public FirmwareBuilder addAlias(ResourceReference alias) {
+        Objects.requireNonNull(alias, "alias");
+        this.aliases.add(alias);
+        return this;
+    }
+
+    /**
+     * Retrieve the dependencies of the firmware manifest.
+     * 
+     * @return the dependencies
+     */
+    public List<ResourceReference> getDependencies() {
+        return dependencies;
+    }
+
+    /**
+     * Adds a new dependency to the list of aliases.
+     * 
+     * @param aliases
+     *            the alias to add
+     * @return the same builder instance
+     */
+    public FirmwareBuilder addDependency(ResourceReference dependency) {
+        Objects.requireNonNull(dependency, "dependency");
+        this.dependencies.add(dependency);
+        return this;
+    }
+
+    /**
+     * Retrieve the block device identifier for the firmware.
+     * 
+     * @return the blockDeviceIdentifier
+     */
+    public String getBlockDeviceIdentifier() {
+        return blockDeviceIdentifier;
+    }
+
+    /**
+     * Set the block device identifier.
+     * 
+     * @param blockDeviceIdentifier
+     *            a {@code non-null} block device identifier
+     * @return the same builder instance
+     */
+    public FirmwareBuilder blockDeviceIdentifier(String blockDeviceIdentifier) {
+        Util.requireNonEmpty(blockDeviceIdentifier, "blockDeviceIdentifier");
+        this.blockDeviceIdentifier = blockDeviceIdentifier;
+        return this;
+    }
+
+    /**
+     * Retrieve the target device identifier for the firmware manifest.
+     * 
+     * @return the targetDeviceIdentifier
+     */
+    public DeviceIdentifier getTargetDeviceIdentifier() {
+        return targetDeviceIdentifier;
+    }
+
+    /**
+     * Set the target device identifier.
+     * 
+     * @param targetDeviceIdentifier
+     *            a {@code non-null} target device identifier
+     * @return the same builder instance
+     */
+    public FirmwareBuilder targetDeviceIdentifier(DeviceIdentifier targetDeviceIdentifier) {
+        Objects.requireNonNull(targetDeviceIdentifier, "targetDeviceIdentifier");
+        this.targetDeviceIdentifier = targetDeviceIdentifier;
+        return this;
+    }
+
+    /**
+     * Retrieve the firmware payloads of the firmware manifest.
+     * 
+     * @return the payloads
+     */
+    public List<FirmwarePayloadBuilder> getPayloads() {
+        return payloads;
+    }
+
+    /**
+     * Adds a new payload to the list of payloads.
+     * 
+     * @param payload
+     *            the payload to add
+     * @return the same builder instance
+     */
+    public FirmwareBuilder addPayload(FirmwarePayloadBuilder payload) {
+        Objects.requireNonNull(payload, "payload");
+        this.payloads.add(payload);
+        return this;
+    }
+
+    /**
+     * Retrieve the firmware manifest extensions.
+     * 
+     * @return the extensions
+     */
+    public Map<Integer, byte[]> getExtensions() {
+        return extensions;
+    }
+
+    /**
+     * Adds a new extension object.
+     * 
+     * @param extenstiontype
+     *            the extension type identifier
+     * @param extensions
+     *            the extension content
+     * @return the same builder instance
+     */
+    public FirmwareBuilder addExtension(int extenstiontype, byte[] extension) {
+        this.extensions.put(extenstiontype, extension);
+        return this;
+    }
+
+    @Override
+    public void validate() throws ValidationException {
+        validateNonNull("id", id);
+        validateNonNull("creationTimestamp", creationTimestamp);
+        validateNonNull("version", version);
+        validateNonEmpty("nonce", nonce);
+        validateNonNull("targetDeviceIdentifier", nonce);
+    }
+
+    public static FirmwareBuilder create() {
+        return new FirmwareBuilder();
+    }
 
 }

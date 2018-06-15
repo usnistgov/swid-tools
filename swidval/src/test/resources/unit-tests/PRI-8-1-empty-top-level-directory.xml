@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-unit-test xmlns="http://decima.nist.gov/xml/unit-test">
+	<requirement>PRI-8-1</requirement>
+	<description>An valid non-authoritative tag with an empty top-level directory, and multiple files inside the evidence element.</description>
+	<template template="classpath:templates/primary-non-auth-swid.xml"
+		xmlns="http://csrc.nist.gov/ns/decima/template/1.0" xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <delete xpath="/swid:SoftwareIdentity/swid:Evidence/swid:File" />
+	</template>
+	<assessments>
+		<schema-assessment derived-requirement="GEN-1" />
+		<schematron-assessment ruleset="classpath:schematron/swid-nistir-8060.sch"
+			phase="swid.primary.non-auth">
+			<parameter name="authoritative">false</parameter>
+			<parameter name="type">primary</parameter>
+		</schematron-assessment>
+	</assessments>
+	<assertions>
+<!-- 		<assert-derived-requirement requirement-id="GEN-8-1" -->
+<!-- 			result="FAIL" /> -->
+		<assert-overall quantifier="ALL" result="PASS" />
+	</assertions>
+</content-unit-test>

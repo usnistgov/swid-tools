@@ -56,7 +56,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
-public class CBOROutputHandler implements OutputHandler {
+public class CBOROutputHandler extends CBORSupport implements OutputHandler {
   /**
    * The tag identifier (text).
    */
@@ -137,16 +137,6 @@ public class CBOROutputHandler implements OutputHandler {
    * Firmware.
    */
   private static final long FIRMWARE_ENTRY_FIELD = 59L;
-  private static final long FIRMWARE_NAME_FIELD = 60L;
-  private static final long FIRMWARE_VERSION_FIELD = 61L;
-  private static final long FIRMWARE_COMPONENT_INDEX_FIELD = 62L;
-  private static final long FIRMWARE_MODEL_LABEL_FIELD = 63L;
-  private static final long FIRMWARE_BLOCK_DEVICE_IDENTIFIER_FIELD = 64L;
-  private static final long FIRMWARE_CMS_FIRMWARE_PACKAGE_FIELD = 65L;
-  private static final long FIRMWARE_PACKAGE_IDENTIFIER_FIELD = 66L;
-  private static final long FIRMWARE_TARGET_HARDWARE_IDENTIFIER_FIELD = 67L;
-
-  private static final Pattern INTEGER_PATTERN = Pattern.compile("[-]?[1-9]\\d*");
 
   public CBOROutputHandler() {
   }
@@ -464,47 +454,6 @@ public class CBOROutputHandler implements OutputHandler {
     }
   }
 
-  private static void writeTextField(CBORGenerator generator, long fieldId, String text) throws IOException {
-    generator.writeFieldId(fieldId);
-    generator.writeString(text);
-  }
-
-  private static void writeBooleanField(CBORGenerator generator, long fieldId, boolean state) throws IOException {
-    generator.writeFieldId(fieldId);
-    generator.writeBoolean(state);
-
-  }
-
-  private static void writeLongField(CBORGenerator generator, long fieldId, long value) throws IOException {
-    generator.writeFieldId(fieldId);
-    generator.writeNumber(value);
-  }
-
-  private static void writeIntegerField(CBORGenerator generator, long fieldId, int value) throws IOException {
-    generator.writeFieldId(fieldId);
-    generator.writeNumber(value);
-  }
-
-  private static void writeIntegerField(CBORGenerator generator, long fieldId, BigInteger value) throws IOException {
-    generator.writeFieldId(fieldId);
-    generator.writeNumber(value);
-  }
-
-  private static void writeDateTimeField(CBORGenerator generator, long fieldId, ZonedDateTime dateTime)
-      throws IOException {
-    generator.writeFieldId(fieldId);
-    generator.writeString(dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-  }
-
-  private static void writeIntegerOrTextField(CBORGenerator generator, long firmwareVersionField, String value)
-      throws IOException {
-    if (INTEGER_PATTERN.matcher(value).matches()) {
-      BigInteger intValue = new BigInteger(value);
-      writeIntegerField(generator, FIRMWARE_VERSION_FIELD, intValue);
-    } else {
-      writeTextField(generator, FIRMWARE_VERSION_FIELD, value);
-    }
-  }
 
   public static class CBORResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator<CBORGenerator> {
 
@@ -575,48 +524,7 @@ public class CBOROutputHandler implements OutputHandler {
 
     @Override
     public void generate(FirmwareBuilder builder, CBORGenerator generator) {
-      try {
-        generator.writeStartObject();
-
-        writeTextField(generator, FIRMWARE_NAME_FIELD, builder.getName());
-
-        if (builder.getVersion() != null) {
-          writeIntegerOrTextField(generator, FIRMWARE_VERSION_FIELD, builder.getVersion());
-        }
-
-        if (builder.getPackageIdentifier() != null) {
-          writeTextField(generator, FIRMWARE_PACKAGE_IDENTIFIER_FIELD, builder.getPackageIdentifier());
-        }
-
-        if (builder.getComponentIndex() != null) {
-          writeIntegerField(generator, FIRMWARE_PACKAGE_IDENTIFIER_FIELD, builder.getComponentIndex());
-        }
-
-        if (builder.getBlockDeviceIdentifier() != null) {
-          writeIntegerOrTextField(generator, FIRMWARE_BLOCK_DEVICE_IDENTIFIER_FIELD,
-              builder.getBlockDeviceIdentifier());
-        }
-
-        if (builder.getTargetHardwareIdentifier() != null) {
-          writeTextField(generator, FIRMWARE_TARGET_HARDWARE_IDENTIFIER_FIELD, builder.getTargetHardwareIdentifier());
-        }
-
-        // writeIntegerOrTextField(generator, FIRMWARE_MODEL_LABEL_FIELD,
-        // builder.getModelLabel());
-
-        if (builder.getHashAlgorithm() != null && builder.getHashValue() != null) {
-          writeHash(builder.getHashAlgorithm(), builder.getHashValue(), generator);
-        }
-
-        if (builder.getCmsFirmwarePackage() != null) {
-          generator.writeFieldId(FIRMWARE_CMS_FIRMWARE_PACKAGE_FIELD);
-          generator.writeBinary(builder.getCmsFirmwarePackage());
-        }
-
-        generator.writeEndObject();
-      } catch (IOException ex) {
-        throw new RuntimeException(ex);
-      }
+        new CBORFirmwareOutputHandler().generate(builder, generator);
     }
 
     private <E extends AbstractFileSystemItemBuilder<E>> void buildFileSystemItem(

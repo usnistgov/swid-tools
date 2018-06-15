@@ -161,11 +161,9 @@ public class SwidContainerDescriptorHandler implements ContainerDescriptorHandle
 
     // create the output directory
     File retval = getTagOutputDirectory();
-    if (!retval.exists()) {
-      if (!retval.mkdirs()) {
+    if (!retval.exists() && !retval.mkdirs()) {
         throw new ArchiverException(
             "Unable to create the directory specified by outputDirectory configuration parameter: " + retval.getPath());
-      }
     }
     //
     // // create the tagPath

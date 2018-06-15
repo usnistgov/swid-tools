@@ -24,18 +24,18 @@
 package gov.nist.swid.builder.resource;
 
 public enum HashAlgorithm {
-  SHA_256(1, "SHA-256", 256, "http://www.w3.org/2001/04/xmlenc#sha256"), SHA_256_128(2, "SHA_256_128", 128,
-      "http://www.w3.org/2001/04/xmlenc#sha256"), SHA_256_120(3, "SHA_256_120", 120,
-          "http://www.w3.org/2001/04/xmlenc#sha256"), SHA_256_96(4, "SHA_256_96", 96,
-              "http://www.w3.org/2001/04/xmlenc#sha256"), SHA_256_64(5, "SHA_256_64", 64,
-                  "http://www.w3.org/2001/04/xmlenc#sha256"), SHA_256_32(6, "SHA_256_32", 32,
-                      "http://www.w3.org/2001/04/xmlenc#sha256"), SHA_384(7, "SHA_384", 384,
-                          "http://www.w3.org/2001/04/xmldsig-more#sha384"), SHA_512(8, "SHA-512", 512,
-                              "http://www.w3.org/2001/04/xmlenc#sha512"), SHA_3_224(9, "SHA_3_224", 224,
-                                  "http://www.w3.org/2007/05/xmldsig-more#sha3-224"), SHA_3_256(9, "SHA_3_256", 256,
-                                      "http://www.w3.org/2007/05/xmldsig-more#sha3-256"), SHA_3_384(9, "SHA_3_384", 384,
-                                          "http://www.w3.org/2007/05/xmldsig-more#sha3-384"), SHA_3_512(9, "SHA_3_512",
-                                              512, "http://www.w3.org/2007/05/xmldsig-more#sha3-512");
+  SHA_256(1, "SHA-256", 256, "http://www.w3.org/2001/04/xmlenc#sha256"),
+  SHA_256_128(2, "SHA_256_128", 128, "http://www.w3.org/2001/04/xmlenc#sha256"),
+  SHA_256_120(3, "SHA_256_120", 120, "http://www.w3.org/2001/04/xmlenc#sha256"),
+  SHA_256_96(4, "SHA_256_96", 96, "http://www.w3.org/2001/04/xmlenc#sha256"),
+  SHA_256_64(5, "SHA_256_64", 64, "http://www.w3.org/2001/04/xmlenc#sha256"),
+  SHA_256_32(6, "SHA_256_32", 32, "http://www.w3.org/2001/04/xmlenc#sha256"),
+  SHA_384(7, "SHA_384", 384, "http://www.w3.org/2001/04/xmldsig-more#sha384"),
+  SHA_512(8, "SHA-512", 512, "http://www.w3.org/2001/04/xmlenc#sha512"),
+  SHA_3_224(9, "SHA_3_224", 224, "http://www.w3.org/2007/05/xmldsig-more#sha3-224"),
+  SHA_3_256(9, "SHA_3_256", 256, "http://www.w3.org/2007/05/xmldsig-more#sha3-256"),
+  SHA_3_384(9, "SHA_3_384", 384, "http://www.w3.org/2007/05/xmldsig-more#sha3-384"),
+  SHA_3_512(9, "SHA_3_512", 512, "http://www.w3.org/2007/05/xmldsig-more#sha3-512");
 
   /**
    * From the Named Information Hash Algorithm Registry:

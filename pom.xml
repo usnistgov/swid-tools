@@ -16,26 +16,26 @@
 	<packaging>pom</packaging>
 
 	<name>SWID Java Support Parent</name>
-	<description>A parent project object model (POM) for a collection of Java utilities for creating SWID Tags.</description>
+	<description>A parent project object model (POM) for a collection of Java utilities for creating and validating Software Identification (SWID) Tags.</description>
 
-	<url>https://github.com/usnistgov/swid-builder</url>
+	<url>https://github.com/usnistgov/swid-tools</url>
 
 	<issueManagement>
-		<url>https://github.com/usnistgov/swid-builder/issues</url>
+		<url>https://github.com/usnistgov/swid-tools/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
 
 	<scm>
-		<url>https://github.com/usnistgov/swid-builder</url>
-		<connection>scm:git:https://github.com/usnistgov/swid-builder.git</connection>
-		<developerConnection>scm:git:https://github.com/usnistgov/swid-builder.git</developerConnection>
+		<url>https://github.com/usnistgov/swid-tools</url>
+		<connection>scm:git:https://github.com/usnistgov/swid-tools.git</connection>
+		<developerConnection>scm:git:https://github.com/usnistgov/swid-tools.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
 		<site>
 			<id>my.git.server</id>
-			<url>scm:git:https://github.com/usnistgov/swid-builder.git</url>
+			<url>scm:git:https://github.com/usnistgov/swid-tools.git</url>
 		</site>
 	</distributionManagement>
 
@@ -60,6 +60,8 @@
 	<modules>
 		<module>swid-builder</module>
 		<module>swid-maven-plugin</module>
+		<module>swidval</module>
+		<module>swidval-webapp</module>
 	</modules>
 
 	<dependencyManagement>

@@ -29,6 +29,14 @@ import gov.nist.swid.builder.KnownVersionScheme;
 import gov.nist.swid.builder.SWIDBuilder;
 import gov.nist.swid.builder.TagType;
 import gov.nist.swid.builder.ValidationException;
+import gov.nist.swid.builder.resource.HashAlgorithm;
+import gov.nist.swid.builder.resource.HashUtils;
+import gov.nist.swid.builder.resource.firmware.DeviceIdentifier;
+import gov.nist.swid.builder.resource.firmware.DigestType;
+import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
+import gov.nist.swid.builder.resource.firmware.FirmwarePayloadBuilder;
+import gov.nist.swid.builder.resource.firmware.FirmwarePayloadPackage;
+import gov.nist.swid.builder.resource.firmware.StringFirmwareIdentifier;
 
 import org.junit.Test;
 
@@ -36,6 +44,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.util.Random;
+import java.util.UUID;
 
 public class CBOROutputHandlerTest {
 
@@ -55,6 +67,39 @@ public class CBOROutputHandlerTest {
         XMLOutputHandler xmlHandler = new XMLOutputHandler();
         try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid-cbor.xml")))) {
             xmlHandler.write(builder, os);
+        }
+    }
+
+    @Test
+    public void testFirmware() throws IOException, ValidationException, NoSuchAlgorithmException {
+        SWIDBuilder builder = SWIDBuilder.create();
+        builder.addEntity(
+                EntityBuilder.create().name("Acme Software").regid("acme.com").addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
+        builder.language("en-US").name("acme firmware").tagId(UUID.randomUUID().toString()).tagType(TagType.PRIMARY).version("1.0.0")
+                .versionScheme(KnownVersionScheme.MULTIPART_NUMERIC);
+
+        FirmwareBuilder fb = builder.newPayload().newFirmwareResource();
+        fb.id(new StringFirmwareIdentifier(UUID.randomUUID().toString()));
+        fb.version(BigInteger.ONE);
+        fb.targetDeviceIdentifier(new DeviceIdentifier("acme", "9000x"));
+        
+        FirmwarePayloadBuilder fp = new FirmwarePayloadBuilder();
+        fp.id(new StringFirmwareIdentifier(UUID.randomUUID().toString()));
+        fp.formatType(0);
+        fp.size(BigInteger.valueOf(2048));
+
+        byte[] payload = new byte[2048];
+        new Random().nextBytes(payload);
+
+        fp.addDigest(DigestType.RAW_PAYLOAD, HashAlgorithm.SHA_512, HashUtils.hash(HashAlgorithm.SHA_512, payload));
+        fp.storageId(new StringFirmwareIdentifier("some storageId"));
+        fp.firmwarePackage(new FirmwarePayloadPackage(payload));
+
+        fb.addPayload(fp);
+
+        CBOROutputHandler cborHandler = new CBOROutputHandler();
+        try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("firmware-coswid.cbor")))) {
+            cborHandler.write(builder, os);
         }
     }
 

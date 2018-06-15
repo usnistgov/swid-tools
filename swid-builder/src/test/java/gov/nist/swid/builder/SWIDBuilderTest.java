@@ -59,23 +59,6 @@ public class SWIDBuilderTest {
     }
 
     @Test
-    public void testCBORFirmware() throws IOException, NoSuchAlgorithmException, ValidationException {
-        SWIDBuilder builder = SWIDBuilder.create();
-        builder.name("Bootloader").version("1.0.0").tagId(UUID.randomUUID().toString())
-                .addEntity(EntityBuilder.create().regid("org.ietf").name("Internet Engineering Task Force SUIT WG")
-                        .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR))
-                .newPayload().newFirmwareResource().hash(HashAlgorithm.SHA_256, this.getClass().getResourceAsStream("/firmware"))
-                .name("firmware.bin");
-
-        // File file = folder.newFile();
-        File file = new File("test.cbor");
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-        new CBOROutputHandler().write(builder, os);
-        os.close();
-        System.out.println(file.getAbsolutePath());
-    }
-
-    @Test
     public void testXML() throws IOException, ValidationException {
         SWIDBuilder builder = SWIDBuilder.create();
         builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())

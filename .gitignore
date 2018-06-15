@@ -4,3 +4,11 @@ target/
 .project
 .settings/
 /swid-builder/swid.cbor
+.pmd
+.pmdruleset.xml
+
+
+swid-builder/firmware-coswid.cbor
+swid-builder/swid-cbor.cbor
+swid-builder/swid-cbor.xml
+swid-builder/test.cbor

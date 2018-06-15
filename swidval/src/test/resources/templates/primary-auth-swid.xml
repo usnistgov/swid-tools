@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template template="classpath:templates/minimal-swid.xml"
+	xmlns="http://csrc.nist.gov/ns/decima/template/1.0"
+	xmlns:swid="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+    xmlns:n8060="http://csrc.nist.gov/ns/swid/2015-extensions/1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<add-attribute xpath="/swid:SoftwareIdentity" name="lang"
+		value="en" ns="http://www.w3.org/XML/1998/namespace" />
+	<add-attribute xpath="/swid:SoftwareIdentity" name="version"
+		value="1.0"/>
+	<add-attribute xpath="/swid:SoftwareIdentity" name="versionScheme"
+		value="semver"/>
+	<delete xpath="//swid:Entity" />
+	<insert-child xpath="/swid:SoftwareIdentity">
+		<swid:Entity name="ACME Connection" regid="acme.org"
+			role="tagCreator softwareCreator" />
+		<swid:Meta product="product" colloquialVersion="ver" revision="revision" edition="edition" />
+		<swid:Payload xmlns:SHA-256="http://www.w3.org/2001/04/xmlenc#sha256" n8060:pathSeparator="/" n8060:envVarPrefix="$" n8060:envVarSuffix="">
+			<swid:Directory name="dirA">
+				<swid:File name="fileA" size="12345" version="1.0.0" versionScheme="semver" SHA-256:hash="9452e85177f69535ca93cbe2df3e8604344d58f729db7fb9e309e80684253111" />
+			</swid:Directory>
+			<swid:File name="fileB" size="234567" version="1.0.1" versionScheme="semver" SHA-256:hash="9452e85177f69535ca93cbe2df3e8604344d58f729db7fb9e309e80684252111" />
+		</swid:Payload>
+	</insert-child>
+</template>
