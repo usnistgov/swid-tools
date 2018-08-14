@@ -12,3 +12,5 @@ swid-builder/firmware-coswid.cbor
 swid-builder/swid-cbor.cbor
 swid-builder/swid-cbor.xml
 swid-builder/test.cbor
+/swidval/svrl-result
+/swidval/test-results
