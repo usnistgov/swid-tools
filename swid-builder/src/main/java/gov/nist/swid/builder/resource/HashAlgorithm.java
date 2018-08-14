@@ -75,8 +75,8 @@ public enum HashAlgorithm {
   }
 
   /**
-   * Retrieve the length in bits for the digest value. This can be used to truncate the digest result if the algorithm
-   * requires this.
+   * Retrieve the length in bits for the digest value. This can be used to truncate the digest result
+   * if the algorithm requires this.
    * 
    * @return the valueLength (in bits)
    */

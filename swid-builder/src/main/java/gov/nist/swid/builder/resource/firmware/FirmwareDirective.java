@@ -24,19 +24,19 @@
 package gov.nist.swid.builder.resource.firmware;
 
 public enum FirmwareDirective {
-    APPLY_IMMEDIATELY(1),
-    APPLY_AFTER(2);
+  APPLY_IMMEDIATELY(1),
+  APPLY_AFTER(2);
 
-    private final int index;
+  private final int index;
 
-    private FirmwareDirective(int index) {
-        this.index = index;
-    }
+  private FirmwareDirective(int index) {
+    this.index = index;
+  }
 
-    /**
-     * @return the index
-     */
-    public int getIndex() {
-        return index;
-    }
+  /**
+   * @return the index
+   */
+  public int getIndex() {
+    return index;
+  }
 }

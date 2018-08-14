@@ -27,7 +27,7 @@ import gov.nist.decima.xml.service.AbstractCatalogResourceResolverExtension;
 
 public class SWIDResourceResolverExtension extends AbstractCatalogResourceResolverExtension {
 
-    public SWIDResourceResolverExtension() {
-        super("classpath:swidval-catalog.xml");
-    }
+  public SWIDResourceResolverExtension() {
+    super("classpath:swidval-catalog.xml");
+  }
 }

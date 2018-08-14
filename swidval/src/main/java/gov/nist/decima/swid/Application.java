@@ -61,175 +61,174 @@ import java.util.concurrent.Executors;
 import javax.xml.transform.TransformerException;
 
 public class Application {
-    private static final Logger log = LogManager.getLogger(Application.class);
-    private static final String OPTION_USECASE = "usecase";
-    private static final String OPTION_USECASE_VALUE_PRIMARY = "primary";
-    private static final String OPTION_USECASE_VALUE_CORPUS = "corpus";
-    private static final String OPTION_USECASE_VALUE_PATCH = "patch";
-    private static final String OPTION_USECASE_VALUE_SUPPLEMENTAL = "supplemental";
-    private static final String OPTION_USECASE_DEFAULT_VALUE = OPTION_USECASE_VALUE_PRIMARY;
+  private static final Logger log = LogManager.getLogger(Application.class);
+  private static final String OPTION_USECASE = "usecase";
+  private static final String OPTION_USECASE_VALUE_PRIMARY = "primary";
+  private static final String OPTION_USECASE_VALUE_CORPUS = "corpus";
+  private static final String OPTION_USECASE_VALUE_PATCH = "patch";
+  private static final String OPTION_USECASE_VALUE_SUPPLEMENTAL = "supplemental";
+  private static final String OPTION_USECASE_DEFAULT_VALUE = OPTION_USECASE_VALUE_PRIMARY;
 
-    private static final String OPTION_AUTHORITATIVE = "A";
-    private static final String OPTION_NON_AUTHORITATIVE = "a";
+  private static final String OPTION_AUTHORITATIVE = "A";
+  private static final String OPTION_NON_AUTHORITATIVE = "a";
 
-    /**
-     * Runs the application.
-     * 
-     * @param args
-     *            the command line arguments
-     */
-    public static void main(String[] args) {
-        try {
-            System.exit(new Application().run(args));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            System.exit(-2);
-        }
+  /**
+   * Runs the application.
+   * 
+   * @param args
+   *          the command line arguments
+   */
+  public static void main(String[] args) {
+    try {
+      System.exit(new Application().run(args));
+    } catch (ParseException e) {
+      e.printStackTrace();
+      System.exit(-2);
+    }
+  }
+
+  protected CommandLine parseCLI(String[] args) throws ParseException {
+    CLIParser cliParser = new CLIParser("java -jar <decima jar> (options) <swid tag path>");
+    cliParser.setVersion(Version.VERSION);
+
+    Option useCase = Option.builder(OPTION_USECASE)
+        .desc("the SWID tag type, which is one of: primary, corpus, patch, or supplemental" + " (default: primary)")
+        .hasArg().build();
+    OptionEnumerationValidator useCaseValidator = new OptionEnumerationValidator(useCase);
+    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PRIMARY);
+    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_CORPUS);
+    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PATCH);
+    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_SUPPLEMENTAL);
+    cliParser.addOption(useCaseValidator);
+
+    OptionGroup authGroup = new OptionGroup();
+    authGroup.addOption(
+        Option.builder(OPTION_AUTHORITATIVE).desc("the tag is produced by an authoritative creator (default)").build());
+    authGroup.addOption(
+        Option.builder(OPTION_NON_AUTHORITATIVE).desc("the tag is not produced by an authoritative creator").build());
+    cliParser.addOptionGroup(authGroup);
+
+    return cliParser.parse(args);
+  }
+
+  private int run(String[] args) throws ParseException {
+    CommandLine cmd = parseCLI(args);
+
+    if (cmd == null) {
+      return -1;
     }
 
-    protected CommandLine parseCLI(String[] args) throws ParseException {
-        CLIParser cliParser = new CLIParser("java -jar <decima jar> (options) <swid tag path>");
-        cliParser.setVersion(Version.VERSION);
+    List<String> paths = cmd.getArgList();
+    if (paths.isEmpty()) {
+      System.err.println("At least one path must be specified as an extra argument.");
+      return -2;
+    } else if (paths.size() > 1) {
+      System.err.println("Only one path must be specified as an extra argument.");
+      return -3;
+    }
+    String path = paths.get(0);
 
-        Option useCase = Option.builder(OPTION_USECASE).desc(
-                "the SWID tag type, which is one of: primary, corpus, patch, or supplemental" + " (default: primary)")
-                .hasArg().build();
-        OptionEnumerationValidator useCaseValidator = new OptionEnumerationValidator(useCase);
-        useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PRIMARY);
-        useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_CORPUS);
-        useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PATCH);
-        useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_SUPPLEMENTAL);
-        cliParser.addOption(useCaseValidator);
+    String tagTypeName = cmd.getOptionValue(OPTION_USECASE, OPTION_USECASE_DEFAULT_VALUE);
 
-        OptionGroup authGroup = new OptionGroup();
-        authGroup.addOption(Option.builder(OPTION_AUTHORITATIVE)
-                .desc("the tag is produced by an authoritative creator (default)").build());
-        authGroup.addOption(Option.builder(OPTION_NON_AUTHORITATIVE)
-                .desc("the tag is not produced by an authoritative creator").build());
-        cliParser.addOptionGroup(authGroup);
+    TagType tagType = TagType.valueOf(tagTypeName.toUpperCase());
+    boolean authoritative = !cmd.hasOption(OPTION_NON_AUTHORITATIVE);
 
-        return cliParser.parse(args);
+    log.info("Validating tag: " + path);
+    log.info("  tag type: " + tagType.getName());
+    log.info("  authoritative tag: " + authoritative);
+
+    // handle resultfile
+    File validationResultFile;
+    {
+      String fileValue = cmd.getOptionValue(OPTION_VALIDATION_RESULT_FILE, DEFAULT_VALIDATION_RESULT_FILE);
+      validationResultFile = new File(fileValue);
+      File parentDir = validationResultFile.getParentFile();
+      if (parentDir != null && !parentDir.exists()) {
+        parentDir.mkdirs();
+      }
     }
 
-    private int run(String[] args) throws ParseException {
-        CommandLine cmd = parseCLI(args);
-
-        if (cmd == null) {
-            return -1;
-        }
-
-        List<String> paths = cmd.getArgList();
-        if (paths.isEmpty()) {
-            System.err.println("At least one path must be specified as an extra argument.");
-            return -2;
-        } else if (paths.size() > 1) {
-            System.err.println("Only one path must be specified as an extra argument.");
-            return -3;
-        }
-        String path = paths.get(0);
-
-        String tagTypeName = cmd.getOptionValue(OPTION_USECASE, OPTION_USECASE_DEFAULT_VALUE);
-
-        TagType tagType = TagType.valueOf(tagTypeName.toUpperCase());
-        boolean authoritative = !cmd.hasOption(OPTION_NON_AUTHORITATIVE);
-
-        log.info("Validating tag: " + path);
-        log.info("  tag type: " + tagType.getName());
-        log.info("  authoritative tag: " + authoritative);
-
-        // handle resultfile
-        File validationResultFile;
-        {
-            String fileValue = cmd.getOptionValue(OPTION_VALIDATION_RESULT_FILE, DEFAULT_VALIDATION_RESULT_FILE);
-            validationResultFile = new File(fileValue);
-            File parentDir = validationResultFile.getParentFile();
-            if (parentDir != null && !parentDir.exists()) {
-                parentDir.mkdirs();
-            }
-        }
-
-        // handle reportfile
-        File validationReportFile;
-        {
-            String fileValue = cmd.getOptionValue(OPTION_VALIDATION_REPORT_FILE, DEFAULT_VALIDATION_REPORT_FILE);
-            validationReportFile = new File(fileValue);
-            File parentDir = validationReportFile.getParentFile();
-            if (parentDir != null && !parentDir.exists()) {
-                parentDir.mkdirs();
-            }
-        }
-
-        // Load the document to assess
-        File file = new File(path);
-        XMLDocument doc;
-        try {
-            doc = Factory.newXMLDocument(file);
-        } catch (FileNotFoundException ex) {
-            log.error("Non-existant file argument: " + file.getPath(), ex);
-            return -4;
-        } catch (DocumentException ex) {
-            log.error("Unable to parse the XML file: " + file.getPath(), ex);
-            return -5;
-        }
-
-        // Configure the assessments
-        SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
-
-        ExecutorService executorService = null;
-        AssessmentResults validationResult;
-        try {
-            executorService = Executors.newFixedThreadPool(2);
-            SWIDAssessmentFactory factory = SWIDAssessmentFactory.getInstance();
-            factory.setResultDirectory(new File("schematron-results"));
-
-            AssessmentExecutor<XMLDocument> executor
-                    = factory.newAssessmentExecutor(tagType, authoritative, executorService);
-
-            // setup the document assessment
-            reactor.pushAssessmentExecution(doc, executor);
-
-            // do the assessment
-            validationResult = reactor.react();
-        } catch (AssessmentException e) {
-            log.error("An error occured while performing the assessment", e);
-            return -5;
-        } finally {
-            if (executorService != null) {
-                executorService.shutdown();
-            }
-        }
-
-        // Output the results
-        XMLResultBuilder writer = new XMLResultBuilder();
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(validationResultFile))) {
-            log.info("Storing assessment results to: " + validationResultFile);
-            writer.write(validationResult, os);
-        } catch (FileNotFoundException e) {
-            log.error("The result file does not appear to be a regular file: " + validationResultFile, e);
-            return -6;
-        } catch (IOException e) {
-            log.error("Unable to write to the result file: " + validationResultFile, e);
-            return -7;
-        }
-
-        // output the report
-        ReportGenerator reportGenerator = new ReportGenerator();
-        reportGenerator.setHtmlTitle("SWID Tag validation Report");
-        reportGenerator.setIgnoreNotTestedResults(true);
-        reportGenerator.setIgnoreOutOfScopeResults(true);
-        try {
-            reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
-        } catch (URISyntaxException e) {
-            log.error("Unable to load XSL template", e);
-            return -9;
-        }
-        log.info("Generating HTML report to: " + validationReportFile);
-        try {
-            reportGenerator.generate(validationResultFile, validationReportFile);
-        } catch (TransformerException | IOException e) {
-            log.error("Unable to generate HTML report", e);
-            return -10;
-        }
-        return 0;
+    // handle reportfile
+    File validationReportFile;
+    {
+      String fileValue = cmd.getOptionValue(OPTION_VALIDATION_REPORT_FILE, DEFAULT_VALIDATION_REPORT_FILE);
+      validationReportFile = new File(fileValue);
+      File parentDir = validationReportFile.getParentFile();
+      if (parentDir != null && !parentDir.exists()) {
+        parentDir.mkdirs();
+      }
     }
+
+    // Load the document to assess
+    File file = new File(path);
+    XMLDocument doc;
+    try {
+      doc = Factory.newXMLDocument(file);
+    } catch (FileNotFoundException ex) {
+      log.error("Non-existant file argument: " + file.getPath(), ex);
+      return -4;
+    } catch (DocumentException ex) {
+      log.error("Unable to parse the XML file: " + file.getPath(), ex);
+      return -5;
+    }
+
+    // Configure the assessments
+    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
+
+    ExecutorService executorService = null;
+    AssessmentResults validationResult;
+    try {
+      executorService = Executors.newFixedThreadPool(2);
+      SWIDAssessmentFactory factory = SWIDAssessmentFactory.getInstance();
+      factory.setResultDirectory(new File("schematron-results"));
+
+      AssessmentExecutor<XMLDocument> executor = factory.newAssessmentExecutor(tagType, authoritative, executorService);
+
+      // setup the document assessment
+      reactor.pushAssessmentExecution(doc, executor);
+
+      // do the assessment
+      validationResult = reactor.react();
+    } catch (AssessmentException e) {
+      log.error("An error occured while performing the assessment", e);
+      return -5;
+    } finally {
+      if (executorService != null) {
+        executorService.shutdown();
+      }
+    }
+
+    // Output the results
+    XMLResultBuilder writer = new XMLResultBuilder();
+    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(validationResultFile))) {
+      log.info("Storing assessment results to: " + validationResultFile);
+      writer.write(validationResult, os);
+    } catch (FileNotFoundException e) {
+      log.error("The result file does not appear to be a regular file: " + validationResultFile, e);
+      return -6;
+    } catch (IOException e) {
+      log.error("Unable to write to the result file: " + validationResultFile, e);
+      return -7;
+    }
+
+    // output the report
+    ReportGenerator reportGenerator = new ReportGenerator();
+    reportGenerator.setHtmlTitle("SWID Tag validation Report");
+    reportGenerator.setIgnoreNotTestedResults(true);
+    reportGenerator.setIgnoreOutOfScopeResults(true);
+    try {
+      reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
+    } catch (URISyntaxException e) {
+      log.error("Unable to load XSL template", e);
+      return -9;
+    }
+    log.info("Generating HTML report to: " + validationReportFile);
+    try {
+      reportGenerator.generate(validationResultFile, validationReportFile);
+    } catch (TransformerException | IOException e) {
+      log.error("Unable to generate HTML report", e);
+      return -10;
+    }
+    return 0;
+  }
 }

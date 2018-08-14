@@ -33,67 +33,71 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class FirmwarePayloadDigest {
-    private final DigestType type;
-    private final HashAlgorithm algorithm;
-    private final byte[] value;
-    private final byte[] guidance;
+  private final DigestType type;
+  private final HashAlgorithm algorithm;
+  private final byte[] value;
+  private final byte[] guidance;
 
-    public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
-        this(type, algorithm, HashUtils.hash(algorithm, file));
-    }
+  public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, File file)
+      throws NoSuchAlgorithmException, IOException {
+    this(type, algorithm, HashUtils.hash(algorithm, file));
+  }
 
-    public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, File file, byte[] guidance) throws NoSuchAlgorithmException, IOException {
-        this(type, algorithm, HashUtils.hash(algorithm, file), guidance);
-    }
+  public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, File file, byte[] guidance)
+      throws NoSuchAlgorithmException, IOException {
+    this(type, algorithm, HashUtils.hash(algorithm, file), guidance);
+  }
 
-    public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
-        this(type, algorithm, HashUtils.hash(algorithm, is));
-    }
+  public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, InputStream is)
+      throws NoSuchAlgorithmException, IOException {
+    this(type, algorithm, HashUtils.hash(algorithm, is));
+  }
 
-    public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, InputStream is, byte[] guidance) throws NoSuchAlgorithmException, IOException {
-        this(type, algorithm, HashUtils.hash(algorithm, is), guidance);
-    }
+  public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, InputStream is, byte[] guidance)
+      throws NoSuchAlgorithmException, IOException {
+    this(type, algorithm, HashUtils.hash(algorithm, is), guidance);
+  }
 
-    public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, byte[] value) {
-        this(type, algorithm, value, null);
-    }
+  public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, byte[] value) {
+    this(type, algorithm, value, null);
+  }
 
-    public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, byte[] value, byte[] guidance) {
-        super();
-        Objects.requireNonNull(type, "type");
-        Objects.requireNonNull(algorithm, "algorithm");
-        Objects.requireNonNull(value, "value");
-        this.type = type;
-        this.algorithm = algorithm;
-        this.value = value;
-        this.guidance = guidance;
-    }
+  public FirmwarePayloadDigest(DigestType type, HashAlgorithm algorithm, byte[] value, byte[] guidance) {
+    super();
+    Objects.requireNonNull(type, "type");
+    Objects.requireNonNull(algorithm, "algorithm");
+    Objects.requireNonNull(value, "value");
+    this.type = type;
+    this.algorithm = algorithm;
+    this.value = value;
+    this.guidance = guidance;
+  }
 
-    /**
-     * @return the type
-     */
-    public DigestType getType() {
-        return type;
-    }
+  /**
+   * @return the type
+   */
+  public DigestType getType() {
+    return type;
+  }
 
-    /**
-     * @return the algorithm
-     */
-    public HashAlgorithm getAlgorithm() {
-        return algorithm;
-    }
+  /**
+   * @return the algorithm
+   */
+  public HashAlgorithm getAlgorithm() {
+    return algorithm;
+  }
 
-    /**
-     * @return the value
-     */
-    public byte[] getValue() {
-        return value;
-    }
+  /**
+   * @return the value
+   */
+  public byte[] getValue() {
+    return value;
+  }
 
-    /**
-     * @return the guidance
-     */
-    public byte[] getGuidance() {
-        return guidance;
-    }
+  /**
+   * @return the guidance
+   */
+  public byte[] getGuidance() {
+    return guidance;
+  }
 }

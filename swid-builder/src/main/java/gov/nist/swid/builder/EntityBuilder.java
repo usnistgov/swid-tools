@@ -71,7 +71,8 @@ public class EntityBuilder extends AbstractLanguageSpecificBuilder<EntityBuilder
   /**
    * Set the name of the entity.
    * 
-   * @param name a non-{@code null} name value
+   * @param name
+   *          a non-{@code null} name value
    * @return the sane builder instance
    */
   public EntityBuilder name(String name) {

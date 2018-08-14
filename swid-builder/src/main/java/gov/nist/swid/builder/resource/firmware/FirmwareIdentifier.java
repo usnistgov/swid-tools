@@ -28,7 +28,9 @@ import gov.nist.swid.builder.output.CBORWritable;
 import java.math.BigInteger;
 
 public interface FirmwareIdentifier extends CBORWritable {
-    byte[] asBytes();
-    String asText();
-    BigInteger asBigInteger();
+  byte[] asBytes();
+
+  String asText();
+
+  BigInteger asBigInteger();
 }

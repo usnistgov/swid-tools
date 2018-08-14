@@ -71,8 +71,8 @@ public class DirectoryBuilder extends AbstractFileSystemItemBuilder<DirectoryBui
    */
   public <T extends ResourceBuilder> List<T> getResources(Class<T> clazz) {
     @SuppressWarnings("unchecked")
-    List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e.getClass())).map(e -> (T) e)
-        .collect(Collectors.toList());
+    List<? extends T> retval
+        = resources.stream().filter(e -> clazz.isInstance(e.getClass())).map(e -> (T) e).collect(Collectors.toList());
     return Collections.unmodifiableList(retval);
   }
 

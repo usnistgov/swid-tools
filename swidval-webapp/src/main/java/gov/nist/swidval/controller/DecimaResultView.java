@@ -1,3 +1,4 @@
+
 package gov.nist.swidval.controller;
 
 import java.net.URI;
@@ -15,22 +16,21 @@ import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.xml.assessment.result.ReportGenerator;
 import gov.nist.decima.xml.assessment.result.XMLResultBuilder;
 
-
 public class DecimaResultView extends AbstractView {
 
-	@Override
-	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		AssessmentResults results = (AssessmentResults)model.get(SWIDValController.MODEL_KEY_ASSESSMENT_RESULT);
+  @Override
+  protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
+      HttpServletResponse response) throws Exception {
+    AssessmentResults results = (AssessmentResults) model.get(SWIDValController.MODEL_KEY_ASSESSMENT_RESULT);
 
-		XMLResultBuilder writer = new XMLResultBuilder();
-		Document document = writer.newDocument(results);
-		ReportGenerator reportGenerator = new ReportGenerator();
-		reportGenerator.setIgnoreNotTestedResults(true);
-		reportGenerator.setIgnoreOutOfScopeResults(true);
-		reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
-//		reportGenerator.setTargetName(model.get(SWIDValController.MODEL_KEY_FILENAME).toString());
-		reportGenerator.generate(new JDOMSource(document), new StreamResult(response.getOutputStream()));
-	}
+    XMLResultBuilder writer = new XMLResultBuilder();
+    Document document = writer.newDocument(results);
+    ReportGenerator reportGenerator = new ReportGenerator();
+    reportGenerator.setIgnoreNotTestedResults(true);
+    reportGenerator.setIgnoreOutOfScopeResults(true);
+    reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
+    // reportGenerator.setTargetName(model.get(SWIDValController.MODEL_KEY_FILENAME).toString());
+    reportGenerator.generate(new JDOMSource(document), new StreamResult(response.getOutputStream()));
+  }
 
 }

@@ -29,38 +29,38 @@ import java.net.URI;
 import java.util.Objects;
 
 public class ResourceReference {
-    private final URI uri;
-    private final HashAlgorithm algorithm;
-    private final byte[] bytes;
+  private final URI uri;
+  private final HashAlgorithm algorithm;
+  private final byte[] bytes;
 
-    public ResourceReference(URI uri, HashAlgorithm algorithm , byte[] bytes) {
-        super();
-        Objects.requireNonNull(uri, "uri");
-        Objects.requireNonNull(algorithm, "algorithm");
-        Objects.requireNonNull(bytes, "bytes");
-        this.uri = uri;
-        this.algorithm = algorithm;
-        this.bytes = bytes;
-    }
+  public ResourceReference(URI uri, HashAlgorithm algorithm, byte[] bytes) {
+    super();
+    Objects.requireNonNull(uri, "uri");
+    Objects.requireNonNull(algorithm, "algorithm");
+    Objects.requireNonNull(bytes, "bytes");
+    this.uri = uri;
+    this.algorithm = algorithm;
+    this.bytes = bytes;
+  }
 
-    /**
-     * @return the uri
-     */
-    public URI getUri() {
-        return uri;
-    }
+  /**
+   * @return the uri
+   */
+  public URI getUri() {
+    return uri;
+  }
 
-    /**
-     * @return the algorithm
-     */
-    public HashAlgorithm getAlgorithm() {
-        return algorithm;
-    }
+  /**
+   * @return the algorithm
+   */
+  public HashAlgorithm getAlgorithm() {
+    return algorithm;
+  }
 
-    /**
-     * @return the bytes
-     */
-    public byte[] getBytes() {
-        return bytes;
-    }
+  /**
+   * @return the bytes
+   */
+  public byte[] getBytes() {
+    return bytes;
+  }
 }

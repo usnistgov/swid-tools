@@ -1,3 +1,4 @@
+
 package gov.nist.swidval.controller;
 
 import gov.nist.decima.core.assessment.AssessmentExecutor;
@@ -11,29 +12,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SWIDAssessmentManager {
-	private final ExecutorService executorService;
-	private final EnumMap<TagType, AssessmentExecutor<XMLDocument>> assessmentExecutors;
-	
-	public SWIDAssessmentManager() {
-		this(Executors.newFixedThreadPool(2));
-	}
+  private final ExecutorService executorService;
+  private final EnumMap<TagType, AssessmentExecutor<XMLDocument>> assessmentExecutors;
 
-	public SWIDAssessmentManager(ExecutorService executorService) {
-		this.executorService = executorService;
-		this.assessmentExecutors = initializeAssessments();
-	}
+  public SWIDAssessmentManager() {
+    this(Executors.newFixedThreadPool(2));
+  }
 
-	private EnumMap<TagType, AssessmentExecutor<XMLDocument>> initializeAssessments() {
-		EnumMap<TagType, AssessmentExecutor<XMLDocument>> retval = new EnumMap<>(TagType.class);
-		for (TagType tagType : TagType.values()) {
-			AssessmentExecutor<XMLDocument> executor = SWIDAssessmentFactory.getInstance().newAssessmentExecutor(tagType, true, executorService);
-			retval.put(tagType, executor);
-		}
-		return retval;
-	}
+  public SWIDAssessmentManager(ExecutorService executorService) {
+    this.executorService = executorService;
+    this.assessmentExecutors = initializeAssessments();
+  }
 
-	public AssessmentExecutor<XMLDocument> getAssessmentExecutor(TagType tagType) {
-		Objects.requireNonNull(tagType, "tagType");
-		return assessmentExecutors.get(tagType);
-	}
+  private EnumMap<TagType, AssessmentExecutor<XMLDocument>> initializeAssessments() {
+    EnumMap<TagType, AssessmentExecutor<XMLDocument>> retval = new EnumMap<>(TagType.class);
+    for (TagType tagType : TagType.values()) {
+      AssessmentExecutor<XMLDocument> executor
+          = SWIDAssessmentFactory.getInstance().newAssessmentExecutor(tagType, true, executorService);
+      retval.put(tagType, executor);
+    }
+    return retval;
+  }
+
+  public AssessmentExecutor<XMLDocument> getAssessmentExecutor(TagType tagType) {
+    Objects.requireNonNull(tagType, "tagType");
+    return assessmentExecutors.get(tagType);
+  }
 }

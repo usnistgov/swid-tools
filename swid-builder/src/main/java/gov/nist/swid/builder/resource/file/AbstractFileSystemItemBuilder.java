@@ -70,8 +70,8 @@ public abstract class AbstractFileSystemItemBuilder<E extends AbstractFileSystem
   }
 
   /**
-   * Sets the path representing the location and name of a filesystem resource to the provided value. This is a shortcut
-   * for calling {@link #name(String)} and {@link #location(List)}
+   * Sets the path representing the location and name of a filesystem resource to the provided value.
+   * This is a shortcut for calling {@link #name(String)} and {@link #location(List)}
    * 
    * @param pathSegments
    *          one or more path segments
@@ -107,7 +107,8 @@ public abstract class AbstractFileSystemItemBuilder<E extends AbstractFileSystem
   }
 
   /**
-   * Sets the path representing the location of a filesystem resource to the provided value, with the name omitted.
+   * Sets the path representing the location of a filesystem resource to the provided value, with the
+   * name omitted.
    * 
    * @param location
    *          a sequence of paths

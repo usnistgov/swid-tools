@@ -58,8 +58,8 @@ import java.util.List;
 import java.util.Map;
 
 public class XMLOutputHandler implements OutputHandler {
-  public static final Namespace SWID_NAMESPACE = Namespace
-      .getNamespace("http://standards.iso.org/iso/19770/-2/2015/schema.xsd");
+  public static final Namespace SWID_NAMESPACE
+      = Namespace.getNamespace("http://standards.iso.org/iso/19770/-2/2015/schema.xsd");
 
   private final Format format;
 
@@ -245,8 +245,8 @@ public class XMLOutputHandler implements OutputHandler {
     return element;
   }
 
-  private static <E extends AbstractResourceCollectionBuilder<E>> void buildAbstractResourceCollectionBuilder(
-      AbstractResourceCollectionBuilder<E> builder, Element element) {
+  private static <E extends AbstractResourceCollectionBuilder<E>> void
+      buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder<E> builder, Element element) {
     buildAbstractLanguageSpecificBuilder(builder, element);
 
     XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator();
@@ -255,8 +255,8 @@ public class XMLOutputHandler implements OutputHandler {
     }
   }
 
-  private static <E extends AbstractLanguageSpecificBuilder<E>> void buildAbstractLanguageSpecificBuilder(
-      AbstractLanguageSpecificBuilder<E> builder, Element element) {
+  private static <E extends AbstractLanguageSpecificBuilder<E>> void
+      buildAbstractLanguageSpecificBuilder(AbstractLanguageSpecificBuilder<E> builder, Element element) {
     String language = builder.getLanguage();
     if (language != null) {
       element.setAttribute("lang", language, Namespace.XML_NAMESPACE);
@@ -327,8 +327,8 @@ public class XMLOutputHandler implements OutputHandler {
       throw new UnsupportedOperationException("firmware is not supported by the XML SWID format");
     }
 
-    private static <E extends AbstractFileSystemItemBuilder<E>> void buildAbstractFileSystemItem(
-        AbstractFileSystemItemBuilder<E> builder, Element element) {
+    private static <E extends AbstractFileSystemItemBuilder<E>> void
+        buildAbstractFileSystemItem(AbstractFileSystemItemBuilder<E> builder, Element element) {
       buildAbstractResourceBuilder(builder, element);
 
       XMLOutputHandler.buildAttribute("root", builder.getRoot(), element);
@@ -340,8 +340,8 @@ public class XMLOutputHandler implements OutputHandler {
       XMLOutputHandler.buildAttribute("key", builder.getKey(), element);
     }
 
-    private static <E extends AbstractResourceBuilder<E>> void buildAbstractResourceBuilder(
-        AbstractResourceBuilder<E> builder, Element element) {
+    private static <E extends AbstractResourceBuilder<E>> void
+        buildAbstractResourceBuilder(AbstractResourceBuilder<E> builder, Element element) {
       XMLOutputHandler.buildAbstractLanguageSpecificBuilder(builder, element);
     }
   }

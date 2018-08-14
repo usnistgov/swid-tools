@@ -28,5 +28,5 @@ import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
 import java.io.IOException;
 
 public interface CBORWritable {
-    void write(CBORGenerator generator) throws IOException;
+  void write(CBORGenerator generator) throws IOException;
 }

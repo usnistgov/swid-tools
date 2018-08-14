@@ -41,8 +41,8 @@ public class SimpleResourceEntry implements ResourceEntry {
    * @param path
    *          a path with '/' separators
    * @param digestValues
-   *          a mapping of digest algorithms to bytes based on the resources contents, which may be {@code null} or
-   *          empty
+   *          a mapping of digest algorithms to bytes based on the resources contents, which may be
+   *          {@code null} or empty
    * @param size
    *          the size in bytes of the resource contents, which may be {@code null}
    * @param version
@@ -137,7 +137,8 @@ public class SimpleResourceEntry implements ResourceEntry {
   }
 
   /**
-   * Associate a list of bytes representing a digest with the hash function used to generate the digest for this entry.
+   * Associate a list of bytes representing a digest with the hash function used to generate the
+   * digest for this entry.
    * 
    * @param algorithm
    *          the hash function to set

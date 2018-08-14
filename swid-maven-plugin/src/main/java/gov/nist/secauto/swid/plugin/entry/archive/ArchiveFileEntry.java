@@ -45,9 +45,12 @@ public class ArchiveFileEntry implements FileEntry {
   private final Artifact artifact;
 
   /**
-   * Construct a new file entry based on archive data. 
-   * @param archiveEntry the archive metadata
-   * @param artifact optional artifact metadata
+   * Construct a new file entry based on archive data.
+   * 
+   * @param archiveEntry
+   *          the archive metadata
+   * @param artifact
+   *          optional artifact metadata
    */
   public ArchiveFileEntry(ArchiveEntry archiveEntry, Artifact artifact) {
     Objects.requireNonNull(archiveEntry, "archiveEntry");

@@ -446,14 +446,13 @@ public class CBOROutputHandler extends CBORSupport implements OutputHandler {
     generator.writeEndArray();
   }
 
-  private static <E extends AbstractLanguageSpecificBuilder<E>> void buildGlobalAttributes(
-      AbstractLanguageSpecificBuilder<E> builder, CBORGenerator generator) throws IOException {
+  private static <E extends AbstractLanguageSpecificBuilder<E>> void
+      buildGlobalAttributes(AbstractLanguageSpecificBuilder<E> builder, CBORGenerator generator) throws IOException {
     String language = builder.getLanguage();
     if (language != null) {
       writeTextField(generator, LANG_FIELD, language);
     }
   }
-
 
   public static class CBORResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator<CBORGenerator> {
 
@@ -524,11 +523,11 @@ public class CBOROutputHandler extends CBORSupport implements OutputHandler {
 
     @Override
     public void generate(FirmwareBuilder builder, CBORGenerator generator) {
-        new CBORFirmwareOutputHandler().generate(builder, generator);
+      new CBORFirmwareOutputHandler().generate(builder, generator);
     }
 
-    private <E extends AbstractFileSystemItemBuilder<E>> void buildFileSystemItem(
-        AbstractFileSystemItemBuilder<E> builder, CBORGenerator parent) throws IOException {
+    private <E extends AbstractFileSystemItemBuilder<E>> void
+        buildFileSystemItem(AbstractFileSystemItemBuilder<E> builder, CBORGenerator parent) throws IOException {
 
       // TODO: support meta
 

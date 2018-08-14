@@ -116,7 +116,8 @@ public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
   }
 
   /**
-   * Provide a new evidence node if a previous evidence node was not provided, or the cached node if one already exists.
+   * Provide a new evidence node if a previous evidence node was not provided, or the cached node if
+   * one already exists.
    * 
    * @return the evidence node builder instance
    */
@@ -136,7 +137,8 @@ public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
   }
 
   /**
-   * Retrieves the existing PayloadBuilder or creates a new one if no PayloadBuilder has been created already.
+   * Retrieves the existing PayloadBuilder or creates a new one if no PayloadBuilder has been created
+   * already.
    * 
    * @return the payload builder
    */
@@ -225,8 +227,8 @@ public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
   }
 
   /**
-   * Sets the to-be-built SWID tag's versionSchema to the provided value. The version scheme identifies the structure of
-   * the provided version.
+   * Sets the to-be-built SWID tag's versionSchema to the provided value. The version scheme
+   * identifies the structure of the provided version.
    * 
    * @see VersionScheme#lookupByIndex(int)
    * @see VersionScheme#lookupByName(String)

@@ -41,36 +41,36 @@ import java.util.UUID;
 
 public class SWIDBuilderTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+  @Rule
+  public TemporaryFolder folder = new TemporaryFolder();
 
-    @Test
-    public void testCBOR() throws IOException, NoSuchAlgorithmException, ValidationException {
-        SWIDBuilder builder = SWIDBuilder.create();
-        builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
-                .addEntity(EntityBuilder.create().regid("gov.nist")
-                        .name("National Institute of Standards and Technology, United States Department of Commerce")
-                        .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
+  @Test
+  public void testCBOR() throws IOException, NoSuchAlgorithmException, ValidationException {
+    SWIDBuilder builder = SWIDBuilder.create();
+    builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
+        .addEntity(EntityBuilder.create().regid("gov.nist")
+            .name("National Institute of Standards and Technology, United States Department of Commerce")
+            .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
 
-        File file = folder.newFile();
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-        new CBOROutputHandler().write(builder, os);
-        os.close();
+    File file = folder.newFile();
+    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+    new CBOROutputHandler().write(builder, os);
+    os.close();
+  }
+
+  @Test
+  public void testXML() throws IOException, ValidationException {
+    SWIDBuilder builder = SWIDBuilder.create();
+    builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
+        .addEntity(EntityBuilder.create().regid("gov.nist")
+            .name("National Institute of Standards and Technology, United States Department of Commerce")
+            .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
+
+    File file = folder.newFile();
+
+    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+      new XMLOutputHandler().write(builder, os);
     }
-
-    @Test
-    public void testXML() throws IOException, ValidationException {
-        SWIDBuilder builder = SWIDBuilder.create();
-        builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
-                .addEntity(EntityBuilder.create().regid("gov.nist")
-                        .name("National Institute of Standards and Technology, United States Department of Commerce")
-                        .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
-
-        File file = folder.newFile();
-
-        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
-            new XMLOutputHandler().write(builder, os);
-        }
-    }
+  }
 
 }

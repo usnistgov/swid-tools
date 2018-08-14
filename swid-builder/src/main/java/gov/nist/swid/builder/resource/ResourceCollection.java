@@ -79,8 +79,8 @@ public class ResourceCollection {
   }
 
   /**
-   * Retrieve a digest of all of the resources in the collection. This can be used to check if two resource collections
-   * are equal.
+   * Retrieve a digest of all of the resources in the collection. This can be used to check if two
+   * resource collections are equal.
    * 
    * @param algorithm
    *          the hash function to use to generate the digest of the collection

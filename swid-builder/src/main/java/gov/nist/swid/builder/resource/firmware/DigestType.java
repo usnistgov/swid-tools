@@ -24,21 +24,21 @@
 package gov.nist.swid.builder.resource.firmware;
 
 public enum DigestType {
-    RAW_PAYLOAD(1),
-    INSTALLED_PAYLOAD(2),
-    CIPHERTEXT(3),
-    PRE_IMAGE(4);
+  RAW_PAYLOAD(1),
+  INSTALLED_PAYLOAD(2),
+  CIPHERTEXT(3),
+  PRE_IMAGE(4);
 
-    private final int index;
+  private final int index;
 
-    private DigestType(int index) {
-        this.index = index;
-    }
+  private DigestType(int index) {
+    this.index = index;
+  }
 
-    /**
-     * @return the index
-     */
-    public int getIndex() {
-        return index;
-    }
+  /**
+   * @return the index
+   */
+  public int getIndex() {
+    return index;
+  }
 }

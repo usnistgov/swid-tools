@@ -33,58 +33,58 @@ import java.util.regex.Pattern;
 
 public class CBORSupport {
 
-    private static final Pattern INTEGER_PATTERN = Pattern.compile("[-]?[1-9]\\d*");
+  private static final Pattern INTEGER_PATTERN = Pattern.compile("[-]?[1-9]\\d*");
 
-    protected static void writeField(CBORGenerator generator, long fieldId, CBORWritable value) throws IOException {
-        generator.writeFieldId(fieldId);
-        value.write(generator);
-        
-    }
-    
-    protected static void writeTextField(CBORGenerator generator, long fieldId, String text) throws IOException {
-      generator.writeFieldId(fieldId);
-      generator.writeString(text);
-    }
+  protected static void writeField(CBORGenerator generator, long fieldId, CBORWritable value) throws IOException {
+    generator.writeFieldId(fieldId);
+    value.write(generator);
 
-    protected static void writeBooleanField(CBORGenerator generator, long fieldId, boolean state) throws IOException {
-      generator.writeFieldId(fieldId);
-      generator.writeBoolean(state);
+  }
 
-    }
+  protected static void writeTextField(CBORGenerator generator, long fieldId, String text) throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeString(text);
+  }
 
-    protected static void writeLongField(CBORGenerator generator, long fieldId, long value) throws IOException {
-      generator.writeFieldId(fieldId);
-      generator.writeNumber(value);
-    }
+  protected static void writeBooleanField(CBORGenerator generator, long fieldId, boolean state) throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeBoolean(state);
 
-    protected static void writeIntegerField(CBORGenerator generator, long fieldId, int value) throws IOException {
-      generator.writeFieldId(fieldId);
-      generator.writeNumber(value);
-    }
+  }
 
-    protected static void writeIntegerField(CBORGenerator generator, long fieldId, BigInteger value) throws IOException {
-      generator.writeFieldId(fieldId);
-      generator.writeNumber(value);
-    }
+  protected static void writeLongField(CBORGenerator generator, long fieldId, long value) throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeNumber(value);
+  }
 
-    protected static void writeDateTimeField(CBORGenerator generator, long fieldId, ZonedDateTime dateTime)
-        throws IOException {
-      generator.writeFieldId(fieldId);
-      generator.writeString(dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-    }
+  protected static void writeIntegerField(CBORGenerator generator, long fieldId, int value) throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeNumber(value);
+  }
 
-    protected static void writeIntegerOrTextField(CBORGenerator generator, long fieldId, String value)
-        throws IOException {
-      if (INTEGER_PATTERN.matcher(value).matches()) {
-        BigInteger intValue = new BigInteger(value);
-        writeIntegerField(generator, fieldId, intValue);
-      } else {
-        writeTextField(generator, fieldId, value);
-      }
+  protected static void writeIntegerField(CBORGenerator generator, long fieldId, BigInteger value) throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeNumber(value);
+  }
+
+  protected static void writeDateTimeField(CBORGenerator generator, long fieldId, ZonedDateTime dateTime)
+      throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeString(dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+  }
+
+  protected static void writeIntegerOrTextField(CBORGenerator generator, long fieldId, String value)
+      throws IOException {
+    if (INTEGER_PATTERN.matcher(value).matches()) {
+      BigInteger intValue = new BigInteger(value);
+      writeIntegerField(generator, fieldId, intValue);
+    } else {
+      writeTextField(generator, fieldId, value);
     }
-    
-    protected static void writeBinaryField(CBORGenerator generator, long fieldId, byte[] value) throws IOException {
-        generator.writeFieldId(fieldId);
-        generator.writeBinary(value);
-    }
+  }
+
+  protected static void writeBinaryField(CBORGenerator generator, long fieldId, byte[] value) throws IOException {
+    generator.writeFieldId(fieldId);
+    generator.writeBinary(value);
+  }
 }

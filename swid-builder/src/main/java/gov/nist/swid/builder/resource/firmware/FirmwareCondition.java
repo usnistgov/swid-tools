@@ -24,21 +24,21 @@
 package gov.nist.swid.builder.resource.firmware;
 
 public enum FirmwareCondition {
-    VENDOR_ID(1),
-    CLASS_ID(2),
-    DEVICE_ID(3),
-    BEST_BEFORE(4);
+  VENDOR_ID(1),
+  CLASS_ID(2),
+  DEVICE_ID(3),
+  BEST_BEFORE(4);
 
-    private final int index;
+  private final int index;
 
-    private FirmwareCondition(int index) {
-        this.index = index;
-    }
+  private FirmwareCondition(int index) {
+    this.index = index;
+  }
 
-    /**
-     * @return the index
-     */
-    public int getIndex() {
-        return index;
-    }
+  /**
+   * @return the index
+   */
+  public int getIndex() {
+    return index;
+  }
 }

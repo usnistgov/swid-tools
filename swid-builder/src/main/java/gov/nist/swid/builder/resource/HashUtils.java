@@ -35,146 +35,146 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HashUtils {
-    private HashUtils() {
-        // disable
+  private HashUtils() {
+    // disable
+  }
+
+  /**
+   * Converts an array of bytes into a list of bytes.
+   * 
+   * @param bytes
+   *          the array of bytes to convert
+   * @return a list of bytes
+   */
+  public static List<Byte> toList(byte[] bytes) {
+    List<Byte> retval = new ArrayList<>(bytes.length);
+    for (byte b : bytes) {
+      retval.add(b);
+    }
+    return retval;
+  }
+
+  /**
+   * Converts a list of bytes into an array of bytes.
+   * 
+   * @param bytes
+   *          a list of bytes
+   * @return the array of bytes to convert
+   */
+  public static byte[] toArray(List<Byte> bytes) {
+    byte[] retval = new byte[bytes.size()];
+    for (int pos = 0; pos < bytes.size(); pos++) {
+      retval[pos] = bytes.get(pos);
+    }
+    return retval;
+  }
+
+  private static final char[] hexArray = "0123456789abcdef".toCharArray();
+
+  /**
+   * Converts an array of bytes into a hexadecimal string.
+   * 
+   * @param bytes
+   *          the array of bytes to convert
+   * @return a hexadecimal string
+   */
+  public static String toHexString(byte[] bytes) {
+    // Based on example from:
+    // http://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+    char[] hexChars = new char[bytes.length * 2];
+    for (int i = 0; i < bytes.length; i++) {
+      int value = bytes[i] & 0xFF;
+      hexChars[i * 2] = hexArray[value >>> 4];
+      hexChars[i * 2 + 1] = hexArray[value & 0x0F];
+    }
+    return new String(hexChars);
+  }
+
+  /**
+   * Converts an list of bytes into a hexadecimal string.
+   * 
+   * @param bytes
+   *          the list of bytes to convert
+   * @return a hexadecimal string
+   */
+  public static String toHexString(List<Byte> bytes) {
+    // Based on example from:
+    // http://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+    char[] hexChars = new char[bytes.size() * 2];
+    int pos = 0;
+    for (byte b : bytes) {
+      int value = b & 0xFF;
+      hexChars[pos * 2] = hexArray[value >>> 4];
+      hexChars[pos * 2 + 1] = hexArray[value & 0x0F];
+      ++pos;
+    }
+    return new String(hexChars);
+  }
+
+  /**
+   * Generates a hash value, in the form of an array of bytes, by digesting a provided input stream
+   * based on the provided hash algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param file
+   *          the file to read bytes from
+   * @return an array of bytes representing a hash value
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   * @throws IOException
+   *           if an error occured while reading the input stream
+   */
+  public static byte[] hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
+    return hash(algorithm, new BufferedInputStream(new FileInputStream(file)));
+  }
+
+  /**
+   * Generates a hash value, in the form of an array of bytes, by digesting a provided input stream
+   * based on the provided hash algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param is
+   *          the input stream to read bytes from
+   * @return an array of bytes representing a hash value
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   * @throws IOException
+   *           if an error occured while reading the input stream
+   */
+  public static byte[] hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
+    MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
+    byte[] dataBytes = new byte[1024];
+    int nread = 0;
+
+    while ((nread = is.read(dataBytes)) != -1) {
+      digest.update(dataBytes, 0, nread);
     }
 
-    /**
-     * Converts an array of bytes into a list of bytes.
-     * 
-     * @param bytes
-     *            the array of bytes to convert
-     * @return a list of bytes
-     */
-    public static List<Byte> toList(byte[] bytes) {
-        List<Byte> retval = new ArrayList<>(bytes.length);
-        for (byte b : bytes) {
-            retval.add(b);
-        }
-        return retval;
-    }
+    return processDigest(algorithm, digest.digest());
+  }
 
-    /**
-     * Converts a list of bytes into an array of bytes.
-     * 
-     * @param bytes
-     *            a list of bytes
-     * @return the array of bytes to convert
-     */
-    public static byte[] toArray(List<Byte> bytes) {
-        byte[] retval = new byte[bytes.size()];
-        for (int pos = 0; pos < bytes.size(); pos++) {
-            retval[pos] = bytes.get(pos);
-        }
-        return retval;
-    }
+  public static byte[] hash(HashAlgorithm algorithm, byte[] bytes) throws NoSuchAlgorithmException {
+    MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
+    digest.update(bytes);
 
-    private static final char[] hexArray = "0123456789abcdef".toCharArray();
-
-    /**
-     * Converts an array of bytes into a hexadecimal string.
-     * 
-     * @param bytes
-     *            the array of bytes to convert
-     * @return a hexadecimal string
-     */
-    public static String toHexString(byte[] bytes) {
-        // Based on example from:
-        // http://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
-        char[] hexChars = new char[bytes.length * 2];
-        for (int i = 0; i < bytes.length; i++) {
-            int value = bytes[i] & 0xFF;
-            hexChars[i * 2] = hexArray[value >>> 4];
-            hexChars[i * 2 + 1] = hexArray[value & 0x0F];
-        }
-        return new String(hexChars);
-    }
-
-    /**
-     * Converts an list of bytes into a hexadecimal string.
-     * 
-     * @param bytes
-     *            the list of bytes to convert
-     * @return a hexadecimal string
-     */
-    public static String toHexString(List<Byte> bytes) {
-        // Based on example from:
-        // http://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
-        char[] hexChars = new char[bytes.size() * 2];
-        int pos = 0;
-        for (byte b : bytes) {
-            int value = b & 0xFF;
-            hexChars[pos * 2] = hexArray[value >>> 4];
-            hexChars[pos * 2 + 1] = hexArray[value & 0x0F];
-            ++pos;
-        }
-        return new String(hexChars);
-    }
-
-    /**
-     * Generates a hash value, in the form of an array of bytes, by digesting a provided input
-     * stream based on the provided hash algorithm.
-     * 
-     * @param algorithm
-     *            the hash function to use
-     * @param file
-     *            the file to read bytes from
-     * @return an array of bytes representing a hash value
-     * @throws NoSuchAlgorithmException
-     *             if the selected hash function is not supported
-     * @throws IOException
-     *             if an error occured while reading the input stream
-     */
-    public static byte[] hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
-        return hash(algorithm, new BufferedInputStream(new FileInputStream(file)));
-    }
-
-    /**
-     * Generates a hash value, in the form of an array of bytes, by digesting a provided input
-     * stream based on the provided hash algorithm.
-     * 
-     * @param algorithm
-     *            the hash function to use
-     * @param is
-     *            the input stream to read bytes from
-     * @return an array of bytes representing a hash value
-     * @throws NoSuchAlgorithmException
-     *             if the selected hash function is not supported
-     * @throws IOException
-     *             if an error occured while reading the input stream
-     */
-    public static byte[] hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
-        MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
-        byte[] dataBytes = new byte[1024];
-        int nread = 0;
-
-        while ((nread = is.read(dataBytes)) != -1) {
-            digest.update(dataBytes, 0, nread);
-        }
-
-        return processDigest(algorithm, digest.digest());
-    }
-
-    public static byte[] hash(HashAlgorithm algorithm, byte[] bytes) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
-        digest.update(bytes);
-
-        return processDigest(algorithm, digest.digest());
-    }
+    return processDigest(algorithm, digest.digest());
+  }
 
   public static byte[] processDigest(HashAlgorithm algorithm, byte[] mdbytes) {
-      int valueLength = algorithm.getValueLength() / 8;
-      if (valueLength < mdbytes.length) {
-        mdbytes = Arrays.copyOfRange(mdbytes, 0, valueLength);
-      }
-      return mdbytes;
-
-      // //convert the bytes to hex format
-      // StringBuffer hexString = new StringBuffer();
-      // for (int i=0;i<mdbytes.length;i++) {
-      // hexString.append(Integer.toHexString(0xFF & mdbytes[i]));
-      // }
-      //
-      // return hexString.toString();
+    int valueLength = algorithm.getValueLength() / 8;
+    if (valueLength < mdbytes.length) {
+      mdbytes = Arrays.copyOfRange(mdbytes, 0, valueLength);
     }
+    return mdbytes;
+
+    // //convert the bytes to hex format
+    // StringBuffer hexString = new StringBuffer();
+    // for (int i=0;i<mdbytes.length;i++) {
+    // hexString.append(Integer.toHexString(0xFF & mdbytes[i]));
+    // }
+    //
+    // return hexString.toString();
+  }
 }

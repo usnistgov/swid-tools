@@ -123,8 +123,8 @@ public abstract class AbstractResourceCollectionBuilder<E extends AbstractResour
     // }
     // }
     @SuppressWarnings("unchecked")
-    List<? extends T> retval = resources.stream().filter(e -> clazz.isInstance(e)).map(e -> (T) e)
-        .collect(Collectors.toList());
+    List<? extends T> retval
+        = resources.stream().filter(e -> clazz.isInstance(e)).map(e -> (T) e).collect(Collectors.toList());
     return Collections.unmodifiableList(retval);
   }
 

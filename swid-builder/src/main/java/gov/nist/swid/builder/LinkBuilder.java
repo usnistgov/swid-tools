@@ -81,7 +81,8 @@ public class LinkBuilder extends AbstractLanguageSpecificBuilder<LinkBuilder> {
   }
 
   /**
-   * For use with rel="installationmedia" to identify the canonical name for an installation media resource.
+   * For use with rel="installationmedia" to identify the canonical name for an installation media
+   * resource.
    * 
    * @param artifact
    *          a cononical name for the installation media
@@ -146,11 +147,11 @@ public class LinkBuilder extends AbstractLanguageSpecificBuilder<LinkBuilder> {
   }
 
   /**
-   * Provide the IANA MediaType for the resource targeted by the href attribute; this provides the consumer with
-   * knowledge of the format of the referenced resource.
+   * Provide the IANA MediaType for the resource targeted by the href attribute; this provides the
+   * consumer with knowledge of the format of the referenced resource.
    * 
-   * The <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">The IANA Media Type Registry</a>
-   * provides more details on possible values.
+   * The <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">The IANA Media Type
+   * Registry</a> provides more details on possible values.
    * 
    * @param mediaType
    *          a valid media type value

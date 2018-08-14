@@ -93,9 +93,9 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
   }
 
   /**
-   * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An {@link InputStream}
-   * is used to retrieve the files contents to calculate the hash value. The caller is resposnible for closing the
-   * stream used by this method.
+   * Sets the to-be-built file's hash value, for the provided algorithm, to the provided value. An
+   * {@link InputStream} is used to retrieve the files contents to calculate the hash value. The
+   * caller is resposnible for closing the stream used by this method.
    * 
    * @param algorithm
    *          the algorithm to establish a hash value for
@@ -113,9 +113,9 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
   }
 
   /**
-   * Sets the file's hash value, for the provided algorithm, to the provided value. An {@link InputStream} is used to
-   * retrieve the files contents to calculate the hash value. The caller is responsible for closing the stream used by
-   * this method.
+   * Sets the file's hash value, for the provided algorithm, to the provided value. An
+   * {@link InputStream} is used to retrieve the files contents to calculate the hash value. The
+   * caller is responsible for closing the stream used by this method.
    * 
    * @param algorithm
    *          the algorithm to establish a hash value for

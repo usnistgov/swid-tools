@@ -39,31 +39,31 @@ import java.util.Collections;
 import javax.xml.transform.stream.StreamSource;
 
 public class SWIDRequirementsManager extends DefaultRequirementsManager {
-    private static SWIDRequirementsManager INSTANCE;
+  private static SWIDRequirementsManager INSTANCE;
 
-    /**
-     * Retrieves a global instance.
-     * 
-     * @return a {@link RequirementsManager} instance with the SWID requirements pre-loaded
-     */
-    public static synchronized SWIDRequirementsManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new SWIDRequirementsManager();
-        }
-        return INSTANCE;
+  /**
+   * Retrieves a global instance.
+   * 
+   * @return a {@link RequirementsManager} instance with the SWID requirements pre-loaded
+   */
+  public static synchronized SWIDRequirementsManager getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new SWIDRequirementsManager();
     }
+    return INSTANCE;
+  }
 
-    /**
-     * Constructs a new {@link RequirementsManager} with the SWID requirements pre-loaded.
-     */
-    public SWIDRequirementsManager() {
-        try {
-            load(new URL("classpath:requirements.xml"), new XMLRequirementsParser(
-                    Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd"))));
-        } catch (URISyntaxException | MalformedURLException | RequirementsParserException | JDOMException
-                | SAXException ex) {
-            throw new RuntimeException(ex);
-        }
+  /**
+   * Constructs a new {@link RequirementsManager} with the SWID requirements pre-loaded.
+   */
+  public SWIDRequirementsManager() {
+    try {
+      load(new URL("classpath:requirements.xml"), new XMLRequirementsParser(
+          Collections.singletonList(new StreamSource("classpath:swid-requirements-ext.xsd"))));
+    } catch (URISyntaxException | MalformedURLException | RequirementsParserException | JDOMException
+        | SAXException ex) {
+      throw new RuntimeException(ex);
     }
+  }
 
 }

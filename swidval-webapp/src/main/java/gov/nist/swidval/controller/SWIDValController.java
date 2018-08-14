@@ -52,8 +52,8 @@ public class SWIDValController {
 
   // @PostMapping("/validate.html")
   @RequestMapping(name = "/validate", method = RequestMethod.POST)
-  public void validate(HttpServletRequest requestEntity, HttpServletResponse response)
-      throws AssessmentException, UnrecognizedContentException, DocumentException, IOException, TransformerException, URISyntaxException {
+  public void validate(HttpServletRequest requestEntity, HttpServletResponse response) throws AssessmentException,
+      UnrecognizedContentException, DocumentException, IOException, TransformerException, URISyntaxException {
 
     Enumeration<String> headers = requestEntity.getHeaderNames();
     InputStream is = requestEntity.getInputStream();
@@ -81,9 +81,9 @@ public class SWIDValController {
       reportGenerator.setIgnoreNotTestedResults(true);
       reportGenerator.setIgnoreOutOfScopeResults(true);
       reportGenerator.setXslTemplateExtension(new URI("classpath:xsl/swid-result.xsl"));
-//      reportGenerator.setTargetName(model.get(SWIDValController.MODEL_KEY_FILENAME).toString());
+      // reportGenerator.setTargetName(model.get(SWIDValController.MODEL_KEY_FILENAME).toString());
       reportGenerator.generate(new JDOMSource(document), new StreamResult(response.getOutputStream()));
-      
+
     }
   }
 

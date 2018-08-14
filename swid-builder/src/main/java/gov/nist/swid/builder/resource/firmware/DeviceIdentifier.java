@@ -28,88 +28,97 @@ import gov.nist.swid.builder.util.Util;
 import java.util.Objects;
 
 public class DeviceIdentifier {
-    private final String vendor;
-    private String type;
-    private final String model;
-    private String clazz;
-    private String rfc4122;
-    private byte[] ieee8021ar;
+  private final String vendor;
+  private String type;
+  private final String model;
+  private String clazz;
+  private String rfc4122;
+  private byte[] ieee8021ar;
 
-    
+  public DeviceIdentifier(String vendor, String model) {
+    super();
+    Util.requireNonEmpty(vendor, "vendor");
+    Util.requireNonEmpty(vendor, "model");
+    this.vendor = vendor;
+    this.model = model;
+  }
 
-    public DeviceIdentifier(String vendor, String model) {
-        super();
-        Util.requireNonEmpty(vendor, "vendor");
-        Util.requireNonEmpty(vendor, "model");
-        this.vendor = vendor;
-        this.model = model;
-    }
+  /**
+   * @return the vendor
+   */
+  public String getVendor() {
+    return vendor;
+  }
 
-    /**
-     * @return the vendor
-     */
-    public String getVendor() {
-        return vendor;
-    }
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
 
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        Util.requireNonEmpty(type);
-        this.type = type;
-    }
-    /**
-     * @return the model
-     */
-    public String getModel() {
-        return model;
-    }
+  /**
+   * @param type
+   *          the type to set
+   */
+  public void setType(String type) {
+    Util.requireNonEmpty(type);
+    this.type = type;
+  }
 
-    /**
-     * @return the clazz
-     */
-    public String getClazz() {
-        return clazz;
-    }
-    /**
-     * @param clazz the clazz to set
-     */
-    public void setClazz(String clazz) {
-        Util.requireNonEmpty(clazz);
-        this.clazz = clazz;
-    }
-    /**
-     * @return the rfc4122
-     */
-    public String getRfc4122() {
-        return rfc4122;
-    }
-    /**
-     * @param rfc4122 the rfc4122 to set
-     */
-    public void setRfc4122(String rfc4122) {
-        Util.requireNonEmpty(rfc4122);
-        this.rfc4122 = rfc4122;
-    }
-    /**
-     * @return the ieee8021ar
-     */
-    public byte[] getIeee8021ar() {
-        return ieee8021ar;
-    }
-    /**
-     * @param ieee8021ar the ieee8021ar to set
-     */
-    public void setIeee8021ar(byte[] ieee8021ar) {
-        Objects.requireNonNull(ieee8021ar, "ieee8021ar");
-        this.ieee8021ar = ieee8021ar;
-    }
+  /**
+   * @return the model
+   */
+  public String getModel() {
+    return model;
+  }
+
+  /**
+   * @return the clazz
+   */
+  public String getClazz() {
+    return clazz;
+  }
+
+  /**
+   * @param clazz
+   *          the clazz to set
+   */
+  public void setClazz(String clazz) {
+    Util.requireNonEmpty(clazz);
+    this.clazz = clazz;
+  }
+
+  /**
+   * @return the rfc4122
+   */
+  public String getRfc4122() {
+    return rfc4122;
+  }
+
+  /**
+   * @param rfc4122
+   *          the rfc4122 to set
+   */
+  public void setRfc4122(String rfc4122) {
+    Util.requireNonEmpty(rfc4122);
+    this.rfc4122 = rfc4122;
+  }
+
+  /**
+   * @return the ieee8021ar
+   */
+  public byte[] getIeee8021ar() {
+    return ieee8021ar;
+  }
+
+  /**
+   * @param ieee8021ar
+   *          the ieee8021ar to set
+   */
+  public void setIeee8021ar(byte[] ieee8021ar) {
+    Objects.requireNonNull(ieee8021ar, "ieee8021ar");
+    this.ieee8021ar = ieee8021ar;
+  }
 
 }

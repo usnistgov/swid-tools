@@ -24,47 +24,49 @@
 package gov.nist.swid.builder.resource.firmware;
 
 public class FirmwarePayloadPackage {
-    private String compressionType;
-    private byte[] compressionGuidance;
-    private final byte[] packageBytes;
+  private String compressionType;
+  private byte[] compressionGuidance;
+  private final byte[] packageBytes;
 
-    public FirmwarePayloadPackage(byte[] packageBytes) {
-        this.packageBytes = packageBytes;
-    }
+  public FirmwarePayloadPackage(byte[] packageBytes) {
+    this.packageBytes = packageBytes;
+  }
 
-    /**
-     * @return the compressionType
-     */
-    public String getCompressionType() {
-        return compressionType;
-    }
+  /**
+   * @return the compressionType
+   */
+  public String getCompressionType() {
+    return compressionType;
+  }
 
-    /**
-     * @param compressionType the compressionType to set
-     */
-    public void setCompressionType(String compressionType) {
-        this.compressionType = compressionType;
-    }
+  /**
+   * @param compressionType
+   *          the compressionType to set
+   */
+  public void setCompressionType(String compressionType) {
+    this.compressionType = compressionType;
+  }
 
-    /**
-     * @return the compressionGuidance
-     */
-    public byte[] getCompressionGuidance() {
-        return compressionGuidance;
-    }
+  /**
+   * @return the compressionGuidance
+   */
+  public byte[] getCompressionGuidance() {
+    return compressionGuidance;
+  }
 
-    /**
-     * @param compressionGuidance the compressionGuidance to set
-     */
-    public void setCompressionGuidance(byte[] compressionGuidance) {
-        this.compressionGuidance = compressionGuidance;
-    }
+  /**
+   * @param compressionGuidance
+   *          the compressionGuidance to set
+   */
+  public void setCompressionGuidance(byte[] compressionGuidance) {
+    this.compressionGuidance = compressionGuidance;
+  }
 
-    /**
-     * @return the packageBytes
-     */
-    public byte[] getPackageBytes() {
-        return packageBytes;
-    }
-    
+  /**
+   * @return the packageBytes
+   */
+  public byte[] getPackageBytes() {
+    return packageBytes;
+  }
+
 }

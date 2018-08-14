@@ -1,7 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>gov.nist</groupId>
+
+    <parent>
+        <groupId>gov.nist.secauto.swid</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.0.6-SNAPSHOT</version>
+    </parent>
+
 	<artifactId>swidval-webapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -10,15 +17,7 @@
 	<name>SWID Validation Webapp</name>
 	<url>http://maven.apache.org</url>
 
-    <scm>
-        <connection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval-webapp/trunk</connection>
-        <developerConnection>scm:svn:https://subversion.nist.gov/external1/NVD/swidval-webapp/trunk</developerConnection>
-        <url>https://subversion.nist.gov/external1/NVD/swidval-webapp/trunk</url>
-    </scm>
-
 	<properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<jstl.version>1.2</jstl.version>
 		<servletapi.version>4.0.0-b01</servletapi.version>
@@ -82,12 +81,12 @@
 				<version>2.6</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-<!-- 					<webResources> -->
-<!-- 						<resource> -->
-<!-- 							this is relative to the pom.xml directory -->
-<!-- 							<directory>${project.build.directory}/generated-webapp</directory> -->
-<!-- 						</resource> -->
-<!-- 					</webResources> -->
+					<!-- <webResources> -->
+					<!-- <resource> -->
+					<!-- this is relative to the pom.xml directory -->
+					<!-- <directory>${project.build.directory}/generated-webapp</directory> -->
+					<!-- </resource> -->
+					<!-- </webResources> -->
 				</configuration>
 			</plugin>
 			<plugin>

@@ -134,8 +134,8 @@ public class SwidContainerDescriptorHandler implements ContainerDescriptorHandle
   }
 
   /**
-   * Retrieves the path for where the tag is stored. This path is considered a subdirectory relative to the software's
-   * installation lcoation.
+   * Retrieves the path for where the tag is stored. This path is considered a subdirectory relative
+   * to the software's installation lcoation.
    * 
    * @return the tagPath
    */
@@ -162,8 +162,8 @@ public class SwidContainerDescriptorHandler implements ContainerDescriptorHandle
     // create the output directory
     File retval = getTagOutputDirectory();
     if (!retval.exists() && !retval.mkdirs()) {
-        throw new ArchiverException(
-            "Unable to create the directory specified by outputDirectory configuration parameter: " + retval.getPath());
+      throw new ArchiverException(
+          "Unable to create the directory specified by outputDirectory configuration parameter: " + retval.getPath());
     }
     //
     // // create the tagPath

@@ -26,8 +26,8 @@ package gov.nist.secauto.swid.plugin.model;
 import java.util.List;
 
 /**
- * This class is a data transfer object used for conveying entity component configuration settings for the
- * {@link SWIDHandler} plexus component.
+ * This class is a data transfer object used for conveying entity component configuration settings
+ * for the {@link SWIDHandler} plexus component.
  *
  */
 public class Entity {

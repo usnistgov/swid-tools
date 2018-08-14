@@ -103,7 +103,8 @@ public interface Role {
   /**
    * Lookup a role by the provided human-readable name.
    * 
-   * @param name the name to lookup the role by
+   * @param name
+   *          the name to lookup the role by
    * @return the matching role or {@code null} if no matching role was not found.
    */
   public static Role lookupByName(String name) {

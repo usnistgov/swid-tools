@@ -30,32 +30,31 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 public class StringFirmwareIdentifier implements FirmwareIdentifier {
-    private final String id;
+  private final String id;
 
-    
-    public StringFirmwareIdentifier(String id) {
-        super();
-        this.id = id;
-    }
+  public StringFirmwareIdentifier(String id) {
+    super();
+    this.id = id;
+  }
 
-    @Override
-    public byte[] asBytes() {
-        return id.getBytes(StandardCharsets.UTF_8);
-    }
+  @Override
+  public byte[] asBytes() {
+    return id.getBytes(StandardCharsets.UTF_8);
+  }
 
-    @Override
-    public String asText() {
-        return id;
-    }
+  @Override
+  public String asText() {
+    return id;
+  }
 
-    @Override
-    public BigInteger asBigInteger() {
-        return new BigInteger(asBytes());
-    }
+  @Override
+  public BigInteger asBigInteger() {
+    return new BigInteger(asBytes());
+  }
 
-    @Override
-    public void write(CBORGenerator generator) throws IOException {
-        generator.writeString(id);
-    }
-    
+  @Override
+  public void write(CBORGenerator generator) throws IOException {
+    generator.writeString(id);
+  }
+
 }

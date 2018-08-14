@@ -154,16 +154,16 @@ public class SwidGenerateMojo extends AbstractMojo {
     // create the output directory
     File retval = new File(outputDirectory);
     if (!retval.exists() && !retval.mkdirs()) {
-        throw new MojoExecutionException(
-            "Unable to create the directory specified by outputDirectory configuration parameter: " + retval.getPath());
+      throw new MojoExecutionException(
+          "Unable to create the directory specified by outputDirectory configuration parameter: " + retval.getPath());
     }
 
     // create the tagPath
     String tagPath = this.tagPath;
     retval = new File(retval, tagPath);
     if (!retval.exists() && !retval.mkdirs()) {
-        throw new MojoExecutionException(
-            "Unable to create the directory specified by tagPath configuration parameter: " + retval.getPath());
+      throw new MojoExecutionException(
+          "Unable to create the directory specified by tagPath configuration parameter: " + retval.getPath());
     }
 
     // now the tagFile
@@ -236,8 +236,8 @@ public class SwidGenerateMojo extends AbstractMojo {
     String swidPath = "META-INF/" + tagPath + "/" + tagName;
 
     // determine what files to tag in the payload
-    ResourceFileEntryProcessor processor = new ResourceFileEntryProcessor(project.getBuild().getOutputDirectory(),
-        getLog());
+    ResourceFileEntryProcessor processor
+        = new ResourceFileEntryProcessor(project.getBuild().getOutputDirectory(), getLog());
     processor.setIncludes(getIncludes());
     processor.setExcludes(getExcludes());
 

@@ -36,9 +36,9 @@ public class PathRelativizer {
   public static final String URI_SEPERATOR = "/";
 
   /**
-   * Creates a relative sequence of path segments by 1) removing common path segments between the base and target, 2)
-   * using ".." to change the context from the base to the target directory, and 3) use of the remaining portion of the
-   * target path to complete the path segments.
+   * Creates a relative sequence of path segments by 1) removing common path segments between the base
+   * and target, 2) using ".." to change the context from the base to the target directory, and 3) use
+   * of the remaining portion of the target path to complete the path segments.
    * 
    * @param base
    *          the base path to relativize from
@@ -55,9 +55,9 @@ public class PathRelativizer {
   }
 
   /**
-   * Creates a relative sequence of path segments by 1) removing common path segments between the base and target, 2)
-   * using ".." to change the context from the base to the target directory, and 3) use of the remaining portion of the
-   * target path to complete the path segments.
+   * Creates a relative sequence of path segments by 1) removing common path segments between the base
+   * and target, 2) using ".." to change the context from the base to the target directory, and 3) use
+   * of the remaining portion of the target path to complete the path segments.
    * 
    * @param base
    *          the base path to relativize from
@@ -136,15 +136,16 @@ public class PathRelativizer {
   }
 
   /*
-   * public static void main(String[] args) { String base = "SWIDTAG/swidtag5977492487829604934.swid"; String target =
-   * "lib/xml-resolver-1.2.jar"; URI baseUri = URI.create(base); URI targetUri = URI.create(target);
-   * System.out.println("Base: " + baseUri); System.out.println("Target: " + targetUri);
-   * System.out.println(baseUri.relativize(targetUri)); List<String> pathSegments = relativize(base, target);
-   * System.out.println("Relative(String) segments: " + pathSegments); System.out.println("Relative(String) URI: " +
-   * toURI(pathSegments)); pathSegments = relativize(baseUri, targetUri); System.out.println("Relative(URI) segments: "
-   * + pathSegments); System.out.println("Relative(URI) URI: " + toURI(pathSegments)); System.out.println("Normal: " +
-   * PathRelativizer.normalize("bootstrap\\js\\jquery.filtertable.min.js")); System.out.println("Normal: " +
-   * PathRelativizer.normalize("swidval-0.0.1-SNAPSHOT.jar")); System.out.println("Normal: " +
-   * PathRelativizer.normalize("lib/core-0.0.1-SNAPSHOT.jar")); }
+   * public static void main(String[] args) { String base = "SWIDTAG/swidtag5977492487829604934.swid";
+   * String target = "lib/xml-resolver-1.2.jar"; URI baseUri = URI.create(base); URI targetUri =
+   * URI.create(target); System.out.println("Base: " + baseUri); System.out.println("Target: " +
+   * targetUri); System.out.println(baseUri.relativize(targetUri)); List<String> pathSegments =
+   * relativize(base, target); System.out.println("Relative(String) segments: " + pathSegments);
+   * System.out.println("Relative(String) URI: " + toURI(pathSegments)); pathSegments =
+   * relativize(baseUri, targetUri); System.out.println("Relative(URI) segments: " + pathSegments);
+   * System.out.println("Relative(URI) URI: " + toURI(pathSegments)); System.out.println("Normal: " +
+   * PathRelativizer.normalize("bootstrap\\js\\jquery.filtertable.min.js"));
+   * System.out.println("Normal: " + PathRelativizer.normalize("swidval-0.0.1-SNAPSHOT.jar"));
+   * System.out.println("Normal: " + PathRelativizer.normalize("lib/core-0.0.1-SNAPSHOT.jar")); }
    */
 }

@@ -24,30 +24,30 @@
 package gov.nist.swid.builder.resource.firmware;
 
 public class FirmwareRequirement<T extends Enum<T>> {
-    private final T type;
-    private final byte[] parameters;
+  private final T type;
+  private final byte[] parameters;
 
-    public FirmwareRequirement(T type) {
-        this(type, null);
-    }
+  public FirmwareRequirement(T type) {
+    this(type, null);
+  }
 
-    public FirmwareRequirement(T type, byte[] parameters) {
-        super();
-        this.type = type;
-        this.parameters = parameters;
-    }
+  public FirmwareRequirement(T type, byte[] parameters) {
+    super();
+    this.type = type;
+    this.parameters = parameters;
+  }
 
-    /**
-     * @return the type
-     */
-    public T getType() {
-        return type;
-    }
+  /**
+   * @return the type
+   */
+  public T getType() {
+    return type;
+  }
 
-    /**
-     * @return the parameters
-     */
-    public byte[] getParameters() {
-        return parameters;
-    }
+  /**
+   * @return the parameters
+   */
+  public byte[] getParameters() {
+    return parameters;
+  }
 }
