@@ -47,8 +47,8 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
   // private static final long FIRMWARE_MANIFEST_DEPENDENCIES = 68L; // resource-reference
   // private static final long FIRMWARE_MANIFEST_ALIASES = 69L; // resource-reference
   private static final long FIRMWARE_MANIFEST_TARGET_DEVICE_ID = 85L; // object
-  private static final long FIRMWARE_MANIFEST_PAYLOAD_ENTRY = 60L; // firmware-payload / [ 2*
-                                                                   // firmware-payload ]
+  // firmware-payload / [ 2* firmware-payload ]
+  private static final long FIRMWARE_MANIFEST_PAYLOAD_ENTRY = 60L;
   private static final long FIRMWARE_MANIFEST_SIMPLE_EXTENSIONS = 115L; // { + int => bytes }
 
   private static final long FIRMWARE_PAYLOAD_ID = 61L; // bytes / text / uint
@@ -99,6 +99,14 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
   private static final long FIRMWARE_PAYLOAD_PACKAGE_COMPRESSION_GUIDANCE = 77L; // bytes
   private static final long FIRMWARE_PAYLOAD_PACKAGE_VALUE = 78L; // bytes
 
+  /**
+   * Generate a CBOR object based on the provided builder.
+   * 
+   * @param builder
+   *          the firmware builder to read data from
+   * @param generator
+   *          the generator to write data to
+   */
   public void generate(FirmwareBuilder builder, CBORGenerator generator) {
     try {
       generator.writeStartObject();

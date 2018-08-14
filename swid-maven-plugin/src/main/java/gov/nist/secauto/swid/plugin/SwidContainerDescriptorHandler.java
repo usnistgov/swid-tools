@@ -154,7 +154,7 @@ public class SwidContainerDescriptorHandler implements ContainerDescriptorHandle
    * Determine the path to the SWID tag file and create any directories in this path.
    * 
    * @return the tag file
-   * @throws MojoExecutionException
+   * @throws ArchiverException
    *           if an error occurred while creating directories
    */
   protected File getSwidTagFile() throws ArchiverException {

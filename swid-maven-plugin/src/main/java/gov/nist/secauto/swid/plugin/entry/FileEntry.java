@@ -50,6 +50,8 @@ public interface FileEntry {
   /**
    * Retrieve the relative path of to the SWID Tag.
    * 
+   * @param swidTagPath
+   *          the path to relativize
    * @return the file's relative path
    */
   public List<String> getRelativePathSegements(String swidTagPath);

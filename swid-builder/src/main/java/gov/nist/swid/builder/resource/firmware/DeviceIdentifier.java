@@ -35,6 +35,14 @@ public class DeviceIdentifier {
   private String rfc4122;
   private byte[] ieee8021ar;
 
+  /**
+   * Construct a new device identier.
+   * 
+   * @param vendor
+   *          the device vendor string
+   * @param model
+   *          the device model string
+   */
   public DeviceIdentifier(String vendor, String model) {
     super();
     Util.requireNonEmpty(vendor, "vendor");

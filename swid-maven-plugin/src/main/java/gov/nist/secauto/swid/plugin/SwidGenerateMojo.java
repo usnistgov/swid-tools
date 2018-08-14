@@ -65,9 +65,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Goal which touches a timestamp file.
- *
- * @deprecated Don't use!
+ * Goal which generates a SWID Tag
  */
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
 public class SwidGenerateMojo extends AbstractMojo {

@@ -135,6 +135,8 @@ public class Util {
    *          the pattern to match against
    * @param str
    *          the string to check
+   * @param message
+   *          the exception message to use
    * @throws NullPointerException
    *           if the provided string is <code>null</code>
    * @throws IllegalArgumentException

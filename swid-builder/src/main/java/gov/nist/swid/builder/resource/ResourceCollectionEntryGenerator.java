@@ -27,12 +27,20 @@ import gov.nist.swid.builder.resource.file.DirectoryBuilder;
 import gov.nist.swid.builder.resource.file.FileBuilder;
 import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
 
+/**
+ * Represents a collection of file, directory, and/or firmware resources.
+ * 
+ * @param <T>
+ *          the type of resource collection
+ */
 public interface ResourceCollectionEntryGenerator<T> {
   /**
    * Adds the file, represented by the builder, to this resource collection.
    * 
    * @param builder
    *          the file builder representing the file resource to add
+   * @param parent
+   *          the containing resource collection instance
    */
   void generate(FileBuilder builder, T parent);
 
@@ -41,8 +49,18 @@ public interface ResourceCollectionEntryGenerator<T> {
    * 
    * @param builder
    *          the directory builder representing the directory resource to add
+   * @param parent
+   *          the containing resource collection instance
    */
   void generate(DirectoryBuilder builder, T parent);
 
+  /**
+   * Adds the firmware manifest, represented by the builder, to this resource collection.
+   * 
+   * @param firmwareBuilder
+   *          the builder representing the firmware resource to add
+   * @param parent
+   *          the containing resource collection instance
+   */
   void generate(FirmwareBuilder firmwareBuilder, T parent);
 }

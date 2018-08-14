@@ -74,8 +74,8 @@ public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
   /**
    * Set the id of the firmware manifest.
    * 
-   * @param name
-   *          the firmware's name
+   * @param id
+   *          the firmware's identifier
    * @return the same builder instance
    */
   public FirmwareBuilder id(FirmwareIdentifier id) {
@@ -96,8 +96,9 @@ public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
   /**
    * Set the creation timestamp of the firmware manifest.
    * 
-   * @param creationTimestamp
+   * @param dateTime
    *          the creationTimestamp to set
+   * @return the same builder instance
    */
   public FirmwareBuilder creationTimestamp(ZonedDateTime dateTime) {
     Objects.requireNonNull(dateTime, "dateTime");
@@ -183,7 +184,7 @@ public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
   /**
    * Adds a new alias to the list of aliases.
    * 
-   * @param aliases
+   * @param alias
    *          the alias to add
    * @return the same builder instance
    */
@@ -205,8 +206,8 @@ public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
   /**
    * Adds a new dependency to the list of aliases.
    * 
-   * @param aliases
-   *          the alias to add
+   * @param dependency
+   *          the dependency to add
    * @return the same builder instance
    */
   public FirmwareBuilder addDependency(ResourceReference dependency) {
@@ -293,14 +294,14 @@ public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
   /**
    * Adds a new extension object.
    * 
-   * @param extenstiontype
+   * @param extenstionType
    *          the extension type identifier
-   * @param extensions
+   * @param extension
    *          the extension content
    * @return the same builder instance
    */
-  public FirmwareBuilder addExtension(int extenstiontype, byte[] extension) {
-    this.extensions.put(extenstiontype, extension);
+  public FirmwareBuilder addExtension(int extenstionType, byte[] extension) {
+    this.extensions.put(extenstionType, extension);
     return this;
   }
 

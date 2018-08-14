@@ -72,8 +72,8 @@ public class FirmwarePayloadBuilder extends AbstractBuilder {
   /**
    * Set the id of the firmware payload.
    * 
-   * @param name
-   *          the firmware's name
+   * @param id
+   *          the firmware's identifier
    * @return the same builder instance
    */
   public FirmwarePayloadBuilder id(FirmwareIdentifier id) {
@@ -159,7 +159,7 @@ public class FirmwarePayloadBuilder extends AbstractBuilder {
   /**
    * Set the firmware payload's format guidance.
    * 
-   * @param format
+   * @param bytes
    *          guidance a {@code non-null} byte string
    * @return the same builder instance
    */
@@ -311,8 +311,8 @@ public class FirmwarePayloadBuilder extends AbstractBuilder {
    *          the type of resource this digest is for
    * @param algorithm
    *          the algorithm to establish a hash value for
-   * @param hashBytes
-   *          an rray of bytes representing the digest value
+   * @param digest
+   *          an array of bytes representing the digest value
    * @return the same builder instance
    */
   public FirmwarePayloadBuilder addDigest(DigestType type, HashAlgorithm algorithm, byte[] digest) {
