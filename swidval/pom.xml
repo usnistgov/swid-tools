@@ -14,6 +14,13 @@
     <name>SWID Tag Validator </name>
     <description>This tool validates a SWID Tag based on requirements in ISO/IEC 19770-2:2015 and NISTIR 8060.</description>
 
+    <url>https://github.com/usnistgov/swid-tools/tree/master/swidval</url>
+
+    <scm>
+        <url>https://github.com/usnistgov/swid-tools/tree/master/swidval</url>
+        <tag>HEAD</tag>
+    </scm>
+
 	<properties>
 		<decima.version>0.6.3-SNAPSHOT</decima.version>
 	</properties>

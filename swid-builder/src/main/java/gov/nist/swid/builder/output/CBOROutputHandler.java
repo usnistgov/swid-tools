@@ -48,12 +48,9 @@ import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 public class CBOROutputHandler extends CBORSupport implements OutputHandler {

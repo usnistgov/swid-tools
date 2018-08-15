@@ -15,17 +15,12 @@
 	<name>SWID Tag Generation Java API</name>
 	<description>Supports the generation of ISO/IEC 19770-2:2015 SWID tag in Java. A number of other formats are also supported (e.g., CBOR).</description>
 
-	<url>https://github.com/usnistgov/swid-builder/tree/master/swid-builder</url>
+    <url>https://github.com/usnistgov/swid-tools/tree/master/swid-builder</url>
 
-	<issueManagement>
-		<url>https://github.com/usnistgov/swid-builder/issues</url>
-		<system>GitHub Issues</system>
-	</issueManagement>
-
-	<scm>
-		<url>https://github.com/usnistgov/swid-builder/tree/master/swid-builder</url>
-		<tag>HEAD</tag>
-	</scm>
+    <scm>
+        <url>https://github.com/usnistgov/swid-tools/tree/master/swid-builder</url>
+        <tag>HEAD</tag>
+    </scm>
 
 	<developers>
 		<developer>

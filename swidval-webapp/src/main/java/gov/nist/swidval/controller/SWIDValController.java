@@ -53,7 +53,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +76,6 @@ public class SWIDValController {
   public void validate(HttpServletRequest requestEntity, HttpServletResponse response) throws AssessmentException,
       UnrecognizedContentException, DocumentException, IOException, TransformerException, URISyntaxException {
 
-    Enumeration<String> headers = requestEntity.getHeaderNames();
     InputStream is = requestEntity.getInputStream();
     // File tempFile = File.createTempFile("swid", ".swidtag");
     // tempFile.deleteOnExit();

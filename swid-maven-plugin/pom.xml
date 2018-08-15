@@ -15,17 +15,12 @@
 	<name>Maven SWID Tag Generation Plugin </name>
 	<description>This project is a ContainerDescriptorHandler that generates an ISO/IEC 19770-2:2015 SWID tag within a Maven assembly plugin execution.</description>
 
-	<url>https://github.com/usnistgov/swid-builder/tree/master/maven-swid-plugin</url>
+	<url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
 
-	<issueManagement>
-		<url>https://github.com/usnistgov/swid-builder/issues</url>
-		<system>GitHub Issues</system>
-	</issueManagement>
-
-	<scm>
-		<url>https://github.com/usnistgov/swid-builder/tree/master/maven-swid-plugin</url>
-		<tag>HEAD</tag>
-	</scm>
+    <scm>
+        <url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
 
 	<dependencies>
 		<dependency>

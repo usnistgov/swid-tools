@@ -25,7 +25,6 @@ package gov.nist.swid.builder;
 
 import gov.nist.swid.builder.output.CBOROutputHandler;
 import gov.nist.swid.builder.output.XMLOutputHandler;
-import gov.nist.swid.builder.resource.HashAlgorithm;
 
 import org.junit.Rule;
 import org.junit.Test;

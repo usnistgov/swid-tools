@@ -32,7 +32,6 @@ import gov.nist.swid.builder.ValidationException;
 import gov.nist.swid.builder.output.XMLOutputHandler;
 
 import org.apache.maven.monitor.logging.DefaultLog;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.assembly.filter.ContainerDescriptorHandler;

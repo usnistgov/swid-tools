@@ -14,8 +14,14 @@
 	<packaging>war</packaging>
 
 	<name>SWID Validation Webapp</name>
-	<url>http://maven.apache.org</url>
 
+    <url>https://github.com/usnistgov/swid-tools/tree/master/swidval-webapp</url>
+
+    <scm>
+        <url>https://github.com/usnistgov/swid-tools/tree/master/swidval-webapp</url>
+        <tag>HEAD</tag>
+    </scm>
+    
 	<properties>
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<jstl.version>1.2</jstl.version>
@@ -70,12 +76,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<!-- <webResources> -->
