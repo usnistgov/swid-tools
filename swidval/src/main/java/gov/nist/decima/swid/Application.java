@@ -30,6 +30,7 @@ import static gov.nist.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE
 
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.module.cli.CLIParser;
@@ -59,6 +60,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 
 public class Application {
   private static final Logger log = LogManager.getLogger(Application.class);
@@ -172,9 +175,6 @@ public class Application {
       return -5;
     }
 
-    // Configure the assessments
-    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(tagType, authoritative);
-
     ExecutorService executorService = null;
     AssessmentResults validationResult;
     try {
@@ -182,13 +182,16 @@ public class Application {
       SWIDAssessmentFactory factory = SWIDAssessmentFactory.getInstance();
       factory.setResultDirectory(new File("schematron-results"));
 
-      AssessmentExecutor<XMLDocument> executor = factory.newAssessmentExecutor(tagType, authoritative, executorService);
-
       // setup the document assessment
-      reactor.pushAssessmentExecution(doc, executor);
+      AssessmentExecutor<XMLDocument> executor = factory.newAssessmentExecutor(tagType, authoritative, executorService);
+      AssessmentResultBuilder assessmentResultBuilder
+          = SWIDAssessmentResultBuilderFactory.newAssessmentResultBuilder(tagType, authoritative);
 
       // do the assessment
-      validationResult = reactor.react();
+      executor.execute(doc, assessmentResultBuilder);
+
+      // generate the results
+      validationResult = assessmentResultBuilder.end().build(SWIDRequirementsManager.getInstance());
     } catch (AssessmentException e) {
       log.error("An error occured while performing the assessment", e);
       return -5;

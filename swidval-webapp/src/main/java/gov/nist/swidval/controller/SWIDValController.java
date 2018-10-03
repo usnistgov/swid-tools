@@ -25,10 +25,13 @@ package gov.nist.swidval.controller;
 
 import gov.nist.decima.core.assessment.AssessmentException;
 import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.ResultStatus;
 import gov.nist.decima.core.document.DocumentException;
-import gov.nist.decima.swid.SWIDAssessmentReactor;
+import gov.nist.decima.swid.SWIDAssessmentResultBuilderFactory;
+import gov.nist.decima.swid.SWIDRequirementsManager;
+import gov.nist.decima.swid.SWIDTagCharacteristics;
 import gov.nist.decima.swid.TagType;
 import gov.nist.decima.xml.assessment.result.ReportGenerator;
 import gov.nist.decima.xml.assessment.result.XMLResultBuilder;
@@ -60,6 +63,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 
 @RestController
 @Controller
@@ -68,6 +73,9 @@ public class SWIDValController {
 
   public static final String MODEL_KEY_ASSESSMENT_RESULT = "assessment";
   public static final String MODEL_KEY_FILENAME = "filename";
+
+  private static final TagType TAG_TYPE_DEFAULT = TagType.PRIMARY;
+  private static final boolean TAG_AUTHORITATIVE_DEFAULT = true;
 
   private final SWIDAssessmentManager manager = new SWIDAssessmentManager();
 
@@ -81,12 +89,12 @@ public class SWIDValController {
     // tempFile.deleteOnExit();
     // file.transferTo(tempFile);
 
-    // TagType type = TagType.lookup(tagType);
-    TagType type = TagType.PRIMARY;
-    AssessmentExecutor<XMLDocument> executor = manager.getAssessmentExecutor(type);
-    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(type, false);
-    reactor.pushAssessmentExecution(new JDOMDocument(is, null), executor);
-    AssessmentResults results = reactor.react();
+    JDOMDocument swidDocuemnt = new JDOMDocument(is, null);
+
+    // TagType tagType = TagType.lookup(tagType);
+    SWIDTagCharacteristics swidTagCharacteristics = getSWIDTagCharacteristics(swidDocuemnt);
+
+    AssessmentResults results = performAssessment(swidDocuemnt, swidTagCharacteristics);
 
     String accept = requestEntity.getHeader("Accept");
     if (accept == null) {
@@ -108,7 +116,8 @@ public class SWIDValController {
   }
 
   @RequestMapping("/validate-form")
-  public ModelAndView validateForm(@RequestParam("file") MultipartFile file, @RequestParam("tag-type") String tagType)
+  public ModelAndView validateForm(@RequestParam("file") MultipartFile file,
+      @RequestParam("tag-type") String tagTypeParam)
       throws AssessmentException, UnrecognizedContentException, DocumentException, IOException {
     if (file.isEmpty()) {
       throw new UnrecognizedContentException("A valid SWID tag was not provided.");
@@ -119,11 +128,18 @@ public class SWIDValController {
     // tempFile.deleteOnExit();
     // file.transferTo(tempFile);
 
-    TagType type = TagType.lookup(tagType);
-    AssessmentExecutor<XMLDocument> executor = manager.getAssessmentExecutor(type);
-    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(type, false);
-    reactor.pushAssessmentExecution(new JDOMDocument(is, null), executor);
-    AssessmentResults results = reactor.react();
+    XMLDocument swidDocuemnt = new JDOMDocument(is, null);
+
+    SWIDTagCharacteristics swidTagCharacteristics = getSWIDTagCharacteristics(swidDocuemnt);
+    if (tagTypeParam != null) {
+      TagType tagType = TagType.lookup(tagTypeParam);
+      if (tagType != null) {
+        // override with requested type
+        swidTagCharacteristics = new SWIDTagCharacteristics(tagType, swidTagCharacteristics.isAuthoritative());
+      }
+    }
+
+    AssessmentResults results = performAssessment(swidDocuemnt, swidTagCharacteristics);
 
     if (!ResultStatus.PASS.equals(results.getBaseRequirementResult("GEN-1").getStatus())) {
       throw new UnrecognizedContentException("The provided file was not a schema valid SWID tag.");
@@ -146,5 +162,34 @@ public class SWIDValController {
     //
     // modelAndView.setViewName("error");
     // return modelAndView;
+  }
+
+  private SWIDTagCharacteristics getSWIDTagCharacteristics(XMLDocument swidDocuemnt) {
+    SWIDTagCharacteristics characteristics;
+    try {
+      characteristics = SWIDTagCharacteristics.getSWIDTagCharacteristics(swidDocuemnt);
+      log.debug("Based on the tag contents, the tag appears to be {} {} tag",
+          characteristics.isAuthoritative() ? "an authoritative" : "a non-authoritative",
+          characteristics.getTagType().getName());
+    } catch (XPathExpressionException | XPathFactoryConfigurationException ex) {
+      log.debug("Unable to determine the type and authoritativeness of the tag", ex);
+      characteristics = new SWIDTagCharacteristics(TAG_TYPE_DEFAULT, TAG_AUTHORITATIVE_DEFAULT);
+    }
+    return characteristics;
+  }
+
+  private AssessmentResults performAssessment(XMLDocument swidDocuemnt, SWIDTagCharacteristics swidTagCharacteristics)
+      throws AssessmentException {
+    // setup the document assessment
+    AssessmentExecutor<XMLDocument> executor
+        = manager.getAssessmentExecutor(swidTagCharacteristics.getTagType(), swidTagCharacteristics.isAuthoritative());
+    AssessmentResultBuilder assessmentResultBuilder = SWIDAssessmentResultBuilderFactory
+        .newAssessmentResultBuilder(swidTagCharacteristics.getTagType(), swidTagCharacteristics.isAuthoritative());
+
+    // do the assessment
+    executor.execute(swidDocuemnt, assessmentResultBuilder);
+
+    // generate the results
+    return assessmentResultBuilder.end().build(SWIDRequirementsManager.getInstance());
   }
 }

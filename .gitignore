@@ -14,3 +14,5 @@ swid-builder/swid-cbor.xml
 swid-builder/test.cbor
 /swidval/svrl-result
 /swidval/test-results
+/swidval/schematron-results
+/swidval-webapp/build.out

@@ -23,8 +23,9 @@
 
 package gov.nist.decima.swid;
 
-import gov.nist.decima.core.Decima;
 import gov.nist.decima.core.assessment.AssessmentException;
+import gov.nist.decima.core.assessment.AssessmentExecutor;
+import gov.nist.decima.core.assessment.result.AssessmentResultBuilder;
 import gov.nist.decima.core.assessment.result.AssessmentResults;
 import gov.nist.decima.core.assessment.result.BaseRequirementResult;
 import gov.nist.decima.core.assessment.result.DerivedRequirementResult;
@@ -45,7 +46,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.concurrent.Executors;
 
 public class SchematronTest {
 
@@ -67,12 +68,17 @@ public class SchematronTest {
     // resultDir.mkdirs();
 
     // Perform the assessment
-    SWIDAssessmentReactor reactor = new SWIDAssessmentReactor(TagType.PRIMARY, true);
-    reactor.pushAssessmentExecution(doc,
-        Decima.newAssessmentExecutorFactory().newAssessmentExecutor(Collections.singletonList(assessment)));
+    SWIDAssessmentFactory factory = SWIDAssessmentFactory.getInstance();
+    factory.setResultDirectory(new File("schematron-results"));
+
+    AssessmentExecutor<XMLDocument> executor
+        = factory.newAssessmentExecutor(TagType.PRIMARY, true, Executors.newSingleThreadExecutor());
+    AssessmentResultBuilder assessmentResultBuilder
+        = SWIDAssessmentResultBuilderFactory.newAssessmentResultBuilder(TagType.PRIMARY, true);
+    executor.execute(doc, assessmentResultBuilder);
 
     // Generate the assessment results
-    AssessmentResults validationResult = reactor.react();
+    AssessmentResults validationResult = assessmentResultBuilder.end().build(SWIDRequirementsManager.getInstance());
 
     // Output the results
     Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();

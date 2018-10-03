@@ -35,7 +35,10 @@ import java.util.concurrent.Executors;
 
 public class SWIDAssessmentManager {
   private final ExecutorService executorService;
-  private final EnumMap<TagType, AssessmentExecutor<XMLDocument>> assessmentExecutors;
+  private final EnumMap<TagType, AssessmentExecutor<XMLDocument>> authoritativeAssessmentExecutors
+      = new EnumMap<>(TagType.class);
+  private final EnumMap<TagType, AssessmentExecutor<XMLDocument>> nonAuthoritativeAssessmentExecutors
+      = new EnumMap<>(TagType.class);
 
   public SWIDAssessmentManager() {
     this(Executors.newFixedThreadPool(2));
@@ -43,21 +46,23 @@ public class SWIDAssessmentManager {
 
   public SWIDAssessmentManager(ExecutorService executorService) {
     this.executorService = executorService;
-    this.assessmentExecutors = initializeAssessments();
   }
 
-  private EnumMap<TagType, AssessmentExecutor<XMLDocument>> initializeAssessments() {
-    EnumMap<TagType, AssessmentExecutor<XMLDocument>> retval = new EnumMap<>(TagType.class);
-    for (TagType tagType : TagType.values()) {
-      AssessmentExecutor<XMLDocument> executor
-          = SWIDAssessmentFactory.getInstance().newAssessmentExecutor(tagType, true, executorService);
-      retval.put(tagType, executor);
-    }
-    return retval;
-  }
-
-  public AssessmentExecutor<XMLDocument> getAssessmentExecutor(TagType tagType) {
+  public synchronized AssessmentExecutor<XMLDocument> getAssessmentExecutor(TagType tagType, boolean authoritative) {
     Objects.requireNonNull(tagType, "tagType");
-    return assessmentExecutors.get(tagType);
+
+    EnumMap<TagType, AssessmentExecutor<XMLDocument>> executorMap;
+    if (authoritative) {
+      executorMap = authoritativeAssessmentExecutors;
+    } else {
+      executorMap = nonAuthoritativeAssessmentExecutors;
+    }
+
+    AssessmentExecutor<XMLDocument> executor = executorMap.get(tagType);
+    if (executor == null) {
+      executor = SWIDAssessmentFactory.getInstance().newAssessmentExecutor(tagType, authoritative, executorService);
+      executorMap.put(tagType, executor);
+    }
+    return executor;
   }
 }
