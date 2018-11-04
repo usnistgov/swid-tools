@@ -42,7 +42,7 @@ public class SWIDTagCharacteristics {
     eval.setNamespaceContext(nsContext);
 
     boolean authoritative = eval.test(
-        "if (//swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))]) then 'true' else 'false'");
+        "//swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))]");
     String tagTypeValue = eval.evaluateSingle(
         "if (/swid:SoftwareIdentity[@patch='true']) then 'patch' else (if (/swid:SoftwareIdentity[@supplemental='true']) then 'supplemental' else (if (/swid:SoftwareIdentity[@corpus='true']) then 'corpus' else 'primary'))",
         XPathConstants.STRING, null);
