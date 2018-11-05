@@ -34,6 +34,18 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactoryConfigurationException;
 
 public class SWIDTagCharacteristics {
+  /**
+   * Detects the SWID tag characteristics for the provided file.
+   * 
+   * @param doc
+   *          the file to generate characteristics for
+   * @return the detected SWID tag characteristics
+   * @throws XPathExpressionException
+   *           if an error occurred while evaluating the XPath expressions used to determine the
+   *           characteristics
+   * @throws XPathFactoryConfigurationException
+   *           if an error occurred while establishing the XPath evaluation environment
+   */
   public static SWIDTagCharacteristics getSWIDTagCharacteristics(XMLDocument doc)
       throws XPathExpressionException, XPathFactoryConfigurationException {
     XPathEvaluator eval = doc.newXPathEvaluator();
@@ -41,10 +53,13 @@ public class SWIDTagCharacteristics {
     nsContext.addNamespace("swid", "http://standards.iso.org/iso/19770/-2/2015/schema.xsd");
     eval.setNamespaceContext(nsContext);
 
-    boolean authoritative = eval.test(
-        "//swid:Entity[contains(@role,'tagCreator') and (contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or contains(@role,'softwareCreator'))]");
+    boolean authoritative = eval.test("//swid:Entity[contains(@role,'tagCreator') and "
+        + "(contains(@role,'aggregator') or contains(@role,'distributor') or contains(@role,'licensor') or "
+        + "contains(@role,'softwareCreator'))]");
     String tagTypeValue = eval.evaluateSingle(
-        "if (/swid:SoftwareIdentity[@patch='true']) then 'patch' else (if (/swid:SoftwareIdentity[@supplemental='true']) then 'supplemental' else (if (/swid:SoftwareIdentity[@corpus='true']) then 'corpus' else 'primary'))",
+        "if (/swid:SoftwareIdentity[@patch='true']) then 'patch' "
+            + "else (if (/swid:SoftwareIdentity[@supplemental='true']) then 'supplemental' "
+            + "else (if (/swid:SoftwareIdentity[@corpus='true']) then 'corpus' else 'primary'))",
         XPathConstants.STRING, null);
     TagType tagType = TagType.lookup(tagTypeValue);
     return new SWIDTagCharacteristics(tagType, authoritative);
@@ -53,6 +68,14 @@ public class SWIDTagCharacteristics {
   private final TagType tagType;
   private final boolean authoritative;
 
+  /**
+   * Construct a new SWID tag characteristics using the provided characteristics.
+   * 
+   * @param tagType
+   *          the type of the tag
+   * @param authoritative
+   *          <code>true</code> if the tag is authoritative, or <code>false</code> otherwise
+   */
   public SWIDTagCharacteristics(TagType tagType, boolean authoritative) {
     Objects.requireNonNull(tagType, "tagType");
     this.tagType = tagType;
@@ -60,6 +83,8 @@ public class SWIDTagCharacteristics {
   }
 
   /**
+   * Retrieve the tag type.
+   * 
    * @return the tagType
    */
   public TagType getTagType() {
@@ -67,6 +92,8 @@ public class SWIDTagCharacteristics {
   }
 
   /**
+   * Determine if the tag is authoritative or not.
+   * 
    * @return <code>true</code> if the tag is authoritative, or <code>false</code> otherwise
    */
   public boolean isAuthoritative() {

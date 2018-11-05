@@ -20,10 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
-
 package gov.nist.decima.swid;
-
-import static org.junit.Assert.fail;
 
 import gov.nist.decima.core.document.DocumentException;
 import gov.nist.decima.xml.document.JDOMDocument;
@@ -41,14 +38,16 @@ import javax.xml.xpath.XPathFactoryConfigurationException;
 public class SWIDTagCharacteristicsTest {
 
   @Test
-  public void testNonAuthoritative() throws MalformedURLException, DocumentException, XPathExpressionException, XPathFactoryConfigurationException {
+  public void testNonAuthoritative()
+      throws MalformedURLException, DocumentException, XPathExpressionException, XPathFactoryConfigurationException {
     XMLDocument doc = new JDOMDocument(new URL("classpath:other/non-authoritative.swidtag"));
     SWIDTagCharacteristics characteristics = SWIDTagCharacteristics.getSWIDTagCharacteristics(doc);
     Assert.assertEquals(Boolean.FALSE, characteristics.isAuthoritative());
   }
 
   @Test
-  public void testAuthoritative() throws MalformedURLException, DocumentException, XPathExpressionException, XPathFactoryConfigurationException {
+  public void testAuthoritative()
+      throws MalformedURLException, DocumentException, XPathExpressionException, XPathFactoryConfigurationException {
     XMLDocument doc = new JDOMDocument(new URL("classpath:other/authoritative.swidtag"));
     SWIDTagCharacteristics characteristics = SWIDTagCharacteristics.getSWIDTagCharacteristics(doc);
     Assert.assertEquals(Boolean.TRUE, characteristics.isAuthoritative());
