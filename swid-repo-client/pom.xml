@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>gov.nist.nvd.client</groupId>
+  <artifactId>swid-repo-client</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>SWID Repository Client</name>
+  <url>http://maven.apache.org</url>
+  	<properties>
+		<decima.version>0.6.3-SNAPSHOT</decima.version>
+	</properties>
+  <dependencies>
+  	<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4</version>
+		</dependency>
+		<!--  Read from File to String -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.4</version>
+</dependency>
+<!--String Escape utls -->
+<dependency>
+    <groupId>commons-lang</groupId>
+    <artifactId>commons-lang</artifactId>
+    <version>2.6</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli, for command line interface -->
+<dependency>
+    <groupId>commons-cli</groupId>
+    <artifactId>commons-cli</artifactId>
+    <version>1.4</version>
+</dependency>
+<dependency>
+	<groupId>gov.nist.decima</groupId>
+	<artifactId>decima-module</artifactId>
+	<version>${decima.version}</version>
+</dependency>
+		<dependency>
+	<groupId>io.jsonwebtoken</groupId>
+	<artifactId>jjwt</artifactId>
+	<version>0.9.0</version>
+</dependency>
+  </dependencies>
+  <build>
+  		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/distro</directory>
+				<filtering>true</filtering>
+				<targetPath>${project.build.directory}/generated-distro</targetPath>
+			</resource>
+		</resources>
+  <plugins>
+  			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<!-- TODO: Update to 3.0.2 once the m2e bug is fixed -->
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>gov.nist.swid.Application</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<classpathLayoutType>custom</classpathLayoutType>
+							<customClasspathLayout>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</customClasspathLayout>
+						</manifest>
+								<manifestEntries>
+									<Implementation-Version>${project.version}</Implementation-Version>
+							<Built-By>SWID Client Builder</Built-By>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<!-- <configuration> -->
+				<!-- <archive> -->
+				<!-- <manifest> -->
+				<!-- <mainClass>gov.nist.decima.swid.Application</mainClass> -->
+				<!-- </manifest> -->
+				<!-- </archive> -->
+				<!-- </configuration> -->
+				<dependencies>
+					<dependency>
+						<groupId>gov.nist.secauto.swid</groupId>
+						<artifactId>swid-maven-plugin</artifactId>
+						<version>0.6.0-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<!-- <execution> -->
+					<!-- <id>make-assembly</id> this is used for inheritance merges -->
+					<!-- <phase>package</phase> bind to the packaging phase -->
+					<!-- <goals> -->
+					<!-- <goal>single</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <descriptorRefs> -->
+					<!-- <descriptorRef>jar-with-dependencies</descriptorRef> -->
+					<!-- </descriptorRefs> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+					<execution>
+						<id>make-assembly-bin</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/bin.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+  </plugins>
+  </build>
+</project>
