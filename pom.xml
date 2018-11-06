@@ -62,6 +62,7 @@
 		<module>swid-maven-plugin</module>
 		<module>swidval</module>
 		<module>swidval-webapp</module>
+		<module>swid-repo-client</module>
 	</modules>
 
 	<dependencyManagement>
