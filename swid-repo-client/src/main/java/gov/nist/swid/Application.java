@@ -152,12 +152,8 @@ public class Application {
 		try {
 			HTTPService swidService = new HTTPServiceImpl();
 
-			String response = swidService.postSwid(clientCertificatePath, clientCertificatePassword, passwordSeed,
-					tagFileNames, swidAction, type);
-
-			if (response != null && !response.isEmpty()) {
-				LOG.info("***********************Post Application response***********************\n" + response);
-			}
+			swidService.postSwid(clientCertificatePath, clientCertificatePassword, passwordSeed, tagFileNames,
+					swidAction, type);
 
 		} catch (FileNotFoundException ex) {
 			LOG.error("Non-existant file argument: ", ex);

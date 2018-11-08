@@ -100,6 +100,9 @@ public class HTTPServiceImpl implements HTTPService {
 
 			if (token != null && !token.isEmpty()) {
 				String response = this.sendSWIDData(client, token, swidFiles, action, type);
+				if (response != null && !response.isEmpty()) {
+					LOG.info("***********************Post Application response***********************\n" + response);
+				}
 				return response;
 			} else {
 				LOG.info("Authentication Failed, unable to post SWID to NVD repository");
@@ -194,7 +197,7 @@ public class HTTPServiceImpl implements HTTPService {
 		StringWriter stringWriter = new StringWriter();
 		StreamResult xmlOutput = new StreamResult(stringWriter);
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		transformerFactory.setAttribute("indent-number", indent);
+		// transformerFactory.setAttribute("indent-number", indent);
 		Transformer transformer = transformerFactory.newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
