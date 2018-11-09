@@ -31,7 +31,7 @@ public enum Action {
 	String action;
 	String method;
 	String endpoint;
-	public static final String WEBSERVICES_DEFAULT_HOSTNAME = "services.nvd.nist.gov";
+	public static final String WEBSERVICES_DEFAULT_HOSTNAME = "auth.nvd.nist.gov";
 
 	private Action(String action, String method, String endpoint) {
 		this.action = action;
