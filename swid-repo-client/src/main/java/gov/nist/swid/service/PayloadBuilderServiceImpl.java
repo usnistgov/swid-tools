@@ -21,6 +21,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.service;
 
 import java.io.IOException;
@@ -32,85 +33,85 @@ import java.util.List;
 
 public class PayloadBuilderServiceImpl implements PayloadBuilderService {
 
-	// Element names, required for constructing REST request payload
-	public static final String SWID_BODY_ELEMENT = "body";
-	public static final String TAG_TYPE_ELEMENT = "tagType";
-	public static final String SWID_ELEMENT = "swid";
-	public static final String SWID_LIST_ELEMENT = "swidList";
+  // Element names, required for constructing REST request payload
+  public static final String SWID_BODY_ELEMENT = "body";
+  public static final String TAG_TYPE_ELEMENT = "tagType";
+  public static final String SWID_ELEMENT = "swid";
+  public static final String SWID_LIST_ELEMENT = "swidList";
 
-	/**
-	 * Construct payload from one or more tag files
-	 */
-	public String buildPayload(List<String> tagFileNames, TagType tagType)
-			throws UnsupportedEncodingException, IOException {
-		String content = "";
-		// Tagtype option provided will be used for all SWIDs posted
-		String tagElement = constructTagTypeElement(tagType);
-		for (String filename : tagFileNames) {
-			content += constructSwidElementFromFile(Paths.get(filename), tagElement);
-		}
-		content = this.constructXMLElement(content, SWID_LIST_ELEMENT);
-		return content;
-	}
+  /**
+   * Construct payload from one or more tag files
+   */
+  public String buildPayload(List<String> tagFileNames, TagType tagType)
+      throws UnsupportedEncodingException, IOException {
+    String content = "";
+    // Tagtype option provided will be used for all SWIDs posted
+    String tagElement = constructTagTypeElement(tagType);
+    for (String filename : tagFileNames) {
+      content += constructSwidElementFromFile(Paths.get(filename), tagElement);
+    }
+    content = this.constructXMLElement(content, SWID_LIST_ELEMENT);
+    return content;
+  }
 
-	/**
-	 * Wrap tagType, swidData into SWID element
-	 * 
-	 * @param path
-	 * @param tagElement
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 * @throws IOException
-	 */
-	private String constructSwidElementFromFile(Path path, String tagElement)
-			throws UnsupportedEncodingException, IOException {
-		String content = new String(Files.readAllBytes(path), "UTF-8");
-		String swidData = "";
-		// Remove the XML declaration provided in each SWID tag
-		final String SOFTWARE_IDENTITY_ELEMENT = "<SoftwareIdentity";
-		int swidDataStartIndex = content.indexOf(SOFTWARE_IDENTITY_ELEMENT);
-		if (swidDataStartIndex > 0) {
-			swidData = content.substring(swidDataStartIndex);
-		}
-		String bodyElement = constructBodyElement(swidData);
-		return this.constructXMLElement(tagElement + bodyElement, SWID_ELEMENT);
-	}
+  /**
+   * Wrap tagType, swidData into SWID element
+   * 
+   * @param path
+   * @param tagElement
+   * @return
+   * @throws UnsupportedEncodingException
+   * @throws IOException
+   */
+  private String constructSwidElementFromFile(Path path, String tagElement)
+      throws UnsupportedEncodingException, IOException {
+    String content = new String(Files.readAllBytes(path), "UTF-8");
+    String swidData = "";
+    // Remove the XML declaration provided in each SWID tag
+    final String SOFTWARE_IDENTITY_ELEMENT = "<SoftwareIdentity";
+    int swidDataStartIndex = content.indexOf(SOFTWARE_IDENTITY_ELEMENT);
+    if (swidDataStartIndex > 0) {
+      swidData = content.substring(swidDataStartIndex);
+    }
+    String bodyElement = constructBodyElement(swidData);
+    return this.constructXMLElement(tagElement + bodyElement, SWID_ELEMENT);
+  }
 
-	/**
-	 * Wrap the swid data
-	 * 
-	 * @param swidData
-	 * @return
-	 */
-	private String constructBodyElement(String swidData) {
+  /**
+   * Wrap the swid data
+   * 
+   * @param swidData
+   * @return
+   */
+  private String constructBodyElement(String swidData) {
 
-		return this.constructXMLElement(swidData, SWID_BODY_ELEMENT);
-	}
+    return this.constructXMLElement(swidData, SWID_BODY_ELEMENT);
+  }
 
-	/**
-	 * Wrap tag type
-	 * 
-	 * @param type
-	 * @return
-	 */
-	private String constructTagTypeElement(TagType type) {
-		if (type == null) {
-			return "";
-		}
-		return this.constructXMLElement(type.getName(), TAG_TYPE_ELEMENT);
-	}
+  /**
+   * Wrap tag type
+   * 
+   * @param type
+   * @return
+   */
+  private String constructTagTypeElement(TagType type) {
+    if (type == null) {
+      return "";
+    }
+    return this.constructXMLElement(type.getName(), TAG_TYPE_ELEMENT);
+  }
 
-	/**
-	 * Constructs XML element given data and element name
-	 * 
-	 * @param input
-	 * @param elementName
-	 * @return
-	 */
-	private String constructXMLElement(String input, String elementName) {
+  /**
+   * Constructs XML element given data and element name
+   * 
+   * @param input
+   * @param elementName
+   * @return
+   */
+  private String constructXMLElement(String input, String elementName) {
 
-		return "<" + elementName + ">" + input + "</" + elementName + ">";// TODO
-																			// check
-																			// this
-	}
+    return "<" + elementName + ">" + input + "</" + elementName + ">";// TODO
+    // check
+    // this
+  }
 }

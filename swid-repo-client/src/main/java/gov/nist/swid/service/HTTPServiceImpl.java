@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.service;
 
 import java.io.BufferedReader;
@@ -68,254 +69,252 @@ import io.jsonwebtoken.Jwts;
 
 public class HTTPServiceImpl implements HTTPService {
 
-	private static final Logger LOG = LogManager.getLogger(HTTPServiceImpl.class);
+  private static final Logger LOG = LogManager.getLogger(HTTPServiceImpl.class);
 
-	public static final String TOKEN_CACHE_FILENAME = "./.access";
+  public static final String TOKEN_CACHE_FILENAME = "./.access";
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nist.swid.client.PostService#postSWID(java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.nio.file.Path, java.lang.String)
-	 */
-	public String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
-			List<String> swidFiles, Action action, TagType type) throws KeyStoreException, NoSuchAlgorithmException,
-			CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException {
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.nist.swid.client.PostService#postSWID(java.lang.String, java.lang.String,
+   * java.lang.String, java.lang.String, java.lang.String, java.nio.file.Path, java.lang.String)
+   */
+  public String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
+      List<String> swidFiles, Action action, TagType type) throws KeyStoreException, NoSuchAlgorithmException,
+      CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException {
 
-		HttpClientFactory clientFactory = new HttpClientFactory();
-		KeyStore identityKeyStore = clientFactory.loadKeyStore(clientCertificatePath, clientCertificatePassword);
-		CloseableHttpClient client = clientFactory.build(identityKeyStore, clientCertificatePassword);
-		String subjectDN = getKeyStoreSubjectDN(identityKeyStore);
-		try {
+    HttpClientFactory clientFactory = new HttpClientFactory();
+    KeyStore identityKeyStore = clientFactory.loadKeyStore(clientCertificatePath, clientCertificatePassword);
+    CloseableHttpClient client = clientFactory.build(identityKeyStore, clientCertificatePassword);
+    String subjectDN = getKeyStoreSubjectDN(identityKeyStore);
+    try {
 
-			String token = getCachedToken(subjectDN);
-			if (token == null) {
-				LoginService loginService = new LoginServiceImpl();
-				token = loginService.login(client, passwordSeed);
-				setTokenCache(token, subjectDN);
-			} else {
-				LOG.info("Proceeding with cached token");
-			}
+      String token = getCachedToken(subjectDN);
+      if (token == null) {
+        LoginService loginService = new LoginServiceImpl();
+        token = loginService.login(client, passwordSeed);
+        setTokenCache(token, subjectDN);
+      } else {
+        LOG.info("Proceeding with cached token");
+      }
 
-			if (token != null && !token.isEmpty()) {
-				String response = this.sendSWIDData(client, token, swidFiles, action, type);
-				if (response != null && !response.isEmpty()) {
-					LOG.info("***********************Post Application response***********************\n" + response);
-				}
-				return response;
-			} else {
-				LOG.info("Authentication Failed, unable to post SWID to NVD repository");
-			}
-		} finally {
-			client.close();
-		}
-		return null;
+      if (token != null && !token.isEmpty()) {
+        String response = this.sendSWIDData(client, token, swidFiles, action, type);
+        if (response != null && !response.isEmpty()) {
+          LOG.info("***********************Post Application response***********************\n" + response);
+        }
+        return response;
+      } else {
+        LOG.info("Authentication Failed, unable to post SWID to NVD repository");
+      }
+    } finally {
+      client.close();
+    }
+    return null;
 
-	}
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nist.swid.client.PostService#postSWID(java.lang.String,
-	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.nio.file.Path, java.lang.String)
-	 */
-	public String sendSWIDData(CloseableHttpClient client, String token, List<String> swidFiles, Action action,
-			TagType type) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-			KeyManagementException, UnrecoverableKeyException, TransformerException {
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.nist.swid.client.PostService#postSWID(java.lang.String, java.lang.String,
+   * java.lang.String, java.lang.String, java.lang.String, java.nio.file.Path, java.lang.String)
+   */
+  public String sendSWIDData(CloseableHttpClient client, String token, List<String> swidFiles, Action action,
+      TagType type) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
+      KeyManagementException, UnrecoverableKeyException, TransformerException {
 
-		String responseString = callEndPoint(client, swidFiles, action, token, type);
+    String responseString = callEndPoint(client, swidFiles, action, token, type);
 
-		return StringEscapeUtils.unescapeXml(prettyFormat(responseString, 3));
+    return StringEscapeUtils.unescapeXml(prettyFormat(responseString, 3));
 
-	}
+  }
 
-	/**
-	 * Execute insert or update http request
-	 * 
-	 * @param httpClient
-	 * @param swidDataFilePath
-	 * @param action
-	 * @param token
-	 * @return
-	 * @throws IOException
-	 * @throws TransformerException
-	 */
-	private String callEndPoint(CloseableHttpClient httpClient, List<String> swidFiles, Action actionType, String token,
-			TagType type) throws IOException, TransformerException {
-		PayloadBuilderService payloadBuilder = new PayloadBuilderServiceImpl();
-		String responseString = "";
-		String endPointURL = "";
+  /**
+   * Execute insert or update http request
+   * 
+   * @param httpClient
+   * @param swidDataFilePath
+   * @param action
+   * @param token
+   * @return
+   * @throws IOException
+   * @throws TransformerException
+   */
+  private String callEndPoint(CloseableHttpClient httpClient, List<String> swidFiles, Action actionType, String token,
+      TagType type) throws IOException, TransformerException {
+    PayloadBuilderService payloadBuilder = new PayloadBuilderServiceImpl();
+    String responseString = "";
+    String endPointURL = "";
 
-		endPointURL = actionType.fetchEndpoint();
-		LOG.info("Calling SWID " + actionType.action + ": " + endPointURL);
-		String payload = payloadBuilder.buildPayload(swidFiles, type);
-		StringEntity entity = new StringEntity(payload);
+    endPointURL = actionType.fetchEndpoint();
+    LOG.info("Calling SWID " + actionType.action + ": " + endPointURL);
+    String payload = payloadBuilder.buildPayload(swidFiles, type);
+    StringEntity entity = new StringEntity(payload);
 
-		// HttpPost
-		HttpUriRequest httpRequest = new HttpPost(endPointURL);
-		if (actionType.equals(Action.insert)) {
-			httpRequest = new HttpPost(endPointURL);
-			((HttpPost) httpRequest).setEntity(entity);
-		} else if (actionType.equals(Action.update)) {
-			httpRequest = new HttpPut(endPointURL);
-			((HttpPut) httpRequest).setEntity(entity);
-		}
+    // HttpPost
+    HttpUriRequest httpRequest = new HttpPost(endPointURL);
+    if (actionType.equals(Action.insert)) {
+      httpRequest = new HttpPost(endPointURL);
+      ((HttpPost) httpRequest).setEntity(entity);
+    } else if (actionType.equals(Action.update)) {
+      httpRequest = new HttpPut(endPointURL);
+      ((HttpPut) httpRequest).setEntity(entity);
+    }
 
-		httpRequest.setHeader("Accept", "application/xml");
-		httpRequest.setHeader("Content-type", "application/xml");
-		httpRequest.setHeader("Authorization", "Bearer " + token);
+    httpRequest.setHeader("Accept", "application/xml");
+    httpRequest.setHeader("Content-type", "application/xml");
+    httpRequest.setHeader("Authorization", "Bearer " + token);
 
-		LOG.info("SWID request payload *****************************************\n" + prettyFormat(payload, 2));
+    LOG.info("SWID request payload *****************************************\n" + prettyFormat(payload, 2));
 
-		HttpResponse httpResponse = httpClient.execute(httpRequest);
-		LOG.info("Response Status :" + httpResponse.getStatusLine());
-		BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			responseString += line;
-		}
+    HttpResponse httpResponse = httpClient.execute(httpRequest);
+    LOG.info("Response Status :" + httpResponse.getStatusLine());
+    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
+    String line = "";
+    while ((line = rd.readLine()) != null) {
+      responseString += line;
+    }
 
-		return responseString;
-	}
+    return responseString;
+  }
 
-	/**
-	 * Format XML response for human readability
-	 * 
-	 * @param input
-	 * @param indent
-	 * @return
-	 * @throws TransformerException
-	 */
-	public static String prettyFormat(String input, int indent) throws TransformerException {
+  /**
+   * Format XML response for human readability
+   * 
+   * @param input
+   * @param indent
+   * @return
+   * @throws TransformerException
+   */
+  public static String prettyFormat(String input, int indent) throws TransformerException {
 
-		if (input == null || input.isEmpty()) {
-			return null;
-		}
-		Source xmlInput = new StreamSource(new StringReader(input));
-		StringWriter stringWriter = new StringWriter();
-		StreamResult xmlOutput = new StreamResult(stringWriter);
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		// transformerFactory.setAttribute("indent-number", indent);
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		transformer.transform(xmlInput, xmlOutput);
-		return xmlOutput.getWriter().toString();
+    if (input == null || input.isEmpty()) {
+      return null;
+    }
+    Source xmlInput = new StreamSource(new StringReader(input));
+    StringWriter stringWriter = new StringWriter();
+    StreamResult xmlOutput = new StreamResult(stringWriter);
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    // transformerFactory.setAttribute("indent-number", indent);
+    Transformer transformer = transformerFactory.newTransformer();
+    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+    transformer.transform(xmlInput, xmlOutput);
+    return xmlOutput.getWriter().toString();
 
-	}
+  }
 
-	/**
-	 * Format XML input String
-	 * 
-	 * @param input
-	 * @return
-	 * @throws TransformerException
-	 */
-	public static String prettyFormat(String input) throws TransformerException {
-		return prettyFormat(input, 2);
-	}
+  /**
+   * Format XML input String
+   * 
+   * @param input
+   * @return
+   * @throws TransformerException
+   */
+  public static String prettyFormat(String input) throws TransformerException {
+    return prettyFormat(input, 2);
+  }
 
-	/**
-	 * Fetch token if cached
-	 * 
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 * @throws IOException
-	 */
-	public String getCachedToken(String subjectDN) throws UnsupportedEncodingException, IOException {
-		String token = null;
-		String dn = null;
-		String data = null;
-		File file = new File(TOKEN_CACHE_FILENAME);
-		if (file.exists() && file.isFile()) {
-			try {
-				data = new String(Files.readAllBytes(file.toPath()));
-				String[] items = data.split("\n");
-				if (items != null && items.length == 2) {
-					dn = items[0];
-					token = items[1];
-				}
-				if (dn != null && !dn.isEmpty()) {
-					if (!dn.equals(subjectDN)) {
-						throw new JWTException("Cached DN does not match DN of cient certificate provided");
-					}
-				}
-				if (token != null) {
-					int i = token.lastIndexOf('.');
-					String withoutSignature = token.substring(0, i + 1);
-					@SuppressWarnings({ "unused", "rawtypes" })
-					Jwt<Header, Claims> untrusted = Jwts.parser().parseClaimsJwt(withoutSignature);
+  /**
+   * Fetch token if cached
+   * 
+   * @return
+   * @throws UnsupportedEncodingException
+   * @throws IOException
+   */
+  public String getCachedToken(String subjectDN) throws UnsupportedEncodingException, IOException {
+    String token = null;
+    String dn = null;
+    String data = null;
+    File file = new File(TOKEN_CACHE_FILENAME);
+    if (file.exists() && file.isFile()) {
+      try {
+        data = new String(Files.readAllBytes(file.toPath()));
+        String[] items = data.split("\n");
+        if (items != null && items.length == 2) {
+          dn = items[0];
+          token = items[1];
+        }
+        if (dn != null && !dn.isEmpty()) {
+          if (!dn.equals(subjectDN)) {
+            throw new JWTException("Cached DN does not match DN of cient certificate provided");
+          }
+        }
+        if (token != null) {
+          int i = token.lastIndexOf('.');
+          String withoutSignature = token.substring(0, i + 1);
+          @SuppressWarnings({ "unused", "rawtypes" })
+          Jwt<Header, Claims> untrusted = Jwts.parser().parseClaimsJwt(withoutSignature);
 
-				} else {
-					throw new JWTException("Cached token is NULL");
-				}
-			} catch (io.jsonwebtoken.ExpiredJwtException exp) {
-				LOG.info("Cached token expired, proceed to attempt re-authentication");
-				return null;
-			} catch (JWTException e) {
-				LOG.info(e.getMessage() + ", proceed to attempt re-authentication");
-				return null;
-			} catch (Exception e) {
-				LOG.info("Cached token is invalid, proceed to attempt re-authentication");
-				return null;
-			}
+        } else {
+          throw new JWTException("Cached token is NULL");
+        }
+      } catch (io.jsonwebtoken.ExpiredJwtException exp) {
+        LOG.info("Cached token expired, proceed to attempt re-authentication");
+        return null;
+      } catch (JWTException e) {
+        LOG.info(e.getMessage() + ", proceed to attempt re-authentication");
+        return null;
+      } catch (Exception e) {
+        LOG.info("Cached token is invalid, proceed to attempt re-authentication");
+        return null;
+      }
 
-		}
+    }
 
-		return token;
-	}
+    return token;
+  }
 
-	/**
-	 * Set token cache
-	 * 
-	 * @param token
-	 * @throws IOException
-	 */
-	public void setTokenCache(String token, String subjectDN) throws IOException {
-		FileWriter writer = null;
+  /**
+   * Set token cache
+   * 
+   * @param token
+   * @throws IOException
+   */
+  public void setTokenCache(String token, String subjectDN) throws IOException {
+    FileWriter writer = null;
 
-		if (token == null) {
-			LOG.info("Unable to cache token, token is null");
-			return;
-		}
-		try {
+    if (token == null) {
+      LOG.info("Unable to cache token, token is null");
+      return;
+    }
+    try {
 
-			writer = new FileWriter(new File(TOKEN_CACHE_FILENAME));
-			writer.write(subjectDN + "\n" + token);
-			LOG.info("Token cached");
-		} finally {
-			writer.close();
-		}
-	}
+      writer = new FileWriter(new File(TOKEN_CACHE_FILENAME));
+      writer.write(subjectDN + "\n" + token);
+      LOG.info("Token cached");
+    } finally {
+      writer.close();
+    }
+  }
 
-	/**
-	 * Get Subject DN from Keystore instance
-	 * 
-	 * @param ks
-	 * @return
-	 * @throws KeyStoreException
-	 */
-	public String getKeyStoreSubjectDN(KeyStore ks) throws KeyStoreException {
-		Enumeration<String> enumeration = ks.aliases();
-		String subjectDN = null;
-		for (; enumeration.hasMoreElements();) {
-			String alias = (String) enumeration.nextElement();
+  /**
+   * Get Subject DN from Keystore instance
+   * 
+   * @param ks
+   * @return
+   * @throws KeyStoreException
+   */
+  public String getKeyStoreSubjectDN(KeyStore ks) throws KeyStoreException {
+    Enumeration<String> enumeration = ks.aliases();
+    String subjectDN = null;
+    for (; enumeration.hasMoreElements();) {
+      String alias = (String) enumeration.nextElement();
 
-			Certificate cert = ks.getCertificate(alias);
-			if (cert instanceof X509Certificate) {
-				X509Certificate x509cert = (X509Certificate) cert;
+      Certificate cert = ks.getCertificate(alias);
+      if (cert instanceof X509Certificate) {
+        X509Certificate x509cert = (X509Certificate) cert;
 
-				// Get subject
-				Principal principal = x509cert.getSubjectDN();
-				subjectDN = principal.getName();
-				LOG.info("Subject DN from certificate: " + subjectDN);
-			}
-		}
+        // Get subject
+        Principal principal = x509cert.getSubjectDN();
+        subjectDN = principal.getName();
+        LOG.info("Subject DN from certificate: " + subjectDN);
+      }
+    }
 
-		return subjectDN;
+    return subjectDN;
 
-	}
+  }
 
 }

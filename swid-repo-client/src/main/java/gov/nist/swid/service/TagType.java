@@ -27,60 +27,63 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TagType {
-	CORPUS("corpus"), PRIMARY("primary"), PATCH("patch"), SUPPLEMENTAL("supplemental");
+  CORPUS("corpus"),
+  PRIMARY("primary"),
+  PATCH("patch"),
+  SUPPLEMENTAL("supplemental");
 
-	private static final Map<String, TagType> LOOKUP_MAP = new HashMap<String, TagType>();
+  private static final Map<String, TagType> LOOKUP_MAP = new HashMap<String, TagType>();
 
-	static {
-		for (TagType type : TagType.values()) {
-			LOOKUP_MAP.put(type.getName().toLowerCase(), type);
-		}
-	}
+  static {
+    for (TagType type : TagType.values()) {
+      LOOKUP_MAP.put(type.getName().toLowerCase(), type);
+    }
+  }
 
-	/**
-	 * Get list of tag type values
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static TagType lookup(String value) {
-		if (value == null) {
-			return null;
-		}
-		return LOOKUP_MAP.get(value.toLowerCase());
-	}
+  /**
+   * Get list of tag type values
+   * 
+   * @param value
+   * @return
+   */
+  public static TagType lookup(String value) {
+    if (value == null) {
+      return null;
+    }
+    return LOOKUP_MAP.get(value.toLowerCase());
+  }
 
-	private final String name;
+  private final String name;
 
-	/**
-	 * Get tag type name
-	 * 
-	 * @param name
-	 */
-	private TagType(String name) {
-		this.name = name;
-	}
+  /**
+   * Get tag type name
+   * 
+   * @param name
+   */
+  private TagType(String name) {
+    this.name = name;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Return display type of TagType
-	 * 
-	 * @return
-	 */
-	public static String displayTagTypes() {
-		String displayString = "";
-		int total = TagType.values().length;
-		int index = 0;
-		for (TagType type : TagType.values()) {
-			displayString += type.getName();
-			index++;
-			if (index < total) {
-				displayString += ", ";
-			}
-		}
-		return displayString;
-	}
+  /**
+   * Return display type of TagType
+   * 
+   * @return
+   */
+  public static String displayTagTypes() {
+    String displayString = "";
+    int total = TagType.values().length;
+    int index = 0;
+    for (TagType type : TagType.values()) {
+      displayString += type.getName();
+      index++;
+      if (index < total) {
+        displayString += ", ";
+      }
+    }
+    return displayString;
+  }
 }

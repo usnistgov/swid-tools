@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.totp;
 
 import java.util.Calendar;
@@ -33,86 +34,84 @@ import gov.nist.swid.totp.Hotp.HashAlgorithm;
  * 
  */
 public class Totp {
-	// the size of the time step in seconds
-	private int timeStepSeconds;
-	// the time adjustment from UNIX time in seconds (based on UTC and the
-	// epoch)
-	private long T0;
-	// the internal HOTP implementation
-	private Hotp hotp;
+  // the size of the time step in seconds
+  private int timeStepSeconds;
+  // the time adjustment from UNIX time in seconds (based on UTC and the
+  // epoch)
+  private long T0;
+  // the internal HOTP implementation
+  private Hotp hotp;
 
-	/**
-	 * Creates a default Totp instance with a 30 second time step, T0 of 0 using
-	 * HMAC-SHA-1 producing an 8 digit output.
-	 */
-	public Totp() {
-		this(30, 0L, HashAlgorithm.SHA1, 8);
-	}
+  /**
+   * Creates a default Totp instance with a 30 second time step, T0 of 0 using HMAC-SHA-1 producing an
+   * 8 digit output.
+   */
+  public Totp() {
+    this(30, 0L, HashAlgorithm.SHA1, 8);
+  }
 
-	/**
-	 * Creates a Totp instance with a 30 second time step, T0 of 0 using the
-	 * provided parameters.
-	 * 
-	 * @param timeStepSeconds
-	 *            the size of the time step in seconds (this is X in the RFC)
-	 * @param T0
-	 *            the starting time (in seconds) relative to UNIX time
-	 */
-	public Totp(HashAlgorithm algorithm, int digits) {
-		this(30, 0L, algorithm, digits);
-	}
+  /**
+   * Creates a Totp instance with a 30 second time step, T0 of 0 using the provided parameters.
+   * 
+   * @param timeStepSeconds
+   *          the size of the time step in seconds (this is X in the RFC)
+   * @param T0
+   *          the starting time (in seconds) relative to UNIX time
+   */
+  public Totp(HashAlgorithm algorithm, int digits) {
+    this(30, 0L, algorithm, digits);
+  }
 
-	/**
-	 * Creates a Totp instance with a 30 second time step, T0 of 0 using the
-	 * provided parameters.
-	 * 
-	 * @param timeStepSeconds
-	 *            the size of the time step in seconds (this is X in the RFC)
-	 * @param T0
-	 *            the starting time (in seconds) relative to UNIX time
-	 * @param algorithm
-	 * @param digits
-	 * @see Hotp
-	 */
-	public Totp(int timeStepSeconds, long T0, HashAlgorithm algorithm, int digits) {
-		if (timeStepSeconds <= 0) {
-			throw new IllegalArgumentException("timeStepSeconds must be greater than zero");
-		}
-		this.timeStepSeconds = timeStepSeconds;
-		this.T0 = T0;
-		this.hotp = new Hotp(algorithm, digits);
-	}
+  /**
+   * Creates a Totp instance with a 30 second time step, T0 of 0 using the provided parameters.
+   * 
+   * @param timeStepSeconds
+   *          the size of the time step in seconds (this is X in the RFC)
+   * @param T0
+   *          the starting time (in seconds) relative to UNIX time
+   * @param algorithm
+   * @param digits
+   * @see Hotp
+   */
+  public Totp(int timeStepSeconds, long T0, HashAlgorithm algorithm, int digits) {
+    if (timeStepSeconds <= 0) {
+      throw new IllegalArgumentException("timeStepSeconds must be greater than zero");
+    }
+    this.timeStepSeconds = timeStepSeconds;
+    this.T0 = T0;
+    this.hotp = new Hotp(algorithm, digits);
+  }
 
-	/**
-	 * Calculates a TOTP result using the provided key and the current time
-	 * 
-	 * @param key
-	 *            the key/seed to use for calculating the value
-	 * @return the TOTP value for the current time point
-	 */
-	public String totp(byte[] key) {
-		return totp(key, currentTime());
-	}
+  /**
+   * Calculates a TOTP result using the provided key and the current time
+   * 
+   * @param key
+   *          the key/seed to use for calculating the value
+   * @return the TOTP value for the current time point
+   */
+  public String totp(byte[] key) {
+    return totp(key, currentTime());
+  }
 
-	/**
-	 * Calculates a TOTP result using the provided key and provided time
-	 * 
-	 * @param key
-	 *            the key/seed to use for calculating the value
-	 * @param time
-	 *            the time value to use
-	 * @return the TOTP value for the provided time point
-	 */
-	public String totp(byte[] key, long time) {
-		long T = (time - T0) / timeStepSeconds;
-		return hotp.generate(key, T);
-	}
+  /**
+   * Calculates a TOTP result using the provided key and provided time
+   * 
+   * @param key
+   *          the key/seed to use for calculating the value
+   * @param time
+   *          the time value to use
+   * @return the TOTP value for the provided time point
+   */
+  public String totp(byte[] key, long time) {
+    long T = (time - T0) / timeStepSeconds;
+    return hotp.generate(key, T);
+  }
 
-	/**
-	 * @return the current UNIX time (based on UTC and epoch) in seconds
-	 */
-	private long currentTime() {
-		Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-		return calendar.getTimeInMillis() / 1000;
-	}
+  /**
+   * @return the current UNIX time (based on UTC and epoch) in seconds
+   */
+  private long currentTime() {
+    Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+    return calendar.getTimeInMillis() / 1000;
+  }
 }

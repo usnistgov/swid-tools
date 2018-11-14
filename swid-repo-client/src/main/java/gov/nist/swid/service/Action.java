@@ -25,111 +25,111 @@ package gov.nist.swid.service;
 
 public enum Action {
 
-	insert("insert", "POST", "/service/rest/external/swid/list"), update("update", "PUT",
-			"/service/rest/external/swid/list");
+  insert("insert", "POST", "/service/rest/external/swid/list"),
+  update("update", "PUT", "/service/rest/external/swid/list");
 
-	String action;
-	String method;
-	String endpoint;
-	public static final String WEBSERVICES_DEFAULT_HOSTNAME = "auth.nvd.nist.gov";
+  String action;
+  String method;
+  String endpoint;
+  public static final String WEBSERVICES_DEFAULT_HOSTNAME = "auth.nvd.nist.gov";
 
-	private Action(String action, String method, String endpoint) {
-		this.action = action;
-		this.method = method;
-		this.endpoint = endpoint;
+  private Action(String action, String method, String endpoint) {
+    this.action = action;
+    this.method = method;
+    this.endpoint = endpoint;
 
-	}
+  }
 
-	/**
-	 * Get the action name for the enum
-	 * 
-	 * @return
-	 */
-	public String getAction() {
-		return action;
-	}
+  /**
+   * Get the action name for the enum
+   * 
+   * @return
+   */
+  public String getAction() {
+    return action;
+  }
 
-	/**
-	 * Set the action name
-	 * 
-	 * @param action
-	 */
-	public void setAction(String action) {
-		this.action = action;
-	}
+  /**
+   * Set the action name
+   * 
+   * @param action
+   */
+  public void setAction(String action) {
+    this.action = action;
+  }
 
-	/**
-	 * Return Action name that matches the name.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public static Action findByName(String name) {
+  /**
+   * Return Action name that matches the name.
+   * 
+   * @param name
+   * @return
+   */
+  public static Action findByName(String name) {
 
-		if (name != null) {
-			for (Action actionItem : values()) {
-				if (name.equals(actionItem.getAction())) {
-					return actionItem;
-				}
-			}
-		}
-		return null;
-	}
+    if (name != null) {
+      for (Action actionItem : values()) {
+        if (name.equals(actionItem.getAction())) {
+          return actionItem;
+        }
+      }
+    }
+    return null;
+  }
 
-	public String getMethod() {
-		return method;
-	}
+  public String getMethod() {
+    return method;
+  }
 
-	/**
-	 * Set method
-	 * 
-	 * @param method
-	 */
-	public void setMethod(String method) {
-		this.method = method;
-	}
+  /**
+   * Set method
+   * 
+   * @param method
+   */
+  public void setMethod(String method) {
+    this.method = method;
+  }
 
-	/**
-	 * Get endpoint URL for the action
-	 * 
-	 * @return
-	 */
-	public String getEndpoint() {
-		return endpoint;
-	}
+  /**
+   * Get endpoint URL for the action
+   * 
+   * @return
+   */
+  public String getEndpoint() {
+    return endpoint;
+  }
 
-	/**
-	 * Set endpoint URL for the action
-	 * 
-	 * @param endpoint
-	 */
-	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
-	}
+  /**
+   * Set endpoint URL for the action
+   * 
+   * @param endpoint
+   */
+  public void setEndpoint(String endpoint) {
+    this.endpoint = endpoint;
+  }
 
-	/**
-	 * Return endpoint URL
-	 * 
-	 * @return
-	 */
-	public String fetchEndpoint() {
+  /**
+   * Return endpoint URL
+   * 
+   * @return
+   */
+  public String fetchEndpoint() {
 
-		return "https://" + getHostName() + endpoint;
-	}
+    return "https://" + getHostName() + endpoint;
+  }
 
-	/**
-	 * Use swidHost environment variable value, if provided
-	 * 
-	 * @return
-	 */
-	public static String getHostName() {
-		String hostname = WEBSERVICES_DEFAULT_HOSTNAME;
-		String swidHost = System.getenv("swidhost");
-		if (swidHost != null) {
-			hostname = swidHost;
-		}
+  /**
+   * Use swidHost environment variable value, if provided
+   * 
+   * @return
+   */
+  public static String getHostName() {
+    String hostname = WEBSERVICES_DEFAULT_HOSTNAME;
+    String swidHost = System.getenv("swidhost");
+    if (swidHost != null) {
+      hostname = swidHost;
+    }
 
-		return hostname;
-	}
+    return hostname;
+  }
 
 }

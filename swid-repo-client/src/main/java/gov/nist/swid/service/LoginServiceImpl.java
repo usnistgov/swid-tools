@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.service;
 
 import java.io.BufferedReader;
@@ -51,103 +52,102 @@ import gov.nist.swid.totp.Totp;
 
 public class LoginServiceImpl implements LoginService {
 
-	private static final Logger LOG = LogManager.getLogger(LoginServiceImpl.class);
+  private static final Logger LOG = LogManager.getLogger(LoginServiceImpl.class);
 
-	public static final String LOGIN_ENDPOINT = "/service/rest/external/client/login";
+  public static final String LOGIN_ENDPOINT = "/service/rest/external/client/login";
 
-	/**
-	 * Login using password seed
-	 * 
-	 * @param clientCertificatePath
-	 * @param clientCertificatePassword
-	 * @param serverCertificatePath
-	 * @param serverCertificatePassword
-	 * @param passwordSeed
-	 * @return
-	 * @throws KeyStoreException
-	 * @throws NoSuchAlgorithmException
-	 * @throws CertificateException
-	 * @throws IOException
-	 * @throws KeyManagementException
-	 * @throws UnrecoverableKeyException
-	 */
-	public String login(CloseableHttpClient client, String passwordSeed)
-			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-			KeyManagementException, UnrecoverableKeyException {
+  /**
+   * Login using password seed
+   * 
+   * @param clientCertificatePath
+   * @param clientCertificatePassword
+   * @param serverCertificatePath
+   * @param serverCertificatePassword
+   * @param passwordSeed
+   * @return
+   * @throws KeyStoreException
+   * @throws NoSuchAlgorithmException
+   * @throws CertificateException
+   * @throws IOException
+   * @throws KeyManagementException
+   * @throws UnrecoverableKeyException
+   */
+  public String login(CloseableHttpClient client, String passwordSeed) throws KeyStoreException,
+      NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
 
-		LOG.info("Submitting authentication request ");
-		String oneTimePassword = generateOneTimePassword(passwordSeed);
-		String response = this.callEndPoint(client, oneTimePassword);
-		JSONParser parser = new JSONParser();
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = (JSONObject) parser.parse(response);
-			LOG.info("User Authenticated:" + response);
-		} catch (ParseException e) {
-			LOG.error("Failed Authentication Response :" + response);
+    LOG.info("Submitting authentication request ");
+    String oneTimePassword = generateOneTimePassword(passwordSeed);
+    String response = this.callEndPoint(client, oneTimePassword);
+    JSONParser parser = new JSONParser();
+    JSONObject jsonObject = null;
+    try {
+      jsonObject = (JSONObject) parser.parse(response);
+      LOG.info("User Authenticated:" + response);
+    } catch (ParseException e) {
+      LOG.error("Failed Authentication Response :" + response);
 
-		}
-		String token = null;
-		if (jsonObject != null) {
-			token = (String) jsonObject.get("jwt");
-		}
+    }
+    String token = null;
+    if (jsonObject != null) {
+      token = (String) jsonObject.get("jwt");
+    }
 
-		return token;
+    return token;
 
-	}
+  }
 
-	/**
-	 * Generate one time password based on password seed
-	 * 
-	 * @param passwordSeed
-	 * @return
-	 */
-	private String generateOneTimePassword(String passwordSeed) {
-		Totp totp = new Totp(gov.nist.swid.totp.Hotp.HashAlgorithm.SHA256, 8);
-		Base64 decoder = new Base64();
-		return totp.totp(decoder.decode(passwordSeed));
+  /**
+   * Generate one time password based on password seed
+   * 
+   * @param passwordSeed
+   * @return
+   */
+  private String generateOneTimePassword(String passwordSeed) {
+    Totp totp = new Totp(gov.nist.swid.totp.Hotp.HashAlgorithm.SHA256, 8);
+    Base64 decoder = new Base64();
+    return totp.totp(decoder.decode(passwordSeed));
 
-	}
+  }
 
-	/**
-	 * Set parameters and execute the Client request for login
-	 * 
-	 * @param aHTTPClient
-	 * @param aEndPointURL
-	 * @param password
-	 * @return
-	 */
-	private String callEndPoint(CloseableHttpClient aHTTPClient, String password) throws IOException {
-		String response = "";
-		try {
-			String loginEndpoint = getLoginEndpoint();
-			LOG.info("Attempting to authenticate using rest service: " + loginEndpoint);
-			HttpPost post = new HttpPost(loginEndpoint);
-			post.setHeader("Accept", "application/json");
-			post.setHeader("Content-type", "application/x-www-form-urlencoded");
+  /**
+   * Set parameters and execute the Client request for login
+   * 
+   * @param aHTTPClient
+   * @param aEndPointURL
+   * @param password
+   * @return
+   */
+  private String callEndPoint(CloseableHttpClient aHTTPClient, String password) throws IOException {
+    String response = "";
+    try {
+      String loginEndpoint = getLoginEndpoint();
+      LOG.info("Attempting to authenticate using rest service: " + loginEndpoint);
+      HttpPost post = new HttpPost(loginEndpoint);
+      post.setHeader("Accept", "application/json");
+      post.setHeader("Content-type", "application/x-www-form-urlencoded");
 
-			List<NameValuePair> nvList = new ArrayList<NameValuePair>();
-			nvList.add(new BasicNameValuePair("password", password));
-			post.setEntity(new UrlEncodedFormEntity(nvList, Consts.UTF_8));
-			HttpResponse httpResponse = aHTTPClient.execute(post);
-			LOG.info("Response Status: " + httpResponse.getStatusLine());
-			BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
-			response = rd.readLine();
+      List<NameValuePair> nvList = new ArrayList<NameValuePair>();
+      nvList.add(new BasicNameValuePair("password", password));
+      post.setEntity(new UrlEncodedFormEntity(nvList, Consts.UTF_8));
+      HttpResponse httpResponse = aHTTPClient.execute(post);
+      LOG.info("Response Status: " + httpResponse.getStatusLine());
+      BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
+      response = rd.readLine();
 
-		} catch (Exception ex) {
-			LOG.error("Unable to authenticate using login rest service,  " + ex.getMessage());
-		}
-		return response;
-	}
+    } catch (Exception ex) {
+      LOG.error("Unable to authenticate using login rest service,  " + ex.getMessage());
+    }
+    return response;
+  }
 
-	/**
-	 * Return the endpoint for login
-	 * 
-	 * @return
-	 */
-	private String getLoginEndpoint() {
+  /**
+   * Return the endpoint for login
+   * 
+   * @return
+   */
+  private String getLoginEndpoint() {
 
-		return "https://" + Action.getHostName() + LOGIN_ENDPOINT;
-	}
+    return "https://" + Action.getHostName() + LOGIN_ENDPOINT;
+  }
 
 }

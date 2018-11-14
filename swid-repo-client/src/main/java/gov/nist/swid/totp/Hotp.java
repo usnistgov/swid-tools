@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.totp;
 
 import java.nio.ByteBuffer;
@@ -31,154 +32,154 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * A direct implementation of https://tools.ietf.org/html/rfc4226 and
- * https://tools.ietf.org/html/rfc6238 C = counter K = key Digits = length of
- * OTP Note that a strict implementation of RFC 4226 will only support
- * HMAC-SHA-1.
+ * https://tools.ietf.org/html/rfc6238 C = counter K = key Digits = length of OTP Note that a strict
+ * implementation of RFC 4226 will only support HMAC-SHA-1.
  */
 public class Hotp {
 
-	public static enum HashAlgorithm {
-		SHA1("HMACSHA1"), SHA256("HMACSHA256"), SHA512("HMACSHA512");
+  public static enum HashAlgorithm {
+    SHA1("HMACSHA1"),
+    SHA256("HMACSHA256"),
+    SHA512("HMACSHA512");
 
-		private String name;
+    private String name;
 
-		private HashAlgorithm(String name) {
-			this.name = name;
-		}
+    private HashAlgorithm(String name) {
+      this.name = name;
+    }
 
-		public String getAlgorithmName() {
-			return name;
-		}
-	}
+    public String getAlgorithmName() {
+      return name;
+    }
+  }
 
-	private static class Digits {
-		private long value;
-		private int length;
+  private static class Digits {
+    private long value;
+    private int length;
 
-		/**
-		 * @param length
-		 *            the number of digits in the OTP
-		 */
-		private Digits(int length) {
-			if (length < 6 && length > 9) {
-				// 6 is the minimum in the RFC and 19 is the maximum that a long
-				// can represent
-				// 9 is the maximum number of digits supported in the RFC
-				throw new IllegalArgumentException("the length must be between 6 and 9 digits");
-			}
-			this.length = length;
-			StringBuilder builder = new StringBuilder("1");
-			for (int i = 0; i < length; i++) {
-				builder.append('0');
-			}
-			value = Long.valueOf(builder.toString());
-		}
+    /**
+     * @param length
+     *          the number of digits in the OTP
+     */
+    private Digits(int length) {
+      if (length < 6 && length > 9) {
+        // 6 is the minimum in the RFC and 19 is the maximum that a long
+        // can represent
+        // 9 is the maximum number of digits supported in the RFC
+        throw new IllegalArgumentException("the length must be between 6 and 9 digits");
+      }
+      this.length = length;
+      StringBuilder builder = new StringBuilder("1");
+      for (int i = 0; i < length; i++) {
+        builder.append('0');
+      }
+      value = Long.valueOf(builder.toString());
+    }
 
-		public int length() {
-			return length;
-		}
+    public int length() {
+      return length;
+    }
 
-		public long mod(long input) {
-			return input % value;
-		}
-	}
+    public long mod(long input) {
+      return input % value;
+    }
+  }
 
-	/** the hash algorithm */
-	private HashAlgorithm algorithm;
-	/** the number of digits */
-	private Digits digits;
+  /** the hash algorithm */
+  private HashAlgorithm algorithm;
+  /** the number of digits */
+  private Digits digits;
 
-	/**
-	 * Creates a new instance
-	 * 
-	 * @param algorithm
-	 *            the algorithm to use
-	 * @param length
-	 *            the number of digits
-	 */
-	public Hotp(HashAlgorithm algorithm, int length) {
-		this.algorithm = algorithm;
-		this.digits = new Digits(length);
-	}
+  /**
+   * Creates a new instance
+   * 
+   * @param algorithm
+   *          the algorithm to use
+   * @param length
+   *          the number of digits
+   */
+  public Hotp(HashAlgorithm algorithm, int length) {
+    this.algorithm = algorithm;
+    this.digits = new Digits(length);
+  }
 
-	/**
-	 * Generates an HOTP value according to RFC 4226
-	 * 
-	 * @param key
-	 *            the shared secret ('K')
-	 * @param counter
-	 *            the counter ('C') value
-	 * @return the HOTP value
-	 */
-	public String generate(byte[] key, long counter) {
-		try {
-			byte[] hs = hashString(key, counter);
-			long hotp = truncate(hs);
-			return pad(Long.toString(hotp), this.digits.length());
-		} catch (InvalidKeyException e) {
-			throw new RuntimeException("configuration error, invalid key", e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("configuration error, missing algorithm support", e);
-		}
-	}
+  /**
+   * Generates an HOTP value according to RFC 4226
+   * 
+   * @param key
+   *          the shared secret ('K')
+   * @param counter
+   *          the counter ('C') value
+   * @return the HOTP value
+   */
+  public String generate(byte[] key, long counter) {
+    try {
+      byte[] hs = hashString(key, counter);
+      long hotp = truncate(hs);
+      return pad(Long.toString(hotp), this.digits.length());
+    } catch (InvalidKeyException e) {
+      throw new RuntimeException("configuration error, invalid key", e);
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException("configuration error, missing algorithm support", e);
+    }
+  }
 
-	/**
-	 * A helper function for padding a String up to a minimum number of
-	 * characters
-	 * 
-	 * @param s
-	 *            the string to pad
-	 * @param minLength
-	 *            the minimum
-	 * @return the string or a string padded up to the minimum length
-	 */
-	private String pad(String s, int minLength) {
-		int padding = minLength - s.length();
-		if (padding <= 0) {
-			// nothing to do
-			return s;
-		}
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < padding; i++) {
-			builder.append("0");
-		}
-		builder.append(s);
-		return builder.toString();
-	}
+  /**
+   * A helper function for padding a String up to a minimum number of characters
+   * 
+   * @param s
+   *          the string to pad
+   * @param minLength
+   *          the minimum
+   * @return the string or a string padded up to the minimum length
+   */
+  private String pad(String s, int minLength) {
+    int padding = minLength - s.length();
+    if (padding <= 0) {
+      // nothing to do
+      return s;
+    }
+    StringBuilder builder = new StringBuilder();
+    for (int i = 0; i < padding; i++) {
+      builder.append("0");
+    }
+    builder.append(s);
+    return builder.toString();
+  }
 
-	/**
-	 * Performs dynamic truncation as described in section 5.3
-	 * 
-	 * @param hash
-	 *            the input hash
-	 * @return the truncated value
-	 */
-	private long truncate(byte[] hash) {
-		// put selected bytes into result int
-		int offset = hash[hash.length - 1] & 0xf;
-		int binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16)
-				| ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);
-		return digits.mod(binary);
-	}
+  /**
+   * Performs dynamic truncation as described in section 5.3
+   * 
+   * @param hash
+   *          the input hash
+   * @return the truncated value
+   */
+  private long truncate(byte[] hash) {
+    // put selected bytes into result int
+    int offset = hash[hash.length - 1] & 0xf;
+    int binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) | ((hash[offset + 2] & 0xff) << 8)
+        | (hash[offset + 3] & 0xff);
+    return digits.mod(binary);
+  }
 
-	/**
-	 * Generates HS as described in step 1. of section 5.3
-	 * 
-	 * @param key
-	 *            the secret Key or 'K' value
-	 * @param counter
-	 *            the counter or 'C' value
-	 * @return hash string
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeyException
-	 */
-	private byte[] hashString(byte[] key, long counter) throws NoSuchAlgorithmException, InvalidKeyException {
-		Mac mac = Mac.getInstance(algorithm.getAlgorithmName());
-		SecretKeySpec macKey = new SecretKeySpec(key, algorithm.getAlgorithmName());
-		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-		buffer.putLong(counter);
-		mac.init(macKey);
-		return mac.doFinal(buffer.array());
-	}
+  /**
+   * Generates HS as described in step 1. of section 5.3
+   * 
+   * @param key
+   *          the secret Key or 'K' value
+   * @param counter
+   *          the counter or 'C' value
+   * @return hash string
+   * @throws NoSuchAlgorithmException
+   * @throws InvalidKeyException
+   */
+  private byte[] hashString(byte[] key, long counter) throws NoSuchAlgorithmException, InvalidKeyException {
+    Mac mac = Mac.getInstance(algorithm.getAlgorithmName());
+    SecretKeySpec macKey = new SecretKeySpec(key, algorithm.getAlgorithmName());
+    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+    buffer.putLong(counter);
+    mac.init(macKey);
+    return mac.doFinal(buffer.array());
+  }
 
 }

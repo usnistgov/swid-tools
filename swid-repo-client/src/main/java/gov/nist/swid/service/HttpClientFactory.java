@@ -21,6 +21,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.service;
 
 import java.io.FileInputStream;
@@ -43,60 +44,60 @@ import org.apache.logging.log4j.Logger;
 
 public class HttpClientFactory {
 
-	private static final Logger LOG = LogManager.getLogger(HttpClientFactory.class);
+  private static final Logger LOG = LogManager.getLogger(HttpClientFactory.class);
 
-	/**
-	 * Construct a HTTP client
-	 * 
-	 * @param clientCertificatePath
-	 * @param clientCertificatePassword
-	 * @param serverCertificatePath
-	 * @param serverCertificatePassword
-	 * @return
-	 * @throws KeyStoreException
-	 * @throws NoSuchAlgorithmException
-	 * @throws CertificateException
-	 * @throws IOException
-	 * @throws KeyManagementException
-	 * @throws UnrecoverableKeyException
-	 */
-	public CloseableHttpClient build(KeyStore identityKeyStore, String clientCertificatePassword)
-			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-			KeyManagementException, UnrecoverableKeyException {
-		LOG.info("Building Http Client");
-		SSLContext sslContext = SSLContexts.custom()
-				// load identity keystore
-				.loadKeyMaterial(identityKeyStore, clientCertificatePassword.toCharArray(), null).build();
+  /**
+   * Construct a HTTP client
+   * 
+   * @param clientCertificatePath
+   * @param clientCertificatePassword
+   * @param serverCertificatePath
+   * @param serverCertificatePassword
+   * @return
+   * @throws KeyStoreException
+   * @throws NoSuchAlgorithmException
+   * @throws CertificateException
+   * @throws IOException
+   * @throws KeyManagementException
+   * @throws UnrecoverableKeyException
+   */
+  public CloseableHttpClient build(KeyStore identityKeyStore, String clientCertificatePassword)
+      throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException,
+      UnrecoverableKeyException {
+    LOG.info("Building Http Client");
+    SSLContext sslContext = SSLContexts.custom()
+        // load identity keystore
+        .loadKeyMaterial(identityKeyStore, clientCertificatePassword.toCharArray(), null).build();
 
-		SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,
-				new String[] { "TLSv1.2" }, null, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+    SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,
+        new String[] { "TLSv1.2" }, null, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
 
-		CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(sslConnectionSocketFactory).build();
+    CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(sslConnectionSocketFactory).build();
 
-		return client;
+    return client;
 
-	}
+  }
 
-	/**
-	 * Instantiate Java Keystore for the client certificate
-	 * 
-	 * @param clientCertificatePath
-	 * @param clientCertificatePassword
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws CertificateException
-	 * @throws IOException
-	 * @throws KeyStoreException
-	 */
-	public KeyStore loadKeyStore(String clientCertificatePath, String clientCertificatePassword)
-			throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
+  /**
+   * Instantiate Java Keystore for the client certificate
+   * 
+   * @param clientCertificatePath
+   * @param clientCertificatePassword
+   * @return
+   * @throws NoSuchAlgorithmException
+   * @throws CertificateException
+   * @throws IOException
+   * @throws KeyStoreException
+   */
+  public KeyStore loadKeyStore(String clientCertificatePath, String clientCertificatePassword)
+      throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
 
-		KeyStore identityKeyStore = KeyStore.getInstance("PKCS12");
+    KeyStore identityKeyStore = KeyStore.getInstance("PKCS12");
 
-		FileInputStream identityKeyStoreFile = new FileInputStream(clientCertificatePath);
-		identityKeyStore.load(identityKeyStoreFile, clientCertificatePassword.toCharArray());
+    FileInputStream identityKeyStoreFile = new FileInputStream(clientCertificatePath);
+    identityKeyStore.load(identityKeyStoreFile, clientCertificatePassword.toCharArray());
 
-		return identityKeyStore;
-	}
+    return identityKeyStore;
+  }
 
 }

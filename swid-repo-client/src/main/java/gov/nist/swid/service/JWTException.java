@@ -21,24 +21,25 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.service;
 
 /**
  * Configuration exceptions.
  */
 public class JWTException extends Exception {
-	/** */
-	private static final long serialVersionUID = 1L;
+  /** */
+  private static final long serialVersionUID = 1L;
 
-	public JWTException() {
+  public JWTException() {
 
-	}
+  }
 
-	public JWTException(Exception e) {
-		super("JWT Exception", e);
-	}
+  public JWTException(Exception e) {
+    super("JWT Exception", e);
+  }
 
-	public JWTException(String message) {
-		super(message);
-	}
+  public JWTException(String message) {
+    super(message);
+  }
 }

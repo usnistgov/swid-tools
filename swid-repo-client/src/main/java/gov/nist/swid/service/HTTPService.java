@@ -20,6 +20,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.swid.service;
 
 import java.io.IOException;
@@ -36,34 +37,34 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 public interface HTTPService {
 
-	/**
-	 * Insert or Update end points
-	 * 
-	 * @param clientCertificatePath
-	 *            location of client keystore
-	 * @param clientCertificatePassword
-	 *            password of client keystore
-	 * @param serverCertificatePath
-	 *            location of server keystore
-	 * @param serverCertificatePassword
-	 * @param token
-	 * @param swidDataFilePath
-	 * @param action
-	 * @return
-	 * @throws KeyStoreException
-	 * @throws NoSuchAlgorithmException
-	 * @throws CertificateException
-	 * @throws IOException
-	 * @throws KeyManagementException
-	 * @throws UnrecoverableKeyException
-	 * @throws TransformerException
-	 */
-	String sendSWIDData(CloseableHttpClient client, String token, List<String> swidFiles, Action action, TagType type)
-			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-			KeyManagementException, UnrecoverableKeyException, TransformerException;
+  /**
+   * Insert or Update end points
+   * 
+   * @param clientCertificatePath
+   *          location of client keystore
+   * @param clientCertificatePassword
+   *          password of client keystore
+   * @param serverCertificatePath
+   *          location of server keystore
+   * @param serverCertificatePassword
+   * @param token
+   * @param swidDataFilePath
+   * @param action
+   * @return
+   * @throws KeyStoreException
+   * @throws NoSuchAlgorithmException
+   * @throws CertificateException
+   * @throws IOException
+   * @throws KeyManagementException
+   * @throws UnrecoverableKeyException
+   * @throws TransformerException
+   */
+  String sendSWIDData(CloseableHttpClient client, String token, List<String> swidFiles, Action action, TagType type)
+      throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException,
+      UnrecoverableKeyException, TransformerException;
 
-	public String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
-			List<String> swidFiles, Action action, TagType type) throws KeyStoreException, NoSuchAlgorithmException,
-			CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException;
+  public String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
+      List<String> swidFiles, Action action, TagType type) throws KeyStoreException, NoSuchAlgorithmException,
+      CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException;
 
 }

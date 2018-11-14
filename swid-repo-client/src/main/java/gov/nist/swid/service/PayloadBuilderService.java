@@ -29,15 +29,14 @@ import java.util.List;
 
 public interface PayloadBuilderService {
 
-	/**
-	 * Construct request payload for SWID insert endpoints
-	 * 
-	 * @param tagFileNames
-	 * @param type
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 * @throws IOException
-	 */
-	public String buildPayload(List<String> tagFileNames, TagType type)
-			throws UnsupportedEncodingException, IOException;
+  /**
+   * Construct request payload for SWID insert endpoints
+   * 
+   * @param tagFileNames
+   * @param type
+   * @return
+   * @throws UnsupportedEncodingException
+   * @throws IOException
+   */
+  public String buildPayload(List<String> tagFileNames, TagType type) throws UnsupportedEncodingException, IOException;
 }
