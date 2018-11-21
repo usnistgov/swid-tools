@@ -183,9 +183,12 @@ public class HTTPServiceImpl implements HTTPService {
    * Format XML response for human readability
    * 
    * @param input
+   *          input string to format
    * @param indent
-   * @return
+   *          the number of space to indext
+   * @return the formatted string
    * @throws TransformerException
+   *           if transformation error occurs
    */
   public static String prettyFormat(String input, int indent) throws TransformerException {
 
@@ -209,8 +212,10 @@ public class HTTPServiceImpl implements HTTPService {
    * Format XML input String
    * 
    * @param input
-   * @return
+   *          the string to format
+   * @return the formatted string
    * @throws TransformerException
+   *           if error with formatting occurs
    */
   public static String prettyFormat(String input) throws TransformerException {
     return prettyFormat(input, 2);
@@ -219,9 +224,13 @@ public class HTTPServiceImpl implements HTTPService {
   /**
    * Fetch token if cached
    * 
-   * @return
+   * @param subjectDN
+   *          the DN of the certificate
+   * @return the cached token string
    * @throws UnsupportedEncodingException
+   *           if encoding error occurs
    * @throws IOException
+   *           if error with read or write
    */
   public String getCachedToken(String subjectDN) throws UnsupportedEncodingException, IOException {
     String token = null;
@@ -270,7 +279,11 @@ public class HTTPServiceImpl implements HTTPService {
    * Set token cache
    * 
    * @param token
+   *          the token to cache
+   * @param subjectDN
+   *          DN of the certificate
    * @throws IOException
+   *           if read or write error occurs
    */
   public void setTokenCache(String token, String subjectDN) throws IOException {
     FileWriter writer = null;
@@ -293,8 +306,10 @@ public class HTTPServiceImpl implements HTTPService {
    * Get Subject DN from Keystore instance
    * 
    * @param ks
-   * @return
+   *          the keystore
+   * @return the string which is the DN of the certificate
    * @throws KeyStoreException
+   *           if error occurs with keystore loading
    */
   public String getKeyStoreSubjectDN(KeyStore ks) throws KeyStoreException {
     Enumeration<String> enumeration = ks.aliases();

@@ -43,7 +43,7 @@ public enum Action {
   /**
    * Get the action name for the enum
    * 
-   * @return
+   * @return the action name
    */
   public String getAction() {
     return action;
@@ -53,6 +53,7 @@ public enum Action {
    * Set the action name
    * 
    * @param action
+   *          the action name
    */
   public void setAction(String action) {
     this.action = action;
@@ -62,7 +63,10 @@ public enum Action {
    * Return Action name that matches the name.
    * 
    * @param name
-   * @return
+   *          the action name
+   * 
+   * @return the Action enum that matches with the name
+   * 
    */
   public static Action findByName(String name) {
 
@@ -84,6 +88,7 @@ public enum Action {
    * Set method
    * 
    * @param method
+   *          the http method allowed for the action
    */
   public void setMethod(String method) {
     this.method = method;
@@ -92,7 +97,7 @@ public enum Action {
   /**
    * Get endpoint URL for the action
    * 
-   * @return
+   * @return the endpoint URL for the action
    */
   public String getEndpoint() {
     return endpoint;
@@ -102,6 +107,7 @@ public enum Action {
    * Set endpoint URL for the action
    * 
    * @param endpoint
+   *          the endpoint URL for the action
    */
   public void setEndpoint(String endpoint) {
     this.endpoint = endpoint;
@@ -110,7 +116,7 @@ public enum Action {
   /**
    * Return endpoint URL
    * 
-   * @return
+   * @return the endpoint URL for the action
    */
   public String fetchEndpoint() {
 
@@ -120,7 +126,7 @@ public enum Action {
   /**
    * Use swidHost environment variable value, if provided
    * 
-   * @return
+   * @return the service provider host
    */
   public static String getHostName() {
     String hostname = WEBSERVICES_DEFAULT_HOSTNAME;

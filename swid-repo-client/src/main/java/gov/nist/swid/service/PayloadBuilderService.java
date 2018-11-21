@@ -33,10 +33,14 @@ public interface PayloadBuilderService {
    * Construct request payload for SWID insert endpoints
    * 
    * @param tagFileNames
+   *          the SWID tag file names list
    * @param type
-   * @return
+   *          the tag type
+   * @return formatted payload
    * @throws UnsupportedEncodingException
+   *           if encoding is not supported
    * @throws IOException
+   *           if read or write error occurs
    */
   public String buildPayload(List<String> tagFileNames, TagType type) throws UnsupportedEncodingException, IOException;
 }

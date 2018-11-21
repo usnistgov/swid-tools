@@ -53,10 +53,10 @@ public class Totp {
   /**
    * Creates a Totp instance with a 30 second time step, T0 of 0 using the provided parameters.
    * 
-   * @param timeStepSeconds
-   *          the size of the time step in seconds (this is X in the RFC)
-   * @param T0
-   *          the starting time (in seconds) relative to UNIX time
+   * @param algorithm
+   *          the algorithm to use
+   * @param digits
+   *          the number of digits
    */
   public Totp(HashAlgorithm algorithm, int digits) {
     this(30, 0L, algorithm, digits);
@@ -67,10 +67,12 @@ public class Totp {
    * 
    * @param timeStepSeconds
    *          the size of the time step in seconds (this is X in the RFC)
-   * @param T0
-   *          the starting time (in seconds) relative to UNIX time
    * @param algorithm
+   *          the algorithm to use
+   * @param T0
+   *          the time adjustment from UNIX time in seconds (based on UTC and the epoch)
    * @param digits
+   *          the number of digits
    * @see Hotp
    */
   public Totp(int timeStepSeconds, long T0, HashAlgorithm algorithm, int digits) {

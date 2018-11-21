@@ -56,6 +56,8 @@ public class Application {
    * Runs the application
    * 
    * @param args
+   *          the command line arguments
+   * 
    */
   public static void main(String[] args) {
     try {
@@ -70,8 +72,10 @@ public class Application {
    * Parses the command line input arguments
    * 
    * @param args
-   * @return
+   *          the command line arguments
+   * @return CommandLine Instance
    * @throws ParseException
+   *           Exception thrown when there is error parsing command line arguments
    */
   protected CommandLine parseCLI(String[] args) throws ParseException {
 

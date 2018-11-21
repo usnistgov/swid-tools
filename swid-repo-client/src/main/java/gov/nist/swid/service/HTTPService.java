@@ -40,29 +40,66 @@ public interface HTTPService {
   /**
    * Insert or Update end points
    * 
-   * @param clientCertificatePath
-   *          location of client keystore
-   * @param clientCertificatePassword
-   *          password of client keystore
-   * @param serverCertificatePath
-   *          location of server keystore
-   * @param serverCertificatePassword
+   * @param client
+   *          the http client
    * @param token
-   * @param swidDataFilePath
+   *          the JSON web token
+   * @param swidFiles
+   *          the location of input SWID tags to POST
    * @param action
-   * @return
+   *          the action either insert or update to performs on the SWID tags
+   * @param type
+   *          the SWID tag type
+   * @return the REST response
    * @throws KeyStoreException
+   *           if there are errors with loading client certificate
    * @throws NoSuchAlgorithmException
+   *           if there are errors
    * @throws CertificateException
+   *           if there are errors with loading client certificate
    * @throws IOException
+   *           if there are errors with read or write
    * @throws KeyManagementException
+   *           if there are errors with certificate
    * @throws UnrecoverableKeyException
+   *           if there are errors with loading client certificate
    * @throws TransformerException
+   *           if error with transformer factory
    */
   String sendSWIDData(CloseableHttpClient client, String token, List<String> swidFiles, Action action, TagType type)
       throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException,
       UnrecoverableKeyException, TransformerException;
 
+  /**
+   * 
+   * @param clientCertificatePath
+   *          location of client keystore
+   * @param clientCertificatePassword
+   *          password of client keystore
+   * @param passwordSeed
+   *          the password seed
+   * @param swidFiles
+   *          the list of SWID tags to POST
+   * @param action
+   *          the action either insert or update to performs on the SWID tags
+   * @param type
+   *          the SWID tag type
+   * @return the Rest response
+   * @throws KeyStoreException
+   *           if there are errors with loading client certificate
+   * @throws NoSuchAlgorithmException
+   *           if there are errors
+   * @throws CertificateException
+   *           if there are errors with loading client certificate
+   * @throws IOException
+   *           if there are errors with read or write
+   * @throws KeyManagementException
+   *           if there are errors with certificate
+   * @throws UnrecoverableKeyException
+   *           if there are errors with loading client certificate
+   * @throws TransformerException
+   *           if error with transformer factory
+   */
   public String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
       List<String> swidFiles, Action action, TagType type) throws KeyStoreException, NoSuchAlgorithmException,
       CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException;

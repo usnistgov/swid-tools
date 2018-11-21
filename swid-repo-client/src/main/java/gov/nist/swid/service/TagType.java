@@ -44,7 +44,8 @@ public enum TagType {
    * Get list of tag type values
    * 
    * @param value
-   * @return
+   *          the tag type
+   * @return Tagtype
    */
   public static TagType lookup(String value) {
     if (value == null) {
@@ -59,11 +60,17 @@ public enum TagType {
    * Get tag type name
    * 
    * @param name
+   *          the tag type name
    */
   private TagType(String name) {
     this.name = name;
   }
 
+  /**
+   * Get the name of the tagtype
+   * 
+   * @return the name of the tag type
+   */
   public String getName() {
     return name;
   }
@@ -71,7 +78,7 @@ public enum TagType {
   /**
    * Return display type of TagType
    * 
-   * @return
+   * @return the display name of the tag type
    */
   public static String displayTagTypes() {
     String displayString = "";

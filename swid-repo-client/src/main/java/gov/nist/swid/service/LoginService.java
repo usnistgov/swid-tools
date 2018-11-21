@@ -35,26 +35,24 @@ import org.apache.http.impl.client.CloseableHttpClient;
 public interface LoginService {
 
   /**
-   * Login using One time password
    * 
-   * @param clientCertificatePath
-   *          Location of Client keystore //Change to clientKeyStorePath
-   * @param clientCertificatePassword
-   *          password of client keystore
-   * @param serverCertificatePath
-   *          Location of server keystore
-   * @param serverCertificatePassword
-   *          password of server keystore
+   * @param client
+   *          the Http Client
    * @param passwordSeed
-   *          shared seed
-   *
-   * @return
+   *          the password seed for the client
+   * @return the reponse
    * @throws KeyStoreException
+   *           if there are errors with loading client certificate
    * @throws NoSuchAlgorithmException
+   *           if there are errors
    * @throws CertificateException
+   *           if there are errors with loading client certificate
    * @throws IOException
+   *           if there are errors with read or write
    * @throws KeyManagementException
+   *           if there are errors with certificate
    * @throws UnrecoverableKeyException
+   *           if there are errors with loading client certificate
    */
   String login(CloseableHttpClient client, String passwordSeed) throws KeyStoreException, NoSuchAlgorithmException,
       CertificateException, IOException, KeyManagementException, UnrecoverableKeyException;

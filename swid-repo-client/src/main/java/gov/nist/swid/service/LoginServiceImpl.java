@@ -57,20 +57,24 @@ public class LoginServiceImpl implements LoginService {
   public static final String LOGIN_ENDPOINT = "/service/rest/external/client/login";
 
   /**
-   * Login using password seed
    * 
-   * @param clientCertificatePath
-   * @param clientCertificatePassword
-   * @param serverCertificatePath
-   * @param serverCertificatePassword
+   * @param client
+   *          the Http Client
    * @param passwordSeed
-   * @return
+   *          the password seed for the client
+   * @return the reponse
    * @throws KeyStoreException
+   *           if there are errors with loading client certificate
    * @throws NoSuchAlgorithmException
+   *           if there are errors
    * @throws CertificateException
+   *           if there are errors with loading client certificate
    * @throws IOException
+   *           if there are errors with read or write
    * @throws KeyManagementException
+   *           if there are errors with certificate
    * @throws UnrecoverableKeyException
+   *           if there are errors with loading client certificate
    */
   public String login(CloseableHttpClient client, String passwordSeed) throws KeyStoreException,
       NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
@@ -113,9 +117,12 @@ public class LoginServiceImpl implements LoginService {
    * Set parameters and execute the Client request for login
    * 
    * @param aHTTPClient
+   *          the http client
    * @param aEndPointURL
+   *          the login URL
    * @param password
-   * @return
+   *          the password
+   * @return the response
    */
   private String callEndPoint(CloseableHttpClient aHTTPClient, String password) throws IOException {
     String response = "";
@@ -143,7 +150,7 @@ public class LoginServiceImpl implements LoginService {
   /**
    * Return the endpoint for login
    * 
-   * @return
+   * @return the login endpoint
    */
   private String getLoginEndpoint() {
 

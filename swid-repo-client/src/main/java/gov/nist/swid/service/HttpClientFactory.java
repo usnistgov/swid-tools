@@ -49,17 +49,23 @@ public class HttpClientFactory {
   /**
    * Construct a HTTP client
    * 
-   * @param clientCertificatePath
+   * @param identityKeyStore
+   *          the client keystore
    * @param clientCertificatePassword
-   * @param serverCertificatePath
-   * @param serverCertificatePassword
-   * @return
+   *          the password for the client certificate the password of the client certificate
+   * @return the Http client
    * @throws KeyStoreException
+   *           if there are errors with loading client certificate
    * @throws NoSuchAlgorithmException
+   *           if there are errors
    * @throws CertificateException
+   *           if there are errors with loading client certificate
    * @throws IOException
+   *           if there are errors with read or write
    * @throws KeyManagementException
+   *           if there are errors with certificate
    * @throws UnrecoverableKeyException
+   *           if there are errors with loading client certificate
    */
   public CloseableHttpClient build(KeyStore identityKeyStore, String clientCertificatePassword)
       throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException,
@@ -82,12 +88,18 @@ public class HttpClientFactory {
    * Instantiate Java Keystore for the client certificate
    * 
    * @param clientCertificatePath
+   *          path to client certificate
    * @param clientCertificatePassword
-   * @return
-   * @throws NoSuchAlgorithmException
-   * @throws CertificateException
-   * @throws IOException
+   *          the password of the client certificate
+   * @return the keystore instance
    * @throws KeyStoreException
+   *           if there are errors with loading client certificate
+   * @throws NoSuchAlgorithmException
+   *           if there are errors
+   * @throws CertificateException
+   *           if there are errors with loading client certificate
+   * @throws IOException
+   *           if there are errors with read or write
    */
   public KeyStore loadKeyStore(String clientCertificatePath, String clientCertificatePassword)
       throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
