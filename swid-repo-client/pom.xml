@@ -5,7 +5,7 @@
     <parent>
         <groupId>gov.nist.secauto.swid</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6.0</version>
+        <version>0.6.1-SNAPSHOT</version>
     </parent>
 
 	<artifactId>swid-repo-client</artifactId>
@@ -101,7 +101,7 @@
 					<dependency>
 						<groupId>gov.nist.secauto.swid</groupId>
 						<artifactId>swid-maven-plugin</artifactId>
-						<version>0.6.0</version>
+						<version>0.6.1-SNAPSHOT</version>
 					</dependency>
 				</dependencies>
 				<executions>

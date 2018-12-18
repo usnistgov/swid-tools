@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>gov.nist.secauto.swid</groupId>
         <artifactId>parent</artifactId>
-		<version>0.6.0</version>
+		<version>0.6.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>swid-maven-plugin</artifactId>
@@ -18,7 +18,7 @@
 
     <scm>
         <url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
-        <tag>v0.6.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
 	<dependencies>
