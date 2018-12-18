@@ -155,6 +155,18 @@ public class HashUtils {
     return processDigest(algorithm, digest.digest());
   }
 
+  /**
+   * Generates a hash value, in the form of an array of bytes, by digesting a provided bytes based on
+   * the provided hash algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param bytes
+   *          the bytes to digest
+   * @return an array of bytes representing a hash value
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   */
   public static byte[] hash(HashAlgorithm algorithm, byte[] bytes) throws NoSuchAlgorithmException {
     MessageDigest digest = MessageDigest.getInstance(algorithm.getName());
     digest.update(bytes);
@@ -162,6 +174,17 @@ public class HashUtils {
     return processDigest(algorithm, digest.digest());
   }
 
+  /**
+   * Processes the provided hash value, truncating the value based on the width of the provided hash
+   * algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param mdbytes
+   *          the digest bytes to truncate
+   * @return an array of bytes representing a hash value based on the width of the provided hash
+   *         algorithm
+   */
   public static byte[] processDigest(HashAlgorithm algorithm, byte[] mdbytes) {
     int valueLength = algorithm.getValueLength() / 8;
     if (valueLength < mdbytes.length) {

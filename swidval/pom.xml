@@ -21,26 +21,19 @@
         <tag>HEAD</tag>
     </scm>
 
-	<properties>
-		<decima.version>0.6.3-SNAPSHOT</decima.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
 			<artifactId>decima-xml-assessment</artifactId>
-			<version>${decima.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
 			<artifactId>decima-xml-testing</artifactId>
-			<version>${decima.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
 			<artifactId>decima-module</artifactId>
-			<version>${decima.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -99,14 +92,14 @@
 									<!-- Artifact that has the schema files -->
 									<groupId>gov.nist.decima</groupId>
 									<artifactId>decima-xml</artifactId>
-									<version>${decima.version}</version>
+<!-- 									<version>${dependency.version.decima}</version> -->
 									<type>jar</type>
 								</artifactItem>
 								<artifactItem>
 									<!-- Artifact that has the schema files -->
 									<groupId>gov.nist.decima</groupId>
 									<artifactId>decima-xml-assessment</artifactId>
-									<version>${decima.version}</version>
+<!-- 									<version>${dependency.version.decima}</version> -->
 									<type>jar</type>
 								</artifactItem>
 							</artifactItems>

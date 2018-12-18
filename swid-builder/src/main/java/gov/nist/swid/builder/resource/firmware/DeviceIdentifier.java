@@ -36,7 +36,7 @@ public class DeviceIdentifier {
   private byte[] ieee8021ar;
 
   /**
-   * Construct a new device identier.
+   * Construct a new device identifier.
    * 
    * @param vendor
    *          the device vendor string
@@ -52,6 +52,8 @@ public class DeviceIdentifier {
   }
 
   /**
+   * Retrieve the vendor string.
+   * 
    * @return the vendor
    */
   public String getVendor() {
@@ -59,6 +61,8 @@ public class DeviceIdentifier {
   }
 
   /**
+   * Retrieve the type string.
+   * 
    * @return the type
    */
   public String getType() {
@@ -66,6 +70,8 @@ public class DeviceIdentifier {
   }
 
   /**
+   * Set the type.
+   * 
    * @param type
    *          the type to set
    */
@@ -75,6 +81,8 @@ public class DeviceIdentifier {
   }
 
   /**
+   * Retrieve the model string.
+   * 
    * @return the model
    */
   public String getModel() {
@@ -82,6 +90,8 @@ public class DeviceIdentifier {
   }
 
   /**
+   * Retrieve the class string.
+   * 
    * @return the clazz
    */
   public String getClazz() {
@@ -89,6 +99,8 @@ public class DeviceIdentifier {
   }
 
   /**
+   * Set the class string.
+   * 
    * @param clazz
    *          the clazz to set
    */

@@ -17,10 +17,6 @@
 
 	<url>http://maven.apache.org</url>
 
-	<properties>
-		<decima.version>0.6.3-SNAPSHOT</decima.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -55,7 +51,6 @@
 		<dependency>
 			<groupId>gov.nist.decima</groupId>
 			<artifactId>decima-module</artifactId>
-			<version>${decima.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
