@@ -39,6 +39,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.xml.bind.DatatypeConverter;
+
 public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
   private Long size;
   private String version;
@@ -61,8 +63,8 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
   }
 
   @Override
-  public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
-    creator.generate(this, parentContext);
+  public <T> void accept(T parentContext, ResourceCollectionEntryGenerator<T> creator) {
+    creator.generate(parentContext, this);
   }
 
   public Long getSize() {
@@ -148,6 +150,21 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
     return this;
   }
 
+  /**
+   * Sets the file's hash value, for the provided algorithm, to the provided value.
+   * 
+   * @param algorithm
+   *          the algorithm to establish a hash value for
+   * @param hashHexBytes
+   *          the digest value as a hex string.
+   * @return the same builder instance
+   */
+  public FileBuilder hash(HashAlgorithm algorithm, String hashHexBytes) {
+    Objects.requireNonNull(algorithm, "algorithm");
+    Objects.requireNonNull(hashHexBytes, "hashBytes");
+    hashAlgorithmToValueMap.put(algorithm, HashUtils.toBytes(hashHexBytes));
+    return this;
+  }
   /**
    * Sets the to-be-built file's version to the provided value.
    * 

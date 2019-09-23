@@ -251,7 +251,7 @@ public class XMLOutputHandler implements OutputHandler {
 
     XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator();
     for (ResourceBuilder resourceBuilder : builder.getResources()) {
-      resourceBuilder.accept(creator, element);
+      resourceBuilder.accept(element, creator);
     }
   }
 
@@ -280,19 +280,19 @@ public class XMLOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void generate(DirectoryBuilder builder, Element parent) {
+    public void generate(Element parent, DirectoryBuilder builder) {
       Element element = new Element("Directory", XMLOutputHandler.SWID_NAMESPACE);
       parent.addContent(element);
 
       buildAbstractFileSystemItem(builder, element);
 
       for (ResourceBuilder child : builder.getResources()) {
-        child.accept(this, element);
+        child.accept(element, this);
       }
     }
 
     @Override
-    public void generate(FileBuilder builder, Element parent) {
+    public void generate(Element parent, FileBuilder builder) {
 
       Element element = new Element("File", XMLOutputHandler.SWID_NAMESPACE);
       parent.addContent(element);
@@ -323,7 +323,7 @@ public class XMLOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void generate(FirmwareBuilder firmwareBuilder, Element parent) {
+    public void generate(Element parent, FirmwareBuilder firmwareBuilder) {
       throw new UnsupportedOperationException("firmware is not supported by the XML SWID format");
     }
 

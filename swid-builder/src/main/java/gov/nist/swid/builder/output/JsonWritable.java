@@ -23,10 +23,10 @@
 
 package gov.nist.swid.builder.output;
 
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 
-public interface CBORWritable {
-  void write(CBORGenerator generator) throws IOException;
+public interface JsonWritable {
+  void write(JsonGenerator generator) throws IOException;
 }

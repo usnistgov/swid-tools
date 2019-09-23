@@ -29,6 +29,11 @@ import java.net.URI;
 import java.util.Objects;
 
 public class LinkBuilder extends AbstractLanguageSpecificBuilder<LinkBuilder> {
+
+  public static LinkBuilder create() {
+    return new LinkBuilder();
+  }
+
   private String artifact;
   private URI href;
   private String media;

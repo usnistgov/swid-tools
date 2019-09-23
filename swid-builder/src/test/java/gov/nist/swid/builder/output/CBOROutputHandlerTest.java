@@ -59,7 +59,7 @@ public class CBOROutputHandlerTest {
     builder.language("en-US").name("coswid app").tagId("tagId").tagType(TagType.PRIMARY).version("1.0.0")
         .versionScheme(KnownVersionScheme.MULTIPART_NUMERIC);
 
-    CBOROutputHandler cborHandler = new CBOROutputHandler();
+    AbstractJsonOutputHandler cborHandler = new CBOROutputHandler();
     try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("swid-cbor.cbor")))) {
       cborHandler.write(builder, os);
     }
@@ -97,7 +97,7 @@ public class CBOROutputHandlerTest {
 
     fb.addPayload(fp);
 
-    CBOROutputHandler cborHandler = new CBOROutputHandler();
+    AbstractJsonOutputHandler cborHandler = new CBOROutputHandler();
     try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File("firmware-coswid.cbor")))) {
       cborHandler.write(builder, os);
     }

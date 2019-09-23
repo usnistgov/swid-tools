@@ -23,11 +23,11 @@
 
 package gov.nist.swid.builder.resource.firmware;
 
-import gov.nist.swid.builder.output.CBORWritable;
+import gov.nist.swid.builder.output.JsonWritable;
 
 import java.math.BigInteger;
 
-public interface FirmwareIdentifier extends CBORWritable {
+public interface FirmwareIdentifier extends JsonWritable {
   byte[] asBytes();
 
   String asText();

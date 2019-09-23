@@ -23,7 +23,7 @@
 
 package gov.nist.swid.builder.output;
 
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import gov.nist.swid.builder.resource.firmware.DeviceIdentifier;
 import gov.nist.swid.builder.resource.firmware.FirmwareBuilder;
@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class CBORFirmwareOutputHandler extends CBORSupport {
+public class CBORFirmwareOutputHandler extends JsonSupport {
   /**
    * Firmware.
    */
@@ -101,13 +101,12 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
 
   /**
    * Generate a CBOR object based on the provided builder.
-   * 
-   * @param builder
-   *          the firmware builder to read data from
    * @param generator
    *          the generator to write data to
+   * @param builder
+   *          the firmware builder to read data from
    */
-  public void generate(FirmwareBuilder builder, CBORGenerator generator) {
+  public void generate(JsonGenerator generator, FirmwareBuilder builder) {
     try {
       generator.writeStartObject();
 
@@ -126,18 +125,18 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
       // FIRMWARE_MANIFEST_DEPENDENCIES
       // FIRMWARE_MANIFEST_ALIASES
 
-      writeField(generator, FIRMWARE_MANIFEST_TARGET_DEVICE_ID, builder.getTargetDeviceIdentifier());
+      writeDeviceIdentifier(generator, FIRMWARE_MANIFEST_TARGET_DEVICE_ID, builder.getTargetDeviceIdentifier());
 
       List<FirmwarePayloadBuilder> payloads = builder.getPayloads();
       if (!payloads.isEmpty()) {
         generator.writeFieldId(FIRMWARE_MANIFEST_PAYLOAD_ENTRY);
 
         if (payloads.size() == 1) {
-          generate(payloads.iterator().next(), generator);
+          generate(generator, payloads.iterator().next());
         } else {
           generator.writeStartArray();
           for (FirmwarePayloadBuilder payload : payloads) {
-            generate(payload, generator);
+            generate(generator, payload);
           }
           generator.writeEndArray();
         }
@@ -160,7 +159,7 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
     }
   }
 
-  private void generate(FirmwarePayloadBuilder builder, CBORGenerator generator) throws IOException {
+  private void generate(JsonGenerator generator, FirmwarePayloadBuilder builder) throws IOException {
     generator.writeStartObject();
 
     writeField(generator, FIRMWARE_PAYLOAD_ID, builder.getId());
@@ -195,7 +194,7 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
 
       generator.writeStartArray();
       for (FirmwarePayloadDigest digest : digests) {
-        generate(digest, generator);
+        generate(generator, digest);
       }
       generator.writeEndArray();
     }
@@ -211,14 +210,14 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
     // private static final long FIRMWARE_PAYLOAD_RELATIONSHIPS = 84L; // enum (int)
 
     if (builder.getFirmwarePackage() != null) {
-      writeField(generator, FIRMWARE_PAYLOAD_PACKAGE, builder.getFirmwarePackage());
+      writePayload(generator, FIRMWARE_PAYLOAD_PACKAGE, builder.getFirmwarePackage());
     }
     // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { + int => bytes
 
     generator.writeEndObject();
   }
 
-  private void generate(FirmwarePayloadDigest digest, CBORGenerator generator) throws IOException {
+  private void generate(JsonGenerator generator, FirmwarePayloadDigest digest) throws IOException {
     generator.writeStartObject();
 
     writeIntegerField(generator, FIRMWARE_PAYLOAD_DIGEST_TYPE, digest.getType().getIndex());
@@ -231,7 +230,7 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
     generator.writeEndObject();
   }
 
-  private void writeField(CBORGenerator generator, long fieldId, DeviceIdentifier deviceIdentifier) throws IOException {
+  private void writeDeviceIdentifier(JsonGenerator generator, long fieldId, DeviceIdentifier deviceIdentifier) throws IOException {
     generator.writeFieldId(fieldId);
 
     generator.writeStartObject();
@@ -259,7 +258,7 @@ public class CBORFirmwareOutputHandler extends CBORSupport {
     generator.writeEndObject();
   }
 
-  private void writeField(CBORGenerator generator, long fieldId, FirmwarePayloadPackage payload) throws IOException {
+  private void writePayload(JsonGenerator generator, long fieldId, FirmwarePayloadPackage payload) throws IOException {
     generator.writeFieldId(fieldId);
 
     generator.writeStartObject();

@@ -23,7 +23,7 @@
 
 package gov.nist.swid.builder.output;
 
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -31,49 +31,53 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
-public class CBORSupport {
+public class JsonSupport {
 
   private static final Pattern INTEGER_PATTERN = Pattern.compile("[-]?[1-9]\\d*");
 
-  protected static void writeField(CBORGenerator generator, long fieldId, CBORWritable value) throws IOException {
+  protected void writeField(JsonGenerator generator, long fieldId) throws IOException {
     generator.writeFieldId(fieldId);
+  }
+
+  protected void writeField(JsonGenerator generator, long fieldId, JsonWritable value) throws IOException {
+    writeField(generator, fieldId);
     value.write(generator);
 
   }
 
-  protected static void writeTextField(CBORGenerator generator, long fieldId, String text) throws IOException {
-    generator.writeFieldId(fieldId);
+  protected void writeTextField(JsonGenerator generator, long fieldId, String text) throws IOException {
+    writeField(generator, fieldId);
     generator.writeString(text);
   }
 
-  protected static void writeBooleanField(CBORGenerator generator, long fieldId, boolean state) throws IOException {
-    generator.writeFieldId(fieldId);
+  protected void writeBooleanField(JsonGenerator generator, long fieldId, boolean state) throws IOException {
+    writeField(generator, fieldId);
     generator.writeBoolean(state);
 
   }
 
-  protected static void writeLongField(CBORGenerator generator, long fieldId, long value) throws IOException {
-    generator.writeFieldId(fieldId);
+  protected void writeLongField(JsonGenerator generator, long fieldId, long value) throws IOException {
+    writeField(generator, fieldId);
     generator.writeNumber(value);
   }
 
-  protected static void writeIntegerField(CBORGenerator generator, long fieldId, int value) throws IOException {
-    generator.writeFieldId(fieldId);
+  protected void writeIntegerField(JsonGenerator generator, long fieldId, int value) throws IOException {
+    writeField(generator, fieldId);
     generator.writeNumber(value);
   }
 
-  protected static void writeIntegerField(CBORGenerator generator, long fieldId, BigInteger value) throws IOException {
-    generator.writeFieldId(fieldId);
+  protected void writeIntegerField(JsonGenerator generator, long fieldId, BigInteger value) throws IOException {
+    writeField(generator, fieldId);
     generator.writeNumber(value);
   }
 
-  protected static void writeDateTimeField(CBORGenerator generator, long fieldId, ZonedDateTime dateTime)
+  protected void writeDateTimeField(JsonGenerator generator, long fieldId, ZonedDateTime dateTime)
       throws IOException {
-    generator.writeFieldId(fieldId);
+    writeField(generator, fieldId);
     generator.writeString(dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
   }
 
-  protected static void writeIntegerOrTextField(CBORGenerator generator, long fieldId, String value)
+  protected void writeIntegerOrTextField(JsonGenerator generator, long fieldId, String value)
       throws IOException {
     if (INTEGER_PATTERN.matcher(value).matches()) {
       BigInteger intValue = new BigInteger(value);
@@ -83,8 +87,8 @@ public class CBORSupport {
     }
   }
 
-  protected static void writeBinaryField(CBORGenerator generator, long fieldId, byte[] value) throws IOException {
-    generator.writeFieldId(fieldId);
+  protected void writeBinaryField(JsonGenerator generator, long fieldId, byte[] value) throws IOException {
+    writeField(generator, fieldId);
     generator.writeBinary(value);
   }
 }

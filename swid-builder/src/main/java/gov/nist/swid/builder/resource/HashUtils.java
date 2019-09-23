@@ -23,6 +23,9 @@
 
 package gov.nist.swid.builder.resource;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -109,6 +112,14 @@ public class HashUtils {
       ++pos;
     }
     return new String(hexChars);
+  }
+
+  public static byte[] toBytes(String hashHexBytes) {
+    try {
+      return Hex.decodeHex(hashHexBytes);
+    } catch (DecoderException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**

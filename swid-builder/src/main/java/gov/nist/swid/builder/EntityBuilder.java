@@ -123,8 +123,5 @@ public class EntityBuilder extends AbstractLanguageSpecificBuilder<EntityBuilder
     super.validate();
     validateNonEmpty("name", name);
     validateNonEmpty("role", roles);
-    if (!roles.contains(KnownRole.TAG_CREATOR)) {
-      throw new ValidationException("at least the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
-    }
   }
 }

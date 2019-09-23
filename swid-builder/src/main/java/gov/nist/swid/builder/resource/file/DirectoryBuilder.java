@@ -47,8 +47,8 @@ public class DirectoryBuilder extends AbstractFileSystemItemBuilder<DirectoryBui
   }
 
   @Override
-  public <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext) {
-    creator.generate(this, parentContext);
+  public <T> void accept(T parentContext, ResourceCollectionEntryGenerator<T> creator) {
+    creator.generate(parentContext, this);
   }
 
   /**

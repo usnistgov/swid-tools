@@ -26,6 +26,9 @@ package gov.nist.swid.builder;
 import static gov.nist.swid.builder.util.Util.requireNonEmpty;
 
 public class MetaBuilder extends AbstractLanguageSpecificBuilder<MetaBuilder> {
+  public static MetaBuilder create() {
+    return new MetaBuilder();
+  }
   private String activationStatus;
   private String channelType;
   private String colloquialVersion;

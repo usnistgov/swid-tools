@@ -328,8 +328,15 @@ public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
     validateNonEmpty("name", name);
     validateNonEmpty("tagId", tagId);
     validateNonEmpty("entity", entities);
+    boolean foundTagCreator = false;
     for (EntityBuilder entity : entities) {
       entity.validate();
+      if (entity.getRoles().contains(KnownRole.TAG_CREATOR)) {
+        foundTagCreator = true;
+      }
+    }
+    if (!foundTagCreator) {
+      throw new ValidationException("at least one entity wwith the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
     }
 
     if (payload != null && evidence != null) {

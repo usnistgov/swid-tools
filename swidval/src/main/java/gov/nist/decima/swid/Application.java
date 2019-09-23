@@ -60,8 +60,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactoryConfigurationException;
 
 public class Application {
   private static final Logger log = LogManager.getLogger(Application.class);

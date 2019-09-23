@@ -24,11 +24,11 @@
 package gov.nist.swid.builder;
 
 public enum KnownRole implements Role {
-  TAG_CREATOR(0, "tagCreator"),
-  SOFTWARE_CREATOR(1, "softwareCreator"),
-  AGGREGATOR(2, "aggregator"),
-  DISTRIBUTOR(3, "distributor"),
-  LICENSOR(4, "licensor");
+  TAG_CREATOR(1, "tagCreator"),
+  SOFTWARE_CREATOR(2, "softwareCreator"),
+  AGGREGATOR(3, "aggregator"),
+  DISTRIBUTOR(4, "distributor"),
+  LICENSOR(5, "licensor");
 
   private final int index;
   private final String name;

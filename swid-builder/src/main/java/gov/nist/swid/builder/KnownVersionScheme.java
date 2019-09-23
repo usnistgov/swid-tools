@@ -28,20 +28,20 @@ public enum KnownVersionScheme implements VersionScheme {
    * Numbers separated by dots, where the numbers are interpreted as integers (e.g., 1.2.3, 1.4.5.6,
    * 1.2.3.4.5.6.7).
    */
-  MULTIPART_NUMERIC(0, "multipartnumeric"),
+  MULTIPART_NUMERIC(1, "multipartnumeric"),
   /**
    * Numbers separated by dots, where the numbers are interpreted as integers with an additional
    * string suffix: (e.g., 1.2.3a).
    */
-  MULTIPART_NUMERIC_WITH_SUFFIX(1, "multipartnumeric+suffix"),
+  MULTIPART_NUMERIC_WITH_SUFFIX(2, "multipartnumeric+suffix"),
   /**
    * an alpha-numeric string, that can be sorted based on alpha-numeric order.
    */
-  ALPHANUMERIC(2, "alphanumeric"),
+  ALPHANUMERIC(3, "alphanumeric"),
   /**
    * A decimal number (e.g., 1.25 is less than 1.3 ).
    */
-  DECIMAL(3, "decimal"),
+  DECIMAL(4, "decimal"),
   /**
    * Follows the <a href="http://semver.org/">Semantic Versioning</a> specificatio.
    */

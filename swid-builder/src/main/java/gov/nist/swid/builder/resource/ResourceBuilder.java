@@ -26,5 +26,5 @@ package gov.nist.swid.builder.resource;
 import gov.nist.swid.builder.Builder;
 
 public interface ResourceBuilder extends Builder {
-  <T> void accept(ResourceCollectionEntryGenerator<T> creator, T parentContext);
+  <T> void accept(T parentContext, ResourceCollectionEntryGenerator<T> creator);
 }

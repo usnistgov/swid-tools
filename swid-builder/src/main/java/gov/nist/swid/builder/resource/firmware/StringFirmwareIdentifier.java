@@ -23,7 +23,7 @@
 
 package gov.nist.swid.builder.resource.firmware;
 
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -53,7 +53,7 @@ public class StringFirmwareIdentifier implements FirmwareIdentifier {
   }
 
   @Override
-  public void write(CBORGenerator generator) throws IOException {
+  public void write(JsonGenerator generator) throws IOException {
     generator.writeString(id);
   }
 
