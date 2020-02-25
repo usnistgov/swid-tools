@@ -74,7 +74,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>gov.nist.swid.Application</mainClass>
+							<mainClass>gov.nist.secauto.swid.client.Application</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 							<classpathLayoutType>custom</classpathLayoutType>

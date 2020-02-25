@@ -25,15 +25,15 @@
  */
 package gov.nist.secauto.swid.plugin;
 
+import gov.nist.secauto.swid.builder.SWIDBuilder;
+import gov.nist.secauto.swid.builder.ValidationException;
+import gov.nist.secauto.swid.builder.output.CBOROutputHandler;
+import gov.nist.secauto.swid.builder.output.OutputHandler;
+import gov.nist.secauto.swid.builder.output.XMLOutputHandler;
 import gov.nist.secauto.swid.plugin.entry.FileEntry;
 import gov.nist.secauto.swid.plugin.entry.resource.ResourceFileEntryProcessor;
 import gov.nist.secauto.swid.plugin.generate.MavenProjectSwidBuilderHelper;
 import gov.nist.secauto.swid.plugin.model.Entity;
-import gov.nist.swid.builder.SWIDBuilder;
-import gov.nist.swid.builder.ValidationException;
-import gov.nist.swid.builder.output.CBOROutputHandler;
-import gov.nist.swid.builder.output.OutputHandler;
-import gov.nist.swid.builder.output.XMLOutputHandler;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.

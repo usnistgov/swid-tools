@@ -25,7 +25,7 @@
  */
 package gov.nist.secauto.swid.plugin.entry;
 
-import gov.nist.swid.builder.resource.PathRelativizer;
+import gov.nist.secauto.swid.builder.resource.PathRelativizer;
 
 import org.codehaus.plexus.components.io.fileselectors.FileInfo;
 

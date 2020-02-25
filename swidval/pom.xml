@@ -117,7 +117,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>gov.nist.decima.swid.Application</mainClass>
+							<mainClass>gov.nist.secauto.swid.swidval.Application</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 							<classpathLayoutType>custom</classpathLayoutType>
@@ -132,7 +132,7 @@
 				<!-- <configuration> -->
 				<!-- <archive> -->
 				<!-- <manifest> -->
-				<!-- <mainClass>gov.nist.decima.swid.Application</mainClass> -->
+				<!-- <mainClass>gov.nist.secauto.swid.swidval.Application</mainClass> -->
 				<!-- </manifest> -->
 				<!-- </archive> -->
 				<!-- </configuration> -->

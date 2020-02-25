@@ -25,8 +25,8 @@
  */
 package gov.nist.secauto.swid.plugin.entry.archive;
 
+import gov.nist.secauto.swid.builder.resource.PathRelativizer;
 import gov.nist.secauto.swid.plugin.entry.FileEntry;
-import gov.nist.swid.builder.resource.PathRelativizer;
 
 import org.apache.maven.artifact.Artifact;
 import org.codehaus.plexus.archiver.ArchiveEntry;
