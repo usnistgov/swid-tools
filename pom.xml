@@ -72,22 +72,22 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>gov.nist.decima</groupId>
+				<groupId>gov.nist.secauto.decima</groupId>
 				<artifactId>decima-module</artifactId>
 				<version>${dependency.version.decima}</version>
 			</dependency>
 			<dependency>
-				<groupId>gov.nist.decima</groupId>
+				<groupId>gov.nist.secauto.decima</groupId>
 				<artifactId>decima-xml</artifactId>
 				<version>${dependency.version.decima}</version>
 			</dependency>
 			<dependency>
-				<groupId>gov.nist.decima</groupId>
+				<groupId>gov.nist.secauto.decima</groupId>
 				<artifactId>decima-xml-assessment</artifactId>
 				<version>${dependency.version.decima}</version>
 			</dependency>
 			<dependency>
-				<groupId>gov.nist.decima</groupId>
+				<groupId>gov.nist.secauto.decima</groupId>
 				<artifactId>decima-xml-testing</artifactId>
 				<version>${dependency.version.decima}</version>
 				<scope>test</scope>
