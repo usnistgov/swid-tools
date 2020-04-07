@@ -3,7 +3,7 @@
 
 	<parent>
 		<groupId>gov.nist.secauto.swid</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>swid-parent</artifactId>
 		<version>0.6.1-SNAPSHOT</version>
 	</parent>
 
@@ -12,14 +12,11 @@
 	<packaging>war</packaging>
 
 	<name>SWID Validation Webapp</name>
-
-    <url>https://github.com/usnistgov/swid-tools/tree/master/swidval-webapp</url>
-
-    <scm>
-        <url>https://github.com/usnistgov/swid-tools/tree/master/swidval-webapp</url>
-        <tag>HEAD</tag>
-    </scm>
     
+	<scm>
+		<url>https://github.com/usnistgov/swid-tools/tree/master/swidval-webapp</url>
+	</scm>
+
 	<properties>
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<jstl.version>1.2</jstl.version>

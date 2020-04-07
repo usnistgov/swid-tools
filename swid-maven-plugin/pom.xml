@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>gov.nist.secauto.swid</groupId>
-        <artifactId>parent</artifactId>
+		<artifactId>swid-parent</artifactId>
 		<version>0.6.1-SNAPSHOT</version>
 	</parent>
 
@@ -14,12 +16,9 @@
 	<name>Maven SWID Tag Generation Plugin </name>
 	<description>This project is a ContainerDescriptorHandler that generates an ISO/IEC 19770-2:2015 SWID tag within a Maven assembly plugin execution.</description>
 
-	<url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
-
-    <scm>
-        <url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
-        <tag>HEAD</tag>
-    </scm>
+	<scm>
+		<url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -66,24 +65,55 @@
 	</dependencies>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-plugin-plugin
+										</artifactId>
+										<versionRange>
+											[3.6.0,)
+										</versionRange>
+										<goals>
+											<goal>descriptor</goal>
+											<goal>helpmojo</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.4</version>
 				<configuration>
 					<goalPrefix>swid</goalPrefix>
 					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
 				</configuration>
 				<executions>
 					<execution>
-						<id>mojo-descriptor</id>
-						<goals>
-							<goal>descriptor</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>help-goal</id>
+						<id>help-mojo</id>
 						<goals>
 							<goal>helpmojo</goal>
 						</goals>
@@ -93,7 +123,7 @@
 			<plugin>
 				<groupId>org.codehaus.plexus</groupId>
 				<artifactId>plexus-component-metadata</artifactId>
-				<version>1.7.1</version>
+				<version>2.1.0</version>
 				<executions>
 					<execution>
 						<id>default-generate-metadata</id>

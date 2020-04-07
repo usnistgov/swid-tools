@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd">
 	<mvc:annotation-driven />
-	<context:component-scan base-package="gov.nist.swidval.controller" />
+	<context:component-scan base-package="gov.nist.secauto.swid.swidval.controller" />
 	<mvc:default-servlet-handler />
 	<!-- <bean id="viewResolver" -->
 	<!-- class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->

@@ -9,7 +9,7 @@
     <title>ISO/IEC 19770-2 SWID Tag Checker based on NISTIR 8060</title>
     <ns uri="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" prefix="swid"/>
     <ns uri="http://csrc.nist.gov/ns/swid/2015-extensions/1.0" prefix="n8060"/>
-    <ns prefix="java" uri="java:gov.nist.decima.swid.schematron"/>
+    <ns prefix="java" uri="java:gov.nist.secauto.swid.swidval.schematron"/>
 
     <phase id="swid.primary.auth">
         <active pattern="info"/>
