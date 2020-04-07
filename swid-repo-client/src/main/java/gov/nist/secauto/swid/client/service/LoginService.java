@@ -23,7 +23,10 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.client.service;
+
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -31,8 +34,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-
-import org.apache.http.impl.client.CloseableHttpClient;
 
 public interface LoginService {
 

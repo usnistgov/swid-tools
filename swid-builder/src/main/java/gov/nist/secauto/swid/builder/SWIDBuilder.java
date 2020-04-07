@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder;
 
 import static gov.nist.secauto.swid.builder.util.Util.requireNonEmpty;
@@ -338,7 +339,8 @@ public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
       }
     }
     if (!foundTagCreator) {
-      throw new ValidationException("at least one entity wwith the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
+      throw new ValidationException(
+          "at least one entity wwith the role '" + KnownRole.TAG_CREATOR.getName() + "' must be provided");
     }
 
     if (payload != null && evidence != null) {

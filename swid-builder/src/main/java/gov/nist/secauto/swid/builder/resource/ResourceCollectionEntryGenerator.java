@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.resource;
 
 import gov.nist.secauto.swid.builder.resource.file.DirectoryBuilder;
@@ -38,6 +39,7 @@ import gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
 public interface ResourceCollectionEntryGenerator<T> {
   /**
    * Adds the file, represented by the builder, to this resource collection.
+   * 
    * @param parent
    *          the containing resource collection instance
    * @param builder
@@ -47,6 +49,7 @@ public interface ResourceCollectionEntryGenerator<T> {
 
   /**
    * Adds the directory, represented by the builder, to this resource collection.
+   * 
    * @param parent
    *          the containing resource collection instance
    * @param builder
@@ -56,6 +59,7 @@ public interface ResourceCollectionEntryGenerator<T> {
 
   /**
    * Adds the firmware manifest, represented by the builder, to this resource collection.
+   * 
    * @param parent
    *          the containing resource collection instance
    * @param firmwareBuilder

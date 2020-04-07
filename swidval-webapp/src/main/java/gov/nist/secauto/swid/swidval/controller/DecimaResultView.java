@@ -23,7 +23,16 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.swidval.controller;
+
+import gov.nist.secauto.decima.core.assessment.result.AssessmentResults;
+import gov.nist.secauto.decima.xml.assessment.result.ReportGenerator;
+import gov.nist.secauto.decima.xml.assessment.result.XMLResultBuilder;
+
+import org.jdom2.Document;
+import org.jdom2.transform.JDOMSource;
+import org.springframework.web.servlet.view.AbstractView;
 
 import java.net.URI;
 import java.util.Map;
@@ -31,14 +40,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamResult;
-
-import org.jdom2.Document;
-import org.jdom2.transform.JDOMSource;
-import org.springframework.web.servlet.view.AbstractView;
-
-import gov.nist.secauto.decima.core.assessment.result.AssessmentResults;
-import gov.nist.secauto.decima.xml.assessment.result.ReportGenerator;
-import gov.nist.secauto.decima.xml.assessment.result.XMLResultBuilder;
 
 public class DecimaResultView extends AbstractView {
 

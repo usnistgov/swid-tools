@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.plugin;
 
 import gov.nist.secauto.swid.builder.SWIDBuilder;
@@ -231,6 +232,7 @@ public class SwidGenerateMojo extends AbstractMojo {
   /**
    * Execute the mojo.
    */
+  @Override
   public void execute() throws MojoExecutionException {
 
     String swidPath = "META-INF/" + tagPath + "/" + tagName;

@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.swidval.controller;
 
 import gov.nist.secauto.decima.core.assessment.AssessmentException;
@@ -83,8 +84,8 @@ public class SWIDValController {
 
   // @PostMapping("/validate.html")
   @RequestMapping(name = "/validate", method = RequestMethod.POST)
-  public void validate(HttpServletRequest requestEntity, HttpServletResponse response) throws AssessmentException,
-      UnrecognizedContentException, DocumentException, IOException, TransformerException, URISyntaxException {
+  public void validate(HttpServletRequest requestEntity, HttpServletResponse response)
+      throws AssessmentException, DocumentException, IOException, TransformerException, URISyntaxException {
 
     InputStream is = requestEntity.getInputStream();
     // File tempFile = File.createTempFile("swid", ".swidtag");

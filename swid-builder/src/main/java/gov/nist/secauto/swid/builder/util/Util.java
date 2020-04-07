@@ -23,7 +23,9 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.util;
+
 /**
  * Portions of this software was developed by employees of the National Institute
  * of Standards and Technology (NIST), an agency of the Federal Government.

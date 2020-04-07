@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.client.service;
 
 import java.io.IOException;
@@ -40,9 +41,12 @@ public class PayloadBuilderServiceImpl implements PayloadBuilderService {
   public static final String SWID_ELEMENT = "swid";
   public static final String SWID_LIST_ELEMENT = "swidList";
 
+  private static final String SOFTWARE_IDENTITY_ELEMENT = "<SoftwareIdentity";
+
   /**
    * Construct payload from one or more tag files
    */
+  @Override
   public String buildPayload(List<String> tagFileNames, TagType tagType)
       throws UnsupportedEncodingException, IOException {
     String content = "";
@@ -69,7 +73,6 @@ public class PayloadBuilderServiceImpl implements PayloadBuilderService {
     String content = new String(Files.readAllBytes(path), "UTF-8");
     String swidData = "";
     // Remove the XML declaration provided in each SWID tag
-    final String SOFTWARE_IDENTITY_ELEMENT = "<SoftwareIdentity";
     int swidDataStartIndex = content.indexOf(SOFTWARE_IDENTITY_ELEMENT);
     if (swidDataStartIndex > 0) {
       swidData = content.substring(swidDataStartIndex);

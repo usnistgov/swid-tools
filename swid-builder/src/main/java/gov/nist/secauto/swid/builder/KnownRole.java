@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder;
 
 public enum KnownRole implements Role {
@@ -46,6 +47,7 @@ public enum KnownRole implements Role {
    * 
    * @return the index
    */
+  @Override
   public Integer getIndex() {
     return index;
   }
@@ -55,6 +57,7 @@ public enum KnownRole implements Role {
    * 
    * @return the value
    */
+  @Override
   public String getName() {
     return name;
   }

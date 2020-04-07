@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder;
 
 import gov.nist.secauto.swid.builder.util.Util;
@@ -36,6 +37,7 @@ public abstract class AbstractLanguageSpecificBuilder<E extends AbstractLanguage
     reset();
   }
 
+  @Override
   public void reset() {
     this.language = null;
   }

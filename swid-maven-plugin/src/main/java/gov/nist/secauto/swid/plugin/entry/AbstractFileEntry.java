@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.plugin.entry;
 
 import gov.nist.secauto.swid.builder.resource.PathRelativizer;
@@ -51,6 +52,7 @@ public abstract class AbstractFileEntry implements FileEntry {
    * 
    * @return the filePath
    */
+  @Override
   public abstract Path getPath();
 
   /**
@@ -85,6 +87,7 @@ public abstract class AbstractFileEntry implements FileEntry {
 
   }
 
+  @Override
   public List<String> getRelativePathSegements(String swidTagPath) {
     return PathRelativizer.relativize(swidTagPath, getOutputRelativePath());
   }

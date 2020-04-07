@@ -23,17 +23,12 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 
-import gov.nist.secauto.swid.builder.EntityBuilder;
-import gov.nist.secauto.swid.builder.KnownRole;
-import gov.nist.secauto.swid.builder.LinkBuilder;
-import gov.nist.secauto.swid.builder.MetaBuilder;
-import gov.nist.secauto.swid.builder.SWIDBuilder;
-import gov.nist.secauto.swid.builder.ValidationException;
 import gov.nist.secauto.swid.builder.output.CBOROutputHandler;
 import gov.nist.secauto.swid.builder.output.JsonOutputHandler;
 import gov.nist.secauto.swid.builder.output.XMLOutputHandler;
@@ -49,7 +44,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 
 public class SWIDBuilderTest {
@@ -59,45 +53,50 @@ public class SWIDBuilderTest {
 
   private static SWIDBuilder buildSWID() {
     SWIDBuilder builder = SWIDBuilder.create();
-//    builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
-//        .addEntity(EntityBuilder.create().regid("gov.acme")
-//            .name("ACME Software")
-//            .addRole(KnownRole.SOFTWARE_CREATOR))
-//        .addEntity(EntityBuilder.create().regid("gov.nist")
-//            .name("National Institute of Standards and Technology, United States Department of Commerce")
-//            .addRole(KnownRole.TAG_CREATOR));
-////            .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
-    builder.name("ACME Roadrunner Detector 2013 Coyote Edition SP1").version("4.1.5").tagId("com.acme.rrd2013-ce-sp1-v4-1-5-0")
-    .addEntity(EntityBuilder.create().regid("acme.com")
-        .name("The ACME Corporation")
-        .addRole(KnownRole.SOFTWARE_CREATOR).addRole(KnownRole.TAG_CREATOR))
-    .addLink(LinkBuilder.create().rel("license").href(URI.create("http://www.gnu.org/licenses/gpl.txt")))
-    .addMeta(MetaBuilder.create().setProductBaseName("Roadrunner Detector").setColloquialVersion("2013").setEdition("coyote").setRevision("sp1"))
-    .newPayload().newFileResource(Collections.singletonList("rrdetector.exe")).size(532712).hash(HashAlgorithm.SHA_256, "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a");
+    // builder.name("Test Product").version("1.0.0").tagId(UUID.randomUUID().toString())
+    // .addEntity(EntityBuilder.create().regid("gov.acme")
+    // .name("ACME Software")
+    // .addRole(KnownRole.SOFTWARE_CREATOR))
+    // .addEntity(EntityBuilder.create().regid("gov.nist")
+    // .name("National Institute of Standards and Technology, United States Department of Commerce")
+    // .addRole(KnownRole.TAG_CREATOR));
+    //// .addRole(KnownRole.TAG_CREATOR).addRole(KnownRole.SOFTWARE_CREATOR));
+    builder.name("ACME Roadrunner Detector 2013 Coyote Edition SP1").version("4.1.5")
+        .tagId("com.acme.rrd2013-ce-sp1-v4-1-5-0")
+        .addEntity(EntityBuilder.create().regid("acme.com").name("The ACME Corporation")
+            .addRole(KnownRole.SOFTWARE_CREATOR).addRole(KnownRole.TAG_CREATOR))
+        .addLink(LinkBuilder.create().rel("license").href(URI.create("http://www.gnu.org/licenses/gpl.txt")))
+        .addMeta(MetaBuilder.create().setProductBaseName("Roadrunner Detector").setColloquialVersion("2013")
+            .setEdition("coyote").setRevision("sp1"))
+        .newPayload().newFileResource(Collections.singletonList("rrdetector.exe")).size(532712)
+        .hash(HashAlgorithm.SHA_256, "a314fc2dc663ae7a6b6bc6787594057396e6b3f569cd50fd5ddb4d1bbafd2b6a");
 
     return builder;
   }
 
   @Test
-  public void testCBOR() throws IOException, NoSuchAlgorithmException, ValidationException {
+  public void testCBOR() throws IOException, ValidationException {
     SWIDBuilder builder = buildSWID();
     File file = folder.newFile();
     OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
     new CBOROutputHandler().write(builder, os);
     os.close();
-    System.out.println("CBOR: "+file.length());
+    System.out.println("CBOR: " + file.length());
   }
 
   @Test
-  public void testJson() throws IOException, NoSuchAlgorithmException, ValidationException {
+  public void testJson() throws IOException, ValidationException {
     SWIDBuilder builder = buildSWID();
     File file = folder.newFile();
     OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
     JsonFactory jsonFactory = new JsonFactory();
     new JsonOutputHandler(jsonFactory) {
 
-      /* (non-Javadoc)
-       * @see gov.nist.secauto.swid.builder.output.AbstractJsonOutputHandler#newGenerator(java.io.OutputStream)
+      /*
+       * (non-Javadoc)
+       * 
+       * @see gov.nist.secauto.swid.builder.output.AbstractJsonOutputHandler#newGenerator(
+       * java.io.OutputStream)
        */
       @Override
       protected JsonGenerator newGenerator(OutputStream os) throws IOException {
@@ -105,7 +104,7 @@ public class SWIDBuilderTest {
         retval.useDefaultPrettyPrinter();
         return retval;
       }
-      
+
     }.write(builder, os);
     os.close();
   }
@@ -119,7 +118,7 @@ public class SWIDBuilderTest {
     try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
       new XMLOutputHandler().write(builder, os);
     }
-    System.out.println("XML: "+file.length());
+    System.out.println("XML: " + file.length());
   }
 
 }

@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.output;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -73,14 +74,12 @@ public class JsonSupport {
     generator.writeNumber(value);
   }
 
-  protected void writeDateTimeField(JsonGenerator generator, long fieldId, ZonedDateTime dateTime)
-      throws IOException {
+  protected void writeDateTimeField(JsonGenerator generator, long fieldId, ZonedDateTime dateTime) throws IOException {
     writeField(generator, fieldId);
     generator.writeString(dateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
   }
 
-  protected void writeIntegerOrTextField(JsonGenerator generator, long fieldId, String value)
-      throws IOException {
+  protected void writeIntegerOrTextField(JsonGenerator generator, long fieldId, String value) throws IOException {
     if (INTEGER_PATTERN.matcher(value).matches()) {
       BigInteger intValue = new BigInteger(value);
       writeIntegerField(generator, fieldId, intValue);

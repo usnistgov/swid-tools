@@ -16,25 +16,9 @@
 	<name>SWID Tag Generation Java API</name>
 	<description>Supports the generation of ISO/IEC 19770-2:2015 SWID tag in Java. A number of other formats are also supported (e.g., CBOR).</description>
 
-	<url>https://github.com/usnistgov/swid-tools/tree/master/swid-builder</url>
-
 	<scm>
 		<url>https://github.com/usnistgov/swid-tools/tree/master/swid-builder</url>
-		<tag>HEAD</tag>
 	</scm>
-
-	<developers>
-		<developer>
-			<id>david.waltermire@nist.gov</id>
-			<name>David Waltermire</name>
-			<email>david.waltermire@nist.gov</email>
-			<organization>National Institute of Standards and Technology</organization>
-			<roles>
-				<role>designer</role>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
 
 	<dependencies>
 		<dependency>

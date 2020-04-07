@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.swidval;
 
 import gov.nist.secauto.decima.core.assessment.AssessmentException;
@@ -41,10 +42,6 @@ import gov.nist.secauto.decima.xml.document.XMLDocument;
 import gov.nist.secauto.decima.xml.schematron.DefaultSchematronCompiler;
 import gov.nist.secauto.decima.xml.schematron.Schematron;
 import gov.nist.secauto.decima.xml.schematron.SchematronCompilationException;
-import gov.nist.secauto.swid.swidval.SWIDAssessmentFactory;
-import gov.nist.secauto.swid.swidval.SWIDAssessmentResultBuilderFactory;
-import gov.nist.secauto.swid.swidval.SWIDRequirementsManager;
-import gov.nist.secauto.swid.swidval.TagType;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

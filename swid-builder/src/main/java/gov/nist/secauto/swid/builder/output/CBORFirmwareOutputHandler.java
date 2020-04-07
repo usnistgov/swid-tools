@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.output;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -46,8 +47,10 @@ public class CBORFirmwareOutputHandler extends JsonSupport {
   private static final long FIRMWARE_MANIFEST_VERSION = 65L; // uint
   private static final long FIRMWARE_MANIFEST_DESCRIPTION = 66L; // text
   private static final long FIRMWARE_MANIFEST_NONCE = 67L; // bytes
-  // private static final long FIRMWARE_MANIFEST_DEPENDENCIES = 68L; // resource-reference
-  // private static final long FIRMWARE_MANIFEST_ALIASES = 69L; // resource-reference
+  // private static final long FIRMWARE_MANIFEST_DEPENDENCIES = 68L; //
+  // resource-reference
+  // private static final long FIRMWARE_MANIFEST_ALIASES = 69L; //
+  // resource-reference
   private static final long FIRMWARE_MANIFEST_TARGET_DEVICE_ID = 85L; // object
   // firmware-payload / [ 2* firmware-payload ]
   private static final long FIRMWARE_MANIFEST_PAYLOAD_ENTRY = 60L;
@@ -61,15 +64,21 @@ public class CBORFirmwareOutputHandler extends JsonSupport {
   // private static final long FIRMWARE_PAYLOAD_SIMPLE_VERSION = 107L; // uint
   // private static final long FIRMWARE_PAYLOAD_VERSION = 108L; // object
   private static final long FIRMWARE_PAYLOAD_DIGESTS = 97L; // object
-  // private static final long FIRMWARE_PAYLOAD_TARGET_COMPONENT_INDEX = 79L; // text
+  // private static final long FIRMWARE_PAYLOAD_TARGET_COMPONENT_INDEX = 79L; //
+  // text
   private static final long FIRMWARE_PAYLOAD_STORAGE_IDENTIFIER = 80L; // bytes / text / uint
-  // private static final long FIRMWARE_PAYLOAD_CONDITIONS = 101L; // array of objects
-  // private static final long FIRMWARE_PAYLOAD_DIRECTIVES = 104L; // array of objects
-  // private static final long FIRMWARE_PAYLOAD_TARGET_DEPENDENCY = 81L; // array of objects
-  // private static final long FIRMWARE_PAYLOAD_TARGET_MINIMAL_VERSION = 92L; // object
+  // private static final long FIRMWARE_PAYLOAD_CONDITIONS = 101L; // array of
+  // objects
+  // private static final long FIRMWARE_PAYLOAD_DIRECTIVES = 104L; // array of
+  // objects
+  // private static final long FIRMWARE_PAYLOAD_TARGET_DEPENDENCY = 81L; // array
+  // of objects
+  // private static final long FIRMWARE_PAYLOAD_TARGET_MINIMAL_VERSION = 92L; //
+  // object
   // private static final long FIRMWARE_PAYLOAD_RELATIONSHIPS = 84L; // enum (int)
   private static final long FIRMWARE_PAYLOAD_PACKAGE = 75L; // object
-  // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { + int => bytes }
+  // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { +
+  // int => bytes }
 
   /*
    * Device Identifier object
@@ -103,6 +112,7 @@ public class CBORFirmwareOutputHandler extends JsonSupport {
 
   /**
    * Generate a CBOR object based on the provided builder.
+   * 
    * @param generator
    *          the generator to write data to
    * @param builder
@@ -201,20 +211,26 @@ public class CBORFirmwareOutputHandler extends JsonSupport {
       generator.writeEndArray();
     }
 
-    // private static final long FIRMWARE_PAYLOAD_TARGET_COMPONENT_INDEX = 79L; // text
+    // private static final long FIRMWARE_PAYLOAD_TARGET_COMPONENT_INDEX = 79L; //
+    // text
 
     writeField(generator, FIRMWARE_PAYLOAD_STORAGE_IDENTIFIER, builder.getStorageId());
 
-    // private static final long FIRMWARE_PAYLOAD_CONDITIONS = 101L; // array of objects
-    // private static final long FIRMWARE_PAYLOAD_DIRECTIVES = 104L; // array of objects
-    // private static final long FIRMWARE_PAYLOAD_TARGET_DEPENDENCY = 81L; // array of objects
-    // private static final long FIRMWARE_PAYLOAD_TARGET_MINIMAL_VERSION = 92L; // object
+    // private static final long FIRMWARE_PAYLOAD_CONDITIONS = 101L; // array of
+    // objects
+    // private static final long FIRMWARE_PAYLOAD_DIRECTIVES = 104L; // array of
+    // objects
+    // private static final long FIRMWARE_PAYLOAD_TARGET_DEPENDENCY = 81L; // array
+    // of objects
+    // private static final long FIRMWARE_PAYLOAD_TARGET_MINIMAL_VERSION = 92L; //
+    // object
     // private static final long FIRMWARE_PAYLOAD_RELATIONSHIPS = 84L; // enum (int)
 
     if (builder.getFirmwarePackage() != null) {
       writePayload(generator, FIRMWARE_PAYLOAD_PACKAGE, builder.getFirmwarePackage());
     }
-    // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { + int => bytes
+    // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { +
+    // int => bytes
 
     generator.writeEndObject();
   }
@@ -232,7 +248,8 @@ public class CBORFirmwareOutputHandler extends JsonSupport {
     generator.writeEndObject();
   }
 
-  private void writeDeviceIdentifier(JsonGenerator generator, long fieldId, DeviceIdentifier deviceIdentifier) throws IOException {
+  private void writeDeviceIdentifier(JsonGenerator generator, long fieldId, DeviceIdentifier deviceIdentifier)
+      throws IOException {
     generator.writeFieldId(fieldId);
 
     generator.writeStartObject();

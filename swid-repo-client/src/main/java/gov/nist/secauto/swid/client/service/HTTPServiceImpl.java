@@ -23,7 +23,23 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.client.service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -54,21 +70,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
-
 public class HTTPServiceImpl implements HTTPService {
 
   private static final Logger LOG = LogManager.getLogger(HTTPServiceImpl.class);
@@ -81,6 +82,7 @@ public class HTTPServiceImpl implements HTTPService {
    * @see gov.nist.secauto.swid.client.client.PostService#postSWID(java.lang.String, java.lang.String,
    * java.lang.String, java.lang.String, java.lang.String, java.nio.file.Path, java.lang.String)
    */
+  @Override
   public String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
       List<String> swidFiles, Action action, TagType type) throws KeyStoreException, NoSuchAlgorithmException,
       CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException {
@@ -122,6 +124,7 @@ public class HTTPServiceImpl implements HTTPService {
    * @see gov.nist.secauto.swid.client.client.PostService#postSWID(java.lang.String, java.lang.String,
    * java.lang.String, java.lang.String, java.lang.String, java.nio.file.Path, java.lang.String)
    */
+  @Override
   public String sendSWIDData(CloseableHttpClient client, String token, List<String> swidFiles, Action action,
       TagType type) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
       KeyManagementException, UnrecoverableKeyException, TransformerException {
@@ -247,14 +250,12 @@ public class HTTPServiceImpl implements HTTPService {
           dn = items[0];
           token = items[1];
         }
-        if (dn != null && !dn.isEmpty()) {
-          if (!dn.equals(subjectDN)) {
-            throw new JWTException("Cached DN does not match DN of cient certificate provided");
-          }
+        if (dn != null && !dn.isEmpty() && !dn.equals(subjectDN)) {
+          throw new JWTException("Cached DN does not match DN of cient certificate provided");
         }
         if (token != null) {
-          int i = token.lastIndexOf('.');
-          String withoutSignature = token.substring(0, i + 1);
+          int index = token.lastIndexOf('.');
+          String withoutSignature = token.substring(0, index + 1);
           @SuppressWarnings({ "unused", "rawtypes" })
           Jwt<Header, Claims> untrusted = Jwts.parser().parseClaimsJwt(withoutSignature);
 
@@ -318,7 +319,7 @@ public class HTTPServiceImpl implements HTTPService {
   public String getKeyStoreSubjectDN(KeyStore ks) throws KeyStoreException {
     Enumeration<String> enumeration = ks.aliases();
     String subjectDN = null;
-    for (; enumeration.hasMoreElements();) {
+    while (enumeration.hasMoreElements()) {
       String alias = (String) enumeration.nextElement();
 
       Certificate cert = ks.getCertificate(alias);

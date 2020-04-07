@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder;
 
 public enum KnownVersionScheme implements VersionScheme {
@@ -63,6 +64,7 @@ public enum KnownVersionScheme implements VersionScheme {
    * 
    * @return the index
    */
+  @Override
   public Integer getIndex() {
     return index;
   }
@@ -72,6 +74,7 @@ public enum KnownVersionScheme implements VersionScheme {
    * 
    * @return the value
    */
+  @Override
   public String getName() {
     return name;
   }

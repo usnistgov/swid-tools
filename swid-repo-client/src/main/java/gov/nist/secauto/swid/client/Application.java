@@ -23,10 +23,8 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
-package gov.nist.secauto.swid.client;
 
-import java.io.FileNotFoundException;
-import java.util.List;
+package gov.nist.secauto.swid.client;
 
 import gov.nist.secauto.swid.client.service.Action;
 import gov.nist.secauto.swid.client.service.HTTPService;
@@ -42,6 +40,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class Application {
 
@@ -80,7 +81,6 @@ public class Application {
    */
   protected CommandLine parseCLI(String[] args) throws ParseException {
 
-    CommandLineParser parser = new DefaultParser();
     Options options = new Options();
     Option keystore = Option.builder().longOpt(OPTION_KEYSTORE).desc("the client keystore file path").hasArg().build();
     options.addOption(keystore);
@@ -112,6 +112,7 @@ public class Application {
       }
     }
 
+    CommandLineParser parser = new DefaultParser();
     CommandLine cmd = parser.parse(options, args);
 
     return cmd;
@@ -119,7 +120,7 @@ public class Application {
   }
 
   /**
-   * Authenticate with NVD services and insert or update SWID data
+   * Authenticate with NVD services and insert or update SWID data.
    * 
    * @param args
    * @return

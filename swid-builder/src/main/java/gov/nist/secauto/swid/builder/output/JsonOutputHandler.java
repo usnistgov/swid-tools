@@ -23,11 +23,11 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.output;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 
 import gov.nist.secauto.swid.builder.Role;
 import gov.nist.secauto.swid.builder.VersionScheme;
@@ -38,6 +38,7 @@ import java.util.Map;
 
 public class JsonOutputHandler extends AbstractJsonOutputHandler {
   private static final Map<Long, String> fieldIdToNameMap;
+
   static {
     fieldIdToNameMap = new HashMap<>();
     fieldIdToNameMap.put(TAG_ID_FIELD, "tag-id");
@@ -100,7 +101,7 @@ public class JsonOutputHandler extends AbstractJsonOutputHandler {
   }
 
   private static String lookupFieldName(long fieldId) {
-     return fieldIdToNameMap.get(fieldId);
+    return fieldIdToNameMap.get(fieldId);
   }
 
   public JsonOutputHandler() {
@@ -111,7 +112,6 @@ public class JsonOutputHandler extends AbstractJsonOutputHandler {
     super(jsonFactory);
   }
 
-
   @Override
   protected void writeField(JsonGenerator generator, long fieldId) throws IOException {
     generator.writeFieldName(lookupFieldName(fieldId));
@@ -119,9 +119,8 @@ public class JsonOutputHandler extends AbstractJsonOutputHandler {
 
   @Override
   protected void writeRole(JsonGenerator generator, Role role) throws IOException {
-      generator.writeString(role.getName());
+    generator.writeString(role.getName());
   }
-
 
   @Override
   protected void writeVersionScheme(JsonGenerator generator, VersionScheme versionScheme) throws IOException {

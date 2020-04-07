@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.resource.firmware;
 
 import gov.nist.secauto.swid.builder.AbstractBuilder;
@@ -430,7 +431,8 @@ public class FirmwarePayloadBuilder extends AbstractBuilder {
   // * a {@code non-null} targetDependency
   // * @return the same builder instance
   // */
-  // public FirmwarePayloadBuilder targetDependency(VersionedDependency targetDependency) {
+  // public FirmwarePayloadBuilder targetDependency(VersionedDependency
+  // targetDependency) {
   // Objects.requireNonNull(targetDependency, "targetDependency");
   // this.targetDependency = targetDependency;
   // return this;
@@ -452,7 +454,8 @@ public class FirmwarePayloadBuilder extends AbstractBuilder {
   // * a {@code non-null} targetMinimalVersion
   // * @return the same builder instance
   // */
-  // public FirmwarePayloadBuilder targetMinimalVersion(MinimalVersion targetMinimalVersion) {
+  // public FirmwarePayloadBuilder targetMinimalVersion(MinimalVersion
+  // targetMinimalVersion) {
   // Objects.requireNonNull(targetDependency, "targetDependency");
   // this.targetMinimalVersion = targetMinimalVersion;
   // return this;
@@ -474,7 +477,8 @@ public class FirmwarePayloadBuilder extends AbstractBuilder {
   // * the relationship to add
   // * @return the same builder instance
   // */
-  // public FirmwarePayloadBuilder addRelationship(FirmwarePayloadRelationship relationship) {
+  // public FirmwarePayloadBuilder addRelationship(FirmwarePayloadRelationship
+  // relationship) {
   // Objects.requireNonNull(relationship, "relationship");
   // this.relationships.add(relationship);
   // return this;

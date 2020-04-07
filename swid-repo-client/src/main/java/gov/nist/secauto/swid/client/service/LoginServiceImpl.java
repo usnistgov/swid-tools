@@ -23,18 +23,8 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
-package gov.nist.secauto.swid.client.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.ArrayList;
-import java.util.List;
+package gov.nist.secauto.swid.client.service;
 
 import gov.nist.secauto.swid.client.totp.Totp;
 
@@ -51,6 +41,17 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginServiceImpl implements LoginService {
 
@@ -78,6 +79,7 @@ public class LoginServiceImpl implements LoginService {
    * @throws UnrecoverableKeyException
    *           if there are errors with loading client certificate
    */
+  @Override
   public String login(CloseableHttpClient client, String passwordSeed) throws KeyStoreException,
       NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
 
@@ -89,9 +91,8 @@ public class LoginServiceImpl implements LoginService {
     try {
       jsonObject = (JSONObject) parser.parse(response);
       LOG.info("User Authenticated:" + response);
-    } catch (ParseException e) {
+    } catch (ParseException ex) {
       LOG.error("Failed Authentication Response :" + response);
-
     }
     String token = null;
     if (jsonObject != null) {
@@ -143,8 +144,9 @@ public class LoginServiceImpl implements LoginService {
       BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
       response = rd.readLine();
 
-    } catch (Exception ex) {
-      LOG.error("Unable to authenticate using login rest service,  " + ex.getMessage());
+    } catch (IOException ex) {
+      LOG.error("Unable to authenticate using login rest service, " + ex.getMessage());
+      throw ex;
     }
     return response;
   }

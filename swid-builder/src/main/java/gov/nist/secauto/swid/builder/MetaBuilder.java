@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder;
 
 import static gov.nist.secauto.swid.builder.util.Util.requireNonEmpty;
@@ -31,6 +32,7 @@ public class MetaBuilder extends AbstractLanguageSpecificBuilder<MetaBuilder> {
   public static MetaBuilder create() {
     return new MetaBuilder();
   }
+
   private String activationStatus;
   private String channelType;
   private String colloquialVersion;

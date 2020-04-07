@@ -23,12 +23,11 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.output;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
 
 import gov.nist.secauto.swid.builder.AbstractLanguageSpecificBuilder;
 import gov.nist.secauto.swid.builder.EntityBuilder;
@@ -50,15 +49,12 @@ import gov.nist.secauto.swid.builder.resource.file.DirectoryBuilder;
 import gov.nist.secauto.swid.builder.resource.file.FileBuilder;
 import gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
 
-import org.jdom2.Element;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 public abstract class AbstractJsonOutputHandler extends JsonSupport implements OutputHandler {
   /**
    * The tag identifier (text).
@@ -165,8 +161,8 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
   }
 
   protected abstract void writeRole(JsonGenerator generator, Role role) throws IOException;
-  protected abstract void writeVersionScheme(JsonGenerator generator, VersionScheme versionScheme) throws IOException;
 
+  protected abstract void writeVersionScheme(JsonGenerator generator, VersionScheme versionScheme) throws IOException;
 
   /**
    * @return the jsonFactory
@@ -275,7 +271,7 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
         generator.writeStartArray();
       }
       for (MetaBuilder meta : metas) {
-        build(generator, meta);
+        buildMeta(generator, meta);
       }
       if (metas.size() > 1) {
         generator.writeEndArray();
@@ -285,7 +281,7 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
     PayloadBuilder payload = builder.getPayload();
     if (payload != null) {
       writeField(generator, PAYLOAD_FIELD);
-      build(generator, payload);
+      buildPayload(generator, payload);
     }
 
     // TODO: media
@@ -385,7 +381,7 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
     generator.writeEndObject();
   }
 
-  private void build(JsonGenerator generator, MetaBuilder builder) throws IOException {
+  private void buildMeta(JsonGenerator generator, MetaBuilder builder) throws IOException {
 
     // start of the meta
     generator.writeStartObject();
@@ -418,7 +414,7 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
     }
   }
 
-  private void build(JsonGenerator generator, PayloadBuilder builder) throws IOException {
+  private void buildPayload(JsonGenerator generator, PayloadBuilder builder) throws IOException {
 
     // start of the payload
     generator.writeStartObject();
@@ -431,8 +427,8 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
     generator.writeEndObject();
   }
 
-  private <E extends AbstractResourceCollectionBuilder<E>> void buildResourceCollection(
-      JsonGenerator generator, AbstractResourceCollectionBuilder<E> builder) throws IOException {
+  private <E extends AbstractResourceCollectionBuilder<E>> void buildResourceCollection(JsonGenerator generator,
+      AbstractResourceCollectionBuilder<E> builder) throws IOException {
     buildGlobalAttributes(generator, builder);
 
     JsonResourceCollectionEntryGenerator creator = new JsonResourceCollectionEntryGenerator();
@@ -496,8 +492,8 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
     generator.writeEndArray();
   }
 
-  private <E extends AbstractLanguageSpecificBuilder<E>> void
-      buildGlobalAttributes(JsonGenerator generator, AbstractLanguageSpecificBuilder<E> builder) throws IOException {
+  private <E extends AbstractLanguageSpecificBuilder<E>> void buildGlobalAttributes(JsonGenerator generator,
+      AbstractLanguageSpecificBuilder<E> builder) throws IOException {
     String language = builder.getLanguage();
     if (language != null) {
       writeTextField(generator, LANG_FIELD, language);
@@ -576,8 +572,8 @@ public abstract class AbstractJsonOutputHandler extends JsonSupport implements O
       new CBORFirmwareOutputHandler().generate(generator, builder);
     }
 
-    private <E extends AbstractFileSystemItemBuilder<E>> void
-        buildFileSystemItem(JsonGenerator parent, AbstractFileSystemItemBuilder<E> builder) throws IOException {
+    private <E extends AbstractFileSystemItemBuilder<E>> void buildFileSystemItem(JsonGenerator parent,
+        AbstractFileSystemItemBuilder<E> builder) throws IOException {
 
       // TODO: support meta
 

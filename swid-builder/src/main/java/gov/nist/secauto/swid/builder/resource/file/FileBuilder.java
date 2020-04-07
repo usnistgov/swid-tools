@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.builder.resource.file;
 
 import static gov.nist.secauto.swid.builder.util.Util.requireNonEmpty;
@@ -40,8 +41,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.xml.bind.DatatypeConverter;
 
 public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
   private Long size;
@@ -167,6 +166,7 @@ public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
     hashAlgorithmToValueMap.put(algorithm, HashUtils.toBytes(hashHexBytes));
     return this;
   }
+
   /**
    * Sets the to-be-built file's version to the provided value.
    * 

@@ -23,6 +23,7 @@
  * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
  * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
  */
+
 package gov.nist.secauto.swid.swidval;
 
 import static gov.nist.secauto.decima.module.cli.CLIParser.DEFAULT_VALIDATION_REPORT_FILE;
@@ -42,7 +43,6 @@ import gov.nist.secauto.decima.xml.assessment.Factory;
 import gov.nist.secauto.decima.xml.assessment.result.ReportGenerator;
 import gov.nist.secauto.decima.xml.assessment.result.XMLResultBuilder;
 import gov.nist.secauto.decima.xml.document.XMLDocument;
-import gov.nist.secauto.swid.swidval.Version;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
