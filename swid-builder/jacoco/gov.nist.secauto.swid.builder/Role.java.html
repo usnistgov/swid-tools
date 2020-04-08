@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Role.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder</a> &gt; <span class="el_source">Role.java</span></div><h1>Role.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public interface Role {
+  Integer getIndex();
+
+  String getName();
+
+<span class="fc" id="L37">  static final Map&lt;String, Role&gt; byValueMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L39">  static final Map&lt;Integer, Role&gt; byIndexMap = new HashMap&lt;&gt;();</span>
+
+  /**
+   * Initialize the mapping of role index and text values.
+   * 
+   * @param index
+   *          the index position
+   * @param value
+   *          the human-readable value
+   */
+  default void init(Integer index, String value) {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">    if (index != null) {</span>
+<span class="fc" id="L51">      synchronized (byIndexMap) {</span>
+<span class="fc" id="L52">        byIndexMap.put(index, this);</span>
+<span class="fc" id="L53">      }</span>
+    }
+<span class="fc" id="L55">    synchronized (byValueMap) {</span>
+<span class="fc" id="L56">      byValueMap.put(value, this);</span>
+<span class="fc" id="L57">    }</span>
+<span class="fc" id="L58">  }</span>
+
+  /**
+   * Assign a new role to the private id space.
+   * 
+   * @param indexValue
+   *          the index value to use
+   * @param name
+   *          the human-readable name
+   * @return the new role
+   */
+  public static Role assignPrivateRole(int indexValue, String name) {
+    // force initialization of the known roles
+<span class="nc" id="L71">    KnownRole.values();</span>
+<span class="nc" id="L72">    Role retval = null;</span>
+<span class="nc" id="L73">    synchronized (byValueMap) {</span>
+      @SuppressWarnings(&quot;unlikely-arg-type&quot;)
+<span class="nc" id="L75">      Role value = byValueMap.get(indexValue);</span>
+<span class="nc" id="L76">      retval = value;</span>
+<span class="nc" id="L77">    }</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">    if (retval == null) {</span>
+<span class="nc" id="L79">      retval = new UnknownRole(indexValue, name);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">    } else if (retval.getName().equals(name)) {</span>
+      // return the current role
+    } else {
+<span class="nc" id="L83">      throw new IllegalStateException(&quot;the role with the name '&quot; + retval.getName()</span>
+          + &quot;' is already assigned to the index value '&quot; + indexValue + &quot;'&quot;);
+    }
+<span class="nc" id="L86">    return retval;</span>
+  }
+
+  /**
+   * Lookup a role by the provided index value.
+   * 
+   * @param value
+   *          the index value to lookup the role for
+   * @return the matching role or {@code null} if no matching role was not found.
+   */
+  public static Role lookupByIndex(int value) {
+    // force initialization of the known roles
+<span class="nc" id="L98">    KnownRole.values();</span>
+<span class="nc" id="L99">    Role retval = null;</span>
+<span class="nc" id="L100">    synchronized (byIndexMap) {</span>
+<span class="nc" id="L101">      retval = byIndexMap.get(value);</span>
+<span class="nc" id="L102">    }</span>
+<span class="nc" id="L103">    return retval;</span>
+  }
+
+  /**
+   * Lookup a role by the provided human-readable name.
+   * 
+   * @param name
+   *          the name to lookup the role by
+   * @return the matching role or {@code null} if no matching role was not found.
+   */
+  public static Role lookupByName(String name) {
+    // force initialization of the known roles
+<span class="nc" id="L115">    KnownRole.values();</span>
+<span class="nc" id="L116">    Role retval = null;</span>
+<span class="nc" id="L117">    synchronized (byValueMap) {</span>
+<span class="nc" id="L118">      retval = byValueMap.get(name);</span>
+<span class="nc" id="L119">    }</span>
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">    if (retval == null) {</span>
+<span class="nc" id="L122">      retval = new UnknownRole(name);</span>
+    }
+<span class="nc" id="L124">    return retval;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

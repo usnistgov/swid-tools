@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>SWID Repository Client - Checkstyle report</title>
+    <link>https://pages.nist.gov/swid-tools/swid-repo-client/</link>
+    <description>SWID Repository Client - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2020 National Institute of Standards and Technology</copyright>
+    <item>
+      <title>File: 13,
+             Errors: 0,
+             Warnings: 68,
+             Infos: 0
+      </title>
+            <link>https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.HTTPServiceImpl.java">gov/nist/secauto/swid/client/service/HTTPServiceImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.JWTException.java">gov/nist/secauto/swid/client/service/JWTException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.totp.Totp.java">gov/nist/secauto/swid/client/totp/Totp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.LoginService.java">gov/nist/secauto/swid/client/service/LoginService.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.TagType.java">gov/nist/secauto/swid/client/service/TagType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.HTTPService.java">gov/nist/secauto/swid/client/service/HTTPService.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.Application.java">gov/nist/secauto/swid/client/Application.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.PayloadBuilderServiceImpl.java">gov/nist/secauto/swid/client/service/PayloadBuilderServiceImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.PayloadBuilderService.java">gov/nist/secauto/swid/client/service/PayloadBuilderService.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.Action.java">gov/nist/secauto/swid/client/service/Action.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.HttpClientFactory.java">gov/nist/secauto/swid/client/service/HttpClientFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.totp.Hotp.java">gov/nist/secauto/swid/client/totp/Hotp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-repo-client//checkstyle.html#gov.nist.secauto.swid.client.service.LoginServiceImpl.java">gov/nist/secauto/swid/client/service/LoginServiceImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

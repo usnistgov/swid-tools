@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractResourceCollectionBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.resource</a> &gt; <span class="el_source">AbstractResourceCollectionBuilder.java</span></div><h1>AbstractResourceCollectionBuilder.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.resource;
+
+import gov.nist.secauto.swid.builder.AbstractLanguageSpecificBuilder;
+import gov.nist.secauto.swid.builder.ValidationException;
+import gov.nist.secauto.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.secauto.swid.builder.resource.file.FileBuilder;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public abstract class AbstractResourceCollectionBuilder&lt;E extends AbstractResourceCollectionBuilder&lt;E&gt;&gt;
+    extends AbstractLanguageSpecificBuilder&lt;E&gt; {
+  private Map&lt;String, DirectoryBuilder&gt; directoryMap;
+  private List&lt;ResourceBuilder&gt; resources;
+
+  public AbstractResourceCollectionBuilder() {
+<span class="fc" id="L48">    super();</span>
+<span class="fc" id="L49">  }</span>
+
+  @Override
+  public void reset() {
+<span class="fc" id="L53">    super.reset();</span>
+<span class="fc" id="L54">    directoryMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L55">    resources = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L56">  }</span>
+
+  /**
+   * Creates a new file builder based on resource pointed to by a sequence of path segments.
+   * 
+   * @param pathSegments
+   *          a sequence of path segements that represent a path to a resource
+   * @return a new file builder representing the provided path
+   */
+  public FileBuilder newFileResource(List&lt;String&gt; pathSegments) {
+    FileBuilder retval;
+    String filename;
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">    if (pathSegments.size() &gt; 1) {</span>
+<span class="nc" id="L69">      List&lt;String&gt; directoryPath = pathSegments.subList(0, pathSegments.size() - 1);</span>
+<span class="nc" id="L70">      DirectoryBuilder directoryBuilder = getDirectoryBuilder(directoryPath);</span>
+<span class="nc" id="L71">      filename = pathSegments.get(pathSegments.size() - 1);</span>
+<span class="nc" id="L72">      retval = directoryBuilder.newFileResource(filename);</span>
+<span class="nc" id="L73">    } else {</span>
+<span class="fc" id="L74">      filename = pathSegments.get(0);</span>
+<span class="fc" id="L75">      retval = FileBuilder.create();</span>
+<span class="fc" id="L76">      retval.name(filename);</span>
+<span class="fc" id="L77">      resources.add(retval);</span>
+    }
+<span class="fc" id="L79">    return retval;</span>
+  }
+
+  /**
+   * Creates a new firmware resource, adding it to this resource collection.
+   * 
+   * @return the new firmware builder
+   */
+  public FirmwareBuilder newFirmwareResource() {
+<span class="fc" id="L88">    FirmwareBuilder retval = FirmwareBuilder.create();</span>
+<span class="fc" id="L89">    resources.add(retval);</span>
+<span class="fc" id="L90">    return retval;</span>
+  }
+
+  private DirectoryBuilder getDirectoryBuilder(List&lt;String&gt; directoryPath) {
+<span class="nc" id="L94">    DirectoryBuilder retval = null;</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">    for (String name : directoryPath) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">      if (retval == null) {</span>
+<span class="nc" id="L97">        DirectoryBuilder dir = directoryMap.get(name);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (dir == null) {</span>
+<span class="nc" id="L99">          dir = DirectoryBuilder.create();</span>
+<span class="nc" id="L100">          dir.name(name);</span>
+<span class="nc" id="L101">          directoryMap.put(name, dir);</span>
+<span class="nc" id="L102">          resources.add(dir);</span>
+        }
+<span class="nc" id="L104">        retval = dir;</span>
+<span class="nc" id="L105">      } else {</span>
+<span class="nc" id="L106">        retval = retval.getDirectoryResource(name);</span>
+      }
+<span class="nc" id="L108">    }</span>
+<span class="nc" id="L109">    return retval;</span>
+  }
+
+  /**
+   * Retrieves the child resources that match the specified builder..
+   * 
+   * @param &lt;T&gt;
+   *          the type of builder to filter on
+   * @param clazz
+   *          the builder to filter on
+   * @return the matching resources
+   */
+  public &lt;T extends ResourceBuilder&gt; List&lt;T&gt; getResources(Class&lt;T&gt; clazz) {
+    // List&lt;T&gt; retval = new LinkedList&lt;&gt;();
+    // for (ResourceBuilder builder : resources) {
+    // if (clazz.isInstance(builder)) {
+    // retval.add((T)builder);
+    // }
+    // }
+    @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L129">    List&lt;? extends T&gt; retval</span>
+<span class="fc" id="L130">        = resources.stream().filter(e -&gt; clazz.isInstance(e)).map(e -&gt; (T) e).collect(Collectors.toList());</span>
+<span class="fc" id="L131">    return Collections.unmodifiableList(retval);</span>
+  }
+
+  public List&lt;ResourceBuilder&gt; getResources() {
+<span class="fc" id="L135">    return Collections.unmodifiableList(resources);</span>
+  }
+
+  @Override
+  public void validate() throws ValidationException {
+<span class="fc" id="L140">    super.validate();</span>
+<span class="fc" id="L141">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

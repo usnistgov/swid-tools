@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IsStringSetEqual.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Validator</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.swidval.services</a> &gt; <span class="el_source">IsStringSetEqual.java</span></div><h1>IsStringSetEqual.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.swidval.services;
+
+import net.sf.saxon.expr.XPathContext;
+import net.sf.saxon.lib.ExtensionFunctionCall;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.om.Sequence;
+import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.value.BooleanValue;
+import net.sf.saxon.value.SequenceType;
+
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+<span class="fc" id="L42">public class IsStringSetEqual extends ExtensionFunctionDefinition {</span>
+<span class="fc" id="L43">  private static final StructuredQName FUNCTION_QNAME</span>
+      = new StructuredQName(&quot;java-swid&quot;, &quot;java:gov.nist.secauto.swid.swidval.schematron&quot;, &quot;isStringSetEqual&quot;);
+
+<span class="fc" id="L46">  private static final SequenceType[] FUNCTION_ARGUMENTS</span>
+      = new SequenceType[] { SequenceType.STRING_SEQUENCE, SequenceType.STRING_SEQUENCE, SequenceType.OPTIONAL_STRING };
+
+  @Override
+  public StructuredQName getFunctionQName() {
+<span class="fc" id="L51">    return FUNCTION_QNAME;</span>
+  }
+
+  @Override
+  public SequenceType[] getArgumentTypes() {
+<span class="nc" id="L56">    return FUNCTION_ARGUMENTS;</span>
+  }
+
+  @Override
+  public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
+<span class="nc" id="L61">    return SequenceType.SINGLE_BOOLEAN;</span>
+  }
+
+  @Override
+  public ExtensionFunctionCall makeCallExpression() {
+<span class="nc" id="L66">    return new FunctionCall();</span>
+  }
+
+  private static class FunctionCall extends ExtensionFunctionCall {
+    @Override
+    public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
+<span class="nc" id="L72">      String left = arguments[0].head().getStringValue();</span>
+<span class="nc" id="L73">      String right = arguments[1].head().getStringValue();</span>
+
+      String pattern;
+<span class="nc bnc" id="L76" title="All 2 branches missed.">      if (arguments.length == 3) {</span>
+<span class="nc" id="L77">        pattern = arguments[2].head().getStringValue();</span>
+      } else {
+<span class="nc" id="L79">        pattern = &quot;\\s+&quot;;</span>
+      }
+
+<span class="nc" id="L82">      Set&lt;String&gt; leftSet = parseSet(left, pattern);</span>
+<span class="nc" id="L83">      Set&lt;String&gt; rightSet = parseSet(right, pattern);</span>
+<span class="nc" id="L84">      boolean retval = leftSet.equals(rightSet);</span>
+<span class="nc" id="L85">      return BooleanValue.get(retval);</span>
+    }
+
+    private Set&lt;String&gt; parseSet(String str, String pattern) {
+<span class="nc" id="L89">      Set&lt;String&gt; retval = new LinkedHashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">      for (String s : str.split(pattern)) {</span>
+<span class="nc" id="L91">        retval.add(s);</span>
+      }
+<span class="nc" id="L93">      return Collections.unmodifiableSet(retval);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

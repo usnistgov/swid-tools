@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HashAlgorithm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.resource</a> &gt; <span class="el_source">HashAlgorithm.java</span></div><h1>HashAlgorithm.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.resource;
+
+<span class="fc" id="L29">public enum HashAlgorithm {</span>
+<span class="fc" id="L30">  SHA_256(1, &quot;SHA-256&quot;, 256, &quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;),</span>
+<span class="fc" id="L31">  SHA_256_128(2, &quot;SHA_256_128&quot;, 128, &quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;),</span>
+<span class="fc" id="L32">  SHA_256_120(3, &quot;SHA_256_120&quot;, 120, &quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;),</span>
+<span class="fc" id="L33">  SHA_256_96(4, &quot;SHA_256_96&quot;, 96, &quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;),</span>
+<span class="fc" id="L34">  SHA_256_64(5, &quot;SHA_256_64&quot;, 64, &quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;),</span>
+<span class="fc" id="L35">  SHA_256_32(6, &quot;SHA_256_32&quot;, 32, &quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;),</span>
+<span class="fc" id="L36">  SHA_384(7, &quot;SHA_384&quot;, 384, &quot;http://www.w3.org/2001/04/xmldsig-more#sha384&quot;),</span>
+<span class="fc" id="L37">  SHA_512(8, &quot;SHA-512&quot;, 512, &quot;http://www.w3.org/2001/04/xmlenc#sha512&quot;),</span>
+<span class="fc" id="L38">  SHA_3_224(9, &quot;SHA_3_224&quot;, 224, &quot;http://www.w3.org/2007/05/xmldsig-more#sha3-224&quot;),</span>
+<span class="fc" id="L39">  SHA_3_256(9, &quot;SHA_3_256&quot;, 256, &quot;http://www.w3.org/2007/05/xmldsig-more#sha3-256&quot;),</span>
+<span class="fc" id="L40">  SHA_3_384(9, &quot;SHA_3_384&quot;, 384, &quot;http://www.w3.org/2007/05/xmldsig-more#sha3-384&quot;),</span>
+<span class="fc" id="L41">  SHA_3_512(9, &quot;SHA_3_512&quot;, 512, &quot;http://www.w3.org/2007/05/xmldsig-more#sha3-512&quot;);</span>
+
+  /**
+   * From the Named Information Hash Algorithm Registry:
+   * https://www.iana.org/assignments/named-information/named-information.xhtml#hash-alg
+   */
+  private final int index;
+  private final String name;
+  /**
+   * The value length (in bits).
+   */
+  private final int valueLength;
+  private final String namespace;
+
+<span class="fc" id="L55">  private HashAlgorithm(int index, String name, int valueLength, String namespace) {</span>
+<span class="fc" id="L56">    this.index = index;</span>
+<span class="fc" id="L57">    this.name = name;</span>
+<span class="fc" id="L58">    this.valueLength = valueLength;</span>
+<span class="fc" id="L59">    this.namespace = namespace;</span>
+<span class="fc" id="L60">  }</span>
+
+  /**
+   * Retrieve the integer idenx value.
+   * 
+   * @return the index value
+   */
+  public int getIndex() {
+<span class="fc" id="L68">    return index;</span>
+  }
+
+  /**
+   * Retrieve the human-readable text value.
+   * 
+   * @return the text name of the algorithm
+   */
+  public String getName() {
+<span class="fc" id="L77">    return name;</span>
+  }
+
+  /**
+   * Retrieve the length in bits for the digest value. This can be used to truncate the digest result
+   * if the algorithm requires this.
+   * 
+   * @return the valueLength (in bits)
+   */
+  public int getValueLength() {
+<span class="fc" id="L87">    return valueLength;</span>
+  }
+
+  /**
+   * The namespace URI for the hash algorithm.
+   * 
+   * @return a URI
+   */
+  public String getNamespace() {
+<span class="fc" id="L96">    return namespace;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

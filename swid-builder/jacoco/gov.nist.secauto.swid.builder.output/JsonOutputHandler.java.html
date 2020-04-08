@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JsonOutputHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.output</a> &gt; <span class="el_source">JsonOutputHandler.java</span></div><h1>JsonOutputHandler.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.output;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+
+import gov.nist.secauto.swid.builder.Role;
+import gov.nist.secauto.swid.builder.VersionScheme;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class JsonOutputHandler extends AbstractJsonOutputHandler {
+  private static final Map&lt;Long, String&gt; fieldIdToNameMap;
+
+  static {
+<span class="fc" id="L43">    fieldIdToNameMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L44">    fieldIdToNameMap.put(TAG_ID_FIELD, &quot;tag-id&quot;);</span>
+<span class="fc" id="L45">    fieldIdToNameMap.put(SWID_NAME_FIELD, &quot;swid-name&quot;);</span>
+<span class="fc" id="L46">    fieldIdToNameMap.put(ENTITY_FIELD, &quot;entity&quot;);</span>
+<span class="fc" id="L47">    fieldIdToNameMap.put(EVIDENCE_FIELD, &quot;evidence&quot;);</span>
+<span class="fc" id="L48">    fieldIdToNameMap.put(LINK_FIELD, &quot;link&quot;);</span>
+<span class="fc" id="L49">    fieldIdToNameMap.put(SOFTWARE_META_FIELD, &quot;software-meta&quot;);</span>
+<span class="fc" id="L50">    fieldIdToNameMap.put(PAYLOAD_FIELD, &quot;payload&quot;);</span>
+<span class="fc" id="L51">    fieldIdToNameMap.put(HASH_FIELD, &quot;hash&quot;);</span>
+<span class="fc" id="L52">    fieldIdToNameMap.put(CORPUS_FIELD, &quot;corpus&quot;);</span>
+<span class="fc" id="L53">    fieldIdToNameMap.put(PATCH_FIELD, &quot;patch&quot;);</span>
+<span class="fc" id="L54">    fieldIdToNameMap.put(MEDIA_FIELD, &quot;media&quot;);</span>
+<span class="fc" id="L55">    fieldIdToNameMap.put(SUPPLEMENTAL_FIELD, &quot;supplemental&quot;);</span>
+<span class="fc" id="L56">    fieldIdToNameMap.put(TAG_VERSION_FIELD, &quot;tag-version&quot;);</span>
+<span class="fc" id="L57">    fieldIdToNameMap.put(SOFTWARE_VERSION_FIELD, &quot;software-version&quot;);</span>
+<span class="fc" id="L58">    fieldIdToNameMap.put(VERSION_SCHEME_FIELD, &quot;version-scheme&quot;);</span>
+<span class="fc" id="L59">    fieldIdToNameMap.put(LANG_FIELD, &quot;lang&quot;);</span>
+<span class="fc" id="L60">    fieldIdToNameMap.put(DIRECTORY_FIELD, &quot;directory&quot;);</span>
+<span class="fc" id="L61">    fieldIdToNameMap.put(FILE_FIELD, &quot;file&quot;);</span>
+<span class="fc" id="L62">    fieldIdToNameMap.put(PROCESS_FIELD, &quot;process&quot;);</span>
+<span class="fc" id="L63">    fieldIdToNameMap.put(RESOURCE_FIELD, &quot;resource&quot;);</span>
+<span class="fc" id="L64">    fieldIdToNameMap.put(SIZE_FIELD, &quot;size&quot;);</span>
+<span class="fc" id="L65">    fieldIdToNameMap.put(FILE_VERSION_FIELD, &quot;file-version&quot;);</span>
+<span class="fc" id="L66">    fieldIdToNameMap.put(KEY_FIELD, &quot;key&quot;);</span>
+<span class="fc" id="L67">    fieldIdToNameMap.put(LOCATION_FIELD, &quot;location&quot;);</span>
+<span class="fc" id="L68">    fieldIdToNameMap.put(FS_NAME_FIELD, &quot;fs-name&quot;);</span>
+<span class="fc" id="L69">    fieldIdToNameMap.put(ROOT_FIELD, &quot;root&quot;);</span>
+<span class="fc" id="L70">    fieldIdToNameMap.put(PATH_ELEMENTS_FIELD, &quot;path-elements&quot;);</span>
+<span class="fc" id="L71">    fieldIdToNameMap.put(PROCESS_NAME_FIELD, &quot;process-name&quot;);</span>
+<span class="fc" id="L72">    fieldIdToNameMap.put(PID_FIELD, &quot;pid&quot;);</span>
+<span class="fc" id="L73">    fieldIdToNameMap.put(TYPE_FIELD, &quot;type&quot;);</span>
+<span class="fc" id="L74">    fieldIdToNameMap.put(ENTITY_NAME_FIELD, &quot;entity-name&quot;);</span>
+<span class="fc" id="L75">    fieldIdToNameMap.put(REG_ID_FIELD, &quot;reg-id&quot;);</span>
+<span class="fc" id="L76">    fieldIdToNameMap.put(ROLE_FIELD, &quot;role&quot;);</span>
+<span class="fc" id="L77">    fieldIdToNameMap.put(THUMBPRINT_FIELD, &quot;thumbprint&quot;);</span>
+<span class="fc" id="L78">    fieldIdToNameMap.put(DATE_FIELD, &quot;date&quot;);</span>
+<span class="fc" id="L79">    fieldIdToNameMap.put(DEVICE_ID_FIELD, &quot;device-id&quot;);</span>
+<span class="fc" id="L80">    fieldIdToNameMap.put(ARTIFACT_FIELD, &quot;artifact&quot;);</span>
+<span class="fc" id="L81">    fieldIdToNameMap.put(HREF_FIELD, &quot;href&quot;);</span>
+<span class="fc" id="L82">    fieldIdToNameMap.put(OWNERSHIP_FIELD, &quot;ownership&quot;);</span>
+<span class="fc" id="L83">    fieldIdToNameMap.put(REL_FIELD, &quot;rel&quot;);</span>
+<span class="fc" id="L84">    fieldIdToNameMap.put(MEDIA_TYPE_FIELD, &quot;media-type&quot;);</span>
+<span class="fc" id="L85">    fieldIdToNameMap.put(USE_FIELD, &quot;use&quot;);</span>
+<span class="fc" id="L86">    fieldIdToNameMap.put(ACTIVATION_STATUS_FIELD, &quot;activation-status&quot;);</span>
+<span class="fc" id="L87">    fieldIdToNameMap.put(CHANNEL_TYPE_FIELD, &quot;channel-type&quot;);</span>
+<span class="fc" id="L88">    fieldIdToNameMap.put(COLLOQUIAL_VERSION_FIELD, &quot;colloquial-version&quot;);</span>
+<span class="fc" id="L89">    fieldIdToNameMap.put(DESCRIPTION_FIELD, &quot;description&quot;);</span>
+<span class="fc" id="L90">    fieldIdToNameMap.put(EDITION_FIELD, &quot;edition&quot;);</span>
+<span class="fc" id="L91">    fieldIdToNameMap.put(ENTITLEMENT_DATA_REQUIRED_FIELD, &quot;entitlement-data-required&quot;);</span>
+<span class="fc" id="L92">    fieldIdToNameMap.put(ENTITLEMENT_KEY_FIELD, &quot;entitlement-key&quot;);</span>
+<span class="fc" id="L93">    fieldIdToNameMap.put(GENERATOR_FIELD, &quot;generator&quot;);</span>
+<span class="fc" id="L94">    fieldIdToNameMap.put(PERSISTENT_ID_FIELD, &quot;persistent-id&quot;);</span>
+<span class="fc" id="L95">    fieldIdToNameMap.put(PRODUCT_FIELD, &quot;product&quot;);</span>
+<span class="fc" id="L96">    fieldIdToNameMap.put(PRODUCT_FAMILY_FIELD, &quot;product-family&quot;);</span>
+<span class="fc" id="L97">    fieldIdToNameMap.put(REVISION_FIELD, &quot;revision&quot;);</span>
+<span class="fc" id="L98">    fieldIdToNameMap.put(SUMMARY_FIELD, &quot;summary&quot;);</span>
+<span class="fc" id="L99">    fieldIdToNameMap.put(UNSPSC_CODE_FIELD, &quot;unspsc-code&quot;);</span>
+<span class="fc" id="L100">    fieldIdToNameMap.put(UNSPSC_VERSION_FIELD, &quot;unspsc-version&quot;);</span>
+<span class="fc" id="L101">  }</span>
+
+  private static String lookupFieldName(long fieldId) {
+<span class="fc" id="L104">    return fieldIdToNameMap.get(fieldId);</span>
+  }
+
+  public JsonOutputHandler() {
+<span class="nc" id="L108">    this(new JsonFactory());</span>
+<span class="nc" id="L109">  }</span>
+
+  public JsonOutputHandler(JsonFactory jsonFactory) {
+<span class="fc" id="L112">    super(jsonFactory);</span>
+<span class="fc" id="L113">  }</span>
+
+  @Override
+  protected void writeField(JsonGenerator generator, long fieldId) throws IOException {
+<span class="fc" id="L117">    generator.writeFieldName(lookupFieldName(fieldId));</span>
+<span class="fc" id="L118">  }</span>
+
+  @Override
+  protected void writeRole(JsonGenerator generator, Role role) throws IOException {
+<span class="fc" id="L122">    generator.writeString(role.getName());</span>
+<span class="fc" id="L123">  }</span>
+
+  @Override
+  protected void writeVersionScheme(JsonGenerator generator, VersionScheme versionScheme) throws IOException {
+<span class="fc" id="L127">    generator.writeString(versionScheme.getName());</span>
+<span class="fc" id="L128">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

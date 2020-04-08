@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FirmwareBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.resource.firmware</a> &gt; <span class="el_source">FirmwareBuilder.java</span></div><h1>FirmwareBuilder.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.resource.firmware;
+
+import gov.nist.secauto.swid.builder.ValidationException;
+import gov.nist.secauto.swid.builder.resource.AbstractResourceBuilder;
+import gov.nist.secauto.swid.builder.resource.ResourceCollectionEntryGenerator;
+import gov.nist.secauto.swid.builder.util.Util;
+
+import java.math.BigInteger;
+import java.time.ZonedDateTime;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+
+public class FirmwareBuilder extends AbstractResourceBuilder&lt;FirmwareBuilder&gt; {
+  private FirmwareIdentifier id;
+<span class="fc" id="L45">  private ZonedDateTime creationTimestamp = ZonedDateTime.now();</span>
+  private BigInteger version;
+  private String description;
+  private byte[] nonce;
+<span class="fc" id="L49">  private List&lt;ResourceReference&gt; aliases = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L50">  private List&lt;ResourceReference&gt; dependencies = new LinkedList&lt;&gt;();</span>
+  private String blockDeviceIdentifier;
+  private DeviceIdentifier targetDeviceIdentifier;
+<span class="fc" id="L53">  private List&lt;FirmwarePayloadBuilder&gt; payloads = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L54">  private Map&lt;Integer, byte[]&gt; extensions = new LinkedHashMap&lt;&gt;();</span>
+
+  public FirmwareBuilder() {
+<span class="fc" id="L57">    super();</span>
+<span class="fc" id="L58">    byte[] nonceData = new byte[8];</span>
+<span class="fc" id="L59">    new Random().nextBytes(nonceData);</span>
+<span class="fc" id="L60">    this.nonce = nonceData;</span>
+<span class="fc" id="L61">  }</span>
+
+  @Override
+  public &lt;T&gt; void accept(T parentContext, ResourceCollectionEntryGenerator&lt;T&gt; creator) {
+<span class="fc" id="L65">    creator.generate(parentContext, this);</span>
+<span class="fc" id="L66">  }</span>
+
+  /**
+   * Retrieve the identifier of the firmware manifest.
+   * 
+   * @return the id
+   */
+  public FirmwareIdentifier getId() {
+<span class="fc" id="L74">    return id;</span>
+  }
+
+  /**
+   * Set the id of the firmware manifest.
+   * 
+   * @param id
+   *          the firmware's identifier
+   * @return the same builder instance
+   */
+  public FirmwareBuilder id(FirmwareIdentifier id) {
+<span class="fc" id="L85">    Objects.requireNonNull(id, &quot;id&quot;);</span>
+<span class="fc" id="L86">    this.id = id;</span>
+<span class="fc" id="L87">    return this;</span>
+  }
+
+  /**
+   * Retrieve the identifier of the firmware manifest.
+   * 
+   * @return the creationTimestamp
+   */
+  public ZonedDateTime getCreationTimestamp() {
+<span class="fc" id="L96">    return creationTimestamp;</span>
+  }
+
+  /**
+   * Set the creation timestamp of the firmware manifest.
+   * 
+   * @param dateTime
+   *          the creationTimestamp to set
+   * @return the same builder instance
+   */
+  public FirmwareBuilder creationTimestamp(ZonedDateTime dateTime) {
+<span class="nc" id="L107">    Objects.requireNonNull(dateTime, &quot;dateTime&quot;);</span>
+<span class="nc" id="L108">    this.creationTimestamp = dateTime;</span>
+<span class="nc" id="L109">    return this;</span>
+  }
+
+  /**
+   * Retrieve the version of the firmware manifest.
+   * 
+   * @return the version
+   */
+  public BigInteger getVersion() {
+<span class="fc" id="L118">    return version;</span>
+  }
+
+  /**
+   * Set the version of the firmware manifest.
+   * 
+   * @param version
+   *          the firmware's version
+   * @return the same builder instance
+   */
+  public FirmwareBuilder version(BigInteger version) {
+<span class="fc" id="L129">    Objects.requireNonNull(version, &quot;version&quot;);</span>
+<span class="fc" id="L130">    this.version = version;</span>
+<span class="fc" id="L131">    return this;</span>
+  }
+
+  /**
+   * Retrieve the description of the firmware manifest.
+   * 
+   * @return the description
+   */
+  public String getDescription() {
+<span class="fc" id="L140">    return description;</span>
+  }
+
+  /**
+   * Set the version of the firmware manifest.
+   * 
+   * @param description
+   *          the firmware's description
+   * @return the same builder instance
+   */
+  public FirmwareBuilder description(String description) {
+<span class="nc" id="L151">    Util.requireNonEmpty(description, &quot;description&quot;);</span>
+<span class="nc" id="L152">    this.description = description;</span>
+<span class="nc" id="L153">    return this;</span>
+  }
+
+  /**
+   * Retrieve the nonce of the firmware manifest.
+   * 
+   * @return the nonce
+   */
+  public byte[] getNonce() {
+<span class="fc" id="L162">    return nonce;</span>
+  }
+
+  /**
+   * Set the nonce of the firmware manifest.
+   * 
+   * @param nonce
+   *          the firmware's nonce
+   * @return the same builder instance
+   */
+  public FirmwareBuilder nonce(byte[] nonce) {
+<span class="nc" id="L173">    Objects.requireNonNull(nonce, &quot;nonce&quot;);</span>
+<span class="nc" id="L174">    this.nonce = nonce;</span>
+<span class="nc" id="L175">    return this;</span>
+  }
+
+  /**
+   * Retrieve the aliases of the firmware manifest.
+   * 
+   * @return the aliases
+   */
+  public List&lt;ResourceReference&gt; getAliases() {
+<span class="nc" id="L184">    return aliases;</span>
+  }
+
+  /**
+   * Adds a new alias to the list of aliases.
+   * 
+   * @param alias
+   *          the alias to add
+   * @return the same builder instance
+   */
+  public FirmwareBuilder addAlias(ResourceReference alias) {
+<span class="nc" id="L195">    Objects.requireNonNull(alias, &quot;alias&quot;);</span>
+<span class="nc" id="L196">    this.aliases.add(alias);</span>
+<span class="nc" id="L197">    return this;</span>
+  }
+
+  /**
+   * Retrieve the dependencies of the firmware manifest.
+   * 
+   * @return the dependencies
+   */
+  public List&lt;ResourceReference&gt; getDependencies() {
+<span class="nc" id="L206">    return dependencies;</span>
+  }
+
+  /**
+   * Adds a new dependency to the list of aliases.
+   * 
+   * @param dependency
+   *          the dependency to add
+   * @return the same builder instance
+   */
+  public FirmwareBuilder addDependency(ResourceReference dependency) {
+<span class="nc" id="L217">    Objects.requireNonNull(dependency, &quot;dependency&quot;);</span>
+<span class="nc" id="L218">    this.dependencies.add(dependency);</span>
+<span class="nc" id="L219">    return this;</span>
+  }
+
+  /**
+   * Retrieve the block device identifier for the firmware.
+   * 
+   * @return the blockDeviceIdentifier
+   */
+  public String getBlockDeviceIdentifier() {
+<span class="nc" id="L228">    return blockDeviceIdentifier;</span>
+  }
+
+  /**
+   * Set the block device identifier.
+   * 
+   * @param blockDeviceIdentifier
+   *          a {@code non-null} block device identifier
+   * @return the same builder instance
+   */
+  public FirmwareBuilder blockDeviceIdentifier(String blockDeviceIdentifier) {
+<span class="nc" id="L239">    Util.requireNonEmpty(blockDeviceIdentifier, &quot;blockDeviceIdentifier&quot;);</span>
+<span class="nc" id="L240">    this.blockDeviceIdentifier = blockDeviceIdentifier;</span>
+<span class="nc" id="L241">    return this;</span>
+  }
+
+  /**
+   * Retrieve the target device identifier for the firmware manifest.
+   * 
+   * @return the targetDeviceIdentifier
+   */
+  public DeviceIdentifier getTargetDeviceIdentifier() {
+<span class="fc" id="L250">    return targetDeviceIdentifier;</span>
+  }
+
+  /**
+   * Set the target device identifier.
+   * 
+   * @param targetDeviceIdentifier
+   *          a {@code non-null} target device identifier
+   * @return the same builder instance
+   */
+  public FirmwareBuilder targetDeviceIdentifier(DeviceIdentifier targetDeviceIdentifier) {
+<span class="fc" id="L261">    Objects.requireNonNull(targetDeviceIdentifier, &quot;targetDeviceIdentifier&quot;);</span>
+<span class="fc" id="L262">    this.targetDeviceIdentifier = targetDeviceIdentifier;</span>
+<span class="fc" id="L263">    return this;</span>
+  }
+
+  /**
+   * Retrieve the firmware payloads of the firmware manifest.
+   * 
+   * @return the payloads
+   */
+  public List&lt;FirmwarePayloadBuilder&gt; getPayloads() {
+<span class="fc" id="L272">    return payloads;</span>
+  }
+
+  /**
+   * Adds a new payload to the list of payloads.
+   * 
+   * @param payload
+   *          the payload to add
+   * @return the same builder instance
+   */
+  public FirmwareBuilder addPayload(FirmwarePayloadBuilder payload) {
+<span class="fc" id="L283">    Objects.requireNonNull(payload, &quot;payload&quot;);</span>
+<span class="fc" id="L284">    this.payloads.add(payload);</span>
+<span class="fc" id="L285">    return this;</span>
+  }
+
+  /**
+   * Retrieve the firmware manifest extensions.
+   * 
+   * @return the extensions
+   */
+  public Map&lt;Integer, byte[]&gt; getExtensions() {
+<span class="fc" id="L294">    return extensions;</span>
+  }
+
+  /**
+   * Adds a new extension object.
+   * 
+   * @param extenstionType
+   *          the extension type identifier
+   * @param extension
+   *          the extension content
+   * @return the same builder instance
+   */
+  public FirmwareBuilder addExtension(int extenstionType, byte[] extension) {
+<span class="nc" id="L307">    this.extensions.put(extenstionType, extension);</span>
+<span class="nc" id="L308">    return this;</span>
+  }
+
+  @Override
+  public void validate() throws ValidationException {
+<span class="nc" id="L313">    validateNonNull(&quot;id&quot;, id);</span>
+<span class="nc" id="L314">    validateNonNull(&quot;creationTimestamp&quot;, creationTimestamp);</span>
+<span class="nc" id="L315">    validateNonNull(&quot;version&quot;, version);</span>
+<span class="nc" id="L316">    validateNonEmpty(&quot;nonce&quot;, nonce);</span>
+<span class="nc" id="L317">    validateNonNull(&quot;targetDeviceIdentifier&quot;, nonce);</span>
+<span class="nc" id="L318">  }</span>
+
+  public static FirmwareBuilder create() {
+<span class="fc" id="L321">    return new FirmwareBuilder();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

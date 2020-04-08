@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HTTPServiceImpl xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/gov/nist/secauto/swid/client/service/HTTPServiceImpl.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> * Portions of this software was developed by employees of the National Institute</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment"> * of Standards and Technology (NIST), an agency of the Federal Government and is</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> * being made available as a public service. Pursuant to title 17 United States</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> * Code Section 105, works of NIST employees are not subject to copyright</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> * protection in the United States. This software may be subject to foreign</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> * copyright. Permission in the United States and in foreign countries, to the</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> * extent that NIST may hold copyright, to use, copy, modify, create derivative</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> * works, and distribute this software and its documentation without fee is hereby</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> * granted on a non-exclusive basis, provided that this notice and disclaimer</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> * of warranty appears in all copies.</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment"> * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment"> * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">package</strong> gov.nist.secauto.swid.client.service;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> io.jsonwebtoken.Claims;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> io.jsonwebtoken.Header;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> io.jsonwebtoken.Jwt;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> io.jsonwebtoken.Jwts;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.StringEscapeUtils;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.http.HttpResponse;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.methods.HttpPost;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.methods.HttpPut;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.methods.HttpUriRequest;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.http.entity.StringEntity;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.http.impl.client.CloseableHttpClient;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.logging.log4j.LogManager;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.apache.logging.log4j.Logger;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> java.io.BufferedReader;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> java.io.FileWriter;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> java.io.InputStreamReader;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> java.io.StringReader;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> java.io.StringWriter;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> java.io.UnsupportedEncodingException;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> java.security.KeyManagementException;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">import</strong> java.security.KeyStore;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">import</strong> java.security.KeyStoreException;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> java.security.NoSuchAlgorithmException;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> java.security.Principal;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> java.security.UnrecoverableKeyException;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> java.security.cert.Certificate;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> java.security.cert.CertificateException;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> java.security.cert.X509Certificate;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> java.util.Enumeration;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.OutputKeys;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.Source;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.Transformer;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.TransformerException;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.TransformerFactory;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.stream.StreamResult;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">import</strong> javax.xml.transform.stream.StreamSource;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="HTTPServiceImpl" href="../../../../../../gov/nist/secauto/swid/client/service/HTTPServiceImpl.html#HTTPServiceImpl">HTTPServiceImpl</a> <strong class="jxr_keyword">implements</strong> <a name="HTTPService" href="../../../../../../gov/nist/secauto/swid/client/service/HTTPService.html#HTTPService">HTTPService</a> {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOG = LogManager.getLogger(HTTPServiceImpl.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TOKEN_CACHE_FILENAME = <span class="jxr_string">"./.access"</span>;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>    <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_comment">   * (non-Javadoc)</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_comment">   * </em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_comment">   * @see gov.nist.secauto.swid.client.client.PostService#postSWID(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_comment">   * java.lang.String, java.lang.String, java.lang.String, java.nio.file.Path, java.lang.String)</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_comment">   */</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>    @Override
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>    <strong class="jxr_keyword">public</strong> String postSwid(String clientCertificatePath, String clientCertificatePassword, String passwordSeed,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>        List&lt;String&gt; swidFiles, <a name="Action" href="../../../../../../gov/nist/secauto/swid/client/service/Action.html#Action">Action</a> action, <a name="TagType" href="../../../../../../gov/nist/secauto/swid/client/service/TagType.html#TagType">TagType</a> type) <strong class="jxr_keyword">throws</strong> KeyStoreException, NoSuchAlgorithmException,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>        CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, TransformerException {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <a name="HttpClientFactory" href="../../../../../../gov/nist/secauto/swid/c<a name="HttpClientFactory" href="../../../../../../gov/nist/secauto/swid/client/service/HttpClientFactory.html#HttpClientFactory">HttpClientFactory</a>pClientFactory.html#HttpClientFactory">HttpClientFactory</a> clientFactory = <strong class="jxr_keyword">new</strong> <a name="HttpClientFactory" href="../../../../../../gov/nist/secauto/swid/client/service/HttpClientFactory.html#HttpClientFactory">HttpClientFactory</a>();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      KeyStore identityKeyStore = clientFactory.loadKeyStore(clientCertificatePath, clientCertificatePassword);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      CloseableHttpClient client = clientFactory.build(identityKeyStore, clientCertificatePassword);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      String subjectDN = getKeyStoreSubjectDN(identityKeyStore);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>        String token = getCachedToken(subjectDN);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>        <strong class="jxr_keyword">if</strong> (token == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          <a name="LoginService" href="../../../../../../gov/nist/secauto/swid/client/service/LoginService.html#LoginService">LoginService</a> loginService = <strong class="jxr_keyword">new</strong> <a name="LoginServiceImpl" href="../../../../../../gov/nist/secauto/swid/client/service/LoginServiceImpl.html#LoginServiceImpl">LoginServiceImpl</a>();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          token = loginService.login(client, passwordSeed);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         setTokenCache(token, subjectDN);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         LOG.info(<span class="jxr_string">"Proceeding with cached token"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>       }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>       <strong class="jxr_keyword">if</strong> (token != <strong class="jxr_keyword">null</strong> &amp;&amp; !token.isEmpty()) {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         String response = <strong class="jxr_keyword">this</strong>.sendSWIDData(client, token, swidFiles, action, type);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">if</strong> (response != <strong class="jxr_keyword">null</strong> &amp;&amp; !response.isEmpty()) {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>           LOG.info(<span class="jxr_string">"***********************Post Application response***********************\n"</span> + response);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         <strong class="jxr_keyword">return</strong> response;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         LOG.info(<span class="jxr_string">"Authentication Failed, unable to post SWID to NVD repository"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>       }
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>       client.close();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>   }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_comment">   * (non-Javadoc)</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_comment">   * </em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_comment">   * @see gov.nist.secauto.swid.client.client.PostService#postSWID(java.lang.String, java.lang.String,</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_comment">   * java.lang.String, java.lang.String, java.lang.String, java.nio.file.Path, java.lang.String)</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_comment">   */</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>   @Override
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>   <strong class="jxr_keyword">public</strong> String sendSWIDData(CloseableHttpClient client, String token, List&lt;String&gt; swidFiles, <a name="Action" href="../../../../../../gov/nist/secauto/swid/client/service/Action.html#Action">Action</a> action,
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>       <a name="TagType" href="../../../../../../gov/nist/secauto/swid/client/service/TagType.html#TagType">TagType</a> type) <strong class="jxr_keyword">throws</strong> KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>       KeyManagementException, UnrecoverableKeyException, TransformerException {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     String responseString = callEndPoint(client, swidFiles, action, token, type);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <strong class="jxr_keyword">return</strong> StringEscapeUtils.unescapeXml(prettyFormat(responseString, 3));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>   }
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">   * Execute insert or update http request</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">   * @param httpClient</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">   * @param swidDataFilePath</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">   * @param action</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">   * @param token</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">   * @return</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">   * @throws IOException</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">   * @throws TransformerException</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>   <strong class="jxr_keyword">private</strong> String callEndPoint(CloseableHttpClient httpClient, List&lt;String&gt; swidFiles, <a name="Action" href="../../../../../../gov/nist/secauto/swid/client/service/Action.html#Action">Action</a> actionType, String token,
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>       <a name="TagType" href="../../../../../../gov/nist/secauto/swid/client/service/TagType.html#TagType">TagType</a> type) <strong class="jxr_keyword">throws</strong> IOException, TransformerException {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <a name="PayloadBuilderService" href="../../../../../../gov/nist/secauto/swid/client/service/PayloadBuilderService.html#PayloadBuilderService">PayloadBuilderService</a> payloadBuilder = <strong class="jxr_keyword">new</strong> <a name="PayloadBuilderServiceImpl" href="../../../../../../gov/nist/secauto/swid/client/service/PayloadBuilderServiceImpl.html#PayloadBuilderServiceImpl">PayloadBuilderServiceImpl</a>();
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     String responseString = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     String endPointURL = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     endPointURL = actionType.fetchEndpoint();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     LOG.info(<span class="jxr_string">"Calling SWID "</span> + actionType.action + <span class="jxr_string">": "</span> + endPointURL);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>     String payload = payloadBuilder.buildPayload(swidFiles, type);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     StringEntity entity = <strong class="jxr_keyword">new</strong> StringEntity(payload);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <em class="jxr_comment">// HttpPost</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     HttpUriRequest httpRequest = <strong class="jxr_keyword">new</strong> HttpPost(endPointURL);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     <strong class="jxr_keyword">if</strong> (actionType.equals(Action.insert)) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>       httpRequest = <strong class="jxr_keyword">new</strong> HttpPost(endPointURL);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>       ((HttpPost) httpRequest).setEntity(entity);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (actionType.equals(Action.update)) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>       httpRequest = <strong class="jxr_keyword">new</strong> HttpPut(endPointURL);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>       ((HttpPut) httpRequest).setEntity(entity);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     httpRequest.setHeader(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/xml"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     httpRequest.setHeader(<span class="jxr_string">"Content-type"</span>, <span class="jxr_string">"application/xml"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>     httpRequest.setHeader(<span class="jxr_string">"Authorization"</span>, <span class="jxr_string">"Bearer "</span> + token);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>     LOG.info(<span class="jxr_string">"SWID request payload *****************************************\n"</span> + prettyFormat(payload, 2));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>     HttpResponse httpResponse = httpClient.execute(httpRequest);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     LOG.info(<span class="jxr_string">"Response Status :"</span> + httpResponse.getStatusLine());
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>     BufferedReader rd = <strong class="jxr_keyword">new</strong> BufferedReader(<strong class="jxr_keyword">new</strong> InputStreamReader(httpResponse.getEntity().getContent()));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     String line = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     <strong class="jxr_keyword">while</strong> ((line = rd.readLine()) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>       responseString += line;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     }
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     <strong class="jxr_keyword">return</strong> responseString;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>   }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">   * Format XML response for human readability</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">   * @param input</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">   *          input string to format</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">   * @param indent</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">   *          the number of space to indext</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">   * @return the formatted string</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">   * @throws TransformerException</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">   *           if transformation error occurs</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String prettyFormat(String input, <strong class="jxr_keyword">int</strong> indent) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>     <strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong> || input.isEmpty()) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>     }
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     Source xmlInput = <strong class="jxr_keyword">new</strong> StreamSource(<strong class="jxr_keyword">new</strong> StringReader(input));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>     StringWriter stringWriter = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     StreamResult xmlOutput = <strong class="jxr_keyword">new</strong> StreamResult(stringWriter);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>     TransformerFactory transformerFactory = TransformerFactory.newInstance();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     <em class="jxr_comment">// transformerFactory.setAttribute("indent-number", indent);</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     Transformer transformer = transformerFactory.newTransformer();
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     transformer.setOutputProperty(OutputKeys.INDENT, <span class="jxr_string">"yes"</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, <span class="jxr_string">"yes"</span>);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     transformer.transform(xmlInput, xmlOutput);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>     <strong class="jxr_keyword">return</strong> xmlOutput.getWriter().toString();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>   }
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">   * Format XML input String</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">   * @param input</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">   *          the string to format</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">   * @return the formatted string</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">   * @throws TransformerException</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">   *           if error with formatting occurs</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String prettyFormat(String input) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     <strong class="jxr_keyword">return</strong> prettyFormat(input, 2);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>   }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">   * Fetch token if cached</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">   * @param subjectDN</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">   *          the DN of the certificate</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">   * @return the cached token string</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">   * @throws UnsupportedEncodingException</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">   *           if encoding error occurs</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">   * @throws IOException</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">   *           if error with read or write</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>   <strong class="jxr_keyword">public</strong> String getCachedToken(String subjectDN) <strong class="jxr_keyword">throws</strong> UnsupportedEncodingException, IOException {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>     String token = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     String dn = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>     String data = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     File file = <strong class="jxr_keyword">new</strong> File(TOKEN_CACHE_FILENAME);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>     <strong class="jxr_keyword">if</strong> (file.exists() &amp;&amp; file.isFile()) {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>       <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>         data = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(file.toPath()));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         String[] items = data.split(<span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>         <strong class="jxr_keyword">if</strong> (items != <strong class="jxr_keyword">null</strong> &amp;&amp; items.length == 2) {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>           dn = items[0];
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>           token = items[1];
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>         }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>         <strong class="jxr_keyword">if</strong> (dn != <strong class="jxr_keyword">null</strong> &amp;&amp; !dn.isEmpty() &amp;&amp; !dn.equals(subjectDN)) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>           <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="JWTException" href="../../../../../../gov/nist/secauto/swid/client/service/JWTException.html#JWTException">JWTException</a>(<span class="jxr_string">"Cached DN does not match DN of cient certificate provided"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>         }
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>         <strong class="jxr_keyword">if</strong> (token != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>           <strong class="jxr_keyword">int</strong> index = token.lastIndexOf('.');
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>           String withoutSignature = token.substring(0, index + 1);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>           @SuppressWarnings({ <span class="jxr_string">"unused"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>           Jwt&lt;Header, Claims&gt; untrusted = Jwts.parser().parseClaimsJwt(withoutSignature);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>           <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="JWTException" href="../../../../../../gov/nist/secauto/swid/client/service/JWTException.html#JWTException">JWTException</a>(<span class="jxr_string">"Cached token is NULL"</span>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>       } <strong class="jxr_keyword">catch</strong> (io.jsonwebtoken.ExpiredJwtException exp) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         LOG.info(<span class="jxr_string">"Cached token expired, proceed to attempt re-authentication"</span>);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>       } <strong class="jxr_keyword">catch</strong> (<a name="JWTException" href="../../../../../../gov/nist/secauto/swid/client/service/JWTException.html#JWTException">JWTException</a> e) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         LOG.info(e.getMessage() + <span class="jxr_string">", proceed to attempt re-authentication"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>       } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>         LOG.info(<span class="jxr_string">"Cached token is invalid, proceed to attempt re-authentication"</span>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>       }
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     }
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">return</strong> token;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>   }
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">   * Set token cache</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">   * @param token</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">   *          the token to cache</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">   * @param subjectDN</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">   *          DN of the certificate</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">   * @throws IOException</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">   *           if read or write error occurs</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTokenCache(String token, String subjectDN) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     FileWriter writer = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     <strong class="jxr_keyword">if</strong> (token == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>       LOG.info(<span class="jxr_string">"Unable to cache token, token is null"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>       <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>       writer = <strong class="jxr_keyword">new</strong> FileWriter(<strong class="jxr_keyword">new</strong> File(TOKEN_CACHE_FILENAME));
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>       writer.write(subjectDN + <span class="jxr_string">"\n"</span> + token);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>       LOG.info(<span class="jxr_string">"Token cached"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>       <strong class="jxr_keyword">if</strong> (writer != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>         writer.close();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>       }
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     }
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>   }
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">   * Get Subject DN from Keystore instance</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">   * @param ks</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">   *          the keystore</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">   * @return the string which is the DN of the certificate</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">   * @throws KeyStoreException</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">   *           if error occurs with keystore loading</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>   <strong class="jxr_keyword">public</strong> String getKeyStoreSubjectDN(KeyStore ks) <strong class="jxr_keyword">throws</strong> KeyStoreException {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     Enumeration&lt;String&gt; enumeration = ks.aliases();
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     String subjectDN = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>     <strong class="jxr_keyword">while</strong> (enumeration.hasMoreElements()) {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>       String alias = (String) enumeration.nextElement();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>       Certificate cert = ks.getCertificate(alias);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>       <strong class="jxr_keyword">if</strong> (cert instanceof X509Certificate) {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>         X509Certificate x509cert = (X509Certificate) cert;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>         <em class="jxr_comment">// Get subject</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>         Principal principal = x509cert.getSubjectDN();
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         subjectDN = principal.getName();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         LOG.info(<span class="jxr_string">"Subject DN from certificate: "</span> + subjectDN);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>       }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>     }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>     <strong class="jxr_keyword">return</strong> subjectDN;
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>   }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2020 <a href="https://www.nist.gov">National Institute of Standards and Technology</a>. All rights reserved.</div>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetaBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder</a> &gt; <span class="el_source">MetaBuilder.java</span></div><h1>MetaBuilder.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder;
+
+import static gov.nist.secauto.swid.builder.util.Util.requireNonEmpty;
+
+public class MetaBuilder extends AbstractLanguageSpecificBuilder&lt;MetaBuilder&gt; {
+  public static MetaBuilder create() {
+<span class="fc" id="L33">    return new MetaBuilder();</span>
+  }
+
+  private String activationStatus;
+  private String channelType;
+  private String colloquialVersion;
+  private String description;
+  private String edition;
+  private String entitlementDataRequired;
+  private String entitlementKey;
+  private String generator;
+  private String persistentId;
+  private String productBaseName;
+  private String productFamily;
+  private String revision;
+  private String summary;
+  private String unspscCode;
+  private String unspscVersion;
+
+  protected MetaBuilder() {
+<span class="fc" id="L53">    super();</span>
+<span class="fc" id="L54">  }</span>
+
+  @Override
+  public void reset() {
+<span class="fc" id="L58">    this.activationStatus = null;</span>
+<span class="fc" id="L59">    this.channelType = null;</span>
+<span class="fc" id="L60">    this.colloquialVersion = null;</span>
+<span class="fc" id="L61">    this.description = null;</span>
+<span class="fc" id="L62">    this.edition = null;</span>
+<span class="fc" id="L63">    this.entitlementDataRequired = null;</span>
+<span class="fc" id="L64">    this.entitlementKey = null;</span>
+<span class="fc" id="L65">    this.generator = null;</span>
+<span class="fc" id="L66">    this.persistentId = null;</span>
+<span class="fc" id="L67">    this.productBaseName = null;</span>
+<span class="fc" id="L68">    this.productFamily = null;</span>
+<span class="fc" id="L69">    this.revision = null;</span>
+<span class="fc" id="L70">    this.summary = null;</span>
+<span class="fc" id="L71">    this.unspscCode = null;</span>
+<span class="fc" id="L72">    this.unspscVersion = null;</span>
+<span class="fc" id="L73">  }</span>
+
+  /**
+   * Retrieves the activation status.
+   * 
+   * @return the activationStatus or {@code null} if one hasn't been set
+   */
+  public String getActivationStatus() {
+<span class="fc" id="L81">    return activationStatus;</span>
+  }
+
+  /**
+   * Sets the activation status.
+   * 
+   * @param activationStatus
+   *          the activationStatus to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setActivationStatus(String activationStatus) {
+<span class="nc" id="L92">    requireNonEmpty(activationStatus, &quot;activationStatus&quot;);</span>
+<span class="nc" id="L93">    this.activationStatus = activationStatus;</span>
+<span class="nc" id="L94">    return this;</span>
+  }
+
+  /**
+   * Retrieves the channel type.
+   * 
+   * @return the channelType or {@code null} if one hasn't been set
+   */
+  public String getChannelType() {
+<span class="fc" id="L103">    return channelType;</span>
+  }
+
+  /**
+   * Sets the channel type.
+   * 
+   * @param channelType
+   *          the channelType to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setChannelType(String channelType) {
+<span class="nc" id="L114">    requireNonEmpty(channelType, &quot;channelType&quot;);</span>
+<span class="nc" id="L115">    this.channelType = channelType;</span>
+<span class="nc" id="L116">    return this;</span>
+  }
+
+  /**
+   * Retrieves the colloquial version.
+   * 
+   * @return the colloquialVersion or {@code null} if one hasn't been set
+   */
+  public String getColloquialVersion() {
+<span class="fc" id="L125">    return colloquialVersion;</span>
+  }
+
+  /**
+   * Sets the colloquial version.
+   * 
+   * @param colloquialVersion
+   *          the colloquialVersion to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setColloquialVersion(String colloquialVersion) {
+<span class="fc" id="L136">    requireNonEmpty(colloquialVersion, &quot;colloquialVersion&quot;);</span>
+<span class="fc" id="L137">    this.colloquialVersion = colloquialVersion;</span>
+<span class="fc" id="L138">    return this;</span>
+  }
+
+  /**
+   * Retrieves the description.
+   * 
+   * @return the description or {@code null} if one hasn't been set
+   */
+  public String getDescription() {
+<span class="fc" id="L147">    return description;</span>
+  }
+
+  /**
+   * Sets the description.
+   * 
+   * @param description
+   *          the description to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setDescription(String description) {
+<span class="nc" id="L158">    requireNonEmpty(description, &quot;description&quot;);</span>
+<span class="nc" id="L159">    this.description = description;</span>
+<span class="nc" id="L160">    return this;</span>
+  }
+
+  /**
+   * Retrieves the edition.
+   * 
+   * @return the edition or {@code null} if one hasn't been set
+   */
+  public String getEdition() {
+<span class="fc" id="L169">    return edition;</span>
+  }
+
+  /**
+   * Sets the edition.
+   * 
+   * @param edition
+   *          the edition to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setEdition(String edition) {
+<span class="fc" id="L180">    requireNonEmpty(edition, &quot;edition&quot;);</span>
+<span class="fc" id="L181">    this.edition = edition;</span>
+<span class="fc" id="L182">    return this;</span>
+  }
+
+  /**
+   * Retrieves the indicator of if entitlement data is required.
+   * 
+   * @return the entitlementDataRequired or {@code null} if one hasn't been set
+   */
+  public String getEntitlementDataRequired() {
+<span class="fc" id="L191">    return entitlementDataRequired;</span>
+  }
+
+  /**
+   * Sets the indicator of if entitlement data is required.
+   * 
+   * @param entitlementDataRequired
+   *          the entitlementDataRequired to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setEntitlementDataRequired(String entitlementDataRequired) {
+<span class="nc" id="L202">    requireNonEmpty(entitlementDataRequired, &quot;entitlementDataRequired&quot;);</span>
+<span class="nc" id="L203">    this.entitlementDataRequired = entitlementDataRequired;</span>
+<span class="nc" id="L204">    return this;</span>
+  }
+
+  /**
+   * Retrieves the entitlement key.
+   * 
+   * @return the entitlementKey or {@code null} if one hasn't been set
+   */
+  public String getEntitlementKey() {
+<span class="fc" id="L213">    return entitlementKey;</span>
+  }
+
+  /**
+   * Sets the entitlement key.
+   * 
+   * @param entitlementKey
+   *          the entitlementKey to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setEntitlementKey(String entitlementKey) {
+<span class="nc" id="L224">    requireNonEmpty(entitlementKey, &quot;entitlementKey&quot;);</span>
+<span class="nc" id="L225">    this.entitlementKey = entitlementKey;</span>
+<span class="nc" id="L226">    return this;</span>
+  }
+
+  /**
+   * Retrieves the generator.
+   * 
+   * @return the generator or {@code null} if one hasn't been set
+   */
+  public String getGenerator() {
+<span class="fc" id="L235">    return generator;</span>
+  }
+
+  /**
+   * Sets the generator.
+   * 
+   * @param generator
+   *          the generator to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setGenerator(String generator) {
+<span class="nc" id="L246">    requireNonEmpty(generator, &quot;generator&quot;);</span>
+<span class="nc" id="L247">    this.generator = generator;</span>
+<span class="nc" id="L248">    return this;</span>
+  }
+
+  /**
+   * Retrieves the persistentId.
+   * 
+   * @return the persistentId or {@code null} if one hasn't been set
+   */
+  public String getPersistentId() {
+<span class="fc" id="L257">    return persistentId;</span>
+  }
+
+  /**
+   * Sets the persistentId.
+   * 
+   * @param persistentId
+   *          the persistentId to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setPersistentId(String persistentId) {
+<span class="nc" id="L268">    requireNonEmpty(persistentId, &quot;persistentId&quot;);</span>
+<span class="nc" id="L269">    this.persistentId = persistentId;</span>
+<span class="nc" id="L270">    return this;</span>
+  }
+
+  /**
+   * Retrieves the product base name.
+   * 
+   * @return the productBaseName or {@code null} if one hasn't been set
+   */
+  public String getProductBaseName() {
+<span class="fc" id="L279">    return productBaseName;</span>
+  }
+
+  /**
+   * Sets the product base name.
+   * 
+   * @param productBaseName
+   *          the productBaseName to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setProductBaseName(String productBaseName) {
+<span class="fc" id="L290">    requireNonEmpty(productBaseName, &quot;productBaseName&quot;);</span>
+<span class="fc" id="L291">    this.productBaseName = productBaseName;</span>
+<span class="fc" id="L292">    return this;</span>
+  }
+
+  /**
+   * Retrieves the product family.
+   * 
+   * @return the productFamily or {@code null} if one hasn't been set
+   */
+  public String getProductFamily() {
+<span class="fc" id="L301">    return productFamily;</span>
+  }
+
+  /**
+   * Sets the product family.
+   * 
+   * @param productFamily
+   *          the productFamily to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setProductFamily(String productFamily) {
+<span class="nc" id="L312">    requireNonEmpty(productFamily, &quot;productFamily&quot;);</span>
+<span class="nc" id="L313">    this.productFamily = productFamily;</span>
+<span class="nc" id="L314">    return this;</span>
+  }
+
+  /**
+   * Retrieves the revision.
+   * 
+   * @return the revision or {@code null} if one hasn't been set
+   */
+  public String getRevision() {
+<span class="fc" id="L323">    return revision;</span>
+  }
+
+  /**
+   * Sets the revision.
+   * 
+   * @param revision
+   *          the revision to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setRevision(String revision) {
+<span class="fc" id="L334">    requireNonEmpty(revision, &quot;revision&quot;);</span>
+<span class="fc" id="L335">    this.revision = revision;</span>
+<span class="fc" id="L336">    return this;</span>
+  }
+
+  /**
+   * Retrieves the summary.
+   * 
+   * @return the summary or {@code null} if one hasn't been set
+   */
+  public String getSummary() {
+<span class="fc" id="L345">    return summary;</span>
+  }
+
+  /**
+   * Sets the summary.
+   * 
+   * @param summary
+   *          the summary to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setSummary(String summary) {
+<span class="nc" id="L356">    requireNonEmpty(summary, &quot;summary&quot;);</span>
+<span class="nc" id="L357">    this.summary = summary;</span>
+<span class="nc" id="L358">    return this;</span>
+  }
+
+  /**
+   * Retrieves the UNSPSC code.
+   * 
+   * @return the unspscCode or {@code null} if one hasn't been set
+   */
+  public String getUnspscCode() {
+<span class="fc" id="L367">    return unspscCode;</span>
+  }
+
+  /**
+   * Sets the UNSPSC code.
+   * 
+   * @param unspscCode
+   *          the unspscCode to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setUnspscCode(String unspscCode) {
+<span class="nc" id="L378">    requireNonEmpty(unspscCode, &quot;unspscCode&quot;);</span>
+<span class="nc" id="L379">    this.unspscCode = unspscCode;</span>
+<span class="nc" id="L380">    return this;</span>
+  }
+
+  /**
+   * Retrieves the UNSPSC version.
+   * 
+   * @return the unspscVersion or {@code null} if one hasn't been set
+   */
+  public String getUnspscVersion() {
+<span class="fc" id="L389">    return unspscVersion;</span>
+  }
+
+  /**
+   * Sets the UNSPSC version.
+   * 
+   * @param unspscVersion
+   *          the unspscVersion to set
+   * @return the current builder instance
+   */
+  public MetaBuilder setUnspscVersion(String unspscVersion) {
+<span class="nc" id="L400">    requireNonEmpty(unspscVersion, &quot;unspscVersion&quot;);</span>
+<span class="nc" id="L401">    this.unspscVersion = unspscVersion;</span>
+<span class="nc" id="L402">    return this;</span>
+  }
+
+  @Override
+  public void validate() throws ValidationException {
+<span class="fc" id="L407">    super.validate();</span>
+<span class="fc" id="L408">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

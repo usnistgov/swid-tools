@@ -1,0 +1,6 @@
+gov.nist.secauto.swid.builder
+gov.nist.secauto.swid.builder.output
+gov.nist.secauto.swid.builder.resource
+gov.nist.secauto.swid.builder.resource.file
+gov.nist.secauto.swid.builder.resource.firmware
+gov.nist.secauto.swid.builder.util

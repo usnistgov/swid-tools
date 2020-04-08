@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XMLOutputHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.output</a> &gt; <span class="el_source">XMLOutputHandler.java</span></div><h1>XMLOutputHandler.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.output;
+
+import gov.nist.secauto.swid.builder.AbstractLanguageSpecificBuilder;
+import gov.nist.secauto.swid.builder.EntityBuilder;
+import gov.nist.secauto.swid.builder.LinkBuilder;
+import gov.nist.secauto.swid.builder.MetaBuilder;
+import gov.nist.secauto.swid.builder.Role;
+import gov.nist.secauto.swid.builder.SWIDBuilder;
+import gov.nist.secauto.swid.builder.ValidationException;
+import gov.nist.secauto.swid.builder.resource.AbstractResourceBuilder;
+import gov.nist.secauto.swid.builder.resource.AbstractResourceCollectionBuilder;
+import gov.nist.secauto.swid.builder.resource.EvidenceBuilder;
+import gov.nist.secauto.swid.builder.resource.HashAlgorithm;
+import gov.nist.secauto.swid.builder.resource.HashUtils;
+import gov.nist.secauto.swid.builder.resource.PathRelativizer;
+import gov.nist.secauto.swid.builder.resource.PayloadBuilder;
+import gov.nist.secauto.swid.builder.resource.ResourceBuilder;
+import gov.nist.secauto.swid.builder.resource.ResourceCollectionEntryGenerator;
+import gov.nist.secauto.swid.builder.resource.file.AbstractFileSystemItemBuilder;
+import gov.nist.secauto.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.secauto.swid.builder.resource.file.FileBuilder;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+
+public class XMLOutputHandler implements OutputHandler {
+<span class="fc" id="L64">  public static final Namespace SWID_NAMESPACE</span>
+<span class="fc" id="L65">      = Namespace.getNamespace(&quot;http://standards.iso.org/iso/19770/-2/2015/schema.xsd&quot;);</span>
+
+  private final Format format;
+
+  public XMLOutputHandler() {
+<span class="fc" id="L70">    this(Format.getPrettyFormat());</span>
+<span class="fc" id="L71">  }</span>
+
+<span class="fc" id="L73">  public XMLOutputHandler(Format format) {</span>
+<span class="fc" id="L74">    this.format = format;</span>
+<span class="fc" id="L75">  }</span>
+
+  @Override
+  public void write(SWIDBuilder builder, OutputStream os) throws IOException, ValidationException {
+<span class="fc" id="L79">    XMLOutputter out = new XMLOutputter(format);</span>
+<span class="fc" id="L80">    out.output(generateXML(builder), os);</span>
+<span class="fc" id="L81">  }</span>
+
+  /**
+   * Creates a JDOM2 XML Document based on the content of the builder.
+   * 
+   * @param builder
+   *          the {@link SWIDBuilder} to use the information from to build the XML model
+   * @return a JDOM2 {@link Document} based on the SWID information
+   * @throws ValidationException
+   *           if the SWID to be built is invalid
+   */
+  public Document generateXML(SWIDBuilder builder) throws ValidationException {
+<span class="fc" id="L93">    builder.validate();</span>
+
+<span class="fc" id="L95">    Document retval = buildDocument(builder);</span>
+<span class="fc" id="L96">    return retval;</span>
+  }
+
+  protected Document buildDocument(SWIDBuilder builder) {
+<span class="fc" id="L100">    return new Document(build(builder));</span>
+  }
+
+  protected Element build(SWIDBuilder builder) {
+<span class="fc" id="L104">    Element element = new Element(&quot;SoftwareIdentity&quot;, SWID_NAMESPACE);</span>
+
+<span class="fc" id="L106">    buildAbstractLanguageSpecificBuilder(builder, element);</span>
+
+    // required attributes
+<span class="fc" id="L109">    element.setAttribute(&quot;name&quot;, builder.getName());</span>
+<span class="fc" id="L110">    element.setAttribute(&quot;tagId&quot;, builder.getTagId());</span>
+
+    // optional attributes
+<span class="pc bpc" id="L113" title="4 of 5 branches missed.">    switch (builder.getTagType()) {</span>
+    case PRIMARY:
+<span class="fc" id="L115">      break;</span>
+    case CORPUS:
+<span class="nc" id="L117">      element.setAttribute(&quot;corpus&quot;, Boolean.TRUE.toString());</span>
+<span class="nc" id="L118">      break;</span>
+    case PATCH:
+<span class="nc" id="L120">      element.setAttribute(&quot;patch&quot;, Boolean.TRUE.toString());</span>
+<span class="nc" id="L121">      break;</span>
+    case SUPPLEMENTAL:
+<span class="nc" id="L123">      element.setAttribute(&quot;supplemental&quot;, Boolean.TRUE.toString());</span>
+<span class="nc" id="L124">      break;</span>
+    default:
+<span class="nc" id="L126">      throw new IllegalStateException(&quot;tagType: &quot; + builder.getTagType().toString());</span>
+    }
+
+<span class="fc" id="L129">    element.setAttribute(&quot;tagVersion&quot;, builder.getTagVersion().toString());</span>
+
+<span class="fc" id="L131">    buildAttribute(&quot;version&quot;, builder.getVersion(), element);</span>
+<span class="fc" id="L132">    buildAttribute(&quot;versionScheme&quot;, builder.getVersionScheme().getName(), element);</span>
+
+    // child elements
+    // Required
+<span class="fc bfc" id="L136" title="All 2 branches covered.">    for (EntityBuilder entity : builder.getEntities()) {</span>
+<span class="fc" id="L137">      element.addContent(build(entity));</span>
+<span class="fc" id="L138">    }</span>
+
+    // optional
+<span class="fc" id="L141">    EvidenceBuilder evidence = builder.getEvidence();</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">    if (evidence != null) {</span>
+<span class="nc" id="L143">      element.addContent(build(evidence));</span>
+    }
+
+<span class="fc bfc" id="L146" title="All 2 branches covered.">    for (LinkBuilder link : builder.getLinks()) {</span>
+<span class="fc" id="L147">      element.addContent(build(link));</span>
+<span class="fc" id="L148">    }</span>
+
+<span class="fc bfc" id="L150" title="All 2 branches covered.">    for (MetaBuilder meta : builder.getMetas()) {</span>
+<span class="fc" id="L151">      element.addContent(build(meta));</span>
+<span class="fc" id="L152">    }</span>
+
+<span class="fc" id="L154">    PayloadBuilder payload = builder.getPayload();</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">    if (payload != null) {</span>
+<span class="fc" id="L156">      element.addContent(build(payload));</span>
+    }
+
+<span class="fc" id="L159">    return element;</span>
+  }
+
+  protected Element build(EntityBuilder builder) {
+<span class="fc" id="L163">    Element element = new Element(&quot;Entity&quot;, SWID_NAMESPACE);</span>
+
+<span class="fc" id="L165">    buildAbstractLanguageSpecificBuilder(builder, element);</span>
+
+    // required attributes
+<span class="fc" id="L168">    element.setAttribute(&quot;name&quot;, builder.getName());</span>
+
+<span class="fc" id="L170">    StringBuilder sb = null;</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">    for (Role role : builder.getRoles()) {</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">      if (sb == null) {</span>
+<span class="fc" id="L173">        sb = new StringBuilder();</span>
+      } else {
+<span class="fc" id="L175">        sb.append(' ');</span>
+      }
+<span class="fc" id="L177">      sb.append(role.getName());</span>
+<span class="fc" id="L178">    }</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">    if (sb != null) {</span>
+<span class="fc" id="L180">      element.setAttribute(&quot;role&quot;, sb.toString());</span>
+    }
+
+    // optional attributes
+<span class="fc" id="L184">    buildAttribute(&quot;regid&quot;, builder.getRegid(), element);</span>
+<span class="fc" id="L185">    buildAttribute(&quot;thumbprint&quot;, builder.getThumbprint(), element);</span>
+
+<span class="fc" id="L187">    return element;</span>
+  }
+
+  protected Element build(EvidenceBuilder builder) {
+<span class="nc" id="L191">    Element element = new Element(&quot;Evidence&quot;, SWID_NAMESPACE);</span>
+
+<span class="nc" id="L193">    buildAbstractResourceCollectionBuilder(builder, element);</span>
+
+<span class="nc" id="L195">    ZonedDateTime date = builder.getDate();</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">    if (date != null) {</span>
+<span class="nc" id="L197">      element.setAttribute(&quot;date&quot;, date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));</span>
+    }
+<span class="nc" id="L199">    buildAttribute(&quot;deviceId&quot;, builder.getDeviceId(), element);</span>
+
+<span class="nc" id="L201">    return element;</span>
+  }
+
+  protected Element build(LinkBuilder builder) {
+<span class="fc" id="L205">    Element element = new Element(&quot;Link&quot;, SWID_NAMESPACE);</span>
+
+<span class="fc" id="L207">    buildAbstractLanguageSpecificBuilder(builder, element);</span>
+
+    // required attributes
+<span class="fc" id="L210">    element.setAttribute(&quot;href&quot;, builder.getHref().toString());</span>
+<span class="fc" id="L211">    element.setAttribute(&quot;rel&quot;, builder.getRel());</span>
+
+    // optional attributes
+<span class="fc" id="L214">    buildAttribute(&quot;artifact&quot;, builder.getArtifact(), element);</span>
+<span class="fc" id="L215">    buildAttribute(&quot;media&quot;, builder.getMedia(), element);</span>
+<span class="fc" id="L216">    buildAttribute(&quot;ownership&quot;, builder.getOwnership(), element);</span>
+<span class="fc" id="L217">    buildAttribute(&quot;type&quot;, builder.getMediaType(), element);</span>
+<span class="fc" id="L218">    buildAttribute(&quot;use&quot;, builder.getUse(), element);</span>
+
+<span class="fc" id="L220">    return element;</span>
+  }
+
+  protected Element build(MetaBuilder builder) {
+<span class="fc" id="L224">    Element element = new Element(&quot;Meta&quot;, SWID_NAMESPACE);</span>
+
+<span class="fc" id="L226">    buildAttribute(&quot;activationStatus&quot;, builder.getActivationStatus(), element);</span>
+<span class="fc" id="L227">    buildAttribute(&quot;channelType&quot;, builder.getChannelType(), element);</span>
+<span class="fc" id="L228">    buildAttribute(&quot;colloquialVersion&quot;, builder.getColloquialVersion(), element);</span>
+<span class="fc" id="L229">    buildAttribute(&quot;description&quot;, builder.getDescription(), element);</span>
+<span class="fc" id="L230">    buildAttribute(&quot;edition&quot;, builder.getEdition(), element);</span>
+<span class="fc" id="L231">    buildAttribute(&quot;entitlementDataRequired&quot;, builder.getEntitlementDataRequired(), element);</span>
+<span class="fc" id="L232">    buildAttribute(&quot;entitlementKey&quot;, builder.getEntitlementKey(), element);</span>
+<span class="fc" id="L233">    buildAttribute(&quot;generator&quot;, builder.getGenerator(), element);</span>
+<span class="fc" id="L234">    buildAttribute(&quot;persistentId&quot;, builder.getPersistentId(), element);</span>
+<span class="fc" id="L235">    buildAttribute(&quot;product&quot;, builder.getProductBaseName(), element);</span>
+<span class="fc" id="L236">    buildAttribute(&quot;productFamily&quot;, builder.getProductFamily(), element);</span>
+<span class="fc" id="L237">    buildAttribute(&quot;revision&quot;, builder.getRevision(), element);</span>
+<span class="fc" id="L238">    buildAttribute(&quot;summary&quot;, builder.getSummary(), element);</span>
+<span class="fc" id="L239">    buildAttribute(&quot;unspscCode&quot;, builder.getUnspscCode(), element);</span>
+<span class="fc" id="L240">    buildAttribute(&quot;unspscVersion&quot;, builder.getUnspscVersion(), element);</span>
+
+<span class="fc" id="L242">    return element;</span>
+  }
+
+  protected Element build(PayloadBuilder builder) {
+<span class="fc" id="L246">    Element element = new Element(&quot;Payload&quot;, SWID_NAMESPACE);</span>
+
+<span class="fc" id="L248">    buildAbstractResourceCollectionBuilder(builder, element);</span>
+
+<span class="fc" id="L250">    return element;</span>
+  }
+
+  private static &lt;E extends AbstractResourceCollectionBuilder&lt;E&gt;&gt; void
+      buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder&lt;E&gt; builder, Element element) {
+<span class="fc" id="L255">    buildAbstractLanguageSpecificBuilder(builder, element);</span>
+
+<span class="fc" id="L257">    XMLResourceCollectionEntryGenerator creator = new XMLResourceCollectionEntryGenerator();</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">    for (ResourceBuilder resourceBuilder : builder.getResources()) {</span>
+<span class="fc" id="L259">      resourceBuilder.accept(element, creator);</span>
+<span class="fc" id="L260">    }</span>
+<span class="fc" id="L261">  }</span>
+
+  private static &lt;E extends AbstractLanguageSpecificBuilder&lt;E&gt;&gt; void
+      buildAbstractLanguageSpecificBuilder(AbstractLanguageSpecificBuilder&lt;E&gt; builder, Element element) {
+<span class="fc" id="L265">    String language = builder.getLanguage();</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">    if (language != null) {</span>
+<span class="fc" id="L267">      element.setAttribute(&quot;lang&quot;, language, Namespace.XML_NAMESPACE);</span>
+    }
+<span class="fc" id="L269">  }</span>
+
+  private static void buildAttribute(String attributeName, String value, Element element) {
+<span class="fc bfc" id="L272" title="All 2 branches covered.">    if (value != null) {</span>
+<span class="fc" id="L273">      element.setAttribute(attributeName, value);</span>
+    }
+<span class="fc" id="L275">  }</span>
+
+  private static void buildAttribute(String attributeName, Object value, Element element) {
+<span class="fc bfc" id="L278" title="All 2 branches covered.">    if (value != null) {</span>
+<span class="fc" id="L279">      element.setAttribute(attributeName, value.toString());</span>
+    }
+<span class="fc" id="L281">  }</span>
+
+  private static class XMLResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator&lt;Element&gt; {
+<span class="fc" id="L284">    public XMLResourceCollectionEntryGenerator() {</span>
+<span class="fc" id="L285">    }</span>
+
+    @Override
+    public void generate(Element parent, DirectoryBuilder builder) {
+<span class="nc" id="L289">      Element element = new Element(&quot;Directory&quot;, XMLOutputHandler.SWID_NAMESPACE);</span>
+<span class="nc" id="L290">      parent.addContent(element);</span>
+
+<span class="nc" id="L292">      buildAbstractFileSystemItem(builder, element);</span>
+
+<span class="nc bnc" id="L294" title="All 2 branches missed.">      for (ResourceBuilder child : builder.getResources()) {</span>
+<span class="nc" id="L295">        child.accept(element, this);</span>
+<span class="nc" id="L296">      }</span>
+<span class="nc" id="L297">    }</span>
+
+    @Override
+    public void generate(Element parent, FileBuilder builder) {
+
+<span class="fc" id="L302">      Element element = new Element(&quot;File&quot;, XMLOutputHandler.SWID_NAMESPACE);</span>
+<span class="fc" id="L303">      parent.addContent(element);</span>
+
+<span class="fc" id="L305">      buildAbstractFileSystemItem(builder, element);</span>
+
+<span class="fc" id="L307">      XMLOutputHandler.buildAttribute(&quot;size&quot;, builder.getSize(), element);</span>
+<span class="fc" id="L308">      XMLOutputHandler.buildAttribute(&quot;version&quot;, builder.getVersion(), element);</span>
+
+<span class="fc" id="L310">      Element rootElement = parent;</span>
+<span class="pc bpc" id="L311" title="1 of 2 branches missed.">      while (rootElement.getParentElement() != null) {</span>
+<span class="nc" id="L312">        rootElement = rootElement.getParentElement();</span>
+      }
+<span class="fc bfc" id="L314" title="All 2 branches covered.">      for (Map.Entry&lt;HashAlgorithm, byte[]&gt; entry : builder.getHashAlgorithmToValueMap().entrySet()) {</span>
+<span class="fc" id="L315">        HashAlgorithm algorithm = entry.getKey();</span>
+<span class="fc" id="L316">        byte[] hashValue = entry.getValue();</span>
+
+<span class="fc" id="L318">        Namespace ns = Namespace.getNamespace(algorithm.getName(), algorithm.getNamespace());</span>
+<span class="fc" id="L319">        Namespace nsOld = rootElement.getNamespace(ns.getPrefix());</span>
+
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (nsOld == null) {</span>
+<span class="fc" id="L322">          rootElement.addNamespaceDeclaration(ns);</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">        } else if (!nsOld.getURI().equals(ns.getURI())) {</span>
+<span class="nc" id="L324">          element.addNamespaceDeclaration(ns);</span>
+        }
+<span class="fc" id="L326">        element.setAttribute(&quot;hash&quot;, HashUtils.toHexString(hashValue), ns);</span>
+<span class="fc" id="L327">      }</span>
+<span class="fc" id="L328">    }</span>
+
+    @Override
+    public void generate(Element parent, FirmwareBuilder firmwareBuilder) {
+<span class="nc" id="L332">      throw new UnsupportedOperationException(&quot;firmware is not supported by the XML SWID format&quot;);</span>
+    }
+
+    private static &lt;E extends AbstractFileSystemItemBuilder&lt;E&gt;&gt; void
+        buildAbstractFileSystemItem(AbstractFileSystemItemBuilder&lt;E&gt; builder, Element element) {
+<span class="fc" id="L337">      buildAbstractResourceBuilder(builder, element);</span>
+
+<span class="fc" id="L339">      XMLOutputHandler.buildAttribute(&quot;root&quot;, builder.getRoot(), element);</span>
+<span class="fc" id="L340">      List&lt;String&gt; location = builder.getLocation();</span>
+<span class="pc bpc" id="L341" title="2 of 4 branches missed.">      if (location != null &amp;&amp; !location.isEmpty()) {</span>
+<span class="nc" id="L342">        element.setAttribute(&quot;location&quot;, PathRelativizer.toURI(location).toString());</span>
+      }
+<span class="fc" id="L344">      XMLOutputHandler.buildAttribute(&quot;name&quot;, builder.getName(), element);</span>
+<span class="fc" id="L345">      XMLOutputHandler.buildAttribute(&quot;key&quot;, builder.getKey(), element);</span>
+<span class="fc" id="L346">    }</span>
+
+    private static &lt;E extends AbstractResourceBuilder&lt;E&gt;&gt; void
+        buildAbstractResourceBuilder(AbstractResourceBuilder&lt;E&gt; builder, Element element) {
+<span class="fc" id="L350">      XMLOutputHandler.buildAbstractLanguageSpecificBuilder(builder, element);</span>
+<span class="fc" id="L351">    }</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

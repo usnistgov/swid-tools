@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PathRelativizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.resource</a> &gt; <span class="el_source">PathRelativizer.java</span></div><h1>PathRelativizer.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.resource;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+
+<span class="nc" id="L37">public class PathRelativizer {</span>
+<span class="nc" id="L38">  public static final Pattern URI_SEPERATOR_PATTERN = Pattern.compile(&quot;\\/&quot;);</span>
+  public static final String URI_SEPERATOR = &quot;/&quot;;
+
+  /**
+   * Creates a relative sequence of path segments by 1) removing common path segments between the base
+   * and target, 2) using &quot;..&quot; to change the context from the base to the target directory, and 3) use
+   * of the remaining portion of the target path to complete the path segments.
+   * 
+   * @param base
+   *          the base path to relativize from
+   * @param target
+   *          the target path to relativize to
+   * @return a sequence of relative path segments pointing to the target from the base
+   */
+  public static List&lt;String&gt; relativize(URI base, URI target) {
+    // Remove path segments within the path having . and .. segments
+<span class="nc" id="L54">    base = base.normalize();</span>
+<span class="nc" id="L55">    target = target.normalize();</span>
+
+<span class="nc" id="L57">    return relativize(base.getPath(), target.getPath());</span>
+  }
+
+  /**
+   * Creates a relative sequence of path segments by 1) removing common path segments between the base
+   * and target, 2) using &quot;..&quot; to change the context from the base to the target directory, and 3) use
+   * of the remaining portion of the target path to complete the path segments.
+   * 
+   * @param base
+   *          the base path to relativize from
+   * @param target
+   *          the target path to relativize to
+   * @return a sequence of relative path segments pointing to the target from the base
+   */
+  public static List&lt;String&gt; relativize(String base, String target) {
+    // Based on code from
+    // http://stackoverflow.com/questions/10801283/get-relative-path-of-two-uris-in-java
+
+    // Split paths into segments
+<span class="nc" id="L76">    String[] baseSegments = URI_SEPERATOR_PATTERN.split(base);</span>
+<span class="nc" id="L77">    String[] targetSegments = URI_SEPERATOR_PATTERN.split(target);</span>
+
+    // Discard trailing segment of base path
+<span class="nc bnc" id="L80" title="All 4 branches missed.">    if (baseSegments.length &gt; 0 &amp;&amp; !base.endsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L81">      baseSegments = Arrays.copyOf(baseSegments, baseSegments.length - 1);</span>
+    }
+
+    // Remove common prefix segments
+<span class="nc" id="L85">    int segmentIndex = 0;</span>
+<span class="nc bnc" id="L86" title="All 4 branches missed.">    while (segmentIndex &lt; baseSegments.length &amp;&amp; segmentIndex &lt; targetSegments.length</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        &amp;&amp; baseSegments[segmentIndex].equals(targetSegments[segmentIndex])) {</span>
+<span class="nc" id="L88">      segmentIndex++;</span>
+    }
+
+    // Construct the relative path
+<span class="nc" id="L92">    int size = (baseSegments.length - segmentIndex) + (targetSegments.length - segmentIndex);</span>
+<span class="nc" id="L93">    List&lt;String&gt; retval = new ArrayList&lt;&gt;(size);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">    for (int j = 0; j &lt; (baseSegments.length - segmentIndex); j++) {</span>
+<span class="nc" id="L95">      retval.add(&quot;..&quot;);</span>
+    }
+
+<span class="nc bnc" id="L98" title="All 2 branches missed.">    for (int j = segmentIndex; j &lt; targetSegments.length; j++) {</span>
+<span class="nc" id="L99">      retval.add(targetSegments[j]);</span>
+    }
+<span class="nc" id="L101">    return Collections.unmodifiableList(retval);</span>
+  }
+
+  /**
+   * Converts a sequence of path segments to a relative URI.
+   * 
+   * @param relativePath
+   *          the path segments to base the URI on
+   * @return a relative URI
+   */
+  public static URI toURI(List&lt;String&gt; relativePath) {
+<span class="nc" id="L112">    StringBuilder retval = new StringBuilder();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">    for (String segment : relativePath) {</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">      if (retval.length() &gt; 0) {</span>
+<span class="nc" id="L115">        retval.append(&quot;/&quot;);</span>
+      }
+<span class="nc" id="L117">      retval.append(segment);</span>
+<span class="nc" id="L118">    }</span>
+<span class="nc" id="L119">    return URI.create(retval.toString());</span>
+  }
+
+  /**
+   * Normalizes path separators to '/'.
+   * 
+   * @param name
+   *          a file name
+   * @return a file path that has been normalized
+   */
+  public static String normalize(String name) {
+    // This will normalize the path separators based on OS semantics
+<span class="nc" id="L131">    File file = new File(name);</span>
+<span class="nc" id="L132">    String path = file.getPath();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">    if (!File.pathSeparator.equals(&quot;/&quot;)) {</span>
+      // Paths are expected in a relative URI form
+<span class="nc" id="L135">      path = path.replaceAll(&quot;/&quot;, &quot;\\/&quot;);</span>
+<span class="nc" id="L136">      path = path.replaceAll(&quot;\\\\&quot;, &quot;/&quot;);</span>
+    }
+<span class="nc" id="L138">    return path;</span>
+  }
+
+  /*
+   * public static void main(String[] args) { String base = &quot;SWIDTAG/swidtag5977492487829604934.swid&quot;;
+   * String target = &quot;lib/xml-resolver-1.2.jar&quot;; URI baseUri = URI.create(base); URI targetUri =
+   * URI.create(target); System.out.println(&quot;Base: &quot; + baseUri); System.out.println(&quot;Target: &quot; +
+   * targetUri); System.out.println(baseUri.relativize(targetUri)); List&lt;String&gt; pathSegments =
+   * relativize(base, target); System.out.println(&quot;Relative(String) segments: &quot; + pathSegments);
+   * System.out.println(&quot;Relative(String) URI: &quot; + toURI(pathSegments)); pathSegments =
+   * relativize(baseUri, targetUri); System.out.println(&quot;Relative(URI) segments: &quot; + pathSegments);
+   * System.out.println(&quot;Relative(URI) URI: &quot; + toURI(pathSegments)); System.out.println(&quot;Normal: &quot; +
+   * PathRelativizer.normalize(&quot;bootstrap\\js\\jquery.filtertable.min.js&quot;));
+   * System.out.println(&quot;Normal: &quot; + PathRelativizer.normalize(&quot;swidval-0.0.1-SNAPSHOT.jar&quot;));
+   * System.out.println(&quot;Normal: &quot; + PathRelativizer.normalize(&quot;lib/core-0.0.1-SNAPSHOT.jar&quot;)); }
+   */
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

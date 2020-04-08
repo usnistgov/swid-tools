@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntityBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder</a> &gt; <span class="el_source">EntityBuilder.java</span></div><h1>EntityBuilder.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder;
+
+import gov.nist.secauto.swid.builder.util.Util;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+public class EntityBuilder extends AbstractLanguageSpecificBuilder&lt;EntityBuilder&gt; {
+  private String name;
+  private String regid;
+  private List&lt;Role&gt; roles;
+  private String thumbprint;
+
+  protected EntityBuilder() {
+<span class="fc" id="L42">    super();</span>
+<span class="fc" id="L43">  }</span>
+
+  @Override
+  public void reset() {
+<span class="fc" id="L47">    super.reset();</span>
+<span class="fc" id="L48">    name = null;</span>
+<span class="fc" id="L49">    regid = null;</span>
+<span class="fc" id="L50">    roles = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L51">    thumbprint = null;</span>
+<span class="fc" id="L52">  }</span>
+
+  public static EntityBuilder create() {
+<span class="fc" id="L55">    return new EntityBuilder();</span>
+  }
+
+  public String getName() {
+<span class="fc" id="L59">    return name;</span>
+  }
+
+  public String getRegid() {
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">    return (regid == null ? SWIDConstants.ENTITY_REGID_DEFAULT : regid);</span>
+  }
+
+  public List&lt;Role&gt; getRoles() {
+<span class="fc" id="L67">    return roles;</span>
+  }
+
+  public String getThumbprint() {
+<span class="fc" id="L71">    return thumbprint;</span>
+  }
+
+  /**
+   * Set the name of the entity.
+   * 
+   * @param name
+   *          a non-{@code null} name value
+   * @return the sane builder instance
+   */
+  public EntityBuilder name(String name) {
+<span class="fc" id="L82">    Util.requireNonEmpty(name);</span>
+<span class="fc" id="L83">    this.name = name;</span>
+<span class="fc" id="L84">    return this;</span>
+  }
+
+  /**
+   * Sets the to-be-built entity's regid to the provided value.
+   * 
+   * @param regid
+   *          the regid value
+   * @return the same builder instance
+   */
+  public EntityBuilder regid(String regid) {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    if (SWIDConstants.ENTITY_REGID_DEFAULT.equals(regid)) {</span>
+<span class="nc" id="L96">      this.regid = null;</span>
+    } else {
+<span class="fc" id="L98">      this.regid = regid;</span>
+    }
+<span class="fc" id="L100">    return this;</span>
+  }
+
+  public EntityBuilder thumbprint(String thumbprint) {
+<span class="nc" id="L104">    this.thumbprint = thumbprint;</span>
+<span class="nc" id="L105">    return this;</span>
+  }
+
+  /**
+   * Assigns the identified role to the entity.
+   * 
+   * @see Role#assignPrivateRole(int, String)
+   * @see Role#lookupByIndex(int)
+   * @see Role#lookupByName(String)
+   * @param role
+   *          the role to assign
+   * @return the same builder instance
+   */
+  public EntityBuilder addRole(Role role) {
+<span class="fc" id="L119">    Objects.requireNonNull(role, &quot;role&quot;);</span>
+<span class="fc" id="L120">    this.roles.add(role);</span>
+<span class="fc" id="L121">    return this;</span>
+  }
+
+  @Override
+  public void validate() throws ValidationException {
+<span class="fc" id="L126">    super.validate();</span>
+<span class="fc" id="L127">    validateNonEmpty(&quot;name&quot;, name);</span>
+<span class="fc" id="L128">    validateNonEmpty(&quot;role&quot;, roles);</span>
+<span class="fc" id="L129">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

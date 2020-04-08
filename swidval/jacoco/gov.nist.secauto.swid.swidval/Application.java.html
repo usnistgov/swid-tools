@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Application.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Validator</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.swidval</a> &gt; <span class="el_source">Application.java</span></div><h1>Application.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.swidval;
+
+import static gov.nist.secauto.decima.module.cli.CLIParser.DEFAULT_VALIDATION_REPORT_FILE;
+import static gov.nist.secauto.decima.module.cli.CLIParser.DEFAULT_VALIDATION_RESULT_FILE;
+import static gov.nist.secauto.decima.module.cli.CLIParser.OPTION_VALIDATION_REPORT_FILE;
+import static gov.nist.secauto.decima.module.cli.CLIParser.OPTION_VALIDATION_RESULT_FILE;
+
+import gov.nist.secauto.decima.core.assessment.AssessmentException;
+import gov.nist.secauto.decima.core.assessment.AssessmentExecutor;
+import gov.nist.secauto.decima.core.assessment.result.AssessmentResultBuilder;
+import gov.nist.secauto.decima.core.assessment.result.AssessmentResults;
+import gov.nist.secauto.decima.core.classpath.ClasspathHandler;
+import gov.nist.secauto.decima.core.document.DocumentException;
+import gov.nist.secauto.decima.module.cli.CLIParser;
+import gov.nist.secauto.decima.module.cli.commons.cli.OptionEnumerationValidator;
+import gov.nist.secauto.decima.xml.assessment.Factory;
+import gov.nist.secauto.decima.xml.assessment.result.ReportGenerator;
+import gov.nist.secauto.decima.xml.assessment.result.XMLResultBuilder;
+import gov.nist.secauto.decima.xml.document.XMLDocument;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
+import org.apache.commons.cli.ParseException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.xml.transform.TransformerException;
+
+<span class="nc" id="L68">public class Application {</span>
+<span class="nc" id="L69">  private static final Logger log = LogManager.getLogger(Application.class);</span>
+  private static final String OPTION_USECASE = &quot;usecase&quot;;
+  private static final String OPTION_USECASE_VALUE_PRIMARY = &quot;primary&quot;;
+  private static final String OPTION_USECASE_VALUE_CORPUS = &quot;corpus&quot;;
+  private static final String OPTION_USECASE_VALUE_PATCH = &quot;patch&quot;;
+  private static final String OPTION_USECASE_VALUE_SUPPLEMENTAL = &quot;supplemental&quot;;
+  private static final String OPTION_USECASE_DEFAULT_VALUE = OPTION_USECASE_VALUE_PRIMARY;
+
+  private static final String OPTION_AUTHORITATIVE = &quot;A&quot;;
+  private static final String OPTION_NON_AUTHORITATIVE = &quot;a&quot;;
+
+  /**
+   * Runs the application.
+   * 
+   * @param args
+   *          the command line arguments
+   */
+  public static void main(String[] args) {
+<span class="nc" id="L87">    ClasspathHandler.initialize();</span>
+    try {
+<span class="nc" id="L89">      System.exit(new Application().run(args));</span>
+<span class="nc" id="L90">    } catch (ParseException e) {</span>
+<span class="nc" id="L91">      e.printStackTrace();</span>
+<span class="nc" id="L92">      System.exit(-2);</span>
+<span class="nc" id="L93">    }</span>
+<span class="nc" id="L94">  }</span>
+
+  protected CommandLine parseCLI(String[] args) throws ParseException {
+<span class="nc" id="L97">    CLIParser cliParser = new CLIParser(&quot;java -jar &lt;swidval jar&gt; (options) &lt;swid tag path&gt;&quot;);</span>
+<span class="nc" id="L98">    cliParser.setVersion(Version.VERSION);</span>
+
+<span class="nc" id="L100">    Option useCase = Option.builder(OPTION_USECASE)</span>
+<span class="nc" id="L101">        .desc(&quot;the SWID tag type, which is one of: primary, corpus, patch, or supplemental&quot; + &quot; (default: primary)&quot;)</span>
+<span class="nc" id="L102">        .hasArg().build();</span>
+<span class="nc" id="L103">    OptionEnumerationValidator useCaseValidator = new OptionEnumerationValidator(useCase);</span>
+<span class="nc" id="L104">    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PRIMARY);</span>
+<span class="nc" id="L105">    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_CORPUS);</span>
+<span class="nc" id="L106">    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_PATCH);</span>
+<span class="nc" id="L107">    useCaseValidator.addAllowedValue(OPTION_USECASE_VALUE_SUPPLEMENTAL);</span>
+<span class="nc" id="L108">    cliParser.addOption(useCaseValidator);</span>
+
+<span class="nc" id="L110">    OptionGroup authGroup = new OptionGroup();</span>
+<span class="nc" id="L111">    authGroup.addOption(</span>
+<span class="nc" id="L112">        Option.builder(OPTION_AUTHORITATIVE).desc(&quot;the tag is produced by an authoritative creator (default)&quot;).build());</span>
+<span class="nc" id="L113">    authGroup.addOption(</span>
+<span class="nc" id="L114">        Option.builder(OPTION_NON_AUTHORITATIVE).desc(&quot;the tag is not produced by an authoritative creator&quot;).build());</span>
+<span class="nc" id="L115">    cliParser.addOptionGroup(authGroup);</span>
+
+<span class="nc" id="L117">    return cliParser.parse(args);</span>
+  }
+
+  private int run(String[] args) throws ParseException {
+<span class="nc" id="L121">    CommandLine cmd = parseCLI(args);</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">    if (cmd == null) {</span>
+<span class="nc" id="L124">      return -1;</span>
+    }
+
+<span class="nc" id="L127">    List&lt;String&gt; paths = cmd.getArgList();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">    if (paths.isEmpty()) {</span>
+<span class="nc" id="L129">      System.err.println(&quot;At least one path must be specified as an extra argument.&quot;);</span>
+<span class="nc" id="L130">      return -2;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">    } else if (paths.size() &gt; 1) {</span>
+<span class="nc" id="L132">      System.err.println(&quot;Only one path must be specified as an extra argument.&quot;);</span>
+<span class="nc" id="L133">      return -3;</span>
+    }
+<span class="nc" id="L135">    String path = paths.get(0);</span>
+
+<span class="nc" id="L137">    String tagTypeName = cmd.getOptionValue(OPTION_USECASE, OPTION_USECASE_DEFAULT_VALUE);</span>
+
+<span class="nc" id="L139">    TagType tagType = TagType.valueOf(tagTypeName.toUpperCase());</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">    boolean authoritative = !cmd.hasOption(OPTION_NON_AUTHORITATIVE);</span>
+
+<span class="nc" id="L142">    log.info(&quot;Validating tag: &quot; + path);</span>
+<span class="nc" id="L143">    log.info(&quot;  tag type: &quot; + tagType.getName());</span>
+<span class="nc" id="L144">    log.info(&quot;  authoritative tag: &quot; + authoritative);</span>
+
+    // handle resultfile
+    File validationResultFile;
+    {
+<span class="nc" id="L149">      String fileValue = cmd.getOptionValue(OPTION_VALIDATION_RESULT_FILE, DEFAULT_VALIDATION_RESULT_FILE);</span>
+<span class="nc" id="L150">      validationResultFile = new File(fileValue);</span>
+<span class="nc" id="L151">      File parentDir = validationResultFile.getParentFile();</span>
+<span class="nc bnc" id="L152" title="All 4 branches missed.">      if (parentDir != null &amp;&amp; !parentDir.exists()) {</span>
+<span class="nc" id="L153">        parentDir.mkdirs();</span>
+      }
+    }
+
+    // handle reportfile
+    File validationReportFile;
+    {
+<span class="nc" id="L160">      String fileValue = cmd.getOptionValue(OPTION_VALIDATION_REPORT_FILE, DEFAULT_VALIDATION_REPORT_FILE);</span>
+<span class="nc" id="L161">      validationReportFile = new File(fileValue);</span>
+<span class="nc" id="L162">      File parentDir = validationReportFile.getParentFile();</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">      if (parentDir != null &amp;&amp; !parentDir.exists()) {</span>
+<span class="nc" id="L164">        parentDir.mkdirs();</span>
+      }
+    }
+
+    // Load the document to assess
+<span class="nc" id="L169">    File file = new File(path);</span>
+    XMLDocument doc;
+    try {
+<span class="nc" id="L172">      doc = Factory.newXMLDocument(file);</span>
+<span class="nc" id="L173">    } catch (FileNotFoundException ex) {</span>
+<span class="nc" id="L174">      log.error(&quot;Non-existant file argument: &quot; + file.getPath(), ex);</span>
+<span class="nc" id="L175">      return -4;</span>
+<span class="nc" id="L176">    } catch (DocumentException ex) {</span>
+<span class="nc" id="L177">      log.error(&quot;Unable to parse the XML file: &quot; + file.getPath(), ex);</span>
+<span class="nc" id="L178">      return -5;</span>
+<span class="nc" id="L179">    }</span>
+
+<span class="nc" id="L181">    ExecutorService executorService = null;</span>
+    AssessmentResults validationResult;
+    try {
+<span class="nc" id="L184">      executorService = Executors.newFixedThreadPool(2);</span>
+<span class="nc" id="L185">      SWIDAssessmentFactory factory = SWIDAssessmentFactory.getInstance();</span>
+<span class="nc" id="L186">      factory.setResultDirectory(new File(&quot;schematron-results&quot;));</span>
+
+      // setup the document assessment
+<span class="nc" id="L189">      AssessmentExecutor&lt;XMLDocument&gt; executor = factory.newAssessmentExecutor(tagType, authoritative, executorService);</span>
+<span class="nc" id="L190">      AssessmentResultBuilder assessmentResultBuilder</span>
+<span class="nc" id="L191">          = SWIDAssessmentResultBuilderFactory.newAssessmentResultBuilder(tagType, authoritative);</span>
+
+      // do the assessment
+<span class="nc" id="L194">      executor.execute(doc, assessmentResultBuilder);</span>
+
+      // generate the results
+<span class="nc" id="L197">      validationResult = assessmentResultBuilder.end().build(SWIDRequirementsManager.getInstance());</span>
+<span class="nc" id="L198">    } catch (AssessmentException e) {</span>
+<span class="nc" id="L199">      log.error(&quot;An error occured while performing the assessment&quot;, e);</span>
+<span class="nc" id="L200">      return -5;</span>
+    } finally {
+<span class="nc bnc" id="L202" title="All 2 branches missed.">      if (executorService != null) {</span>
+<span class="nc" id="L203">        executorService.shutdown();</span>
+      }
+    }
+
+    // Output the results
+<span class="nc" id="L208">    XMLResultBuilder writer = new XMLResultBuilder();</span>
+<span class="nc" id="L209">    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(validationResultFile))) {</span>
+<span class="nc" id="L210">      log.info(&quot;Storing assessment results to: &quot; + validationResultFile);</span>
+<span class="nc" id="L211">      writer.write(validationResult, os);</span>
+<span class="nc" id="L212">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L213">      log.error(&quot;The result file does not appear to be a regular file: &quot; + validationResultFile, e);</span>
+<span class="nc" id="L214">      return -6;</span>
+<span class="nc" id="L215">    } catch (IOException e) {</span>
+<span class="nc" id="L216">      log.error(&quot;Unable to write to the result file: &quot; + validationResultFile, e);</span>
+<span class="nc" id="L217">      return -7;</span>
+<span class="nc" id="L218">    }</span>
+
+    // output the report
+<span class="nc" id="L221">    ReportGenerator reportGenerator = new ReportGenerator();</span>
+<span class="nc" id="L222">    reportGenerator.setHtmlTitle(&quot;SWID Tag validation Report&quot;);</span>
+<span class="nc" id="L223">    reportGenerator.setIgnoreNotTestedResults(true);</span>
+<span class="nc" id="L224">    reportGenerator.setIgnoreOutOfScopeResults(true);</span>
+    try {
+<span class="nc" id="L226">      reportGenerator.setXslTemplateExtension(new URI(&quot;classpath:xsl/swid-result.xsl&quot;));</span>
+<span class="nc" id="L227">    } catch (URISyntaxException e) {</span>
+<span class="nc" id="L228">      log.error(&quot;Unable to load XSL template&quot;, e);</span>
+<span class="nc" id="L229">      return -9;</span>
+<span class="nc" id="L230">    }</span>
+<span class="nc" id="L231">    log.info(&quot;Generating HTML report to: &quot; + validationReportFile);</span>
+    try {
+<span class="nc" id="L233">      reportGenerator.generate(validationResultFile, validationReportFile);</span>
+<span class="nc" id="L234">    } catch (TransformerException | IOException e) {</span>
+<span class="nc" id="L235">      log.error(&quot;Unable to generate HTML report&quot;, e);</span>
+<span class="nc" id="L236">      return -10;</span>
+<span class="nc" id="L237">    }</span>
+<span class="nc" id="L238">    return 0;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

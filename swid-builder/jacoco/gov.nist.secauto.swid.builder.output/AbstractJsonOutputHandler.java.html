@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractJsonOutputHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.output</a> &gt; <span class="el_source">AbstractJsonOutputHandler.java</span></div><h1>AbstractJsonOutputHandler.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.output;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+
+import gov.nist.secauto.swid.builder.AbstractLanguageSpecificBuilder;
+import gov.nist.secauto.swid.builder.EntityBuilder;
+import gov.nist.secauto.swid.builder.LinkBuilder;
+import gov.nist.secauto.swid.builder.MetaBuilder;
+import gov.nist.secauto.swid.builder.Role;
+import gov.nist.secauto.swid.builder.SWIDBuilder;
+import gov.nist.secauto.swid.builder.ValidationException;
+import gov.nist.secauto.swid.builder.VersionScheme;
+import gov.nist.secauto.swid.builder.resource.AbstractResourceCollectionBuilder;
+import gov.nist.secauto.swid.builder.resource.EvidenceBuilder;
+import gov.nist.secauto.swid.builder.resource.HashAlgorithm;
+import gov.nist.secauto.swid.builder.resource.PathRelativizer;
+import gov.nist.secauto.swid.builder.resource.PayloadBuilder;
+import gov.nist.secauto.swid.builder.resource.ResourceBuilder;
+import gov.nist.secauto.swid.builder.resource.ResourceCollectionEntryGenerator;
+import gov.nist.secauto.swid.builder.resource.file.AbstractFileSystemItemBuilder;
+import gov.nist.secauto.swid.builder.resource.file.DirectoryBuilder;
+import gov.nist.secauto.swid.builder.resource.file.FileBuilder;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Map;
+
+public abstract class AbstractJsonOutputHandler extends JsonSupport implements OutputHandler {
+  /**
+   * The tag identifier (text).
+   */
+  public static final long TAG_ID_FIELD = 0L;
+
+  /**
+   * A name (text).
+   */
+  public static final long SWID_NAME_FIELD = 1L;
+  public static final long ENTITY_FIELD = 2L;
+  public static final long EVIDENCE_FIELD = 3L;
+  public static final long LINK_FIELD = 4L;
+  public static final long SOFTWARE_META_FIELD = 5L;
+  public static final long PAYLOAD_FIELD = 6L;
+  public static final long CORPUS_FIELD = 8L;
+  public static final long PATCH_FIELD = 9L;
+  public static final long MEDIA_FIELD = 10L;
+  public static final long SUPPLEMENTAL_FIELD = 11L;
+  public static final long TAG_VERSION_FIELD = 12L;
+  public static final long SOFTWARE_VERSION_FIELD = 13L;
+  public static final long VERSION_SCHEME_FIELD = 14L;
+  public static final long LANG_FIELD = 15L;
+  public static final long DIRECTORY_FIELD = 16L;
+  public static final long FILE_FIELD = 17L;
+  public static final long PROCESS_FIELD = 18L;
+  public static final long RESOURCE_FIELD = 19L;
+
+  /**
+   * The size of a file (number: long).
+   */
+  public static final long SIZE_FIELD = 20L;
+  public static final long FILE_VERSION_FIELD = 21L;
+
+  /**
+   * (bool).
+   */
+  public static final long KEY_FIELD = 22L;
+  public static final long LOCATION_FIELD = 23L;
+  public static final long FS_NAME_FIELD = 24L;
+  public static final long ROOT_FIELD = 25L;
+  public static final long PATH_ELEMENTS_FIELD = 26L;
+  public static final long PROCESS_NAME_FIELD = 27L;
+  public static final long PID_FIELD = 28L;
+  public static final long TYPE_FIELD = 29L;
+  public static final long ENTITY_NAME_FIELD = 31L;
+  public static final long REG_ID_FIELD = 32L;
+
+  /**
+   * The roles (text: space separated).
+   */
+  public static final long ROLE_FIELD = 33L;
+  public static final long THUMBPRINT_FIELD = 34L;
+
+  public static final long DATE_FIELD = 35L;
+  public static final long DEVICE_ID_FIELD = 36L;
+  public static final long ARTIFACT_FIELD = 37L;
+  public static final long HREF_FIELD = 38L;
+  public static final long OWNERSHIP_FIELD = 39L;
+  public static final long REL_FIELD = 40L;
+  public static final long MEDIA_TYPE_FIELD = 41L;
+  public static final long USE_FIELD = 42L;
+
+  public static final long ACTIVATION_STATUS_FIELD = 43L;
+  public static final long CHANNEL_TYPE_FIELD = 44L;
+  // colloquial-version = (45: text)
+  public static final long COLLOQUIAL_VERSION_FIELD = 45L;
+  // description = (46: text)
+  public static final long DESCRIPTION_FIELD = 46L;
+  // edition = (47: text)
+  public static final long EDITION_FIELD = 47L;
+  // entitlement-data-required = (48: bool)
+  public static final long ENTITLEMENT_DATA_REQUIRED_FIELD = 48L;
+  // entitlement-key = (49: text)
+  public static final long ENTITLEMENT_KEY_FIELD = 49L;
+  // generator = (50: text)
+  public static final long GENERATOR_FIELD = 50L;
+  // persistent-id = (51: text)
+  public static final long PERSISTENT_ID_FIELD = 51L;
+  // product = (52: text)
+  public static final long PRODUCT_FIELD = 52L;
+  // product-family = (53: text)
+  public static final long PRODUCT_FAMILY_FIELD = 53L;
+  // revision = (54: text)
+  public static final long REVISION_FIELD = 54L;
+  // summary = (55: text)
+  public static final long SUMMARY_FIELD = 55L;
+  // unspsc-code = (56: text)
+  public static final long UNSPSC_CODE_FIELD = 56L;
+  // unspsc-version = (57: text)
+  public static final long UNSPSC_VERSION_FIELD = 57L;
+
+  public static final long HASH_FIELD = 7L;
+
+  /**
+   * Firmware.
+   */
+  public static final long FIRMWARE_FIELD = 59L;
+
+  private final JsonFactory jsonFactory;
+
+<span class="fc" id="L159">  public AbstractJsonOutputHandler(JsonFactory jsonFactory) {</span>
+<span class="fc" id="L160">    this.jsonFactory = jsonFactory;</span>
+<span class="fc" id="L161">  }</span>
+
+  protected abstract void writeRole(JsonGenerator generator, Role role) throws IOException;
+
+  protected abstract void writeVersionScheme(JsonGenerator generator, VersionScheme versionScheme) throws IOException;
+
+  /**
+   * @return the jsonFactory
+   */
+  public JsonFactory getJsonFactory() {
+<span class="fc" id="L171">    return jsonFactory;</span>
+  }
+
+  protected JsonGenerator newGenerator(OutputStream os) throws IOException {
+
+<span class="fc" id="L176">    JsonFactory factory = getJsonFactory();</span>
+
+<span class="fc" id="L178">    JsonGenerator generator = factory.createGenerator(os);</span>
+<span class="fc" id="L179">    return generator;</span>
+  }
+
+  @Override
+  public void write(SWIDBuilder builder, OutputStream os) throws IOException, ValidationException {
+<span class="fc" id="L184">    builder.validate();</span>
+
+<span class="fc" id="L186">    JsonGenerator generator = newGenerator(os);</span>
+
+<span class="fc" id="L188">    build(generator, builder);</span>
+
+<span class="fc" id="L190">    generator.close();</span>
+<span class="fc" id="L191">  }</span>
+
+  protected void build(JsonGenerator generator, SWIDBuilder builder) throws IOException {
+<span class="fc" id="L194">    generator.writeStartObject();</span>
+
+<span class="fc" id="L196">    buildGlobalAttributes(generator, builder);</span>
+
+    // required attributes
+<span class="fc" id="L199">    writeTextField(generator, TAG_ID_FIELD, builder.getTagId());</span>
+
+<span class="fc" id="L201">    writeIntegerField(generator, TAG_VERSION_FIELD, builder.getTagVersion());</span>
+
+<span class="fc" id="L203">    writeTextField(generator, SWID_NAME_FIELD, builder.getName());</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (builder.getVersion() != null) {</span>
+<span class="fc" id="L205">      writeTextField(generator, SOFTWARE_VERSION_FIELD, builder.getVersion());</span>
+    }
+<span class="fc" id="L207">    VersionScheme versionScheme = builder.getVersionScheme();</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">    if (versionScheme != null) {</span>
+<span class="fc" id="L209">      writeField(generator, VERSION_SCHEME_FIELD);</span>
+<span class="fc" id="L210">      writeVersionScheme(generator, versionScheme);</span>
+    }
+
+    // optional attribute
+<span class="pc bpc" id="L214" title="4 of 5 branches missed.">    switch (builder.getTagType()) {</span>
+    case PRIMARY:
+<span class="fc" id="L216">      break;</span>
+    case CORPUS:
+<span class="nc" id="L218">      writeBooleanField(generator, CORPUS_FIELD, true);</span>
+<span class="nc" id="L219">      break;</span>
+    case PATCH:
+<span class="nc" id="L221">      writeBooleanField(generator, PATCH_FIELD, true);</span>
+<span class="nc" id="L222">      break;</span>
+    case SUPPLEMENTAL:
+<span class="nc" id="L224">      writeBooleanField(generator, SUPPLEMENTAL_FIELD, true);</span>
+<span class="nc" id="L225">      break;</span>
+    default:
+<span class="nc" id="L227">      throw new IllegalStateException(&quot;tagType: &quot; + builder.getTagType().toString());</span>
+    }
+
+    // child elements
+    // Required
+<span class="fc" id="L232">    writeField(generator, ENTITY_FIELD);</span>
+<span class="fc" id="L233">    List&lt;EntityBuilder&gt; entities = builder.getEntities();</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">    if (entities.size() &gt; 1) {</span>
+<span class="nc" id="L235">      generator.writeStartArray();</span>
+    }
+
+<span class="fc bfc" id="L238" title="All 2 branches covered.">    for (EntityBuilder entity : builder.getEntities()) {</span>
+<span class="fc" id="L239">      build(generator, entity);</span>
+<span class="fc" id="L240">    }</span>
+
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">    if (entities.size() &gt; 1) {</span>
+<span class="nc" id="L243">      generator.writeEndArray();</span>
+    }
+
+    // optional
+<span class="fc" id="L247">    EvidenceBuilder evidence = builder.getEvidence();</span>
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">    if (evidence != null) {</span>
+<span class="nc" id="L249">      writeField(generator, EVIDENCE_FIELD);</span>
+<span class="nc" id="L250">      build(generator, evidence);</span>
+    }
+
+<span class="fc" id="L253">    List&lt;LinkBuilder&gt; links = builder.getLinks();</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">    if (!links.isEmpty()) {</span>
+<span class="fc" id="L255">      writeField(generator, LINK_FIELD);</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">      if (links.size() &gt; 1) {</span>
+<span class="nc" id="L257">        generator.writeStartArray();</span>
+      }
+<span class="fc bfc" id="L259" title="All 2 branches covered.">      for (LinkBuilder link : links) {</span>
+<span class="fc" id="L260">        build(generator, link);</span>
+<span class="fc" id="L261">      }</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">      if (links.size() &gt; 1) {</span>
+<span class="nc" id="L263">        generator.writeEndArray();</span>
+      }
+    }
+
+<span class="fc" id="L267">    List&lt;MetaBuilder&gt; metas = builder.getMetas();</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">    if (!links.isEmpty()) {</span>
+<span class="fc" id="L269">      writeField(generator, SOFTWARE_META_FIELD);</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">      if (metas.size() &gt; 1) {</span>
+<span class="nc" id="L271">        generator.writeStartArray();</span>
+      }
+<span class="fc bfc" id="L273" title="All 2 branches covered.">      for (MetaBuilder meta : metas) {</span>
+<span class="fc" id="L274">        buildMeta(generator, meta);</span>
+<span class="fc" id="L275">      }</span>
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">      if (metas.size() &gt; 1) {</span>
+<span class="nc" id="L277">        generator.writeEndArray();</span>
+      }
+    }
+
+<span class="fc" id="L281">    PayloadBuilder payload = builder.getPayload();</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">    if (payload != null) {</span>
+<span class="fc" id="L283">      writeField(generator, PAYLOAD_FIELD);</span>
+<span class="fc" id="L284">      buildPayload(generator, payload);</span>
+    }
+
+    // TODO: media
+    //
+    // generator.writeStringField(&quot;test&quot;, &quot;test&quot;);
+<span class="fc" id="L290">    generator.writeEndObject();</span>
+<span class="fc" id="L291">  }</span>
+
+  protected void build(JsonGenerator generator, EntityBuilder builder) throws IOException {
+
+    // start of the entity
+<span class="fc" id="L296">    generator.writeStartObject();</span>
+
+<span class="fc" id="L298">    buildGlobalAttributes(generator, builder);</span>
+
+<span class="fc" id="L300">    writeTextField(generator, ENTITY_NAME_FIELD, builder.getName());</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">    if (builder.getRegid() != null) {</span>
+<span class="fc" id="L302">      writeTextField(generator, REG_ID_FIELD, builder.getRegid());</span>
+    }
+
+<span class="fc" id="L305">    List&lt;Role&gt; roles = builder.getRoles();</span>
+<span class="fc" id="L306">    writeField(generator, ROLE_FIELD);</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">    if (roles.size() &gt; 1) {</span>
+<span class="fc" id="L308">      generator.writeStartArray();</span>
+    }
+<span class="fc bfc" id="L310" title="All 2 branches covered.">    for (Role role : roles) {</span>
+<span class="fc" id="L311">      writeRole(generator, role);</span>
+<span class="fc" id="L312">    }</span>
+<span class="pc bpc" id="L313" title="1 of 2 branches missed.">    if (roles.size() &gt; 1) {</span>
+<span class="fc" id="L314">      generator.writeEndArray();</span>
+    }
+
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">    if (builder.getThumbprint() != null) {</span>
+<span class="nc" id="L318">      writeTextField(generator, THUMBPRINT_FIELD, builder.getThumbprint());</span>
+    }
+
+    // for empty meta
+    // writeField(generator, META_ELEMENTS_FIELD);
+    // generator.writeStartArray();
+    // generator.writeEndArray();
+
+    // end of the entity
+<span class="fc" id="L327">    generator.writeEndObject();</span>
+<span class="fc" id="L328">  }</span>
+
+  private void build(JsonGenerator generator, EvidenceBuilder builder) throws IOException {
+
+    // start of the evidence
+<span class="nc" id="L333">    generator.writeStartObject();</span>
+
+<span class="nc" id="L335">    buildGlobalAttributes(generator, builder);</span>
+
+<span class="nc" id="L337">    buildResourceCollection(generator, builder);</span>
+
+<span class="nc" id="L339">    ZonedDateTime date = builder.getDate();</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">    if (date != null) {</span>
+<span class="nc" id="L341">      writeDateTimeField(generator, DATE_FIELD, date);</span>
+    }
+
+<span class="nc bnc" id="L344" title="All 2 branches missed.">    if (builder.getDeviceId() != null) {</span>
+<span class="nc" id="L345">      writeTextField(generator, DEVICE_ID_FIELD, builder.getDeviceId());</span>
+    }
+
+    // end of the evidence
+<span class="nc" id="L349">    generator.writeEndObject();</span>
+<span class="nc" id="L350">  }</span>
+
+  private void build(JsonGenerator generator, LinkBuilder builder) throws IOException {
+
+    // start of the link
+<span class="fc" id="L355">    generator.writeStartObject();</span>
+
+<span class="fc" id="L357">    buildGlobalAttributes(generator, builder);</span>
+
+    // required attributes
+<span class="fc" id="L360">    writeTextField(generator, HREF_FIELD, builder.getHref().toString());</span>
+<span class="fc" id="L361">    writeTextField(generator, REL_FIELD, builder.getRel());</span>
+
+    // optional attributes
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">    if (builder.getArtifact() != null) {</span>
+<span class="nc" id="L365">      writeTextField(generator, ARTIFACT_FIELD, builder.getArtifact());</span>
+    }
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">    if (builder.getMedia() != null) {</span>
+<span class="nc" id="L368">      writeTextField(generator, MEDIA_FIELD, builder.getMedia());</span>
+    }
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">    if (builder.getOwnership() != null) {</span>
+<span class="nc" id="L371">      writeTextField(generator, OWNERSHIP_FIELD, builder.getOwnership().toString());</span>
+    }
+<span class="pc bpc" id="L373" title="1 of 2 branches missed.">    if (builder.getMediaType() != null) {</span>
+<span class="nc" id="L374">      writeTextField(generator, MEDIA_TYPE_FIELD, builder.getMediaType());</span>
+    }
+<span class="pc bpc" id="L376" title="1 of 2 branches missed.">    if (builder.getUse() != null) {</span>
+<span class="nc" id="L377">      writeTextField(generator, USE_FIELD, builder.getUse().toString());</span>
+    }
+
+    // end of the link
+<span class="fc" id="L381">    generator.writeEndObject();</span>
+<span class="fc" id="L382">  }</span>
+
+  private void buildMeta(JsonGenerator generator, MetaBuilder builder) throws IOException {
+
+    // start of the meta
+<span class="fc" id="L387">    generator.writeStartObject();</span>
+
+<span class="fc" id="L389">    buildGlobalAttributes(generator, builder);</span>
+
+<span class="fc" id="L391">    buildAttribute(generator, ACTIVATION_STATUS_FIELD, builder.getActivationStatus());</span>
+<span class="fc" id="L392">    buildAttribute(generator, CHANNEL_TYPE_FIELD, builder.getChannelType());</span>
+<span class="fc" id="L393">    buildAttribute(generator, COLLOQUIAL_VERSION_FIELD, builder.getColloquialVersion());</span>
+<span class="fc" id="L394">    buildAttribute(generator, DESCRIPTION_FIELD, builder.getDescription());</span>
+<span class="fc" id="L395">    buildAttribute(generator, EDITION_FIELD, builder.getEdition());</span>
+<span class="fc" id="L396">    buildAttribute(generator, ENTITLEMENT_DATA_REQUIRED_FIELD, builder.getEntitlementDataRequired());</span>
+<span class="fc" id="L397">    buildAttribute(generator, ENTITLEMENT_KEY_FIELD, builder.getEntitlementKey());</span>
+<span class="fc" id="L398">    buildAttribute(generator, GENERATOR_FIELD, builder.getGenerator());</span>
+<span class="fc" id="L399">    buildAttribute(generator, PERSISTENT_ID_FIELD, builder.getPersistentId());</span>
+<span class="fc" id="L400">    buildAttribute(generator, PRODUCT_FIELD, builder.getProductBaseName());</span>
+<span class="fc" id="L401">    buildAttribute(generator, PRODUCT_FAMILY_FIELD, builder.getProductFamily());</span>
+<span class="fc" id="L402">    buildAttribute(generator, REVISION_FIELD, builder.getRevision());</span>
+<span class="fc" id="L403">    buildAttribute(generator, SUMMARY_FIELD, builder.getSummary());</span>
+<span class="fc" id="L404">    buildAttribute(generator, UNSPSC_CODE_FIELD, builder.getUnspscCode());</span>
+<span class="fc" id="L405">    buildAttribute(generator, UNSPSC_VERSION_FIELD, builder.getUnspscVersion());</span>
+
+    // end of the meta
+<span class="fc" id="L408">    generator.writeEndObject();</span>
+<span class="fc" id="L409">  }</span>
+
+  private void buildAttribute(JsonGenerator generator, long fieldId, String value) throws IOException {
+<span class="fc bfc" id="L412" title="All 2 branches covered.">    if (value != null) {</span>
+<span class="fc" id="L413">      writeTextField(generator, fieldId, value);</span>
+    }
+<span class="fc" id="L415">  }</span>
+
+  private void buildPayload(JsonGenerator generator, PayloadBuilder builder) throws IOException {
+
+    // start of the payload
+<span class="fc" id="L420">    generator.writeStartObject();</span>
+
+<span class="fc" id="L422">    buildGlobalAttributes(generator, builder);</span>
+
+<span class="fc" id="L424">    buildResourceCollection(generator, builder);</span>
+
+    // end of the payload
+<span class="fc" id="L427">    generator.writeEndObject();</span>
+<span class="fc" id="L428">  }</span>
+
+  private &lt;E extends AbstractResourceCollectionBuilder&lt;E&gt;&gt; void buildResourceCollection(JsonGenerator generator,
+      AbstractResourceCollectionBuilder&lt;E&gt; builder) throws IOException {
+<span class="fc" id="L432">    buildGlobalAttributes(generator, builder);</span>
+
+<span class="fc" id="L434">    JsonResourceCollectionEntryGenerator creator = new JsonResourceCollectionEntryGenerator();</span>
+    {
+<span class="fc" id="L436">      List&lt;DirectoryBuilder&gt; directories = builder.getResources(DirectoryBuilder.class);</span>
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">      if (!directories.isEmpty()) {</span>
+<span class="nc" id="L438">        writeDirectories(generator, directories, creator);</span>
+      }
+    }
+    {
+<span class="fc" id="L442">      List&lt;FileBuilder&gt; files = builder.getResources(FileBuilder.class);</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">      if (!files.isEmpty()) {</span>
+<span class="fc" id="L444">        writeFiles(generator, files, creator);</span>
+      }
+    }
+    {
+<span class="fc" id="L448">      List&lt;FirmwareBuilder&gt; firmwares = builder.getResources(FirmwareBuilder.class);</span>
+<span class="fc bfc" id="L449" title="All 2 branches covered.">      if (!firmwares.isEmpty()) {</span>
+<span class="fc" id="L450">        writeFirmware(generator, firmwares, creator);</span>
+      }
+    }
+<span class="fc" id="L453">  }</span>
+
+  private void writeDirectories(JsonGenerator generator, List&lt;DirectoryBuilder&gt; directories,
+      JsonResourceCollectionEntryGenerator creator) throws IOException {
+<span class="nc" id="L457">    writeField(generator, DIRECTORY_FIELD);</span>
+<span class="nc" id="L458">    writeResources(generator, directories, creator);</span>
+<span class="nc" id="L459">  }</span>
+
+  private void writeFiles(JsonGenerator generator, List&lt;FileBuilder&gt; files,
+      JsonResourceCollectionEntryGenerator creator) throws IOException {
+<span class="fc" id="L463">    writeField(generator, FILE_FIELD);</span>
+<span class="fc" id="L464">    writeResources(generator, files, creator);</span>
+<span class="fc" id="L465">  }</span>
+
+  private void writeFirmware(JsonGenerator generator, List&lt;FirmwareBuilder&gt; firmwares,
+      JsonResourceCollectionEntryGenerator creator) throws IOException {
+<span class="fc" id="L469">    writeField(generator, FIRMWARE_FIELD);</span>
+<span class="fc" id="L470">    writeResources(generator, firmwares, creator);</span>
+<span class="fc" id="L471">  }</span>
+
+  private void writeResources(JsonGenerator generator, List&lt;? extends ResourceBuilder&gt; resources,
+      JsonResourceCollectionEntryGenerator creator) throws IOException {
+    // use an array for more than one
+<span class="pc bpc" id="L476" title="1 of 2 branches missed.">    if (resources.size() &gt; 1) {</span>
+<span class="nc" id="L477">      generator.writeStartArray();</span>
+    }
+<span class="fc bfc" id="L479" title="All 2 branches covered.">    for (ResourceBuilder builder : resources) {</span>
+<span class="fc" id="L480">      builder.accept(generator, creator);</span>
+<span class="fc" id="L481">    }</span>
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">    if (resources.size() &gt; 1) {</span>
+<span class="nc" id="L483">      generator.writeEndArray();</span>
+    }
+<span class="fc" id="L485">  }</span>
+
+  private void writeHash(JsonGenerator generator, HashAlgorithm algorithm, byte[] bytes) throws IOException {
+<span class="fc" id="L488">    writeField(generator, HASH_FIELD);</span>
+<span class="fc" id="L489">    generator.writeStartArray();</span>
+<span class="fc" id="L490">    generator.writeNumber(algorithm.getIndex());</span>
+<span class="fc" id="L491">    generator.writeBinary(bytes);</span>
+<span class="fc" id="L492">    generator.writeEndArray();</span>
+<span class="fc" id="L493">  }</span>
+
+  private &lt;E extends AbstractLanguageSpecificBuilder&lt;E&gt;&gt; void buildGlobalAttributes(JsonGenerator generator,
+      AbstractLanguageSpecificBuilder&lt;E&gt; builder) throws IOException {
+<span class="fc" id="L497">    String language = builder.getLanguage();</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">    if (language != null) {</span>
+<span class="fc" id="L499">      writeTextField(generator, LANG_FIELD, language);</span>
+    }
+<span class="fc" id="L501">  }</span>
+
+  private class JsonResourceCollectionEntryGenerator implements ResourceCollectionEntryGenerator&lt;JsonGenerator&gt; {
+
+<span class="fc" id="L505">    public JsonResourceCollectionEntryGenerator() {</span>
+<span class="fc" id="L506">    }</span>
+
+    @Override
+    public void generate(JsonGenerator parent, DirectoryBuilder builder) {
+      try {
+<span class="nc" id="L511">        parent.writeStartObject();</span>
+
+<span class="nc" id="L513">        buildGlobalAttributes(parent, builder);</span>
+
+<span class="nc" id="L515">        buildFileSystemItem(parent, builder);</span>
+
+        {
+<span class="nc" id="L518">          List&lt;DirectoryBuilder&gt; directories = builder.getResources(DirectoryBuilder.class);</span>
+<span class="nc bnc" id="L519" title="All 2 branches missed.">          if (!directories.isEmpty()) {</span>
+<span class="nc" id="L520">            writeDirectories(parent, directories, this);</span>
+          }
+        }
+        {
+<span class="nc" id="L524">          List&lt;FileBuilder&gt; files = builder.getResources(FileBuilder.class);</span>
+<span class="nc bnc" id="L525" title="All 2 branches missed.">          if (!files.isEmpty()) {</span>
+<span class="nc" id="L526">            writeFiles(parent, files, this);</span>
+          }
+        }
+
+<span class="nc" id="L530">        parent.writeEndObject();</span>
+<span class="nc" id="L531">      } catch (IOException ex) {</span>
+<span class="nc" id="L532">        throw new RuntimeException(ex);</span>
+<span class="nc" id="L533">      }</span>
+<span class="nc" id="L534">    }</span>
+
+    @Override
+    public void generate(JsonGenerator parent, FileBuilder builder) {
+
+      try {
+<span class="fc" id="L540">        parent.writeStartObject();</span>
+
+<span class="fc" id="L542">        buildGlobalAttributes(parent, builder);</span>
+
+<span class="fc" id="L544">        buildFileSystemItem(parent, builder);</span>
+
+<span class="pc bpc" id="L546" title="1 of 2 branches missed.">        if (builder.getSize() != null) {</span>
+<span class="fc" id="L547">          writeLongField(parent, SIZE_FIELD, builder.getSize());</span>
+        }
+<span class="pc bpc" id="L549" title="1 of 2 branches missed.">        if (builder.getVersion() != null) {</span>
+<span class="nc" id="L550">          writeTextField(parent, SOFTWARE_VERSION_FIELD, builder.getVersion());</span>
+        }
+
+<span class="fc" id="L553">        Map&lt;HashAlgorithm, byte[]&gt; hashMap = builder.getHashAlgorithmToValueMap();</span>
+<span class="pc bpc" id="L554" title="1 of 2 branches missed.">        if (!hashMap.isEmpty()) {</span>
+<span class="pc bpc" id="L555" title="1 of 2 branches missed.">          if (hashMap.size() &gt; 1) {</span>
+<span class="nc" id="L556">            throw new UnsupportedOperationException(&quot;Only a single hash value is allowed&quot;);</span>
+          }
+
+<span class="fc" id="L559">          Map.Entry&lt;HashAlgorithm, byte[]&gt; entry = hashMap.entrySet().iterator().next();</span>
+<span class="fc" id="L560">          writeHash(parent, entry.getKey(), entry.getValue());</span>
+        }
+
+        // end of the payload
+<span class="fc" id="L564">        parent.writeEndObject();</span>
+<span class="nc" id="L565">      } catch (IOException ex) {</span>
+<span class="nc" id="L566">        throw new RuntimeException(ex);</span>
+<span class="fc" id="L567">      }</span>
+<span class="fc" id="L568">    }</span>
+
+    @Override
+    public void generate(JsonGenerator generator, FirmwareBuilder builder) {
+<span class="fc" id="L572">      new CBORFirmwareOutputHandler().generate(generator, builder);</span>
+<span class="fc" id="L573">    }</span>
+
+    private &lt;E extends AbstractFileSystemItemBuilder&lt;E&gt;&gt; void buildFileSystemItem(JsonGenerator parent,
+        AbstractFileSystemItemBuilder&lt;E&gt; builder) throws IOException {
+
+      // TODO: support meta
+
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">      if (builder.getKey() != null) {</span>
+<span class="nc" id="L581">        writeBooleanField(parent, KEY_FIELD, builder.getKey());</span>
+      }
+
+<span class="pc bpc" id="L584" title="1 of 2 branches missed.">      if (builder.getRoot() != null) {</span>
+<span class="nc" id="L585">        writeTextField(parent, ROOT_FIELD, builder.getRoot());</span>
+      }
+
+<span class="fc" id="L588">      List&lt;String&gt; location = builder.getLocation();</span>
+<span class="pc bpc" id="L589" title="2 of 4 branches missed.">      if (location != null &amp;&amp; !location.isEmpty()) {</span>
+<span class="nc" id="L590">        writeTextField(parent, LOCATION_FIELD, PathRelativizer.toURI(location).toString());</span>
+      }
+<span class="fc" id="L592">      writeTextField(parent, FS_NAME_FIELD, builder.getName());</span>
+<span class="fc" id="L593">    }</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

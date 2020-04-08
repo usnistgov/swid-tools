@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleResourceEntry.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.resource</a> &gt; <span class="el_source">SimpleResourceEntry.java</span></div><h1>SimpleResourceEntry.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.resource;
+
+import gov.nist.secauto.swid.builder.util.Util;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+public class SimpleResourceEntry implements ResourceEntry {
+  private String path;
+  private Long size;
+  private String version;
+  private Map&lt;HashAlgorithm, List&lt;Byte&gt;&gt; digestValues;
+
+  /**
+   * Construct a new {@link ResourceEntry} using simple provided values.
+   * 
+   * @param path
+   *          a path with '/' separators
+   * @param digestValues
+   *          a mapping of digest algorithms to bytes based on the resources contents, which may be
+   *          {@code null} or empty
+   * @param size
+   *          the size in bytes of the resource contents, which may be {@code null}
+   * @param version
+   *          the version of the resource, which may be {@code null}
+   */
+<span class="nc" id="L54">  public SimpleResourceEntry(String path, Map&lt;HashAlgorithm, List&lt;Byte&gt;&gt; digestValues, Long size, String version) {</span>
+<span class="nc" id="L55">    Util.requireNonEmpty(path, &quot;path&quot;);</span>
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">    if (version != null) {</span>
+<span class="nc" id="L58">      Util.requireNonEmpty(version, &quot;version&quot;);</span>
+    }
+
+<span class="nc bnc" id="L61" title="All 2 branches missed.">    if (digestValues == null) {</span>
+<span class="nc" id="L62">      this.digestValues = Collections.emptyMap();</span>
+    } else {
+<span class="nc" id="L64">      this.digestValues = Collections.unmodifiableMap(digestValues);</span>
+    }
+<span class="nc" id="L66">    this.path = path;</span>
+<span class="nc" id="L67">    this.size = size;</span>
+<span class="nc" id="L68">    this.version = version;</span>
+<span class="nc" id="L69">  }</span>
+
+  @Override
+  public String getPath() {
+<span class="nc" id="L73">    return path;</span>
+  }
+
+  @Override
+  public long getSize() {
+<span class="nc" id="L78">    return size;</span>
+  }
+
+  @Override
+  public String getVersion() {
+<span class="nc" id="L83">    return version;</span>
+  }
+
+  @Override
+  public List&lt;Byte&gt; getDigestValue(HashAlgorithm key) {
+<span class="nc" id="L88">    return digestValues.get(key);</span>
+  }
+
+  @Override
+  public Map&lt;HashAlgorithm, List&lt;Byte&gt;&gt; getDigestValues() {
+<span class="nc" id="L93">    return Collections.unmodifiableMap(digestValues);</span>
+  }
+
+  /**
+   * Set the path for this entry.
+   * 
+   * @param path
+   *          the path to set
+   * @return the current instance
+   * @throws NullPointerException
+   *           if the provided argument was {@code null}
+   * @throws IllegalArgumentException
+   *           if the provided argument is empty
+   */
+  public SimpleResourceEntry path(String path) {
+<span class="nc" id="L108">    Util.requireNonEmpty(path, &quot;path&quot;);</span>
+<span class="nc" id="L109">    this.path = path;</span>
+<span class="nc" id="L110">    return this;</span>
+  }
+
+  /**
+   * Set the size in bytes for this entry.
+   * 
+   * @param size
+   *          the size to set
+   * @return the current instance
+   */
+  public SimpleResourceEntry size(long size) {
+<span class="nc" id="L121">    this.size = size;</span>
+<span class="nc" id="L122">    return this;</span>
+  }
+
+  /**
+   * Set the version for this entry.
+   * 
+   * @param version
+   *          the version to set
+   * @return the current instance
+   * @throws NullPointerException
+   *           if the provided argument was {@code null}
+   * @throws IllegalArgumentException
+   *           if the provided argument is empty
+   */
+  public SimpleResourceEntry version(String version) {
+<span class="nc" id="L137">    Util.requireNonEmpty(version, &quot;version&quot;);</span>
+<span class="nc" id="L138">    this.version = version;</span>
+<span class="nc" id="L139">    return this;</span>
+  }
+
+  /**
+   * Associate a list of bytes representing a digest with the hash function used to generate the
+   * digest for this entry.
+   * 
+   * @param algorithm
+   *          the hash function to set
+   * @param bytes
+   *          the list of bytes representing the digest value
+   * @return the current instance
+   * @throws NullPointerException
+   *           if the provided argument was {@code null}
+   * @throws IllegalArgumentException
+   *           if the provided argument is empty
+   */
+  public SimpleResourceEntry digestValue(HashAlgorithm algorithm, List&lt;Byte&gt; bytes) {
+<span class="nc" id="L157">    this.digestValues.put(algorithm, bytes);</span>
+<span class="nc" id="L158">    return this;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

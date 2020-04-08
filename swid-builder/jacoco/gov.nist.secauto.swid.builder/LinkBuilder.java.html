@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LinkBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder</a> &gt; <span class="el_source">LinkBuilder.java</span></div><h1>LinkBuilder.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder;
+
+import gov.nist.secauto.swid.builder.util.Util;
+
+import java.net.URI;
+import java.util.Objects;
+
+public class LinkBuilder extends AbstractLanguageSpecificBuilder&lt;LinkBuilder&gt; {
+
+  public static LinkBuilder create() {
+<span class="fc" id="L37">    return new LinkBuilder();</span>
+  }
+
+  private String artifact;
+  private URI href;
+  private String media;
+  private LinkOwnership ownership;
+  private String rel;
+  private String mediaType;
+  private LinkUse use;
+
+  protected LinkBuilder() {
+<span class="fc" id="L49">    super();</span>
+<span class="fc" id="L50">  }</span>
+
+  @Override
+  public void reset() {
+<span class="fc" id="L54">    this.artifact = null;</span>
+<span class="fc" id="L55">    this.href = null;</span>
+<span class="fc" id="L56">    this.media = null;</span>
+<span class="fc" id="L57">    this.ownership = null;</span>
+<span class="fc" id="L58">    this.rel = null;</span>
+<span class="fc" id="L59">    this.mediaType = null;</span>
+<span class="fc" id="L60">    this.use = null;</span>
+<span class="fc" id="L61">  }</span>
+
+  public String getArtifact() {
+<span class="fc" id="L64">    return artifact;</span>
+  }
+
+  public URI getHref() {
+<span class="fc" id="L68">    return href;</span>
+  }
+
+  public String getMedia() {
+<span class="fc" id="L72">    return media;</span>
+  }
+
+  public LinkOwnership getOwnership() {
+<span class="fc" id="L76">    return ownership;</span>
+  }
+
+  public String getRel() {
+<span class="fc" id="L80">    return rel;</span>
+  }
+
+  public String getMediaType() {
+<span class="fc" id="L84">    return mediaType;</span>
+  }
+
+  public LinkUse getUse() {
+<span class="fc" id="L88">    return use;</span>
+  }
+
+  /**
+   * For use with rel=&quot;installationmedia&quot; to identify the canonical name for an installation media
+   * resource.
+   * 
+   * @param artifact
+   *          a cononical name for the installation media
+   * @return the same builder instance
+   */
+  public LinkBuilder artifact(String artifact) {
+<span class="nc" id="L100">    Util.requireNonEmpty(artifact, &quot;artifact&quot;);</span>
+<span class="nc" id="L101">    this.artifact = artifact;</span>
+<span class="nc" id="L102">    return this;</span>
+  }
+
+  /**
+   * Sets the to-be-built link's href to the provided value.
+   * 
+   * @param uri
+   *          a URI identifying the linked resource
+   * @return the same builder instance
+   */
+  public LinkBuilder href(URI uri) {
+<span class="fc" id="L113">    Objects.requireNonNull(uri, &quot;url&quot;);</span>
+<span class="fc" id="L114">    this.href = uri;</span>
+<span class="fc" id="L115">    return this;</span>
+  }
+
+  /**
+   * Sets the to-be-built link's media to the provided value.
+   * 
+   * @param query
+   *          a media query as defined by ISO/IEC 19770-2:2015
+   * @return the same builder instance
+   */
+  public LinkBuilder media(String query) {
+<span class="nc" id="L126">    Util.requireNonEmpty(query, &quot;query&quot;);</span>
+<span class="nc" id="L127">    this.media = query;</span>
+<span class="nc" id="L128">    return this;</span>
+  }
+
+  /**
+   * Sets the to-be-built link's ownership to the provided value.
+   * 
+   * @param ownership
+   *          a valid non-null enumeration value
+   * @return the same builder instance
+   */
+  public LinkBuilder ownership(LinkOwnership ownership) {
+<span class="nc" id="L139">    Objects.requireNonNull(ownership, &quot;ownership&quot;);</span>
+<span class="nc" id="L140">    this.ownership = ownership;</span>
+<span class="nc" id="L141">    return this;</span>
+  }
+
+  /**
+   * Sets the to-be-built link's rel to the provided value.
+   * 
+   * @param rel
+   *          the link relation type
+   * @return the same builder instance
+   */
+  public LinkBuilder rel(String rel) {
+<span class="fc" id="L152">    Util.requireNonEmpty(rel, &quot;rel&quot;);</span>
+<span class="fc" id="L153">    this.rel = rel;</span>
+<span class="fc" id="L154">    return this;</span>
+  }
+
+  /**
+   * Provide the IANA MediaType for the resource targeted by the href attribute; this provides the
+   * consumer with knowledge of the format of the referenced resource.
+   * 
+   * The &lt;a href=&quot;http://www.iana.org/assignments/media-types/media-types.xhtml&quot;&gt;The IANA Media Type
+   * Registry&lt;/a&gt; provides more details on possible values.
+   * 
+   * @param mediaType
+   *          a valid media type value
+   * @return the same builder instance
+   */
+  public LinkBuilder mediaType(String mediaType) {
+<span class="nc" id="L169">    Util.requireNonEmpty(mediaType, &quot;mediaType&quot;);</span>
+<span class="nc" id="L170">    this.mediaType = mediaType;</span>
+<span class="nc" id="L171">    return this;</span>
+  }
+
+  /**
+   * Sets the to-be-built link's use to the provided value.
+   * 
+   * @param use
+   *          a valid, non-null enumeration value
+   * @return the same builder instance
+   */
+  public LinkBuilder use(LinkUse use) {
+<span class="nc" id="L182">    Objects.requireNonNull(use, &quot;use&quot;);</span>
+<span class="nc" id="L183">    this.use = use;</span>
+<span class="nc" id="L184">    return this;</span>
+  }
+
+  @Override
+  public void validate() throws ValidationException {
+<span class="fc" id="L189">    super.validate();</span>
+<span class="fc" id="L190">    validateNonNull(&quot;href&quot;, href);</span>
+<span class="fc" id="L191">    validateNonEmpty(&quot;href&quot;, href.toString());</span>
+<span class="fc" id="L192">    validateNonEmpty(&quot;href&quot;, rel);</span>
+<span class="fc" id="L193">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

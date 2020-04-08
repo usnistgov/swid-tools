@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+SWID Tag Validator,gov.nist.secauto.swid.swidval,XMLConstants,3,0,0,0,1,0,1,0,1,0
+SWID Tag Validator,gov.nist.secauto.swid.swidval,SWIDAssessmentResultBuilderFactory,3,53,0,0,1,10,1,1,1,1
+SWID Tag Validator,gov.nist.secauto.swid.swidval,SWIDAssessmentFactory,13,109,2,2,4,26,4,8,2,8
+SWID Tag Validator,gov.nist.secauto.swid.swidval,Version,3,0,0,0,1,0,1,0,1,0
+SWID Tag Validator,gov.nist.secauto.swid.swidval,SWIDRequirementsManager,6,27,0,2,2,8,0,3,0,2
+SWID Tag Validator,gov.nist.secauto.swid.swidval,SWIDTagCharacteristics,3,50,0,0,1,14,1,3,1,3
+SWID Tag Validator,gov.nist.secauto.swid.swidval,Application,404,0,18,0,104,0,14,0,5,0
+SWID Tag Validator,gov.nist.secauto.swid.swidval,TagType,0,90,0,2,0,14,0,5,0,4
+SWID Tag Validator,gov.nist.secauto.swid.swidval,SWIDValResultStatusBehavior,1,72,5,17,0,13,5,8,0,2
+SWID Tag Validator,gov.nist.secauto.swid.swidval.services,SWIDResourceResolverExtension,0,4,0,0,0,2,0,1,0,1
+SWID Tag Validator,gov.nist.secauto.swid.swidval.services,IsStringSetEqual,9,28,0,0,3,4,3,3,3,3
+SWID Tag Validator,gov.nist.secauto.swid.swidval.services,TransformerExtension,0,9,0,0,0,3,0,2,0,2
+SWID Tag Validator,gov.nist.secauto.swid.swidval.services,IsStringSetEqual.FunctionCall,71,0,4,0,13,0,4,0,2,0

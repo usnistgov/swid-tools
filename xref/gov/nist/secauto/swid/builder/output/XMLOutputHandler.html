@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>XMLOutputHandler xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/gov/nist/secauto/swid/builder/output/XMLOutputHandler.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> * Portions of this software was developed by employees of the National Institute</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment"> * of Standards and Technology (NIST), an agency of the Federal Government and is</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> * being made available as a public service. Pursuant to title 17 United States</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> * Code Section 105, works of NIST employees are not subject to copyright</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> * protection in the United States. This software may be subject to foreign</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> * copyright. Permission in the United States and in foreign countries, to the</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> * extent that NIST may hold copyright, to use, copy, modify, create derivative</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> * works, and distribute this software and its documentation without fee is hereby</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> * granted on a non-exclusive basis, provided that this notice and disclaimer</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> * of warranty appears in all copies.</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment"> * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment"> * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">package</strong> gov.nist.secauto.swid.builder.output;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.AbstractLanguageSpecificBuilder;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.EntityBuilder;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.LinkBuilder;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.MetaBuilder;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.Role;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.SWIDBuilder;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.ValidationException;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.AbstractResourceBuilder;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.AbstractResourceCollectionBuilder;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.EvidenceBuilder;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.HashAlgorithm;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.HashUtils;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.PathRelativizer;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.PayloadBuilder;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.ResourceBuilder;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.ResourceCollectionEntryGenerator;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.file.AbstractFileSystemItemBuilder;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.file.DirectoryBuilder;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.file.FileBuilder;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> org.jdom2.Document;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> org.jdom2.Element;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> org.jdom2.Namespace;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> org.jdom2.output.Format;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">import</strong> org.jdom2.output.XMLOutputter;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStream;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> java.time.ZonedDateTime;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> java.time.format.DateTimeFormatter;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="XMLOutputHandler" href="../../../../../../gov/nist/secauto/swid/builder/output/XMLOutputHandler.html#XMLOutputHandler">XMLOutputHandler</a> <strong class="jxr_keyword">implements</strong> <a name="OutputHandler" href="../../../../../../gov/nist/secauto/swid/builder/output/OutputHandler.html#OutputHandler">OutputHandler</a> {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Namespace SWID_NAMESPACE
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>        = Namespace.getNamespace(<span class="jxr_string">"http://standards.iso.org/iso/19770/-2/2015/schema.xsd"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Format format;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <strong class="jxr_keyword">public</strong> <a name="XMLOutputHandler" href="../../../../../../gov/nist/secauto/swid/builder/output/XMLOutputHandler.html#XMLOutputHandler">XMLOutputHandler</a>() {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">this</strong>(Format.getPrettyFormat());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>    }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>    <strong class="jxr_keyword">public</strong> <a name="XMLOutputHandler" href="../../../../../../gov/nist/secauto/swid/builder/output/XMLOutputHandler.html#XMLOutputHandler">XMLOutputHandler</a>(Format format) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">this</strong>.format = format;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>    }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>    @Override
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> write(<a name="SWIDBuilder" href="../../../../../../gov/nist/secauto/swid/builder/SWIDBuilder.html#SWIDBuilder">SWIDBuilder</a> builder, OutputStream os) <strong class="jxr_keyword">throws</strong> IOException, <a name="ValidationException" href="../../../../../../gov/nist/secauto/swid/builder/ValidationException.html#ValidationException">ValidationException</a> {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      XMLOutputter out = <strong class="jxr_keyword">new</strong> XMLOutputter(format);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      out.output(generateXML(builder), os);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>    }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">   * Creates a JDOM2 XML Document based on the content of the builder.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">   * </em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">   * @param builder</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">   *          the {@link SWIDBuilder} to use the information from to build the XML model</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">   * @return a JDOM2 {@link Document} based on the SWID information</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">   * @throws ValidationException</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">   *           if the SWID to be built is invalid</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>    <strong class="jxr_keyword">public</strong> Document generateXML(<a name="SWIDBuilder" href="../../../../../../gov/nist/secauto/swid/builder/SWIDBuilder.html#SWIDBuilder">SWIDBuilder</a> builder) <strong class="jxr_keyword">throws</strong> <a name="ValidationException" href="../../../../../../gov/nist/secauto/swid/builder/ValidationException.html#ValidationException">ValidationException</a> {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      builder.validate();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      Document retval = buildDocument(builder);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">return</strong> retval;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>    }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>    <strong class="jxr_keyword">protected</strong> Document buildDocument(<a name="SWIDBuilder" href="../../../../../../gov/nist/secauto/swid/builder/SWIDBuilder.html#SWIDBuilder">SWIDBuilder</a> builder) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Document(build(builder));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>   }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>   <strong class="jxr_keyword">protected</strong> Element build(<a name="SWIDBuilder" href="../../../../../../gov/nist/secauto/swid/builder/SWIDBuilder.html#SWIDBuilder">SWIDBuilder</a> builder) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"SoftwareIdentity"</span>, SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     buildAbstractLanguageSpecificBuilder(builder, element);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <em class="jxr_comment">// required attributes</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     element.setAttribute(<span class="jxr_string">"name"</span>, builder.getName());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     element.setAttribute(<span class="jxr_string">"tagId"</span>, builder.getTagId());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     <em class="jxr_comment">// optional attributes</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">switch</strong> (builder.getTagType()) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">case</strong> PRIMARY:
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>       <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">case</strong> CORPUS:
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>       element.setAttribute(<span class="jxr_string">"corpus"</span>, Boolean.TRUE.toString());
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>       <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     <strong class="jxr_keyword">case</strong> PATCH:
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>       element.setAttribute(<span class="jxr_string">"patch"</span>, Boolean.TRUE.toString());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>       <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <strong class="jxr_keyword">case</strong> SUPPLEMENTAL:
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>       element.setAttribute(<span class="jxr_string">"supplemental"</span>, Boolean.TRUE.toString());
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>       <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"tagType: "</span> + builder.getTagType().toString());
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     }
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     element.setAttribute(<span class="jxr_string">"tagVersion"</span>, builder.getTagVersion().toString());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     buildAttribute(<span class="jxr_string">"version"</span>, builder.getVersion(), element);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     buildAttribute(<span class="jxr_string">"versionScheme"</span>, builder.getVersionScheme().getName(), element);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <em class="jxr_comment">// child elements</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <em class="jxr_comment">// Required</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <strong class="jxr_keyword">for</strong> (<a name="EntityBuilder" href="../../../../../../gov/nist/secauto/swid/builder/EntityBuilder.html#EntityBuilder">EntityBuilder</a> entity : builder.getEntities()) {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>       element.addContent(build(entity));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     <em class="jxr_comment">// optional</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <a name="EvidenceBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/EvidenceBuilder.html#EvidenceBuilder">EvidenceBuilder</a> evidence = builder.getEvidence();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">if</strong> (evidence != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>       element.addContent(build(evidence));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     }
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">for</strong> (<a name="LinkBuilder" href="../../../../../../gov/nist/secauto/swid/builder/LinkBuilder.html#LinkBuilder">LinkBuilder</a> link : builder.getLinks()) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>       element.addContent(build(link));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <strong class="jxr_keyword">for</strong> (<a name="MetaBuilder" href="../../../../../../gov/nist/secauto/swid/builder/MetaBuilder.html#MetaBuilder">MetaBuilder</a> meta : builder.getMetas()) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>       element.addContent(build(meta));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     }
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     <a name="PayloadBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/PayloadBuilder.html#PayloadBuilder">PayloadBuilder</a> payload = builder.getPayload();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     <strong class="jxr_keyword">if</strong> (payload != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>       element.addContent(build(payload));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>     }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     <strong class="jxr_keyword">return</strong> element;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>   }
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>   <strong class="jxr_keyword">protected</strong> Element build(<a name="EntityBuilder" href="../../../../../../gov/nist/secauto/swid/builder/EntityBuilder.html#EntityBuilder">EntityBuilder</a> builder) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"Entity"</span>, SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     buildAbstractLanguageSpecificBuilder(builder, element);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>     <em class="jxr_comment">// required attributes</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     element.setAttribute(<span class="jxr_string">"name"</span>, builder.getName());
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     StringBuilder sb = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     <strong class="jxr_keyword">for</strong> (<a name="Role" href="../../../../../../gov/nist/secauto/swid/builder/Role.html#Role">Role</a> role : builder.getRoles()) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>       <strong class="jxr_keyword">if</strong> (sb == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>         sb.append(' ');
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>       }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>       sb.append(role.getName());
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>     }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     <strong class="jxr_keyword">if</strong> (sb != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>       element.setAttribute(<span class="jxr_string">"role"</span>, sb.toString());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     }
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>     <em class="jxr_comment">// optional attributes</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     buildAttribute(<span class="jxr_string">"regid"</span>, builder.getRegid(), element);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     buildAttribute(<span class="jxr_string">"thumbprint"</span>, builder.getThumbprint(), element);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">return</strong> element;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>   }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>   <strong class="jxr_keyword">protected</strong> Element build(<a name="EvidenceBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/EvidenceBuilder.html#EvidenceBuilder">EvidenceBuilder</a> builder) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"Evidence"</span>, SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     buildAbstractResourceCollectionBuilder(builder, element);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     ZonedDateTime date = builder.getDate();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     <strong class="jxr_keyword">if</strong> (date != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>       element.setAttribute(<span class="jxr_string">"date"</span>, date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     }
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     buildAttribute(<span class="jxr_string">"deviceId"</span>, builder.getDeviceId(), element);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <strong class="jxr_keyword">return</strong> element;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>   }
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>   <strong class="jxr_keyword">protected</strong> Element build(<a name="LinkBuilder" href="../../../../../../gov/nist/secauto/swid/builder/LinkBuilder.html#LinkBuilder">LinkBuilder</a> builder) {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"Link"</span>, SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     buildAbstractLanguageSpecificBuilder(builder, element);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     <em class="jxr_comment">// required attributes</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     element.setAttribute(<span class="jxr_string">"href"</span>, builder.getHref().toString());
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     element.setAttribute(<span class="jxr_string">"rel"</span>, builder.getRel());
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     <em class="jxr_comment">// optional attributes</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>     buildAttribute(<span class="jxr_string">"artifact"</span>, builder.getArtifact(), element);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>     buildAttribute(<span class="jxr_string">"media"</span>, builder.getMedia(), element);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>     buildAttribute(<span class="jxr_string">"ownership"</span>, builder.getOwnership(), element);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     buildAttribute(<span class="jxr_string">"type"</span>, builder.getMediaType(), element);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>     buildAttribute(<span class="jxr_string">"use"</span>, builder.getUse(), element);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>     <strong class="jxr_keyword">return</strong> element;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>   }
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>   <strong class="jxr_keyword">protected</strong> Element build(<a name="MetaBuilder" href="../../../../../../gov/nist/secauto/swid/builder/MetaBuilder.html#MetaBuilder">MetaBuilder</a> builder) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"Meta"</span>, SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     buildAttribute(<span class="jxr_string">"activationStatus"</span>, builder.getActivationStatus(), element);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>     buildAttribute(<span class="jxr_string">"channelType"</span>, builder.getChannelType(), element);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>     buildAttribute(<span class="jxr_string">"colloquialVersion"</span>, builder.getColloquialVersion(), element);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     buildAttribute(<span class="jxr_string">"description"</span>, builder.getDescription(), element);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>     buildAttribute(<span class="jxr_string">"edition"</span>, builder.getEdition(), element);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>     buildAttribute(<span class="jxr_string">"entitlementDataRequired"</span>, builder.getEntitlementDataRequired(), element);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     buildAttribute(<span class="jxr_string">"entitlementKey"</span>, builder.getEntitlementKey(), element);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>     buildAttribute(<span class="jxr_string">"generator"</span>, builder.getGenerator(), element);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     buildAttribute(<span class="jxr_string">"persistentId"</span>, builder.getPersistentId(), element);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     buildAttribute(<span class="jxr_string">"product"</span>, builder.getProductBaseName(), element);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>     buildAttribute(<span class="jxr_string">"productFamily"</span>, builder.getProductFamily(), element);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>     buildAttribute(<span class="jxr_string">"revision"</span>, builder.getRevision(), element);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>     buildAttribute(<span class="jxr_string">"summary"</span>, builder.getSummary(), element);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>     buildAttribute(<span class="jxr_string">"unspscCode"</span>, builder.getUnspscCode(), element);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     buildAttribute(<span class="jxr_string">"unspscVersion"</span>, builder.getUnspscVersion(), element);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     <strong class="jxr_keyword">return</strong> element;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>   }
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>   <strong class="jxr_keyword">protected</strong> Element build(<a name="PayloadBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/PayloadBuilder.html#PayloadBuilder">PayloadBuilder</a> builder) {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"Payload"</span>, SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     buildAbstractResourceCollectionBuilder(builder, element);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">return</strong> element;
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>   }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;E <strong class="jxr_keyword">extends</strong> AbstractResourceCollectionBuilder&lt;E&gt;&gt; <strong class="jxr_keyword">void</strong>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>       buildAbstractResourceCollectionBuilder(AbstractResourceCollectionBuilder&lt;E&gt; builder, Element element) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>     buildAbstractLanguageSpecificBuilder(builder, element);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     XMLResourceCollectionEntryGenerator creator = <strong class="jxr_keyword">new</strong> XMLResourceCollectionEntryGenerator();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">for</strong> (<a name="ResourceBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/ResourceBuilder.html#ResourceBuilder">ResourceBuilder</a> resourceBuilder : builder.getResources()) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>       resourceBuilder.accept(element, creator);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>     }
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>   }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;E <strong class="jxr_keyword">extends</strong> AbstractLanguageSpecificBuilder&lt;E&gt;&gt; <strong class="jxr_keyword">void</strong>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>       buildAbstractLanguageSpecificBuilder(AbstractLanguageSpecificBuilder&lt;E&gt; builder, Element element) {
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>     String language = builder.getLanguage();
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>     <strong class="jxr_keyword">if</strong> (language != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>       element.setAttribute(<span class="jxr_string">"lang"</span>, language, Namespace.XML_NAMESPACE);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>     }
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>   }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> buildAttribute(String attributeName, String value, Element element) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>       element.setAttribute(attributeName, value);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>     }
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>   }
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> buildAttribute(String attributeName, Object value, Element element) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>       element.setAttribute(attributeName, value.toString());
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     }
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>   }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> XMLResourceCollectionEntryGenerator <strong class="jxr_keyword">implements</strong> ResourceCollectionEntryGenerator&lt;Element&gt; {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     <strong class="jxr_keyword">public</strong> XMLResourceCollectionEntryGenerator() {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>     }
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>     @Override
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(Element parent, <a name="DirectoryBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/file/DirectoryBuilder.html#DirectoryBuilder">DirectoryBuilder</a> builder) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>       Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"Directory"</span>, XMLOutputHandler.SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>       parent.addContent(element);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>       buildAbstractFileSystemItem(builder, element);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>       <strong class="jxr_keyword">for</strong> (<a name="ResourceBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/ResourceBuilder.html#ResourceBuilder">ResourceBuilder</a> child : builder.getResources()) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>         child.accept(element, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>       }
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>     }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     @Override
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(Element parent, <a name="FileBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/file/FileBuilder.html#FileBuilder">FileBuilder</a> builder) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>       Element element = <strong class="jxr_keyword">new</strong> Element(<span class="jxr_string">"File"</span>, XMLOutputHandler.SWID_NAMESPACE);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>       parent.addContent(element);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>       buildAbstractFileSystemItem(builder, element);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>       XMLOutputHandler.buildAttribute(<span class="jxr_string">"size"</span>, builder.getSize(), element);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>       XMLOutputHandler.buildAttribute(<span class="jxr_string">"version"</span>, builder.getVersion(), element);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>       Element rootElement = parent;
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>       <strong class="jxr_keyword">while</strong> (rootElement.getParentElement() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         rootElement = rootElement.getParentElement();
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>       }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>       <strong class="jxr_keyword">for</strong> (Map.Entry&lt;HashAlgorithm, byte[]&gt; entry : builder.getHashAlgorithmToValueMap().entrySet()) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <a name="HashAlgorithm" href="../../../../../../gov/nist/secauto/swid/builder/resource/HashAlgorithm.html#HashAlgorithm">HashAlgorithm</a> algorithm = entry.getKey();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         byte[] hashValue = entry.getValue();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         Namespace ns = Namespace.getNamespace(algorithm.getName(), algorithm.getNamespace());
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>         Namespace nsOld = rootElement.getNamespace(ns.getPrefix());
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">if</strong> (nsOld == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>           rootElement.addNamespaceDeclaration(ns);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!nsOld.getURI().equals(ns.getURI())) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>           element.addNamespaceDeclaration(ns);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>         }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>         element.setAttribute(<span class="jxr_string">"hash"</span>, HashUtils.toHexString(hashValue), ns);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>       }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     }
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     @Override
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> generate(Element parent, <a name="FirmwareBuilder" href="../../../../../../gov/nist/secauto/swid/builder/resource/firmware/FirmwareBuilder.html#FirmwareBuilder">FirmwareBuilder</a> firmwareBuilder) {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"firmware is not supported by the XML SWID format"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>     }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;E <strong class="jxr_keyword">extends</strong> AbstractFileSystemItemBuilder&lt;E&gt;&gt; <strong class="jxr_keyword">void</strong>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>         buildAbstractFileSystemItem(AbstractFileSystemItemBuilder&lt;E&gt; builder, Element element) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>       buildAbstractResourceBuilder(builder, element);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>       XMLOutputHandler.buildAttribute(<span class="jxr_string">"root"</span>, builder.getRoot(), element);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>       List&lt;String&gt; location = builder.getLocation();
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>       <strong class="jxr_keyword">if</strong> (location != <strong class="jxr_keyword">null</strong> &amp;&amp; !location.isEmpty()) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>         element.setAttribute(<span class="jxr_string">"location"</span>, PathRelativizer.toURI(location).toString());
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>       }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>       XMLOutputHandler.buildAttribute(<span class="jxr_string">"name"</span>, builder.getName(), element);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>       XMLOutputHandler.buildAttribute(<span class="jxr_string">"key"</span>, builder.getKey(), element);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>     }
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;E <strong class="jxr_keyword">extends</strong> AbstractResourceBuilder&lt;E&gt;&gt; <strong class="jxr_keyword">void</strong>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         buildAbstractResourceBuilder(AbstractResourceBuilder&lt;E&gt; builder, Element element) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>       XMLOutputHandler.buildAbstractLanguageSpecificBuilder(builder, element);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>     }
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>   }
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2020 <a href="https://www.nist.gov">National Institute of Standards and Technology</a>. All rights reserved.</div>
+</body>
+</html>

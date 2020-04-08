@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HashUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.resource</a> &gt; <span class="el_source">HashUtils.java</span></div><h1>HashUtils.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.resource;
+
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class HashUtils {
+  private HashUtils() {
+    // disable
+  }
+
+  /**
+   * Converts an array of bytes into a list of bytes.
+   * 
+   * @param bytes
+   *          the array of bytes to convert
+   * @return a list of bytes
+   */
+  public static List&lt;Byte&gt; toList(byte[] bytes) {
+<span class="nc" id="L56">    List&lt;Byte&gt; retval = new ArrayList&lt;&gt;(bytes.length);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">    for (byte b : bytes) {</span>
+<span class="nc" id="L58">      retval.add(b);</span>
+    }
+<span class="nc" id="L60">    return retval;</span>
+  }
+
+  /**
+   * Converts a list of bytes into an array of bytes.
+   * 
+   * @param bytes
+   *          a list of bytes
+   * @return the array of bytes to convert
+   */
+  public static byte[] toArray(List&lt;Byte&gt; bytes) {
+<span class="nc" id="L71">    byte[] retval = new byte[bytes.size()];</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">    for (int pos = 0; pos &lt; bytes.size(); pos++) {</span>
+<span class="nc" id="L73">      retval[pos] = bytes.get(pos);</span>
+    }
+<span class="nc" id="L75">    return retval;</span>
+  }
+
+<span class="fc" id="L78">  private static final char[] hexArray = &quot;0123456789abcdef&quot;.toCharArray();</span>
+
+  /**
+   * Converts an array of bytes into a hexadecimal string.
+   * 
+   * @param bytes
+   *          the array of bytes to convert
+   * @return a hexadecimal string
+   */
+  public static String toHexString(byte[] bytes) {
+    // Based on example from:
+    // http://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+<span class="fc" id="L90">    char[] hexChars = new char[bytes.length * 2];</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">    for (int i = 0; i &lt; bytes.length; i++) {</span>
+<span class="fc" id="L92">      int value = bytes[i] &amp; 0xFF;</span>
+<span class="fc" id="L93">      hexChars[i * 2] = hexArray[value &gt;&gt;&gt; 4];</span>
+<span class="fc" id="L94">      hexChars[i * 2 + 1] = hexArray[value &amp; 0x0F];</span>
+    }
+<span class="fc" id="L96">    return new String(hexChars);</span>
+  }
+
+  /**
+   * Converts an list of bytes into a hexadecimal string.
+   * 
+   * @param bytes
+   *          the list of bytes to convert
+   * @return a hexadecimal string
+   */
+  public static String toHexString(List&lt;Byte&gt; bytes) {
+    // Based on example from:
+    // http://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+<span class="nc" id="L109">    char[] hexChars = new char[bytes.size() * 2];</span>
+<span class="nc" id="L110">    int pos = 0;</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">    for (byte b : bytes) {</span>
+<span class="nc" id="L112">      int value = b &amp; 0xFF;</span>
+<span class="nc" id="L113">      hexChars[pos * 2] = hexArray[value &gt;&gt;&gt; 4];</span>
+<span class="nc" id="L114">      hexChars[pos * 2 + 1] = hexArray[value &amp; 0x0F];</span>
+<span class="nc" id="L115">      ++pos;</span>
+<span class="nc" id="L116">    }</span>
+<span class="nc" id="L117">    return new String(hexChars);</span>
+  }
+
+  public static byte[] toBytes(String hashHexBytes) {
+    try {
+<span class="fc" id="L122">      return Hex.decodeHex(hashHexBytes);</span>
+<span class="nc" id="L123">    } catch (DecoderException e) {</span>
+<span class="nc" id="L124">      throw new RuntimeException(e);</span>
+    }
+  }
+
+  /**
+   * Generates a hash value, in the form of an array of bytes, by digesting a provided input stream
+   * based on the provided hash algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param file
+   *          the file to read bytes from
+   * @return an array of bytes representing a hash value
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   * @throws IOException
+   *           if an error occured while reading the input stream
+   */
+  public static byte[] hash(HashAlgorithm algorithm, File file) throws NoSuchAlgorithmException, IOException {
+<span class="nc" id="L143">    return hash(algorithm, new BufferedInputStream(new FileInputStream(file)));</span>
+  }
+
+  /**
+   * Generates a hash value, in the form of an array of bytes, by digesting a provided input stream
+   * based on the provided hash algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param is
+   *          the input stream to read bytes from
+   * @return an array of bytes representing a hash value
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   * @throws IOException
+   *           if an error occured while reading the input stream
+   */
+  public static byte[] hash(HashAlgorithm algorithm, InputStream is) throws NoSuchAlgorithmException, IOException {
+<span class="nc" id="L161">    MessageDigest digest = MessageDigest.getInstance(algorithm.getName());</span>
+<span class="nc" id="L162">    byte[] dataBytes = new byte[1024];</span>
+<span class="nc" id="L163">    int nread = 0;</span>
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">    while ((nread = is.read(dataBytes)) != -1) {</span>
+<span class="nc" id="L166">      digest.update(dataBytes, 0, nread);</span>
+    }
+
+<span class="nc" id="L169">    return processDigest(algorithm, digest.digest());</span>
+  }
+
+  /**
+   * Generates a hash value, in the form of an array of bytes, by digesting a provided bytes based on
+   * the provided hash algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param bytes
+   *          the bytes to digest
+   * @return an array of bytes representing a hash value
+   * @throws NoSuchAlgorithmException
+   *           if the selected hash function is not supported
+   */
+  public static byte[] hash(HashAlgorithm algorithm, byte[] bytes) throws NoSuchAlgorithmException {
+<span class="fc" id="L185">    MessageDigest digest = MessageDigest.getInstance(algorithm.getName());</span>
+<span class="fc" id="L186">    digest.update(bytes);</span>
+
+<span class="fc" id="L188">    return processDigest(algorithm, digest.digest());</span>
+  }
+
+  /**
+   * Processes the provided hash value, truncating the value based on the width of the provided hash
+   * algorithm.
+   * 
+   * @param algorithm
+   *          the hash function to use
+   * @param mdbytes
+   *          the digest bytes to truncate
+   * @return an array of bytes representing a hash value based on the width of the provided hash
+   *         algorithm
+   */
+  public static byte[] processDigest(HashAlgorithm algorithm, byte[] mdbytes) {
+<span class="fc" id="L203">    int valueLength = algorithm.getValueLength() / 8;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (valueLength &lt; mdbytes.length) {</span>
+<span class="nc" id="L205">      mdbytes = Arrays.copyOfRange(mdbytes, 0, valueLength);</span>
+    }
+<span class="fc" id="L207">    return mdbytes;</span>
+
+    // //convert the bytes to hex format
+    // StringBuffer hexString = new StringBuffer();
+    // for (int i=0;i&lt;mdbytes.length;i++) {
+    // hexString.append(Integer.toHexString(0xFF &amp; mdbytes[i]));
+    // }
+    //
+    // return hexString.toString();
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

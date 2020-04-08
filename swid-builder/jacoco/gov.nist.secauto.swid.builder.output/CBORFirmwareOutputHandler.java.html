@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CBORFirmwareOutputHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SWID Tag Generation Java API</a> &gt; <a href="index.source.html" class="el_package">gov.nist.secauto.swid.builder.output</a> &gt; <span class="el_source">CBORFirmwareOutputHandler.java</span></div><h1>CBORFirmwareOutputHandler.java</h1><pre class="source lang-java linenums">/**
+ * Portions of this software was developed by employees of the National Institute
+ * of Standards and Technology (NIST), an agency of the Federal Government and is
+ * being made available as a public service. Pursuant to title 17 United States
+ * Code Section 105, works of NIST employees are not subject to copyright
+ * protection in the United States. This software may be subject to foreign
+ * copyright. Permission in the United States and in foreign countries, to the
+ * extent that NIST may hold copyright, to use, copy, modify, create derivative
+ * works, and distribute this software and its documentation without fee is hereby
+ * granted on a non-exclusive basis, provided that this notice and disclaimer
+ * of warranty appears in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED 'AS IS' WITHOUT ANY WARRANTY OF ANY KIND, EITHER
+ * EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY
+ * THAT THE SOFTWARE WILL CONFORM TO SPECIFICATIONS, ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND FREEDOM FROM
+ * INFRINGEMENT, AND ANY WARRANTY THAT THE DOCUMENTATION WILL CONFORM TO THE
+ * SOFTWARE, OR ANY WARRANTY THAT THE SOFTWARE WILL BE ERROR FREE.  IN NO EVENT
+ * SHALL NIST BE LIABLE FOR ANY DAMAGES, INCLUDING, BUT NOT LIMITED TO, DIRECT,
+ * INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES, ARISING OUT OF, RESULTING FROM,
+ * OR IN ANY WAY CONNECTED WITH THIS SOFTWARE, WHETHER OR NOT BASED UPON WARRANTY,
+ * CONTRACT, TORT, OR OTHERWISE, WHETHER OR NOT INJURY WAS SUSTAINED BY PERSONS OR
+ * PROPERTY OR OTHERWISE, AND WHETHER OR NOT LOSS WAS SUSTAINED FROM, OR AROSE OUT
+ * OF THE RESULTS OF, OR USE OF, THE SOFTWARE OR SERVICES PROVIDED HEREUNDER.
+ */
+
+package gov.nist.secauto.swid.builder.output;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+
+import gov.nist.secauto.swid.builder.resource.firmware.DeviceIdentifier;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwareBuilder;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwarePayloadBuilder;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwarePayloadDigest;
+import gov.nist.secauto.swid.builder.resource.firmware.FirmwarePayloadPackage;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+<span class="fc" id="L41">public class CBORFirmwareOutputHandler extends JsonSupport {</span>
+  /**
+   * Firmware.
+   */
+  private static final long FIRMWARE_MANIFEST_ID_FIELD = 63L; // bytes / text / uint
+  private static final long FIRMWARE_MANIFEST_CREATION_TIMESTAMP = 64L; // time
+  private static final long FIRMWARE_MANIFEST_VERSION = 65L; // uint
+  private static final long FIRMWARE_MANIFEST_DESCRIPTION = 66L; // text
+  private static final long FIRMWARE_MANIFEST_NONCE = 67L; // bytes
+  // private static final long FIRMWARE_MANIFEST_DEPENDENCIES = 68L; //
+  // resource-reference
+  // private static final long FIRMWARE_MANIFEST_ALIASES = 69L; //
+  // resource-reference
+  private static final long FIRMWARE_MANIFEST_TARGET_DEVICE_ID = 85L; // object
+  // firmware-payload / [ 2* firmware-payload ]
+  private static final long FIRMWARE_MANIFEST_PAYLOAD_ENTRY = 60L;
+  private static final long FIRMWARE_MANIFEST_SIMPLE_EXTENSIONS = 115L; // { + int =&gt; bytes }
+
+  private static final long FIRMWARE_PAYLOAD_ID = 61L; // bytes / text / uint
+  private static final long FIRMWARE_PAYLOAD_PACKAGE_ID = 62L; // text
+  // private static final long FIRMWARE_PAYLOAD_DESCRIPTION = 70L; // text
+  private static final long FIRMWARE_PAYLOAD_FORMAT = 71L; // object
+  private static final long FIRMWARE_PAYLOAD_SIZE = 74L; // unint
+  // private static final long FIRMWARE_PAYLOAD_SIMPLE_VERSION = 107L; // uint
+  // private static final long FIRMWARE_PAYLOAD_VERSION = 108L; // object
+  private static final long FIRMWARE_PAYLOAD_DIGESTS = 97L; // object
+  // private static final long FIRMWARE_PAYLOAD_TARGET_COMPONENT_INDEX = 79L; //
+  // text
+  private static final long FIRMWARE_PAYLOAD_STORAGE_IDENTIFIER = 80L; // bytes / text / uint
+  // private static final long FIRMWARE_PAYLOAD_CONDITIONS = 101L; // array of
+  // objects
+  // private static final long FIRMWARE_PAYLOAD_DIRECTIVES = 104L; // array of
+  // objects
+  // private static final long FIRMWARE_PAYLOAD_TARGET_DEPENDENCY = 81L; // array
+  // of objects
+  // private static final long FIRMWARE_PAYLOAD_TARGET_MINIMAL_VERSION = 92L; //
+  // object
+  // private static final long FIRMWARE_PAYLOAD_RELATIONSHIPS = 84L; // enum (int)
+  private static final long FIRMWARE_PAYLOAD_PACKAGE = 75L; // object
+  // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { +
+  // int =&gt; bytes }
+
+  /*
+   * Device Identifier object
+   */
+  private static final long FIRMWARE_TARGET_DEVICE_IDENTIFIER_VENDOR = 86L; // text
+  private static final long FIRMWARE_TARGET_DEVICE_IDENTIFIER_TYPE = 87L; // text
+  private static final long FIRMWARE_TARGET_DEVICE_IDENTIFIER_MODEL = 88L; // text
+  private static final long FIRMWARE_TARGET_DEVICE_IDENTIFIER_CLASS = 89L; // text
+  private static final long FIRMWARE_TARGET_DEVICE_IDENTIFIER_RFC4122 = 90L; // text
+  private static final long FIRMWARE_TARGET_DEVICE_IDENTIFIER_IEEE802_1_AR = 91L; // bytes
+
+  /*
+   * Payload Format object
+   */
+  private static final long FIRMWARE_PAYLOAD_FORMAT_TYPE = 72L; // int
+  private static final long FIRMWARE_PAYLOAD_FORMAT_GUIDANCE = 73L; // bytes
+
+  /*
+   * Payload Digest object
+   */
+  private static final long FIRMWARE_PAYLOAD_DIGEST_TYPE = 98L; // enum (int)
+  private static final long FIRMWARE_PAYLOAD_DIGEST_GUIDANCE = 99L; // bytes
+  private static final long FIRMWARE_PAYLOAD_DIGEST_VALUE = 100L; // bytes
+
+  /*
+   * Firmware Package object (75)
+   */
+  private static final long FIRMWARE_PAYLOAD_PACKAGE_COMPRESSION_TYPE = 76L; // text / int
+  private static final long FIRMWARE_PAYLOAD_PACKAGE_COMPRESSION_GUIDANCE = 77L; // bytes
+  private static final long FIRMWARE_PAYLOAD_PACKAGE_VALUE = 78L; // bytes
+
+  /**
+   * Generate a CBOR object based on the provided builder.
+   * 
+   * @param generator
+   *          the generator to write data to
+   * @param builder
+   *          the firmware builder to read data from
+   */
+  public void generate(JsonGenerator generator, FirmwareBuilder builder) {
+    try {
+<span class="fc" id="L123">      generator.writeStartObject();</span>
+
+<span class="fc" id="L125">      writeField(generator, FIRMWARE_MANIFEST_ID_FIELD, builder.getId());</span>
+
+<span class="fc" id="L127">      writeDateTimeField(generator, FIRMWARE_MANIFEST_CREATION_TIMESTAMP, builder.getCreationTimestamp());</span>
+
+<span class="fc" id="L129">      writeIntegerField(generator, FIRMWARE_MANIFEST_VERSION, builder.getVersion());</span>
+
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">      if (builder.getDescription() != null) {</span>
+<span class="nc" id="L132">        writeTextField(generator, FIRMWARE_MANIFEST_DESCRIPTION, builder.getDescription());</span>
+      }
+
+<span class="fc" id="L135">      writeBinaryField(generator, FIRMWARE_MANIFEST_NONCE, builder.getNonce());</span>
+
+      // FIRMWARE_MANIFEST_DEPENDENCIES
+      // FIRMWARE_MANIFEST_ALIASES
+
+<span class="fc" id="L140">      writeDeviceIdentifier(generator, FIRMWARE_MANIFEST_TARGET_DEVICE_ID, builder.getTargetDeviceIdentifier());</span>
+
+<span class="fc" id="L142">      List&lt;FirmwarePayloadBuilder&gt; payloads = builder.getPayloads();</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">      if (!payloads.isEmpty()) {</span>
+<span class="fc" id="L144">        generator.writeFieldId(FIRMWARE_MANIFEST_PAYLOAD_ENTRY);</span>
+
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (payloads.size() == 1) {</span>
+<span class="fc" id="L147">          generate(generator, payloads.iterator().next());</span>
+        } else {
+<span class="nc" id="L149">          generator.writeStartArray();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">          for (FirmwarePayloadBuilder payload : payloads) {</span>
+<span class="nc" id="L151">            generate(generator, payload);</span>
+<span class="nc" id="L152">          }</span>
+<span class="nc" id="L153">          generator.writeEndArray();</span>
+        }
+      }
+
+<span class="fc" id="L157">      Map&lt;Integer, byte[]&gt; extensions = builder.getExtensions();</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">      if (!extensions.isEmpty()) {</span>
+<span class="nc" id="L159">        generator.writeFieldId(FIRMWARE_MANIFEST_SIMPLE_EXTENSIONS);</span>
+<span class="nc" id="L160">        generator.writeStartObject();</span>
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        for (Map.Entry&lt;Integer, byte[]&gt; entry : extensions.entrySet()) {</span>
+<span class="nc" id="L163">          writeBinaryField(generator, entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L164">        }</span>
+<span class="nc" id="L165">        generator.writeEndObject();</span>
+      }
+
+<span class="fc" id="L168">      generator.writeEndObject();</span>
+<span class="nc" id="L169">    } catch (IOException ex) {</span>
+<span class="nc" id="L170">      throw new RuntimeException(ex);</span>
+<span class="fc" id="L171">    }</span>
+<span class="fc" id="L172">  }</span>
+
+  private void generate(JsonGenerator generator, FirmwarePayloadBuilder builder) throws IOException {
+<span class="fc" id="L175">    generator.writeStartObject();</span>
+
+<span class="fc" id="L177">    writeField(generator, FIRMWARE_PAYLOAD_ID, builder.getId());</span>
+
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">    if (builder.getPackageIdentifier() != null) {</span>
+<span class="nc" id="L180">      writeTextField(generator, FIRMWARE_PAYLOAD_PACKAGE_ID, builder.getPackageIdentifier());</span>
+    }
+
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">    if (builder.getDescription() != null) {</span>
+<span class="nc" id="L184">      writeTextField(generator, FIRMWARE_MANIFEST_DESCRIPTION, builder.getDescription());</span>
+    }
+
+    {
+<span class="fc" id="L188">      generator.writeFieldId(FIRMWARE_PAYLOAD_FORMAT);</span>
+<span class="fc" id="L189">      generator.writeStartObject();</span>
+<span class="fc" id="L190">      writeIntegerField(generator, FIRMWARE_PAYLOAD_FORMAT_TYPE, builder.getFormatType());</span>
+
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">      if (builder.getFormatGuidance() != null) {</span>
+<span class="nc" id="L193">        writeBinaryField(generator, FIRMWARE_PAYLOAD_FORMAT_GUIDANCE, builder.getFormatGuidance());</span>
+      }
+<span class="fc" id="L195">      generator.writeEndObject();</span>
+    }
+
+<span class="fc" id="L198">    writeIntegerField(generator, FIRMWARE_PAYLOAD_SIZE, builder.getSize());</span>
+
+    // private static final long FIRMWARE_PAYLOAD_SIMPLE_VERSION = 107L; // uint
+    // private static final long FIRMWARE_PAYLOAD_VERSION = 108L; // object
+
+<span class="fc" id="L203">    List&lt;FirmwarePayloadDigest&gt; digests = builder.getDigests();</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (!digests.isEmpty()) {</span>
+<span class="fc" id="L205">      generator.writeFieldId(FIRMWARE_PAYLOAD_DIGESTS);</span>
+
+<span class="fc" id="L207">      generator.writeStartArray();</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">      for (FirmwarePayloadDigest digest : digests) {</span>
+<span class="fc" id="L209">        generate(generator, digest);</span>
+<span class="fc" id="L210">      }</span>
+<span class="fc" id="L211">      generator.writeEndArray();</span>
+    }
+
+    // private static final long FIRMWARE_PAYLOAD_TARGET_COMPONENT_INDEX = 79L; //
+    // text
+
+<span class="fc" id="L217">    writeField(generator, FIRMWARE_PAYLOAD_STORAGE_IDENTIFIER, builder.getStorageId());</span>
+
+    // private static final long FIRMWARE_PAYLOAD_CONDITIONS = 101L; // array of
+    // objects
+    // private static final long FIRMWARE_PAYLOAD_DIRECTIVES = 104L; // array of
+    // objects
+    // private static final long FIRMWARE_PAYLOAD_TARGET_DEPENDENCY = 81L; // array
+    // of objects
+    // private static final long FIRMWARE_PAYLOAD_TARGET_MINIMAL_VERSION = 92L; //
+    // object
+    // private static final long FIRMWARE_PAYLOAD_RELATIONSHIPS = 84L; // enum (int)
+
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">    if (builder.getFirmwarePackage() != null) {</span>
+<span class="fc" id="L230">      writePayload(generator, FIRMWARE_PAYLOAD_PACKAGE, builder.getFirmwarePackage());</span>
+    }
+    // private static final long FIRMWARE_PAYLOAD_SIMPLE_EXTENSIONS = 116L; // { +
+    // int =&gt; bytes
+
+<span class="fc" id="L235">    generator.writeEndObject();</span>
+<span class="fc" id="L236">  }</span>
+
+  private void generate(JsonGenerator generator, FirmwarePayloadDigest digest) throws IOException {
+<span class="fc" id="L239">    generator.writeStartObject();</span>
+
+<span class="fc" id="L241">    writeIntegerField(generator, FIRMWARE_PAYLOAD_DIGEST_TYPE, digest.getType().getIndex());</span>
+
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">    if (digest.getGuidance() != null) {</span>
+<span class="nc" id="L244">      writeBinaryField(generator, FIRMWARE_PAYLOAD_DIGEST_GUIDANCE, digest.getGuidance());</span>
+    }
+
+<span class="fc" id="L247">    writeBinaryField(generator, FIRMWARE_PAYLOAD_DIGEST_VALUE, digest.getValue());</span>
+<span class="fc" id="L248">    generator.writeEndObject();</span>
+<span class="fc" id="L249">  }</span>
+
+  private void writeDeviceIdentifier(JsonGenerator generator, long fieldId, DeviceIdentifier deviceIdentifier)
+      throws IOException {
+<span class="fc" id="L253">    generator.writeFieldId(fieldId);</span>
+
+<span class="fc" id="L255">    generator.writeStartObject();</span>
+
+<span class="fc" id="L257">    writeTextField(generator, FIRMWARE_TARGET_DEVICE_IDENTIFIER_VENDOR, deviceIdentifier.getVendor());</span>
+
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">    if (deviceIdentifier.getType() != null) {</span>
+<span class="nc" id="L260">      writeTextField(generator, FIRMWARE_TARGET_DEVICE_IDENTIFIER_TYPE, deviceIdentifier.getType());</span>
+    }
+
+<span class="fc" id="L263">    writeTextField(generator, FIRMWARE_TARGET_DEVICE_IDENTIFIER_MODEL, deviceIdentifier.getVendor());</span>
+
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">    if (deviceIdentifier.getClazz() != null) {</span>
+<span class="nc" id="L266">      writeTextField(generator, FIRMWARE_TARGET_DEVICE_IDENTIFIER_CLASS, deviceIdentifier.getClazz());</span>
+    }
+
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">    if (deviceIdentifier.getRfc4122() != null) {</span>
+<span class="nc" id="L270">      writeTextField(generator, FIRMWARE_TARGET_DEVICE_IDENTIFIER_RFC4122, deviceIdentifier.getRfc4122());</span>
+    }
+
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">    if (deviceIdentifier.getIeee8021ar() != null) {</span>
+<span class="nc" id="L274">      writeBinaryField(generator, FIRMWARE_TARGET_DEVICE_IDENTIFIER_IEEE802_1_AR, deviceIdentifier.getIeee8021ar());</span>
+    }
+
+<span class="fc" id="L277">    generator.writeEndObject();</span>
+<span class="fc" id="L278">  }</span>
+
+  private void writePayload(JsonGenerator generator, long fieldId, FirmwarePayloadPackage payload) throws IOException {
+<span class="fc" id="L281">    generator.writeFieldId(fieldId);</span>
+
+<span class="fc" id="L283">    generator.writeStartObject();</span>
+
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">    if (payload.getCompressionType() != null) {</span>
+<span class="nc" id="L286">      writeIntegerOrTextField(generator, FIRMWARE_PAYLOAD_PACKAGE_COMPRESSION_TYPE, payload.getCompressionType());</span>
+    }
+
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">    if (payload.getCompressionGuidance() != null) {</span>
+<span class="nc" id="L290">      writeBinaryField(generator, FIRMWARE_PAYLOAD_PACKAGE_COMPRESSION_GUIDANCE, payload.getCompressionGuidance());</span>
+    }
+<span class="fc" id="L292">    writeBinaryField(generator, FIRMWARE_PAYLOAD_PACKAGE_VALUE, payload.getPackageBytes());</span>
+
+<span class="fc" id="L294">    generator.writeEndObject();</span>
+<span class="fc" id="L295">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

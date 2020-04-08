@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>Maven SWID Tag Generation Plugin - Checkstyle report</title>
+    <link>https://pages.nist.gov/swid-tools/swid-maven-plugin/</link>
+    <description>Maven SWID Tag Generation Plugin - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2020 National Institute of Standards and Technology</copyright>
+    <item>
+      <title>File: 11,
+             Errors: 0,
+             Warnings: 405,
+             Infos: 0
+      </title>
+            <link>https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.AbstractFileEntryProcessor.java">gov/nist/secauto/swid/plugin/entry/AbstractFileEntryProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.generate.MavenProjectSwidBuilderHelper.java">gov/nist/secauto/swid/plugin/generate/MavenProjectSwidBuilderHelper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.AbstractFileEntry.java">gov/nist/secauto/swid/plugin/entry/AbstractFileEntry.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.HelpMojo.java">gov/nist/secauto/swid/plugin/HelpMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  386
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.resource.ResourceFileEntryProcessor.java">gov/nist/secauto/swid/plugin/entry/resource/ResourceFileEntryProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.FileEntry.java">gov/nist/secauto/swid/plugin/entry/FileEntry.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.SwidGenerateMojo.java">gov/nist/secauto/swid/plugin/SwidGenerateMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.SwidContainerDescriptorHandler.java">gov/nist/secauto/swid/plugin/SwidContainerDescriptorHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.FileSelectorPredicate.java">gov/nist/secauto/swid/plugin/entry/FileSelectorPredicate.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.archive.ArchiveEntryFileEntryProcessor.java">gov/nist/secauto/swid/plugin/entry/archive/ArchiveEntryFileEntryProcessor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://pages.nist.gov/swid-tools/swid-maven-plugin//checkstyle.html#gov.nist.secauto.swid.plugin.entry.archive.ArtifactMap.java">gov/nist/secauto/swid/plugin/entry/archive/ArtifactMap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
