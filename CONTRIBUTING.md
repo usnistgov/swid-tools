@@ -1,6 +1,6 @@
-# Contributing to the Metaschema Project
+# Contributing to this Project
 
-This page is for potential contributors to this project. It provides basic information on the project, describes the main ways people can make contributions, explains how to report issues relating to the project and projecta rtifacts, and lists pointers to additional sources of information.
+This page is for potential contributors to this project. It provides basic information on the project, describes the main ways people can make contributions, explains how to report issues relating to the project and project artifacts, and lists pointers to additional sources of information.
 
 ## Project approach
 

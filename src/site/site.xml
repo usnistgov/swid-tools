@@ -1,0 +1,192 @@
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
+  name="Software Identification (SWID) Tools">
+  <bannerLeft>
+    <name><![CDATA[
+      Software Identification (SWID) Tools
+      ]]>
+    </name>
+    <href>${this.site.url}</href>
+  </bannerLeft>
+
+  <body>
+    <head>
+      <![CDATA[
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <link rel="manifest" href="$resourcePath/site.webmanifest">
+      <link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css">
+      <link rel="stylesheet" href="$resourcePath/css/custom.css">
+      ]]>
+    </head>
+    <links>
+      <item name="GitHub Project" href="${this.scm.url}"/>
+    </links>
+    <breadcrumbs>
+      <item name="SWID Tools" href="./"/>
+    </breadcrumbs>
+    <menu name="Main" inherit="top">
+      <item name="Home" href="./"/>
+      <item name="GitHub project" href="${this.scm.url}"/>
+      <item name="Licenses" href="${this.scm.url}/LICENSE.md"/>
+    </menu>
+    <menu name="Contribute" inherit="bottom">
+      <item name="Contribute" href="${this.scm.url}/CONTRIBUTING.md"/>
+      <item name="Issues" href="${this.issueManagement.url}"/>
+      <item name="Fork on GitHub" href="${this.scm.url}"/>
+    </menu>
+    <menu name="Documentation" inherit="bottom">
+      <item name="SWID Builder API" href="/swid-builder/apidocs/index.html"/>
+      <item name="Assembly SWID Generator Usage" href="/swid-maven-plugin/plugin-info.html"/>
+      <item name="Maven Plugin Usage" href="/swid-maven-plugin/plugin-info.html"/>
+      <item name="Building" href="building.html"/>
+    </menu>
+    <menu name="Modules" ref="modules"/>
+    <menu name="Maven Documentation" ref="reports" inherit="bottom"/>
+    <!-- Disable copyright footer -->
+    <footer />
+  </body>
+
+  <custom>
+    <reflowSkin>
+      <brand>
+      	<name>
+      	 <![CDATA[
+      	 <div id="nistheadergoeshere"></div> SWID Tools
+      	 ]]>
+      	</name>
+        <href>${this.site.url}</href>
+      </brand>
+      <slogan>A Java API for performing requirements-based XML document validation, and a testing framework for XML Schema and Schematron definitions.</slogan>
+      <bottomDescription quote="false">
+        <![CDATA[
+          <div>
+            A collection of utilities for creating, validating, and publishing SWID and Constrained SWID (CoSWID) tags.
+            <div class="m-1">
+              <a href="${this.scm.url}" class="p-1 text-secondary"><i class="fab fa-github"></i></a>
+              <a href="mailto:scap@nist.gov" class="p-1 text-secondary"><i class="fas fa-envelope"></i></a>
+              <a href="https://gitter.im/usnistgov-swidtools" class="p-1 text-secondary"><i class="fab fa-gitter"></i></a>
+            </div>
+          </div>
+        ]]>
+      </bottomDescription>
+      <pages>
+        <index project="swid-parent">
+          <shortTitle>Introduction</shortTitle>
+          <toc>false</toc>
+          <sections>
+            <body/>
+          </sections>
+        </index>
+        <index project="swid-builder">
+          <shortTitle>Introduction</shortTitle>
+          <toc>false</toc>
+          <sections>
+            <body/>
+          </sections>
+        </index>
+        <index project="swid-maven-plugin">
+          <shortTitle>Introduction</shortTitle>
+          <toc>false</toc>
+          <sections>
+            <body/>
+          </sections>
+        </index>
+        <index project="swid-repo-client">
+          <shortTitle>Introduction</shortTitle>
+          <toc>false</toc>
+          <sections>
+            <body/>
+          </sections>
+        </index>
+        <index project="swidval">
+          <shortTitle>Introduction</shortTitle>
+          <toc>false</toc>
+          <sections>
+            <body/>
+          </sections>
+        </index>
+        <index project="swidval-webapp">
+          <shortTitle>Introduction</shortTitle>
+          <toc>false</toc>
+          <sections>
+            <body/>
+          </sections>
+        </index>
+		<developer-info>
+			<toc>sidebar</toc>
+		</developer-info>
+        <using>
+          <toc>false</toc>
+          <header enabled="false"/>
+        </using>
+        <building>
+          <toc>false</toc>
+          <header enabled="false"/>
+        </building>
+      </pages>
+
+      <navbar filterMenu="Documentation|Maven Documentation"
+        cssClass="navbar-dark bg-primary border-bottom" center="false" alignMenu="right"/>
+      <!-- Split menus in the bottom navigation -->
+      <bottomNav>
+        <column>Main</column>
+        <column>Contribute</column>
+        <column>Modules</column>
+		<column>Maven Documentation</column>
+      </bottomNav>
+
+      <absoluteResourceURL>${this.site.url}</absoluteResourceURL>
+      <localResources>false</localResources>
+      <skinAttribution>false</skinAttribution>
+      <smoothScroll>true</smoothScroll>
+      <theme>bootswatch-flatly</theme>
+      <highlightJs>true</highlightJs>
+      <highlightJsTheme>github</highlightJsTheme>
+      <highlightJsVersion>9.18.1</highlightJsVersion>
+      <breadcrumbs>true</breadcrumbs>
+      <endContent>
+        <script type="text/javascript">
+        <![CDATA[
+        document.querySelectorAll('div.source pre').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        $(document).ready(function () {
+          $.ajax({
+            url: "https://pages.nist.gov/nist-header-footer/boilerplate-header.html",
+            cache: false,
+            dataType: "html",
+            success: function (data) { $('#nistheadergoeshere').append(data); }
+          });
+          $("body").append('<div id="nistfootergoeshere"></div>');
+          $.ajax({
+            url: "https://pages.nist.gov/nist-header-footer/boilerplate-footer.html",
+            cache: false,
+            dataType: "html",
+            success: function (data) { $('#nistfootergoeshere').append(data); }
+          });
+        });
+        ]]>
+        </script>
+      </endContent>
+      <titleTemplate>%2$s | %1$s</titleTemplate>
+      <header enabled="true"/>
+      <!-- Use Table of Contents at the top of the page (max 6 elements) -->
+      <toc numberItems="6" cssClass="navbar-dark bg-dark border rounded">sidebar</toc>
+      <navside-menu cssClass="navside-light bg-light"/>
+      <footer theme="light"/>
+      <markPageHeader>false</markPageHeader>
+    </reflowSkin>
+  </custom>
+
+  <skin>
+    <groupId>io.github.devacfr.maven.skins</groupId>
+    <artifactId>reflow-maven-skin</artifactId>
+    <version>2.2.0</version>
+  </skin>
+
+  <googleAnalyticsAccountId>UA-42404149-54</googleAnalyticsAccountId>
+  <publishDate position="none" format="yyyy-MM-dd"/>
+  <version position="left"/>
+  <edit>${this.scm.url}</edit>
+</project>

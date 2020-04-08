@@ -1,0 +1,21 @@
+#set($h1 = '#')
+#set($h2 = '##')
+
+$h1 Using the SWID Builder Java API
+
+A Java [API](apidocs/index.html) for building SWID and CoSWID tags. This API can be used in Java applications to produce tags in the XML-based SWID and CBOR-based [Constrained SWID](https://datatracker.ietf.org/doc/draft-ietf-sacm-coswid/) (CoSWID) formats. This library provides a set of builder patterns that can be used together to generate a SWID or CoSWID tag.
+
+The following dependency can be added to your POM to use this library.
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```
+
+The [API documentation](apidocs/index.html) provides more details.
+
+
+The [source](https://github.com/usnistgov/swid-tools/tree/master/swid-builder/) can be found in the project's Github repo.

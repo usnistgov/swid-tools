@@ -14,9 +14,12 @@
 
 	<name>SWID Repository Client</name>
 
-	<scm>
-		<url>https://github.com/usnistgov/swid-tools/tree/master/swid-repo-client</url>
-	</scm>
+	<distributionManagement>
+		<site>
+			<id>site_scm</id>
+			<url>${site.url}/${project.artifactId}/</url>
+		</site>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>

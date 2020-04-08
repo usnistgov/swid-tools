@@ -36,6 +36,7 @@ import gov.nist.secauto.decima.core.assessment.result.TestResult;
 import gov.nist.secauto.decima.core.classpath.ClasspathHandler;
 import gov.nist.secauto.decima.core.document.DocumentException;
 import gov.nist.secauto.decima.xml.assessment.Factory;
+import gov.nist.secauto.decima.xml.assessment.result.XPathContext;
 import gov.nist.secauto.decima.xml.assessment.schematron.SchematronAssessment;
 import gov.nist.secauto.decima.xml.document.DefaultXMLDocumentFactory;
 import gov.nist.secauto.decima.xml.document.XMLDocument;
@@ -98,8 +99,8 @@ public class SchematronTest {
         System.out.println("  " + derResult.getDerivedRequirement().getId() + ": status=" + derResult.getStatus());
         for (TestResult asrResult : derResult.getTestResults()) {
           System.out.println("    status=" + asrResult.getStatus() + ", message=" + asrResult.getResultValues()
-              + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn());
-          // + ", xpath=" + asrResult.getContext().getXPath());
+              + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn() + ", xpath="
+              + ((XPathContext) asrResult.getContext()).getXPath());
         }
       }
     }

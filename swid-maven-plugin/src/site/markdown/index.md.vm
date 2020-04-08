@@ -1,0 +1,118 @@
+#set($h1 = '#')
+#set($h2 = '##')
+
+$h1 Using the SWID Maven Plugin
+
+This project supports generating a SWID tag as part of the [Apache Maven](https://maven.apache.org/) build system.
+
+Two generation capabilities are provided:
+
+- **Assembly SWID Generator:** A [container descriptor handler](http://maven.apache.org/plugins/maven-assembly-plugin/examples/single/using-container-descriptor-handlers.html) that supports generation of a SWID tag as a manifest of a Maven [Assembly](http://maven.apache.org/plugins/maven-assembly-plugin/). Maven assemblies are binary distributions of Java code archived using a number of popular archive formats.
+- **SWD Generation Mojo:** An experimental Maven mojo for building a SWID tag for use within a Java JAR file.
+
+The [source](https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin/) for these capabilities can be found in the project's Github repo.
+
+$h2 The Assembly SWID Generator
+
+To generate a SWID tag as part of the execution of the Maven [Assembly](http://maven.apache.org/plugins/maven-assembly-plugin/) plugin, a couple configurations need to be made.
+
+The following example is the configuration used by the [swidval project](https://github.com/usnistgov/swid-tools/tree/master/swidval).
+
+First, the assembly descriptor needs to be configured to use the `swid-generator`. In the following example, the assembly descriptor located in `src/assembly/bin.xml` has the needed `<containerDescriptorHandler>` configured as follows:
+
+```xml
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>swidval</id>
+	<formats>
+		<format>dir</format>
+		<format>zip</format>
+		<format>tar.bz2</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/</outputDirectory>
+			<unpack>false</unpack>
+			<includes>
+				<include>${artifact}</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/lib</outputDirectory>
+			<unpack>false</unpack>
+			<excludes>
+				<exclude>${artifact}</exclude>
+			</excludes>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>${project.build.directory}/generated-distro</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+	<containerDescriptorHandlers>
+    <!-- Generates a SWID tag -->
+		<containerDescriptorHandler>
+			<handlerName>swid-generator</handlerName>
+			<configuration>
+				<excludes>
+          <!-- don't include the assembly in the generated payload -->
+					<exclude>${artifact}</exclude>
+				</excludes>
+        <!-- use the following entities in the SWID tag -->
+				<entities>
+					<entity>
+						<name>National Institute of Standards and Technology</name>
+						<regid>nist.gov</regid>
+						<roles>
+							<role>tagCreator</role>
+							<role>softwareCreator</role>
+						</roles>
+					</entity>
+				</entities>
+			</configuration>
+		</containerDescriptorHandler>
+	</containerDescriptorHandlers>
+</assembly>
+```
+
+Second, the `maven-assembly-plugin` needs to be configured in your project's POM as follows:
+
+```xml
+<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<dependencies>
+					<dependency> <!-- the dependency for the SWID generator -->
+            <groupId>${project.groupId}</groupId>
+            <artifactId>${project.artifactId}</artifactId>
+            <version>${project.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>make-assembly-bin</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/bin.xml</descriptor> <!-- the location of the configured assembly descriptor -->
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+```
+
+$h2 SWID Generator Mojo
+
+See the [mojo documentation](plugin-info.html).
