@@ -38,7 +38,6 @@
 		<dependency.version.spring>4.3.2.RELEASE</dependency.version.spring>
 		<dependency.version.jstl>1.2</dependency.version.jstl>
 		<dependency.version.servletapi>4.0.0-b01</dependency.version.servletapi>
-
 	</properties>
 
 	<issueManagement>
@@ -48,8 +47,8 @@
 
 	<scm>
 		<url>${scm.url}</url>
-		<connection>scm:git:ssh://git@github.com:usnistgov/swid-tools.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:usnistgov/swid-tools.git</developerConnection>
+		<connection>scm:git:ssh://git@github.com/usnistgov/swid-tools.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/usnistgov/swid-tools.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
