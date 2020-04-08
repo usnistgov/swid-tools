@@ -48,7 +48,7 @@
 
 	<scm>
 		<url>${scm.url}</url>
-		<connection>scm:git:https://github.com/usnistgov/swid-tools.git</connection>
+		<connection>scm:git:ssh://git@github.com:usnistgov/swid-tools.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:usnistgov/swid-tools.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
