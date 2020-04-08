@@ -1,4 +1,5 @@
 # Software Identification (SWID) Tagging Tools and Utilities
+[![CircleCI](https://circleci.com/gh/usnistgov/swid-tools/tree/master.svg?style=svg)](https://circleci.com/gh/usnistgov/swid-tools/tree/master) [![Gitter](https://img.shields.io/gitter/room/swid-tools/community.svg?style=flat-square)](https://gitter.im/swid-tools/community)
 
 This project provides a set of Java-based tools for the generation and validation of Software Identification (SWID) tags produced by the NIST [SWID Tagging Project](https://csrc.nist.gov/projects/Software-Identification-SWID). These tools support XML-based SWID tags based on the format defined by ISO/IEC 19770-2:2015, and [Concise Binary Object Representation](https://cbor.io/) (CBOR) based concise SWID (CoSWID) tags based on the [IETF CoSWID](https://datatracker.ietf.org/doc/draft-ietf-sacm-coswid/) specification.
 
