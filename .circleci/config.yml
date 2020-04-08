@@ -103,7 +103,7 @@ jobs:
       - save-maven-cache
       - add_ssh_keys:
           fingerprints:
-            - "64:27:30:4e:b5:0f:94:d4:a9:e0:e1:48:39:6a:b3:84"
+            - "b5:78:2c:c6:2c:2f:b4:6d:87:69:50:03:42:ce:24:44"
       - run:
           name: Create known hosts
           command: |
