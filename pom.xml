@@ -10,7 +10,7 @@
 
 	<groupId>gov.nist.secauto.swid</groupId>
 	<artifactId>swid-parent</artifactId>
-	<version>0.6.1</version>
+	<version>0.6.2-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -47,7 +47,7 @@
 		<url>${scm.url}</url>
 		<connection>scm:git:ssh://git@github.com/usnistgov/swid-tools.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/usnistgov/swid-tools.git</developerConnection>
-		<tag>v0.6.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
