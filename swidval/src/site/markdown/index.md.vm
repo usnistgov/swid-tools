@@ -1,0 +1,69 @@
+#set($h1 = '#')
+#set($h2 = '##')
+
+$h1 Using the SWID Validation Tool and API
+
+Supports validating a SWID tag against the requirements defined by ISO/IEC 19770-2:2015, IETF CoSWID, and NIST Internal Report [(NISTIR) 8060](https://csrc.nist.gov/publications/detail/nistir/8060/final).
+
+This project is implemented using the [Decima Framework][decima], which provides the validation capabilities used to perform the SWID tag validation.
+
+The [source](https://github.com/usnistgov/swid-tools/tree/master/swidval) can be found in the project's Github repo.
+
+$h2 Use as a Command Line Tool
+
+The latest version of the tool binary can be downloaded from the [NIST SWID Tag](https://csrc.nist.gov/Projects/Software-Identification-SWID/resources) project page.
+
+This tool provides an convenient way to check if a SWID or CoSWID tag is valid and provides the necessary information required by the standard and best practices.
+
+$h2 Use as an API
+
+To use SWIDVal can also be used as an Java API, add the following dependency to your POM:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```
+
+The following is an example of using the SWIDVal API:
+
+```java
+// Load the document to assess; the factory can be reused
+DefaultXMLDocumentFactory documentFactory = new DefaultXMLDocumentFactory();
+XMLDocument doc = documentFactory.load(new File("src/test/resources/other/authoritative.swidtag"));
+
+SWIDAssessmentFactory factory = SWIDAssessmentFactory.getInstance();
+factory.setResultDirectory(new File("schematron-results"));
+
+// setup the assessment engine; the executor can be reused
+AssessmentExecutor<XMLDocument> executor
+    = factory.newAssessmentExecutor(TagType.PRIMARY, true, Executors.newSingleThreadExecutor());
+
+// setup the result collector
+AssessmentResultBuilder assessmentResultBuilder
+    = SWIDAssessmentResultBuilderFactory.newAssessmentResultBuilder(TagType.PRIMARY, true);
+
+// do the assessment
+executor.execute(doc, assessmentResultBuilder);
+
+// generate the results
+AssessmentResults validationResult = assessmentResultBuilder.end().build(SWIDRequirementsManager.getInstance());
+
+// Output the results
+Collection<BaseRequirementResult> results = validationResult.getBaseRequirementResults();
+for (BaseRequirementResult reqResult : results) {
+  System.out.println(reqResult.getBaseRequirement().getId() + ": status=" + reqResult.getStatus());
+  for (DerivedRequirementResult derResult : reqResult.getDerivedRequirementResults()) {
+    System.out.println("  " + derResult.getDerivedRequirement().getId() + ": status=" + derResult.getStatus());
+    for (TestResult asrResult : derResult.getTestResults()) {
+      System.out.println("    status=" + asrResult.getStatus() + ", message=" + asrResult.getResultValues()
+          + ", location=" + asrResult.getContext().getLine() + "," + asrResult.getContext().getColumn() + ", xpath="
+          + ((XPathContext) asrResult.getContext()).getXPath());
+    }
+  }
+}
+```
+
+The [API documentation](apidocs/index.html) provides more details.

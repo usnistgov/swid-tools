@@ -13,31 +13,28 @@
 
 	<name>SWID Validation Webapp</name>
     
-	<scm>
-		<url>https://github.com/usnistgov/swid-tools/tree/master/swidval-webapp</url>
-	</scm>
+	<distributionManagement>
+		<site>
+			<id>site_scm</id>
+			<url>${site.url}/${project.artifactId}/</url>
+		</site>
+	</distributionManagement>
 
 	<properties>
-		<spring.version>4.3.2.RELEASE</spring.version>
-		<jstl.version>1.2</jstl.version>
-		<servletapi.version>4.0.0-b01</servletapi.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.secauto.swid</groupId>
 			<artifactId>swidval</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.3</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jsignature.io-tools</groupId>
 			<artifactId>easystream</artifactId>
-			<version>1.2.15</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -47,20 +44,17 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
 		</dependency>
 
 		<!-- compile only, deployed container will provide this -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>${servletapi.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

@@ -16,9 +16,12 @@
 	<name>SWID Tag Generation Java API</name>
 	<description>Supports the generation of ISO/IEC 19770-2:2015 SWID tag in Java. A number of other formats are also supported (e.g., CBOR).</description>
 
-	<scm>
-		<url>https://github.com/usnistgov/swid-tools/tree/master/swid-builder</url>
-	</scm>
+	<distributionManagement>
+		<site>
+			<id>site_scm</id>
+			<url>${site.url}/${project.artifactId}/</url>
+		</site>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
@@ -64,4 +67,34 @@
 			</plugin>
 		</plugins>
 	</build>
+<!-- 
+	<profiles>
+		<profile>
+			<id>reporting</id>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<excludePackageNames>net.sf.saxon.*</excludePackageNames>
+						</configuration>
+						<reportSets>
+							<reportSet>
+								<id>swid-builder-javadoc</id>
+								<reports>
+									<report>no-fork</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>javancss-maven-plugin</artifactId>
+						<version>2.1</version>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+ -->	
 </project>

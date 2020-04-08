@@ -29,6 +29,7 @@ package gov.nist.secauto.swid.swidval;
 import gov.nist.secauto.decima.core.assessment.Assessment;
 import gov.nist.secauto.decima.core.assessment.AssessmentExecutor;
 import gov.nist.secauto.decima.core.assessment.ConcurrentAssessmentExecutor;
+import gov.nist.secauto.decima.core.classpath.ClasspathHandler;
 import gov.nist.secauto.decima.xml.assessment.Factory;
 import gov.nist.secauto.decima.xml.assessment.schema.SchemaAssessment;
 import gov.nist.secauto.decima.xml.assessment.schematron.SchematronAssessment;
@@ -67,6 +68,7 @@ public class SWIDAssessmentFactory {
   private File resultDirectory;
 
   private SWIDAssessmentFactory() {
+    ClasspathHandler.initialize();
     this.schematron = createSchematron();
     this.schemaAssessment = createSchemaAssessment();
   }

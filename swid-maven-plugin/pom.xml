@@ -16,15 +16,17 @@
 	<name>Maven SWID Tag Generation Plugin </name>
 	<description>This project is a ContainerDescriptorHandler that generates an ISO/IEC 19770-2:2015 SWID tag within a Maven assembly plugin execution.</description>
 
-	<scm>
-		<url>https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin</url>
-	</scm>
+	<distributionManagement>
+		<site>
+			<id>site_scm</id>
+			<url>${site.url}/${project.artifactId}/</url>
+		</site>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>swid-builder</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
@@ -139,9 +141,34 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<sourceDirectories>
+						<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+						<sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+					</sourceDirectories>
+				</configuration>
+			</plugin>
 
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 	<profiles>
 		<profile>
 			<id>run-its</id>

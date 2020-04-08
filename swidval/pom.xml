@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -9,12 +11,15 @@
 
 	<artifactId>swidval</artifactId>
 
-    <name>SWID Tag Validator </name>
-    <description>This tool validates a SWID Tag based on requirements in ISO/IEC 19770-2:2015 and NISTIR 8060.</description>
+	<name>SWID Tag Validator </name>
+	<description>This tool validates a SWID Tag based on requirements in ISO/IEC 19770-2:2015 and NISTIR 8060.</description>
 
-	<scm>
-		<url>https://github.com/usnistgov/swid-tools/tree/master/swidval</url>
-	</scm>
+	<distributionManagement>
+		<site>
+			<id>site_scm</id>
+			<url>${site.url}/${project.artifactId}/</url>
+		</site>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
@@ -86,14 +91,14 @@
 									<!-- Artifact that has the schema files -->
 									<groupId>gov.nist.secauto.decima</groupId>
 									<artifactId>decima-xml</artifactId>
-<!-- 									<version>${dependency.version.decima}</version> -->
+									<!-- <version>${dependency.version.decima}</version> -->
 									<type>jar</type>
 								</artifactItem>
 								<artifactItem>
 									<!-- Artifact that has the schema files -->
 									<groupId>gov.nist.secauto.decima</groupId>
 									<artifactId>decima-xml-assessment</artifactId>
-<!-- 									<version>${dependency.version.decima}</version> -->
+									<!-- <version>${dependency.version.decima}</version> -->
 									<type>jar</type>
 								</artifactItem>
 							</artifactItems>
@@ -180,25 +185,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.codehaus.mojo</groupId> -->
-			<!-- <artifactId>build-helper-maven-plugin</artifactId> -->
-			<!-- <version>1.12</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>add-source</id> -->
-			<!-- <phase>generate-sources</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>add-source</goal> -->
-			<!-- </goals> -->
-			<!-- <configuration> -->
-			<!-- <sources> -->
-			<!-- <source>${project.build.directory}/generated-sources/java/</source> -->
-			<!-- </sources> -->
-			<!-- </configuration> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
 		</plugins>
 	</build>
 </project>

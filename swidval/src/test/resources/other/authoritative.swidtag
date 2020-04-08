@@ -3,5 +3,5 @@
   <Entity name="National Institute of Standards and Technology" role="tagCreator softwareCreator" regid="nist.gov" />
   <Payload xmlns:SHA-256="http://www.w3.org/2001/04/xmlenc#sha256" xmlns:SHA-512="http://www.w3.org/2001/04/xmlenc#sha512">
     <File location=".." name="NOTICE.txt" size="9842" SHA-256:hash="abab9565a2593aa037b0054d0a84dbf4d23795840f1321e9476fa7b8eb5d432b" SHA-512:hash="5787658e68139e4c0b46033930362a14fea58c5bcd3063440d49e9a268f5741a6cacafd3d0512228bb081394afb14a5c1e4dcce6ac0db50189a9160d737fe862" />
-</Payload>
+  </Payload>
 </SoftwareIdentity>

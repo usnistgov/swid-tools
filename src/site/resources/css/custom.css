@@ -1,0 +1,24 @@
+.subfooter {
+    display: none;
+}
+#m-top-navbar.bg-primary {
+  background-color: #000 !important;
+}
+#nistheadergoeshere {
+  display: inline;
+}
+#nist-header {
+  display: inline;
+}
+#brandtext {
+  display: inline;
+}
+.nist-header__logo-link {
+  display: inline;
+}
+.nist-header__logo-icon {
+  display: inline;
+}
+.projectVersion {
+  padding-right: 0.5rem;
+}

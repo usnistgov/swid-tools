@@ -81,26 +81,44 @@ public class SwidGenerateMojo extends AbstractMojo {
   private MavenProject project;
 
   /**
-   * 
-   * Location of the file.
+   * Location where the tag will be generated.
    */
   @Parameter(defaultValue = "${project.build.directory}/classes/META-INF", property = "outputDir", required = true)
   private String outputDirectory;
 
+  /**
+   * The tag format to generate. Either XML or CBOR for a SWID or CoSWID tag respectively.
+   */
   @Parameter(defaultValue = "XML", required = true)
   private String tagFormat;
 
+  /**
+   * The location in the archive where the SWID tag will be generated.
+   */
   @Parameter(defaultValue = "SWIDTAG", required = true)
   private String tagPath;
 
+  /**
+   * The name of the SWID tag.
+   */
   @Parameter(defaultValue = "swid-tag", required = true)
   private String tagName;
 
+  /**
+   * The file paths to include.
+   */
   @Parameter
   private List<String> includes;
+
+  /**
+   * The file paths to exclude.
+   */
   @Parameter
   private List<String> excludes;
 
+  /**
+   * A set of SWID entity declarations to include in the tag.
+   */
   @Parameter
   private List<Entity> entities;
 
@@ -114,7 +132,7 @@ public class SwidGenerateMojo extends AbstractMojo {
   }
 
   /**
-   * Get the set of inscluded files.
+   * Get the set of included files.
    * 
    * @return the includes
    */

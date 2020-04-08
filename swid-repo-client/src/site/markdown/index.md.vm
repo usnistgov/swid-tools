@@ -1,0 +1,22 @@
+#set($h1 = '#')
+#set($h2 = '##')
+
+$h1 Using the NVD SWID Repository Client
+
+A experimental, Java-based client for posting SWID tags to the [National Vulnerability Database](https://nvd.nist.gov/) (NVD) for use in vulnerable product identification.
+
+The NVD is maintaining a repository of software producer published SWID and CoSWID tags for use in identifying products as part of the NVD's [vulnerability analysis process](https://nvd.nist.gov/general).
+
+The following dependency can be added to your POM to use this library.
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```
+
+The [API documentation](apidocs/index.html) provides more details.
+
+The [source](https://github.com/usnistgov/swid-tools/tree/master/swid-repo-client) can be found in the project's Github repo.
