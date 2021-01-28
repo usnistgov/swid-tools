@@ -10,4 +10,4 @@ mvn clean install
 
 This will produce a binary distributions archived using the ZIP and TAR/BZip2 formats.
 
-Instructions on using this tool can be found in the binary distributions or [here](src/main/README.txt).
+Instructions on using this tool can be found in the binary distributions or [here](src/main/distro/README.txt).
