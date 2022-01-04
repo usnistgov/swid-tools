@@ -19,9 +19,6 @@
 	<url>${site.url}/</url>
 
 	<properties>
-		<maven.compiler.source>8</maven.compiler.source>
-		<maven.compiler.target>8</maven.compiler.target>
-	
 		<!-- shared site configuration -->
 		<site.url>https://pages.nist.gov/swid-tools</site.url>
 		<scm.url>https://github.com/usnistgov/swid-tools/tree/master</scm.url>
