@@ -129,7 +129,7 @@ public class SWIDAssessmentFactory {
 
   protected SchemaAssessment createSchemaAssessment() {
     return Factory.newSchemaAssessment("GEN-1-1",
-        Collections.singletonList(new StreamSource("classpath:swid-schema-fixed-20160908.xsd")));
+        Collections.singletonList(new StreamSource("classpath:schema/swid-schema-fixed-20160908.xsd")));
   }
 
   protected Schematron createSchematron() {

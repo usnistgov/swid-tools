@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -41,16 +43,13 @@
 	</dependencies>
 
 	<build>
-
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 			<resource>
 				<directory>src/main/xsd</directory>
-				<includes>
-					<include>**/*.xsd</include>
-				</includes>
+				<targetPath>schema</targetPath>
 			</resource>
 			<!-- <resource> -->
 			<!-- <directory>src/main/templates</directory> -->
@@ -70,42 +69,42 @@
 		</pluginManagement>
 
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<!-- Used to pull XSD files from the JAR -->
-					<execution>
-						<id>unpack-xsd-files</id>
-						<!-- Using the initialize phase because it is before the generate sources 
-							phase -->
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<!-- Artifact that has the schema files -->
-									<groupId>gov.nist.secauto.decima</groupId>
-									<artifactId>decima-xml</artifactId>
-									<!-- <version>${dependency.version.decima}</version> -->
-									<type>jar</type>
-								</artifactItem>
-								<artifactItem>
-									<!-- Artifact that has the schema files -->
-									<groupId>gov.nist.secauto.decima</groupId>
-									<artifactId>decima-xml-assessment</artifactId>
-									<!-- <version>${dependency.version.decima}</version> -->
-									<type>jar</type>
-								</artifactItem>
-							</artifactItems>
-							<includes>**/*.xsd</includes>
-							<outputDirectory>${project.basedir}/target/xsd-includes</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- <plugin> -->
+			<!-- <groupId>org.apache.maven.plugins</groupId> -->
+			<!-- <artifactId>maven-dependency-plugin</artifactId> -->
+			<!-- <executions> -->
+			<!-- Used to pull XSD files from the JAR -->
+			<!-- <execution> -->
+			<!-- <id>unpack-xsd-files</id> -->
+			<!-- Using the initialize phase because it is before the generate sources 
+				phase -->
+			<!-- <phase>generate-resources</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>unpack</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <artifactItems> -->
+			<!-- <artifactItem> -->
+			<!-- Artifact that has the schema files -->
+			<!-- <groupId>gov.nist.secauto.decima</groupId> -->
+			<!-- <artifactId>decima-xml</artifactId> -->
+			<!-- <version>${dependency.version.decima}</version> -->
+			<!-- <type>jar</type> -->
+			<!-- </artifactItem> -->
+			<!-- <artifactItem> -->
+			<!-- Artifact that has the schema files -->
+			<!-- <groupId>gov.nist.secauto.decima</groupId> -->
+			<!-- <artifactId>decima-xml-assessment</artifactId> -->
+			<!-- <version>${dependency.version.decima}</version> -->
+			<!-- <type>jar</type> -->
+			<!-- </artifactItem> -->
+			<!-- </artifactItems> -->
+			<!-- <includes>**/*.xsd</includes> -->
+			<!-- <outputDirectory>${project.basedir}/target/xsd-includes</outputDirectory> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
