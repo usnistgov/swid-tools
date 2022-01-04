@@ -65,7 +65,7 @@ public class Hotp {
      *          the number of digits in the OTP
      */
     private Digits(int length) {
-      if (length < 6 && length > 9) {
+      if (length < 6 || length > 9) {
         // 6 is the minimum in the RFC and 19 is the maximum that a long
         // can represent
         // 9 is the maximum number of digits supported in the RFC
