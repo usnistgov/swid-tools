@@ -106,7 +106,7 @@
 					<dependency>
 						<groupId>gov.nist.secauto.swid</groupId>
 						<artifactId>swid-maven-plugin</artifactId>
-						<version>0.6.2-SNAPSHOT</version>
+						<version>${project.version}</version>
 					</dependency>
 				</dependencies>
 				<executions>
