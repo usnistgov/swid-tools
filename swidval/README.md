@@ -11,6 +11,7 @@ This tool can also be [used as an API][swidval-api].
 The source for this tool is found in this repo and can be built using Apache Maven as follows:
 
 ```bash
+cd ..
 mvn clean install
 ```
 
