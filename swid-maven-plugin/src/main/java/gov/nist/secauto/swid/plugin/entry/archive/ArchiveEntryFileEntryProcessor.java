@@ -33,6 +33,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.ArchiveEntry;
+import org.codehaus.plexus.components.io.fileselectors.FileInfo;
 import org.codehaus.plexus.components.io.fileselectors.IncludeExcludeFileSelector;
 
 import java.io.IOException;
@@ -66,9 +67,15 @@ public class ArchiveEntryFileEntryProcessor extends AbstractFileEntryProcessor<A
     ArchiveFileEntry archiveFileEntry = new ArchiveFileEntry(entry, artifact);
 
     Collection<? extends FileEntry> retval;
-    if (selector.isSelected(archiveFileEntry.asFileInfo())) {
-      retval = Collections.singleton(archiveFileEntry);
+    FileInfo fileInfo = archiveFileEntry.asFileInfo();
+    if (fileInfo.isFile()) {
+      if (selector.isSelected(fileInfo)) {
+        retval = Collections.singleton(archiveFileEntry);
+      } else {
+        retval = Collections.emptyList();
+      }
     } else {
+      // this is a directory, handle its contents
       retval = Collections.emptyList();
     }
     return retval;

@@ -69,42 +69,35 @@
 		</pluginManagement>
 
 		<plugins>
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-dependency-plugin</artifactId> -->
-			<!-- <executions> -->
-			<!-- Used to pull XSD files from the JAR -->
-			<!-- <execution> -->
-			<!-- <id>unpack-xsd-files</id> -->
-			<!-- Using the initialize phase because it is before the generate sources 
-				phase -->
-			<!-- <phase>generate-resources</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>unpack</goal> -->
-			<!-- </goals> -->
-			<!-- <configuration> -->
-			<!-- <artifactItems> -->
-			<!-- <artifactItem> -->
-			<!-- Artifact that has the schema files -->
-			<!-- <groupId>gov.nist.secauto.decima</groupId> -->
-			<!-- <artifactId>decima-xml</artifactId> -->
-			<!-- <version>${dependency.version.decima}</version> -->
-			<!-- <type>jar</type> -->
-			<!-- </artifactItem> -->
-			<!-- <artifactItem> -->
-			<!-- Artifact that has the schema files -->
-			<!-- <groupId>gov.nist.secauto.decima</groupId> -->
-			<!-- <artifactId>decima-xml-assessment</artifactId> -->
-			<!-- <version>${dependency.version.decima}</version> -->
-			<!-- <type>jar</type> -->
-			<!-- </artifactItem> -->
-			<!-- </artifactItems> -->
-			<!-- <includes>**/*.xsd</includes> -->
-			<!-- <outputDirectory>${project.basedir}/target/xsd-includes</outputDirectory> -->
-			<!-- </configuration> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.10</version>
+        <configuration>
+          <programs>
+            <program>
+              <mainClass>gov.nist.secauto.swid.swidval.Application</mainClass>
+              <id>swidval</id>
+            </program>
+          </programs>
+          <generateRepository>false</generateRepository>
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>lib</repositoryName>
+          <outputFileNameMapping>@{groupId}@.@{artifactId}@-@{version}@.@{extension}@</outputFileNameMapping>
+          <extraJvmArguments>-Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8</extraJvmArguments>
+          <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
+        </configuration>
+        <executions>
+          <execution>
+            <id>exec-swidval-cli</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -118,9 +111,9 @@
 						<manifest>
 							<mainClass>gov.nist.secauto.swid.swidval.Application</mainClass>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
+<!-- 							<classpathPrefix>lib/</classpathPrefix> -->
 							<classpathLayoutType>custom</classpathLayoutType>
-							<customClasspathLayout>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</customClasspathLayout>
+							<customClasspathLayout>${artifact.groupId}.${artifact.artifactId}-$${artifact.version}.${artifact.extension}</customClasspathLayout>
 						</manifest>
 					</archive>
 				</configuration>
@@ -139,7 +132,7 @@
 					<dependency>
 						<groupId>gov.nist.secauto.swid</groupId>
 						<artifactId>swid-maven-plugin</artifactId>
-						<version>0.6.2-SNAPSHOT</version>
+						<version>${project.version}</version>
 					</dependency>
 				</dependencies>
 				<executions>

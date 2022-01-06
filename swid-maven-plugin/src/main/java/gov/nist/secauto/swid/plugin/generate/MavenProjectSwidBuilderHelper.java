@@ -166,7 +166,6 @@ public class MavenProjectSwidBuilderHelper {
       List<FileEntry> swidFiles, Collection<HashAlgorithm> hashAlgorithms)
       throws NoSuchAlgorithmException, IOException {
     for (FileEntry entry : swidFiles) {
-
       FileBuilder fileBuilder = builder.newFileResource(entry.getRelativePathSegements(swidTagPath));
 
       String version = entry.getVersion();
