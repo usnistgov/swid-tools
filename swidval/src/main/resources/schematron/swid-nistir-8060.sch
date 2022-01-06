@@ -125,9 +125,9 @@
         </rule>
 
         <rule id="general-file" context="swid:File">
-            <assert id="GEN-14-1" test="@size"><value-of select="@name"/></assert>
-            <assert id="GEN-14-2" test="@size and string-length(@size)!=0"><value-of select="@name"/></assert>
-            <assert id="GEN-15-1" test="@version"><value-of select="@name"/></assert>
+            <assert id="GEN-14-1" test="@n8060:mutable='true' or @size"><value-of select="@name"/></assert>
+            <assert id="GEN-14-2" test="@n8060:mutable='true' or (@size and string-length(@size)!=0)"><value-of select="@name"/></assert>
+            <assert id="GEN-15-1" test="@n8060:mutable='true' or @version"><value-of select="@name"/></assert>
             <assert id="GEN-15-2" test="not(@version) or string-length(@version)!=0"><value-of select="@name"/></assert>
             <assert id="GEN-18-1" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmldsig-more#md5'])"><value-of select="@name"/></assert>
             <assert id="GEN-18-2" test="not(@*:hash[namespace-uri() = 'http://www.w3.org/2000/09/xmldsig#sha1'])"><value-of select="@name"/></assert>
@@ -164,11 +164,11 @@
         </rule>
  -->
 	    <rule id="general-auth-file" context="swid:Payload//swid:File">
-	        <assert id="GEN-16-1" test="@*:hash"><value-of select="@name"/></assert>
+	        <assert id="GEN-16-1" test="@n8060:mutable='true' or @*:hash"><value-of select="@name"/></assert>
 <!--	        <assert id="GEN-16-2" subject="@*:hash" test="matches(text(),'^[a-fA-F0-9]+$')"><value-of select="@name"/>|<value-of select="local-name(@*:hash)"/>|<value-of select="namespace-uri(@*:hash)"/></assert>
 -->
-	        <assert id="GEN-19-1" test="@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256']"><value-of select="@name"/></assert>
-	        <assert id="GEN-19-2" test="matches(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256'], '^[abcdef0-9]{64}$','i')"><value-of select="@name"/></assert>
+	        <assert id="GEN-19-1" test="@n8060:mutable='true' or @*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256']"><value-of select="@name"/></assert>
+	        <assert id="GEN-19-2" test="@n8060:mutable='true' or matches(@*:hash[namespace-uri() = 'http://www.w3.org/2001/04/xmlenc#sha256'], '^[abcdef0-9]{64}$','i')"><value-of select="@name"/></assert>
 	    </rule>
 	</pattern>
 

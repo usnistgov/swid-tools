@@ -20,6 +20,7 @@
 				<swid:File name="fileA" size="12345" version="1.0.0" versionScheme="semver" SHA-256:hash="9452e85177f69535ca93cbe2df3e8604344d58f729db7fb9e309e80684253111" />
 			</swid:Directory>
 			<swid:File name="fileB" size="234567" version="1.0.1" versionScheme="semver" SHA-256:hash="9452e85177f69535ca93cbe2df3e8604344d58f729db7fb9e309e80684252111" />
+			<swid:File name="mutable-file" n8060:mutable="true"/>
 		</swid:Payload>
 	</insert-child>
 </template>
