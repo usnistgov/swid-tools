@@ -39,7 +39,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class IsStringSetEqual extends ExtensionFunctionDefinition {
+public class IsStringSetEqual
+    extends ExtensionFunctionDefinition {
   private static final StructuredQName FUNCTION_QNAME
       = new StructuredQName("java-swid", "java:gov.nist.secauto.swid.swidval.schematron", "isStringSetEqual");
 
@@ -66,7 +67,8 @@ public class IsStringSetEqual extends ExtensionFunctionDefinition {
     return new FunctionCall();
   }
 
-  private static class FunctionCall extends ExtensionFunctionCall {
+  private static class FunctionCall
+      extends ExtensionFunctionCall {
     @Override
     public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
       String left = arguments[0].head().getStringValue();

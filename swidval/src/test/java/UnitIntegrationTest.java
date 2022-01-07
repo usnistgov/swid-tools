@@ -32,7 +32,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(PathRunner.class)
 @PathRunner.Paths("src/test/resources/unit-tests")
-@PathRunner.Requirements(value = "classpath:requirements.xml", extensions = "classpath:schema/swid-requirements-ext.xsd")
+@PathRunner.Requirements(value = "classpath:requirements.xml",
+    extensions = "classpath:schema/swid-requirements-ext.xsd")
 public class UnitIntegrationTest {
 
   @BeforeClass

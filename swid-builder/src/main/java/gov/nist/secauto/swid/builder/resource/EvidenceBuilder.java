@@ -33,7 +33,8 @@ import gov.nist.secauto.swid.builder.ValidationException;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-public class EvidenceBuilder extends AbstractResourceCollectionBuilder<EvidenceBuilder> {
+public class EvidenceBuilder
+    extends AbstractResourceCollectionBuilder<EvidenceBuilder> {
   private ZonedDateTime date;
   private String deviceId;
 

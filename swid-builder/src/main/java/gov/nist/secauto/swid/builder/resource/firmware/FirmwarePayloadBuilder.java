@@ -43,7 +43,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class FirmwarePayloadBuilder extends AbstractBuilder {
+public class FirmwarePayloadBuilder
+    extends AbstractBuilder {
 
   private FirmwareIdentifier id;
   private String packageIdentifier;

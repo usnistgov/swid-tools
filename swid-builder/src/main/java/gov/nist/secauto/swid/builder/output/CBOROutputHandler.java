@@ -35,7 +35,8 @@ import gov.nist.secauto.swid.builder.VersionScheme;
 
 import java.io.IOException;
 
-public class CBOROutputHandler extends AbstractJsonOutputHandler {
+public class CBOROutputHandler
+    extends AbstractJsonOutputHandler {
 
   public CBOROutputHandler() {
     this(new CBORFactory());

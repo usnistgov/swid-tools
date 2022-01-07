@@ -41,7 +41,8 @@ import java.util.Collections;
 
 import javax.xml.transform.stream.StreamSource;
 
-public class SWIDRequirementsManager extends DefaultRequirementsManager {
+public class SWIDRequirementsManager
+    extends DefaultRequirementsManager {
   private static SWIDRequirementsManager INSTANCE;
 
   /**

@@ -31,7 +31,8 @@ import gov.nist.secauto.swid.builder.util.Util;
 import java.net.URI;
 import java.util.Objects;
 
-public class LinkBuilder extends AbstractLanguageSpecificBuilder<LinkBuilder> {
+public class LinkBuilder
+    extends AbstractLanguageSpecificBuilder<LinkBuilder> {
 
   public static LinkBuilder create() {
     return new LinkBuilder();

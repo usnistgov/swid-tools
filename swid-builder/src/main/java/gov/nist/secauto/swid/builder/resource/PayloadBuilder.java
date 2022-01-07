@@ -26,7 +26,8 @@
 
 package gov.nist.secauto.swid.builder.resource;
 
-public class PayloadBuilder extends AbstractResourceCollectionBuilder<PayloadBuilder> {
+public class PayloadBuilder
+    extends AbstractResourceCollectionBuilder<PayloadBuilder> {
 
   protected PayloadBuilder() {
     super();

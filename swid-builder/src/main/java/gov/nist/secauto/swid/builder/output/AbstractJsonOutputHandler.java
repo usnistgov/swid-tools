@@ -55,7 +55,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractJsonOutputHandler extends JsonSupport implements OutputHandler {
+public abstract class AbstractJsonOutputHandler
+    extends JsonSupport
+    implements OutputHandler {
   /**
    * The tag identifier (text).
    */

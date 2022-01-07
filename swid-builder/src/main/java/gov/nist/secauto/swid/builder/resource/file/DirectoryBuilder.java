@@ -36,7 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DirectoryBuilder extends AbstractFileSystemItemBuilder<DirectoryBuilder> {
+public class DirectoryBuilder
+    extends AbstractFileSystemItemBuilder<DirectoryBuilder> {
   private Map<String, DirectoryBuilder> directoryMap = new LinkedHashMap<>();
   private List<ResourceBuilder> resources = new LinkedList<>();
 

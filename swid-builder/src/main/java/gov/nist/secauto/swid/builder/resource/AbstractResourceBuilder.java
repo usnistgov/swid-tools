@@ -29,7 +29,8 @@ package gov.nist.secauto.swid.builder.resource;
 import gov.nist.secauto.swid.builder.AbstractLanguageSpecificBuilder;
 
 public abstract class AbstractResourceBuilder<E extends AbstractResourceBuilder<E>>
-    extends AbstractLanguageSpecificBuilder<E> implements ResourceBuilder {
+    extends AbstractLanguageSpecificBuilder<E>
+    implements ResourceBuilder {
 
   protected AbstractResourceBuilder() {
     super();

@@ -32,7 +32,8 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public class FileFileEntry extends AbstractFileEntry {
+public class FileFileEntry
+    extends AbstractFileEntry {
   private Path file;
   private Path base;
 

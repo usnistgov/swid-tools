@@ -36,7 +36,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonOutputHandler extends AbstractJsonOutputHandler {
+public class JsonOutputHandler
+    extends AbstractJsonOutputHandler {
   private static final Map<Long, String> fieldIdToNameMap;
 
   static {

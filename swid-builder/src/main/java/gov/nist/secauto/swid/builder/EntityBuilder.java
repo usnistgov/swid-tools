@@ -32,7 +32,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class EntityBuilder extends AbstractLanguageSpecificBuilder<EntityBuilder> {
+public class EntityBuilder
+    extends AbstractLanguageSpecificBuilder<EntityBuilder> {
   private String name;
   private String regid;
   private List<Role> roles;

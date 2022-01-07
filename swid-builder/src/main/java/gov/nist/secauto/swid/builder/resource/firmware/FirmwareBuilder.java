@@ -40,7 +40,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
-public class FirmwareBuilder extends AbstractResourceBuilder<FirmwareBuilder> {
+public class FirmwareBuilder
+    extends AbstractResourceBuilder<FirmwareBuilder> {
   private FirmwareIdentifier id;
   private ZonedDateTime creationTimestamp = ZonedDateTime.now();
   private BigInteger version;

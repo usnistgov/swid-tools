@@ -26,7 +26,8 @@
 
 package gov.nist.secauto.swid.swidval.controller;
 
-public class UnrecognizedContentException extends Exception {
+public class UnrecognizedContentException
+    extends Exception {
 
   /** the serial version UID */
   private static final long serialVersionUID = 1L;

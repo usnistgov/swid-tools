@@ -46,7 +46,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ResourceFileEntryProcessor extends AbstractFileEntryProcessor<Resource> {
+public class ResourceFileEntryProcessor
+    extends AbstractFileEntryProcessor<Resource> {
 
   private IncludeExcludeFileSelector selector = new IncludeExcludeFileSelector();
   private final String buildOutputDirectory;

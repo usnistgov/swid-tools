@@ -37,7 +37,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-public class ResourceFileEntry extends AbstractFileEntry {
+public class ResourceFileEntry
+    extends AbstractFileEntry {
   private final Resource resource;
   private final Path file;
 

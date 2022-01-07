@@ -29,7 +29,8 @@ package gov.nist.secauto.swid.client.service;
 /**
  * Configuration exceptions.
  */
-public class JWTException extends Exception {
+public class JWTException
+    extends Exception {
   /** */
   private static final long serialVersionUID = 1L;
 

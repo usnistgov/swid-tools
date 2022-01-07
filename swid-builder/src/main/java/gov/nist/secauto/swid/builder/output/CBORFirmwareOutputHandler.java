@@ -38,7 +38,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class CBORFirmwareOutputHandler extends JsonSupport {
+public class CBORFirmwareOutputHandler
+    extends JsonSupport {
   /**
    * Firmware.
    */

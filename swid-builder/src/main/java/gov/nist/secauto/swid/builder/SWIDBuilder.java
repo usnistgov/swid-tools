@@ -37,7 +37,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class SWIDBuilder extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
+public class SWIDBuilder
+    extends AbstractLanguageSpecificBuilder<SWIDBuilder> {
   private TagType tagType = TagType.PRIMARY;
   private String name;
   private String tagId;

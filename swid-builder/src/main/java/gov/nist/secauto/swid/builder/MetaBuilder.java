@@ -28,7 +28,8 @@ package gov.nist.secauto.swid.builder;
 
 import static gov.nist.secauto.swid.builder.util.Util.requireNonEmpty;
 
-public class MetaBuilder extends AbstractLanguageSpecificBuilder<MetaBuilder> {
+public class MetaBuilder
+    extends AbstractLanguageSpecificBuilder<MetaBuilder> {
   public static MetaBuilder create() {
     return new MetaBuilder();
   }

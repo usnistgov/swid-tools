@@ -26,7 +26,8 @@
 
 package gov.nist.secauto.swid.builder;
 
-public class ValidationException extends Exception {
+public class ValidationException
+    extends Exception {
 
   /**
    * the serial version UID.F

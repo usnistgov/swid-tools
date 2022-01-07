@@ -41,7 +41,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.stream.StreamResult;
 
-public class DecimaResultView extends AbstractView {
+public class DecimaResultView
+    extends AbstractView {
 
   @Override
   protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,

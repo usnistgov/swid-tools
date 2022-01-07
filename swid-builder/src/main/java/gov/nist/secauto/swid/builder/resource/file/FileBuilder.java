@@ -42,7 +42,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class FileBuilder extends AbstractFileSystemItemBuilder<FileBuilder> {
+public class FileBuilder
+    extends AbstractFileSystemItemBuilder<FileBuilder> {
   private Long size;
   private String version;
   private Map<HashAlgorithm, byte[]> hashAlgorithmToValueMap = new LinkedHashMap<>();

@@ -71,7 +71,8 @@ import java.util.List;
  * Goal which generates a SWID Tag
  */
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
-public class SwidGenerateMojo extends AbstractMojo {
+public class SwidGenerateMojo
+    extends AbstractMojo {
   private static final List<String> DEFAULT_INCLUDES = Collections.singletonList("**/**");
 
   /**
