@@ -5,7 +5,7 @@ This project provides a set of Java-based tools for the generation and validatio
 
 Included in this repository are the sources for:
 
-- [swid-builder](swid-builder): A Java API for building SWID and CoSWID tags, which can be used in other applciations to produce tags in the XML and CBOR formats.
+- [swid-builder](swid-builder): A Java API for building SWID and CoSWID tags, which can be used in other applications to produce tags in the XML and CBOR formats.
 - [swidval](swidval): A command line tool for validating a SWID tag against the requirements defined by ISO/IEC 19770-2:2015, IETF CoSWID, and NIST Internal Report [(NISTIR) 8060](https://csrc.nist.gov/publications/detail/nistir/8060/final). This tool provides an convenient way to check if a SWID or CoSWID tag is valid and provides the necessary information required by the standard and best practices.
 - [swidval-webapp](swidval-webapp): A simple, proof of concept webapp that provides a SWID validation service that is deployable to a Java application server.
 - [swid-maven-plugin](swid-maven-plugin): An Apache Maven plugin that supports the generation of an XML- or CBOR- based tag as part of a Maven build.
