@@ -231,17 +231,13 @@ public abstract class AbstractJsonOutputHandler
 
     // child elements
     // Required
-    writeField(generator, ENTITY_FIELD);
-    List<EntityBuilder> entities = builder.getEntities();
-    if (entities.size() > 1) {
+    List<EntityBuilder> entites = builder.getEntities();
+    if (!entites.isEmpty()) {
+      writeField(generator, ENTITY_FIELD);
       generator.writeStartArray();
-    }
-
-    for (EntityBuilder entity : builder.getEntities()) {
-      build(generator, entity);
-    }
-
-    if (entities.size() > 1) {
+      for (EntityBuilder entity : entites) {
+        build(generator, entity);
+      }
       generator.writeEndArray();
     }
 
@@ -255,29 +251,21 @@ public abstract class AbstractJsonOutputHandler
     List<LinkBuilder> links = builder.getLinks();
     if (!links.isEmpty()) {
       writeField(generator, LINK_FIELD);
-      if (links.size() > 1) {
-        generator.writeStartArray();
-      }
+      generator.writeStartArray();
       for (LinkBuilder link : links) {
         build(generator, link);
       }
-      if (links.size() > 1) {
-        generator.writeEndArray();
-      }
+      generator.writeEndArray();
     }
 
     List<MetaBuilder> metas = builder.getMetas();
-    if (!links.isEmpty()) {
+    if (!metas.isEmpty()) {
       writeField(generator, SOFTWARE_META_FIELD);
-      if (metas.size() > 1) {
-        generator.writeStartArray();
-      }
+      generator.writeStartArray();
       for (MetaBuilder meta : metas) {
         buildMeta(generator, meta);
       }
-      if (metas.size() > 1) {
-        generator.writeEndArray();
-      }
+      generator.writeEndArray();
     }
 
     PayloadBuilder payload = builder.getPayload();
