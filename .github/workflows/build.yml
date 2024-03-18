@@ -63,6 +63,7 @@ jobs:
     # -------------------------
     # Maven Build
     # -------------------------
+#      TODO: Restore when posting logistics resolved.
 #    - id: build-test-deploy
 #      name: Build, Test and DEPLOY SNAPSHOT Code
 #      if: ${{ env.BUILD_SNAPSHOT == 'true' }}
@@ -73,7 +74,8 @@ jobs:
 #        MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
 #        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
     - name: Build and Test Code
-      if: ${{ steps.build-test-deploy.outcome == 'skipped' }}
+#      TODO: Restore when build-test-deploy restored.
+#      if: ${{ steps.build-test-deploy.outcome == 'skipped' }}
       run: |
         mvn -B -e -Prelease -Preporting install
     - name: Perform CodeQL Analysis
