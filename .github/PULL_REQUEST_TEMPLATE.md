@@ -4,8 +4,8 @@
 
 ### All Submissions:
 
-- [ ] Have you followed the guidelines in our [Contributing](https://github.com/usnistgov/oss-maven/blob/master/CONTRIBUTING.md) document?
-- [ ] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/usnistgov/oss-maven/pulls) for the same update/change?
+- [ ] Have you followed the guidelines in our [Contributing](https://github.com/usnistgov/swid-tools/blob/main/CONTRIBUTING.md) document?
+- [ ] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/usnistgov/swid-tools/pulls) for the same update/change?
 - [ ] Have you squashed any non-relevant commits and commit messages? \[[instructions](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History)\]
 - [ ] Do all automated CI/CD checks pass?
 
