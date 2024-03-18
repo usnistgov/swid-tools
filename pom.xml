@@ -30,7 +30,7 @@
 		<dependency.version.jaxb-api>2.3.1</dependency.version.jaxb-api>
 		<dependency.version.jaxb-impl>2.3.5</dependency.version.jaxb-impl>
 		<dependency.version.decima>0.7.1</dependency.version.decima>
-		<dependency.version.spring>4.3.2.RELEASE</dependency.version.spring>
+		<dependency.version.spring>5.2.20.RELEASE</dependency.version.spring>
 		<dependency.version.jstl>1.2</dependency.version.jstl>
 		<dependency.version.servletapi>4.0.0-b01</dependency.version.servletapi>
 	</properties>
@@ -168,7 +168,7 @@
 			<dependency>
 				<groupId>commons-fileupload</groupId>
 				<artifactId>commons-fileupload</artifactId>
-				<version>1.3.3</version>
+				<version>1.5</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
