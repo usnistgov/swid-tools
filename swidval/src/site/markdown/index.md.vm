@@ -7,7 +7,7 @@ Supports validating a SWID tag against the requirements defined by ISO/IEC 19770
 
 This project is implemented using the [Decima Framework][decima], which provides the validation capabilities used to perform the SWID tag validation.
 
-The [source](https://github.com/usnistgov/swid-tools/tree/master/swidval) can be found in the project's Github repo.
+The [source](https://github.com/usnistgov/swid-tools/tree/main/swidval) can be found in the project's Github repo.
 
 $h2 Use as a Command Line Tool
 
