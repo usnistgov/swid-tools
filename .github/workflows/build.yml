@@ -24,7 +24,7 @@ jobs:
       BUILD_SNAPSHOT: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
                           (github.ref_name == 'develop' || startsWith(github.ref_name, 'release-')) }}
     steps:
-    - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
+    - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
       with:
         submodules: recursive
         filter: tree:0
