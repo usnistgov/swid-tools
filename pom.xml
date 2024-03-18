@@ -21,7 +21,7 @@
 	<properties>
 		<!-- shared site configuration -->
 		<site.url>https://pages.nist.gov/swid-tools</site.url>
-		<scm.url>https://github.com/usnistgov/swid-tools/tree/master</scm.url>
+		<scm.url>https://github.com/usnistgov/swid-tools/tree/main</scm.url>
 		<issueManagement.url>https://github.com/usnistgov/swid-tools/issues</issueManagement.url>
 
 		<!-- dependencies -->
