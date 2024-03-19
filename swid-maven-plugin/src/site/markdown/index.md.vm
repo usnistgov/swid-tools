@@ -10,13 +10,13 @@ Two generation capabilities are provided:
 - **Assembly SWID Generator:** A [container descriptor handler](http://maven.apache.org/plugins/maven-assembly-plugin/examples/single/using-container-descriptor-handlers.html) that supports generation of a SWID tag as a manifest of a Maven [Assembly](http://maven.apache.org/plugins/maven-assembly-plugin/). Maven assemblies are binary distributions of Java code archived using a number of popular archive formats.
 - **SWD Generation Mojo:** An experimental Maven mojo for building a SWID tag for use within a Java JAR file.
 
-The [source](https://github.com/usnistgov/swid-tools/tree/master/swid-maven-plugin/) for these capabilities can be found in the project's Github repo.
+The [source](https://github.com/usnistgov/swid-tools/tree/main/swid-maven-plugin/) for these capabilities can be found in the project's Github repo.
 
 $h2 The Assembly SWID Generator
 
 To generate a SWID tag as part of the execution of the Maven [Assembly](http://maven.apache.org/plugins/maven-assembly-plugin/) plugin, a couple configurations need to be made.
 
-The following example is the configuration used by the [swidval project](https://github.com/usnistgov/swid-tools/tree/master/swidval).
+The following example is the configuration used by the [swidval project](https://github.com/usnistgov/swid-tools/tree/main/swidval).
 
 First, the assembly descriptor needs to be configured to use the `swid-generator`. In the following example, the assembly descriptor located in `src/assembly/bin.xml` has the needed `<containerDescriptorHandler>` configured as follows:
 

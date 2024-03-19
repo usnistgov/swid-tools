@@ -19,4 +19,4 @@ The following dependency can be added to your POM to use this library.
 
 The [API documentation](apidocs/index.html) provides more details.
 
-The [source](https://github.com/usnistgov/swid-tools/tree/master/swid-repo-client) can be found in the project's Github repo.
+The [source](https://github.com/usnistgov/swid-tools/tree/main/swid-repo-client) can be found in the project's Github repo.
