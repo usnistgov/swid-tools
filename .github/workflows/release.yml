@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'Delpoy release?'
+        description: 'Deploy release?'
         type: boolean
         default: false
       website:

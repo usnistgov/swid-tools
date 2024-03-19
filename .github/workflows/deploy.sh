@@ -17,7 +17,7 @@ Options:
                                 commit's message.
       --source-only             Only build but not push
       --push-only               Only push but not build
-  -b, --deploy-branch BRANCH    Delpoy to specified branch
+  -b, --deploy-branch BRANCH    Deploy to specified branch
 "
 
 
