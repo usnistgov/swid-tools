@@ -88,6 +88,15 @@
 				<role>maintainer</role>
 			</roles>
 		</developer>
+		<developer>
+			<id>alexander.nelson@nist.gov</id>
+			<name>Alex Nelson</name>
+			<email>alexander.nelson@nist.gov</email>
+			<organization>National Institute of Standards and Technology</organization>
+			<roles>
+				<role>maintainer</role>
+			</roles>
+		</developer>
 	</developers>
 
 	<mailingLists>
