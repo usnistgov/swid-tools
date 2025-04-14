@@ -25,7 +25,7 @@
 		<issueManagement.url>https://github.com/usnistgov/swid-tools/issues</issueManagement.url>
 
 		<!-- dependencies -->
-		<dependency.version.jackson>2.9.3</dependency.version.jackson>
+		<dependency.version.jackson>2.11.4</dependency.version.jackson>
 		<dependency.version.jdom2>2.0.6.1</dependency.version.jdom2>
 		<dependency.version.jaxb-api>2.3.1</dependency.version.jaxb-api>
 		<dependency.version.jaxb-impl>2.3.5</dependency.version.jaxb-impl>
