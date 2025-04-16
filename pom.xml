@@ -32,7 +32,7 @@
 		<dependency.version.decima>0.7.1</dependency.version.decima>
 		<dependency.version.spring>6.2.5</dependency.version.spring>
 		<dependency.version.jstl>1.2</dependency.version.jstl>
-		<dependency.version.servletapi>4.0.0-b01</dependency.version.servletapi>
+		<dependency.version.servletapi>4.0.1</dependency.version.servletapi>
 	</properties>
 
 	<issueManagement>
