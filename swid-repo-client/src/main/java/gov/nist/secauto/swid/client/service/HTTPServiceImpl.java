@@ -257,7 +257,7 @@ public class HTTPServiceImpl implements HTTPService {
           int index = token.lastIndexOf('.');
           String withoutSignature = token.substring(0, index + 1);
           @SuppressWarnings({ "unused", "rawtypes" })
-          Jwt<Header, Claims> untrusted = Jwts.parser().parseClaimsJwt(withoutSignature);
+          Jwt<Header, Claims> untrusted = Jwts.parser().unsecured().build().parseUnsecuredClaims(withoutSignature);
 
         } else {
           throw new JWTException("Cached token is NULL");
