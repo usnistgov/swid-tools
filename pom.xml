@@ -28,7 +28,7 @@
 		<dependency.version.jackson>2.18.3</dependency.version.jackson>
 		<dependency.version.jdom2>2.0.6.1</dependency.version.jdom2>
 		<dependency.version.jaxb-api>2.3.1</dependency.version.jaxb-api>
-		<dependency.version.jaxb-impl>2.3.5</dependency.version.jaxb-impl>
+		<dependency.version.jaxb-impl>4.0.5</dependency.version.jaxb-impl>
 		<dependency.version.decima>0.7.1</dependency.version.decima>
 		<dependency.version.spring>6.2.5</dependency.version.spring>
 		<dependency.version.jstl>1.2</dependency.version.jstl>
