@@ -30,7 +30,7 @@
 		<dependency.version.jaxb-api>2.3.1</dependency.version.jaxb-api>
 		<dependency.version.jaxb-impl>4.0.9</dependency.version.jaxb-impl>
 		<dependency.version.decima>0.7.1</dependency.version.decima>
-		<dependency.version.spring>7.0.7</dependency.version.spring>
+		<dependency.version.spring>7.0.8</dependency.version.spring>
 		<dependency.version.jstl>1.2</dependency.version.jstl>
 		<dependency.version.servletapi>4.0.1</dependency.version.servletapi>
 	</properties>
