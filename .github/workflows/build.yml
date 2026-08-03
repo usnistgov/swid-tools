@@ -78,7 +78,7 @@ jobs:
         mvn -B -e -Prelease -Preporting install
     - name: Perform CodeQL Analysis
       if: github.event_name == 'push'
-      uses: github/codeql-action/analyze@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81
+      uses: github/codeql-action/analyze@f205ea1c3313d32999d8d6a48b4f6530d4437b38
       with:
         upload: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref_name == 'develop' && 'always' || 'never' }}
     - name: Test Website
